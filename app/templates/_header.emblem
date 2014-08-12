@@ -6,7 +6,7 @@
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      strong.navbar-brand CDAI.me
+      strong.navbar-brand Flaredown
     #navbarCollapse.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
         if currentUser.loggedIn
