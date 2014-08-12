@@ -3,7 +3,7 @@
 This README outlines the details of collaborating on this Ember application.
 
 ## Installation
-
+* Read [Getting Started with Ember CLI](http://www.ember-cli.com/#getting-started) and install prerequisites
 * `git clone` this repository
 * `npm install`
 * `bower install`
