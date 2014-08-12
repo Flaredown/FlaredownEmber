@@ -10,7 +10,8 @@ This README outlines the details of collaborating on this Ember application.
 
 ## Running
 
-* `ember server`
+* Setup [FlaredownAPI](https://github.com/FathomLabs/FlaredownAPI) and run it
+* `ember server --proxy htp://localhost:<API_PORT>`
 * Visit your app at http://localhost:4200.
 
 ## Running Tests
