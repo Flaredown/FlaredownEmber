@@ -3,7 +3,6 @@
 
 route = AuthRoute.extend
   model: (params, transition, queryParams) ->
-    self = @
     date = params.date
     today = moment().format("MMM-DD-YYYY")
     @set "section", parseInt params.section
@@ -15,13 +14,13 @@ route = AuthRoute.extend
       controller.get("model")
     else      
       $.get("#{FlaredownENV.apiNamespace}/entries/#{date}", {by_date: true}).then(
-        (response) ->
+        (response) =>
           if response.id
-            self.store.find("entry", response.id)
+            @store.find("entry", response.id)
           else
-            self.store.createRecord("entry", {catalogs: ["cdai"]}).save()
+            @store.createRecord("entry", {catalogs: ["cdai"]}).save()
         ,
-        (response) ->
+        (response) =>
           debugger
       )
     

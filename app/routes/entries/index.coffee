@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import AuthRoute from './authenticated'`
+`import AuthRoute from '../authenticated'`
 
 route = AuthRoute.extend
   model: (params) ->
@@ -21,5 +21,5 @@ route = AuthRoute.extend
   actions:
     updates: (message) ->
       @controllerFor("entries").get("catalog.scores").pushObject {x: 1391922000, y: 500 }
-      
+
 `export default route`
