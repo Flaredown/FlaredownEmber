@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import AuthRoute from '../authenticated'`
+`import AuthRoute from './authenticated'`
 
 route = AuthRoute.extend
   model: (params) ->

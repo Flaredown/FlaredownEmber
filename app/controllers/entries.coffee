@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import EntryDatumController from '../entry-datum'`
+`import EntryDatumController from './entry-datum'`
 
 controller = Ember.ArrayController.extend
   needs: ["currentUser"]
@@ -47,7 +47,7 @@ controller = Ember.ArrayController.extend
     if score
       that.datum(score)
     else
-      console.log "??!?!"
+      console.log "missing datum"
       that.missingDatum({x: unix, y: 0})
   )
       

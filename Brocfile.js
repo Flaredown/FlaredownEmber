@@ -7,6 +7,7 @@ var app = new EmberApp();
 app.import('vendor/moment/moment.js');
 app.import('vendor/d3/d3.js');
 
+app.import('vendor/bootstrap/js/transition.js');
 app.import('vendor/bootstrap/js/modal.js');
 app.import('vendor/bootstrap/js/dropdown.js');
 
