@@ -12,3 +12,6 @@ var App = Ember.Application.extend({
 loadInitializers(App, 'flaredown');
 
 export default App;
+
+import appHelpers from './utils/app-helpers';
+appHelpers();

@@ -4,6 +4,12 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 var app = new EmberApp();
 
+app.import('vendor/moment/moment.js');
+app.import('vendor/d3/d3.js');
+
+app.import('vendor/bootstrap/js/modal.js');
+app.import('vendor/bootstrap/js/dropdown.js');
+
 // Use `app.import` to add additional libraries to the generated
 // output files.
 //

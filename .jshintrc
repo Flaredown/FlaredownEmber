@@ -2,7 +2,10 @@
   "predef": {
     "document": true,
     "window": true,
-    "FlaredownENV": true
+    "moment": true,
+    "d3": true,
+    "FlaredownENV": true,
+    "$": true
   },
   "browser" : true,
   "boss" : true,
