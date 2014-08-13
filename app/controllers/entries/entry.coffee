@@ -36,12 +36,12 @@ controller = Ember.ObjectController.extend
       
       data = 
         entry:
-            responses: @get("responsesData")
+            JSON.stringify({responses: @get("responsesData")})
       
       $.ajax
-        url: "/entries/#{@get('id')}.json"
-        type: "PATCH"
-        data: JSON.stringify data
+        url: "#{FlaredownENV.apiNamespace}/entries/#{@get('id')}.json"
+        type: "PUT"
+        data: data
         success: (response) -> 
           null
         error: (response) ->
