@@ -51,15 +51,14 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
         
         error: @errorCallback
           
-    logout: ->
-      $.ajax
-        url: "#{FlaredownENV.apiNamespace}/users/sign_out.json"
-        type: "DELETE"
-        context: @
-        success: (response) -> 
-          @get("currentUser.pusherChannels").clear()
-          App.reset()
-          @transitionToRoute("login")
-        error: (response) -> @transitionToRoute("login")
+    # logout: ->
+    #   $.ajax
+    #     url: "#{FlaredownENV.apiNamespace}/users/sign_out.json"
+    #     type: "DELETE"
+    #     context: @
+    #     success: (response) ->
+    #       @get("currentUser.pusherChannels").clear()
+    #       @transitionToRoute("login")
+    #     error: (response) -> @transitionToRoute("login")
         
 `export default controller`

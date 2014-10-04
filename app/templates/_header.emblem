@@ -18,4 +18,4 @@
             ul.dropdown-menu
               li: link-to "Profile"
               li: link-to "Treatments"
-              li: a href="#" click="logout" id="logout" Logout
+              li: a href="/users/sign_out" id="logout" Logout
