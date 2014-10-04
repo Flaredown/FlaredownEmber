@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
 
-route = Em.Route.extend
+route = Ember.Route.extend
   model: ->
     @store.find("currentUser", 0).then(
       (currentUser) =>

@@ -3,6 +3,8 @@
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var app = new EmberApp();
 
+app.import('vendor/pusher/dist/pusher.js');
+
 app.import('vendor/moment/moment.js');
 app.import('vendor/d3/d3.js');
 

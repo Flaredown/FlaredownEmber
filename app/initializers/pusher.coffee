@@ -1,5 +1,3 @@
-`import Ember from 'ember'`
-
 initializer = {
   name: "pusher"
 

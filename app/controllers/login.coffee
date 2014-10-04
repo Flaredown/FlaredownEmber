@@ -37,7 +37,7 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
         data: data
         context: @
         
-        success: (response) ->
+        success: ->
           # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
           
           @store.find("currentUser", 0).then(
@@ -45,21 +45,19 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
               @set("currentUser.model", currentUser)
               @redirectToTransition()
             ,
-            (response) =>
-              console.log "!!! ERROR"
+            -> console.log "!!! ERROR"
           )
         
         error: @errorCallback
           
-    logout: ->
-      $.ajax
-        url: "#{FlaredownENV.apiNamespace}/users/sign_out.json"
-        type: "DELETE"
-        context: @
-        success: (response) -> 
-          @get("currentUser.pusherChannels").clear()
-          App.reset()
-          @transitionToRoute("login")
-        error: (response) -> @transitionToRoute("login")
+    # logout: ->
+    #   $.ajax
+    #     url: "#{FlaredownENV.apiNamespace}/users/sign_out.json"
+    #     type: "DELETE"
+    #     context: @
+    #     success: (response) ->
+    #       @get("currentUser.pusherChannels").clear()
+    #       @transitionToRoute("login")
+    #     error: (response) -> @transitionToRoute("login")
         
 `export default controller`

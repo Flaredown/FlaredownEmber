@@ -1,13 +1,13 @@
 `import DS from 'ember-data'`
 
 model = DS.Model.extend
-  entries:  hasMany "entry"
+  entries:  DS.hasMany "entry"
   
-  email:  attr "string"
-  weight: attr "number"
+  email:    DS.attr "string"
+  weight:   DS.attr "number"
   
-  cdai_score_coordinates: attr ""
-  medication_coordinates: attr ""
-  medications: attr ""
+  cdai_score_coordinates: DS.attr ""
+  medication_coordinates: DS.attr ""
+  medications:            DS.attr ""
   
 `export default model`
