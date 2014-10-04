@@ -36,7 +36,6 @@ controller = Ember.Controller.extend
             self.reset()
             self.transitionToRoute('entries')
         error: (response) ->
-            debugger
             errors = JSON.parse(response.responseText).errors
         
             for k,v of errors

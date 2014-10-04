@@ -1,13 +1,14 @@
+`import Ember from 'ember'`
 `import DS from 'ember-data'`
 
 model = DS.Model.extend
-  user:       belongsTo("user")
+  user:       DS.belongsTo("user")
   
-  scores:     hasMany("score")
-  questions:  hasMany("question")
-  responses:  hasMany("response")
-  catalogs:   attr()
-  date:       attr("string")
+  scores:     DS.hasMany("score")
+  questions:  DS.hasMany("question")
+  responses:  DS.hasMany("response")
+  catalogs:   DS.attr()
+  date:       DS.attr("string")
   
   # questions:  attr("object")
   # responses:  attr("object")

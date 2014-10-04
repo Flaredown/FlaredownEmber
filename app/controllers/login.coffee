@@ -37,7 +37,7 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
         data: data
         context: @
         
-        success: (response) ->
+        success: ->
           # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
           
           @store.find("currentUser", 0).then(
@@ -45,8 +45,7 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
               @set("currentUser.model", currentUser)
               @redirectToTransition()
             ,
-            (response) =>
-              console.log "!!! ERROR"
+            -> console.log "!!! ERROR"
           )
         
         error: @errorCallback

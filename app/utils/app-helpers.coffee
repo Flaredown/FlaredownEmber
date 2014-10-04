@@ -1,5 +1,4 @@
 `import Ember from 'ember'`
-`import DS from 'ember-data'`
 
 appHelpers = ->
   # Progress Bar
@@ -13,13 +12,6 @@ appHelpers = ->
     # End loading animation
     Ember.$("#progress").width("110%") #.delay(200).fadeOut 400,
     Ember.$("#progress").html("")
-  
-  window.uuid = (name, doc_id) ->
-    "#{name}_#{doc_id}"
-  
-  window.attr      = DS.attr
-  window.belongsTo = DS.belongsTo
-  window.hasMany   = DS.hasMany
 
   window.ajax = (url, options) ->
     new Ember.RSVP.Promise((resolve, reject) ->

@@ -1,13 +1,14 @@
+`import Ember from 'ember'`
 `import DS from 'ember-data'`
 
 model = DS.Model.extend
-  inputs:   hasMany("input")
+  inputs:   DS.hasMany("input")
   
-  catalog:  attr("string")
-  name:     attr("string")
-  kind:     attr("string")
-  section:  attr("number")
-  group:    attr("string")
+  catalog:  DS.attr("string")
+  name:     DS.attr("string")
+  kind:     DS.attr("string")
+  section:  DS.attr("number")
+  group:    DS.attr("string")
   
   inputPartial: Ember.computed ->
     "questioner/#{@get("kind")}_input"

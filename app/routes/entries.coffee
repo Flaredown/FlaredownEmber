@@ -1,4 +1,3 @@
-`import Ember from 'ember'`
 `import AuthRoute from './authenticated'`
 
 route = AuthRoute.extend

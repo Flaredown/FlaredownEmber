@@ -1,4 +1,3 @@
-`import Ember from 'ember'`
 `import AuthRoute from '../authenticated'`
 
 route = AuthRoute.extend
@@ -20,8 +19,7 @@ route = AuthRoute.extend
           else
             @store.createRecord("entry", {catalogs: ["cdai"]}).save()
         ,
-        (response) =>
-          debugger
+        (response) ->
       )
     
   afterModel: (model, transition, params) ->
@@ -29,12 +27,12 @@ route = AuthRoute.extend
     
     # Insert all possible responses for forms to depend on
     model.get("questions").forEach (question) ->
-      _uuid = uuid question.get("name"), model.get("id")
-      response = model.get("responses").findBy("id", _uuid )
+      uuid = "#{question.get("name")}_#{model.get("id")}"
+      response = model.get("responses").findBy("id", uuid )
       if response
         response.set("question", question)
       else
-        model.get("responses").createRecord({id: _uuid , name: question.get("name"), value: null, question: question})
+        model.get("responses").createRecord({id: uuid , name: question.get("name"), value: null, question: question})
     
   actions:
     close: -> @transitionTo "entries.index"
