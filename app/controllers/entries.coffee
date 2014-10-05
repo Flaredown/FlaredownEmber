@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import EntryDatumController from './entry-datum'`
+`import config from '../config/environment'`
 
 controller = Ember.ArrayController.extend
   needs: ["currentUser"]
@@ -73,7 +74,7 @@ controller = Ember.ArrayController.extend
       
       that = @
       $.ajax(
-        url: "/chart"
+        url: "#{config.apiNamespace}/chart"
         method: "GET"
         data: 
           start_date: start

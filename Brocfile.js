@@ -2,15 +2,25 @@
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var app = new EmberApp({
-  'ember-cli-bootstrap': {
-
-    }
+  sassOptions: {
+    includePaths: require('node-neat').with('app/styles/bitters')
+  }
 });
 
-app.import('vendor/pusher/dist/pusher.js');
+// app.import('assets/fonts/*', {
+//   destDir: 'assets'
+// });
 
-app.import('vendor/moment/moment.js');
-app.import('vendor/d3/d3.js');
+var pickFiles = require('broccoli-static-compiler');
+var fonts = pickFiles('app/assets/fonts', {
+   srcDir: '/',
+   files: ['*'],
+   destDir: '/assets'
+});
+
+app.import('bower_components/pusher/dist/pusher.js');
+app.import('bower_components/moment/moment.js');
+app.import('bower_components/d3/d3.js');
 
 // app.import('vendor/bootstrap/js/transition.js');
 // app.import('vendor/bootstrap/js/modal.js');
@@ -29,4 +39,4 @@ app.import('vendor/d3/d3.js');
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
-module.exports = app.toTree();
+module.exports = app.toTree(fonts);

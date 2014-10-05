@@ -3,6 +3,13 @@
 
 controller = Ember.ObjectController.extend
   titleBinding: "id"
+  modalOpen: true
+      
+  modalChanged: Ember.observer ->
+    unless @get("modalOpen")
+      @transitionToRoute("entries")
+      @set("modalOpen", true)
+  .observes("modalOpen")
   
   sectionChanged: Ember.observer ->
     @transitionToRoute("entries.entry", @get("entryDateParam"), @get("section")) if @get("section")

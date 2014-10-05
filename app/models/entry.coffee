@@ -4,10 +4,10 @@
 model = DS.Model.extend
   user:       DS.belongsTo("user")
   
-  scores:     DS.hasMany("score")
+  # scores:     DS.hasMany("score")
   questions:  DS.hasMany("question")
   responses:  DS.hasMany("response")
-  catalogs:   DS.attr()
+  # catalogs:   DS.hasMany("catalog")
   date:       DS.attr("string")
   
   # questions:  attr("object")
