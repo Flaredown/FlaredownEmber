@@ -1,4 +1,5 @@
 `import DS from 'ember-data'`
+`import config from '../config/environment'`
 
 init = {
   name: "adapter"
@@ -6,6 +7,6 @@ init = {
 
   initialize: (container, application) ->
     DS.ActiveModelAdapter.reopen
-      namespace: "api/v#{FlaredownENV.apiVersion}"
+      namespace: "api/v#{config.apiVersion}"
 }
 `export default init`

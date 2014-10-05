@@ -2,12 +2,23 @@
 
 module.exports = function(environment) {
   var ENV = {
+    modulePrefix: "flaredown",
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
     apiVersion:      1,
     apiNamespace:    '/api/v1',
     afterLoginRoute: 'entries',
+    
+    // contentSecurityPolicy: {
+    //   'default-src': "'none'",
+    //   'script-src': "'self' 'unsafe-inline' 'unsafe-eval' use.typekit.net",
+    //   'font-src': "'self' data: use.typekit.net",
+    //   'connect-src': "'self'",
+    //   'img-src': "'self' p.typekit.net",
+    //   'style-src': "'self' 'unsafe-inline' use.typekit.net",
+    //   'frame-src': ""
+    // },
     
     EmberENV: {
       FEATURES: {
@@ -31,7 +42,15 @@ module.exports = function(environment) {
   }
 
   if (environment === 'test') {
-
+    // Testem prefers this...
+    ENV.baseURL = '/';
+    ENV.locationType = 'auto';
+    
+    // keep test console output quieter
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
+    
+    ENV.APP.rootElement = '#ember-testing';
   }
 
   if (environment === 'production') {

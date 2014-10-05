@@ -1,4 +1,5 @@
 `import Ember from 'ember'`
+`import config from '../../config/environment'`
 
 controller = Ember.ObjectController.extend
   titleBinding: "id"
@@ -39,7 +40,7 @@ controller = Ember.ObjectController.extend
             JSON.stringify({responses: @get("responsesData")})
       
       $.ajax
-        url: "#{FlaredownENV.apiNamespace}/entries/#{@get('id')}.json"
+        url: "#{config.apiNamespace}/entries/#{@get('id')}.json"
         type: "PUT"
         data: data
         success: (response) -> 
