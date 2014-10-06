@@ -1,8 +1,9 @@
 `import AuthRoute from './authenticated'`
+`import config from '../config/environment'`
 
 route = AuthRoute.extend
   model: (params) ->
-    ajax "#{FlaredownENV.apiNamespace}/chart", {data: {start_date: @get("currentUser").get("defaultStartDate"), end_date: @get("currentUser").get("defaultEndDate")}}
+    ajax "#{config.apiNamespace}/chart", {data: {start_date: @get("currentUser").get("defaultStartDate"), end_date: @get("currentUser").get("defaultEndDate")}}
 
   setupController: (controller,model) ->
     user = @get("currentUser")

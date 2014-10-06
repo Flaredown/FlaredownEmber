@@ -1,4 +1,5 @@
 `import AuthRoute from '../authenticated'`
+`import config from '../../config/environment'`
 
 route = AuthRoute.extend
   model: (params, transition, queryParams) ->
@@ -12,7 +13,7 @@ route = AuthRoute.extend
     if controller and controller.get("model.entryDate") is date
       controller.get("model")
     else      
-      $.get("#{FlaredownENV.apiNamespace}/entries/#{date}", {by_date: true}).then(
+      $.get("#{config.apiNamespace}/entries/#{date}", {by_date: true}).then(
         (response) =>
           if response.id
             @store.find("entry", response.id)

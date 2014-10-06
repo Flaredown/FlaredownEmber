@@ -1,4 +1,5 @@
 `import Ember from 'ember'`
+`import config from '../config/environment'`
 
 controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormStatesMixin,
   init: -> 
@@ -17,7 +18,7 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
       attemptedTransition.retry()
       @set("attemptedTransition", null)
     else 
-      @transitionToRoute(FlaredownENV.afterLoginRoute)
+      @transitionToRoute(config.afterLoginRoute)
     
   # credentialsObserver: Ember.observer ->
   #   if Ember.isEmpty(@get("loginId"))
@@ -29,11 +30,11 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
   actions:    
     login: ->
       data = {}
-      data["api_v#{FlaredownENV.apiVersion}_user"] = @getProperties("email", "password")
+      data["api_v#{config.apiVersion}_user"] = @getProperties("email", "password")
 
       $.ajax
         type: "POST"
-        url: "#{FlaredownENV.apiNamespace}/users/sign_in.json"
+        url: "#{config.apiNamespace}/users/sign_in.json"
         data: data
         context: @
         
@@ -52,7 +53,7 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
           
     # logout: ->
     #   $.ajax
-    #     url: "#{FlaredownENV.apiNamespace}/users/sign_out.json"
+    #     url: "#{config.apiNamespace}/users/sign_out.json"
     #     type: "DELETE"
     #     context: @
     #     success: (response) ->

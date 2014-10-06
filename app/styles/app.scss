@@ -1,3 +1,9 @@
+@import "bourbon";
+@import "neat-helpers";
+@import "neat";
+@import "bitters/grid-settings";
+@import "bitters/base";
+
 //Colors
 
 //#d9e3eb awesome blue-grey;
@@ -11,6 +17,9 @@ $orange-mid: #f2cd5e;
 $orange-dark: #e8b007;
 $pink-mid: #de6896;
 $pink-dark: #cc3f75;
+body {
+    @include linear-gradient(to top, red, orange);
+}
 
 // Mixins
 @mixin standard-shadow {
@@ -29,9 +38,12 @@ $pink-dark: #cc3f75;
 
 //External styles
 @import "progress_bar";
-//@import "rickshaw.min";
-@import "bootstrap-switch.min";
 @import "fonts";
+
+// Some Bourbon stuff
+@import "modal";
+@import "dropdown";
+@import "pagination";
 
 //Internal styles
 @import "global";
