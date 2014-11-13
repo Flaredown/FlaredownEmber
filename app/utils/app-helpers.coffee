@@ -13,20 +13,20 @@ appHelpers = ->
     Ember.$("#progress").width("110%") #.delay(200).fadeOut 400,
     Ember.$("#progress").html("")
 
-  window.ajax = (url, options) ->
-    new Ember.RSVP.Promise((resolve, reject) ->
-      options = options or {}
-      options.url = url
-      options.success = (data) ->
-        Ember.run.once null, resolve, data
-        return
-
-      options.error = (jqxhr, status, something) ->
-        Ember.run.once null, reject, arguments
-        return
-
-      Ember.$.ajax options
-    )
+  # window.ajax = (url, options) ->
+  #   new Ember.RSVP.Promise((resolve, reject) ->
+  #     options = options or {}
+  #     options.url = url
+  #     options.success = (data) ->
+  #       Ember.run.once null, resolve, data
+  #       return
+  #
+  #     options.error = (jqxhr, status, something) ->
+  #       Ember.run.once null, reject, arguments
+  #       return
+  #
+  #     Ember.$.ajax options
+  #   )
 
 
   # Ember.$.ajaxSetup
@@ -38,9 +38,9 @@ appHelpers = ->
   #     if ( settings.contentType is "application/json; charset=utf-8" and typeof(settings.data) isnt "string" )
   #       settings.format = "json"
   #       settings.data = JSON.stringify(settings.data)
-      
+
   # window.App.generalError = (message) ->
   #   unless message then message = "We've encountered an unexpected error! Please refresh the page and try again, if the error persists please contact support via the 'Contact Us' link."
   #   alert(message)
-  
+
 `export default appHelpers`
