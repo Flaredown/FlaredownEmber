@@ -39,6 +39,6 @@ form.form-inline submit="register"
         link-to "login" class="btn btn-default col-md-12" | Back to Login
       .col-md-6
         if isInvite
-          button.btn.btn-success.col-md-12 Enable Early Access / Choose Your Own Adventure Bonanza!
+          button#accept-invitation-button.btn.btn-success.col-md-12 Enable Early Access / Choose Your Own Adventure Bonanza!
         else
-          button.btn.btn-success.col-md-12 Register
+          button#register-button.btn.btn-success.col-md-12 Register

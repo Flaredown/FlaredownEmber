@@ -9,8 +9,8 @@ module('An Integration test', {
   teardown: -> Ember.run(App, App.destroy)
 })
 
-test "Page contents", ->
+test "Sanity Test", ->
   expect(1)
   visit('/').then(
-    -> ok(find(".navbar"), "Page shows up")
+    -> ok(find(".navbar").length, "Page shows up")
   )

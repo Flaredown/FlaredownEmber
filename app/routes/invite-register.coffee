@@ -5,15 +5,18 @@ route = Ember.Route.extend
   # authedOnly: false
 
   model: (params) ->
-    Ember.$.ajax
+    Ember.$.ajax(
       type: "get"
-      url: "#{config.apiNamespace}/users/invitee/#{params.invitation_token}.json"
+      url: "#{config.apiNamespace}/users/invitee/#{params.invitation_token}"
       context: @
-
-      success: (response) ->
-        response.user
-
-      error: @errorCallback
+    ).then(
+      (response) -> response
+      (response) ->
+        if response.status == 404
+          @transitionTo("login")
+          sweetAlert("Invitation not found...", "We couldn't find that invitation, perhaps you've already used it?", "error")
+        # TODO @errorCallback
+    )
 
   setupController: (controller,model) ->
     controller.set("content", model)

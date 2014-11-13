@@ -18,22 +18,26 @@ controller = Ember.ObjectController.extend
 
       @set('errors', {})
 
-      $.ajax
+      Ember.$.ajax(
         type: "POST"
         url: "/users.json"
         data: data
         contentType: "application/x-www-form-urlencoded; charset=UTF-8"
-        success: (response) ->
+      ).then(
+        (response) ->
             # self.set "controllers.login.loginId", response.id
             self.set "controllers.user.content", response
             self.reset()
             self.transitionToRoute('entries')
-        error: (response) ->
+
+        (response) ->
             errors = JSON.parse(response.responseText).errors
 
             for k,v of errors
               errors[k] = v[0]
 
             self.set("errors", errors)
+      )
+
 
 `export default controller`
