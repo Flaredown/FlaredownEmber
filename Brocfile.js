@@ -31,6 +31,7 @@ app.import('bower_components/sweetalert/lib/sweet-alert.js');
 app.import('bower_components/sweetalert/lib/sweet-alert.css');
 
 app.import({development: 'bower_components/jquery-mockjax/jquery.mockjax.js'});
+app.import({development: 'bower_components/jquery-simulate/jquery.simulate.js'});
 
 // app.import('vendor/bootstrap/js/transition.js');
 // app.import('vendor/bootstrap/js/modal.js');

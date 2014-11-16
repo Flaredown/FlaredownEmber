@@ -1,5 +1,6 @@
 `import AuthRoute from '../authenticated'`
 `import config from '../../config/environment'`
+`import ajax from 'ic-ajax'`
 
 route = AuthRoute.extend
   model: (params, transition, queryParams) ->
@@ -13,10 +14,10 @@ route = AuthRoute.extend
     if controller and controller.get("model.entryDate") is date
       controller.get("model")
     else
-      $.get("#{config.apiNamespace}/entries/#{date}", {by_date: true}).then(
+      ajax("#{config.apiNamespace}/entries/#{date}").then(
         (response) =>
-          if response.id
-            @store.find("entry", response.id)
+          if response.entry.id
+            @store.find("entry", date)
           else
             @store.createRecord("entry", {catalogs: ["cdai"]}).save() # TODO replace with user catalogs
         ,

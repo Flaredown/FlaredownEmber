@@ -19,7 +19,8 @@ route = Ember.Route.extend
     )
 
   setupController: (controller,model) ->
-    controller.set("content", model)
-    controller.set("isInvite", true)
+    if model
+      controller.set("content", model)
+      controller.set("isInvite", true)
 
 `export default route`

@@ -32,9 +32,10 @@ test "Invalid invite token gets 404 message", ->
   expect 3
 
   Ember.$.mockjax
-    url: '/api/v1/users/invitee/abc123',
+    url: '/api/v1/users/invitee/abc123-invalid-invite-token',
     type: 'GET'
-    responseJSON: {
+    status: 404
+    responseText: {
       error: "Not found."
     }
 
