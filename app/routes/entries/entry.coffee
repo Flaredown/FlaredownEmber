@@ -3,7 +3,6 @@
 `import ajax from 'ic-ajax'`
 
 route = AuthRoute.extend
-  enter: -> console.log "entered !!!!!!!!!!!!!!!!";
   model: (params, transition, queryParams) ->
     date = params.date
     today = moment.utc().format("MMM-DD-YYYY")
