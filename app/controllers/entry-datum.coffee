@@ -12,7 +12,7 @@ controller = Ember.Controller.extend
           return @get("y")
       when "missing" then "?"
   )
-  text: Ember.computed(-> "#{moment(@get('date')).format('MM/DD')} - #{@get('y')}" ).property("x", "y")
+  text: Ember.computed(-> "#{moment.utc(@get('date')).format('MM/DD')} - #{@get('y')}" ).property("x", "y")
   classes: Ember.computed(->
     switch @get("type")
       when "normal"
@@ -25,7 +25,7 @@ controller = Ember.Controller.extend
   ).property("type")
 
   entryDate: Ember.computed ->
-    moment(@get("date")*1000).format("MMM-DD-YYYY")
+    moment.utc(@get("date")*1000).format("MMM-DD-YYYY")
   .property("x")
 
   # objectFormat: Ember.computed ->

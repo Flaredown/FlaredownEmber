@@ -18,7 +18,7 @@ controller = Ember.ArrayController.extend
   .property("content.@each")
 
   dateRange: Ember.computed( ->
-    current = moment(@get("catalog.scores.firstObject.x")*1000)
+    current = moment.utc(@get("catalog.scores.firstObject.x")*1000)
     range   = Ember.A([current.unix()])
     a_day   = moment.duration(86400*1000)
 
@@ -43,7 +43,6 @@ controller = Ember.ArrayController.extend
   scoreData: Ember.computed.map("dateRange", (unix) ->
     that = @
     score = that.scoreByUnix(unix)
-    console.log score
     if score
       that.datum(score)
     else

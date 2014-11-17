@@ -3,9 +3,10 @@
 `import ajax from 'ic-ajax'`
 
 route = AuthRoute.extend
+  enter: -> console.log "entered !!!!!!!!!!!!!!!!";
   model: (params, transition, queryParams) ->
     date = params.date
-    today = moment().format("MMM-DD-YYYY")
+    today = moment.utc().format("MMM-DD-YYYY")
     @set "section", parseInt params.section
 
     date = today if params.date is "today" or today is params.date
@@ -17,9 +18,9 @@ route = AuthRoute.extend
       ajax("#{config.apiNamespace}/entries/#{date}").then(
         (response) =>
           if response.entry.id
-            @store.find("entry", date)
+            Ember.run => @store.find("entry", date)
           else
-            @store.createRecord("entry", {catalogs: ["cdai"]}).save() # TODO replace with user catalogs
+            Ember.run => @store.createRecord("entry", {catalogs: ["cdai"]}).save() # TODO replace with user catalogs
         ,
         (response) ->
       )

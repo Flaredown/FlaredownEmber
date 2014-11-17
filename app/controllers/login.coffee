@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import config from '../config/environment'`
+`import ajax from 'ic-ajax'`
 
 controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormStatesMixin,
   init: ->
@@ -32,9 +33,8 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
       data = {}
       data["api_v#{config.apiVersion}_user"] = @getProperties("email", "password")
 
-      Ember.$.ajax(
+      ajax("#{config.apiNamespace}/users/sign_in.json",
         type: "POST"
-        url: "#{config.apiNamespace}/users/sign_in.json"
         data: data
         context: @
 

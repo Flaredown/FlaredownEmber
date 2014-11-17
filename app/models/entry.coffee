@@ -16,7 +16,7 @@ model = DS.Model.extend
   # catalogs:   attr("object")
   
   moment: Ember.computed ->
-    moment(@get("date"))
+    moment.utc(@get("date"))
   .property("date")
   
   unixDate: Ember.computed -> 
@@ -28,7 +28,7 @@ model = DS.Model.extend
   .property("moment")
   
   entryDateParam: Ember.computed -> 
-    return "today" if moment().format("MMM-DD-YYYY") is @get("entryDate")
+    return "today" if moment.utc().format("MMM-DD-YYYY") is @get("entryDate")
     @get("entryDate")
   .property("entryDate")
   

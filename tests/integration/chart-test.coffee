@@ -11,6 +11,7 @@ module('Chart Integration', {
 })
 
 chartMocks = ->
+
   Ember.$.mockjax
     url: '/api/v1/current_user',
     type: 'GET'
@@ -49,48 +50,26 @@ test "Interaction", =>
   expect 1
   chartMocks()
 
+
   Ember.$.mockjax
-    url: '/api/v1/entries/Oct-23-2014',
+    url: '/api/v1/entries/Oct-24-2014',
     type: 'GET'
     # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
     responseText: {
       entry: {
         id: "abc123",
-        date: "2014-10-23"
+        date: "2014-10-24"
       }
     }
 
   visit('/').then(
-    =>
+    ->
       stop()
       $($("circle.hitbox")[0]).simulate("click")
+
       setTimeout(
         ->
-          start()
           assetModalPresent()
-
-      , 5000)
-      # , 300)
-      #
-      # stop()
-      #
-      # setTimeout(
-      #   ->
-      #     Ember.run ->
-      #       el = $($("circle.score")[0])
-      #       offset = el.offset()
-      #       event = jQuery.Event( "mousedown", {
-      #         which: 1,
-      #         pageX: offset.left,
-      #         pageY: offset.top
-      #       })
-      #       el.trigger(event)
-      #
-      #       start
-      #       # debugger
-      #       ok(find(".modal").length, "open modal by clicking a circle")
-      #       # start()
-      #   , 2000
-      # )
-
+          start()
+      , 1400)
   )
