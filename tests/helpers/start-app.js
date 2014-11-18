@@ -13,6 +13,9 @@ export default function startApp(attrs) {
     location: 'none'
   });
 
+  $.mockjaxSettings.contentType = "application/json";
+  $.mockjaxSettings.responseTime = 10;
+
   Ember.run(function() {
     App = Application.create(attributes);
     App.setupForTesting();
