@@ -7,9 +7,9 @@ module.exports = function(environment) {
     baseURL: '/',
     locationType: 'auto',
     apiVersion:      1,
-    apiNamespace:    '/api/v1',
+    apiNamespace:    '/v1',
     afterLoginRoute: 'entries',
-    
+
     // contentSecurityPolicy: {
     //   'default-src': "'none'",
     //   'script-src': "'self' 'unsafe-inline' 'unsafe-eval' use.typekit.net",
@@ -19,7 +19,7 @@ module.exports = function(environment) {
     //   'style-src': "'self' 'unsafe-inline' use.typekit.net",
     //   'frame-src': ""
     // },
-    
+
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
@@ -45,11 +45,11 @@ module.exports = function(environment) {
     // Testem prefers this...
     ENV.baseURL = '/';
     ENV.locationType = 'auto';
-    
+
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
-    
+
     ENV.APP.rootElement = '#ember-testing';
   }
 

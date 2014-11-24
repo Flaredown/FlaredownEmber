@@ -1,7 +1,9 @@
+`import config from '../../config/environment'`
 `import Ember from "ember"`
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 `import assetModalPresent from "../helpers/assert-modal-present"`
+
 
 App = null
 
@@ -13,7 +15,7 @@ module('Chart Integration', {
 chartMocks = ->
 
   Ember.$.mockjax
-    url: '/api/v1/current_user',
+    url: "#{config.apiNamespace}/current_user",
     type: 'GET'
     responseText: {
       current_user: {
@@ -23,7 +25,7 @@ chartMocks = ->
     }
 
   Ember.$.mockjax
-    url: '/api/v1/chart',
+    url: "#{config.apiNamespace}/chart",
     type: 'GET'
     # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
     responseText: {
@@ -52,7 +54,7 @@ test "Interaction", =>
 
 
   Ember.$.mockjax
-    url: '/api/v1/entries/Oct-24-2014',
+    url: "#{config.apiNamespace}/entries/Oct-24-2014",
     type: 'GET'
     # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
     responseText: {

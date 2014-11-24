@@ -26,6 +26,7 @@ route = AuthRoute.extend
 
   actions:
     updates: (message) ->
+      # TODO use Pusher data, not hard-coded example
       @controllerFor("entries").get("catalog.scores").pushObject {x: 1391922000, y: 500 }
 
 `export default route`

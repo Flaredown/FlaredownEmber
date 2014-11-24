@@ -7,6 +7,6 @@ init = {
 
   initialize: (container, application) ->
     DS.ActiveModelAdapter.reopen
-      namespace: "api/v#{config.apiVersion}"
+      namespace: "v#{config.apiVersion}" # /v1
 }
 `export default init`

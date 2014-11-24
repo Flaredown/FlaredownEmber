@@ -1,3 +1,4 @@
+`import config from '../../config/environment'`
 `import Ember from "ember"`
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
@@ -14,7 +15,7 @@ test "Shows invitee registration page using invite token", ->
   expect 2
 
   Ember.$.mockjax
-    url: '/api/v1/users/invitee/abc123',
+    url: "#{config.apiNamespace}/users/invitee/abc123",
     type: 'GET'
     responseText: {
       id: 1,
@@ -32,7 +33,7 @@ test "Invalid invite token gets 404 message", ->
   expect 3
 
   Ember.$.mockjax
-    url: '/api/v1/users/invitee/abc123-invalid-invite-token',
+    url: "#{config.apiNamespace}/users/invitee/abc123-invalid-invite-token",
     type: 'GET'
     status: 404
     responseText: {
