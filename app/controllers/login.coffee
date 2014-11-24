@@ -31,15 +31,13 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
   actions:
     login: ->
       data = {}
-      data["api_v#{config.apiVersion}_user"] = @getProperties("email", "password")
+      data["v#{config.apiVersion}_user"] = @getProperties("email", "password")
 
       ajax("#{config.apiNamespace}/users/sign_in.json",
         type: "POST"
         data: data
-        context: @
-
       ).then(
-        (response) -> # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
+        (response) => # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
 
           @store.find("currentUser", 0).then(
             (currentUser) =>
