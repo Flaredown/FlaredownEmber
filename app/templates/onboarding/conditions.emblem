@@ -1,0 +1,21 @@
+.container: .row
+  .col-md-12
+    h1 Which conditions will you track?
+
+    form.form-inline submit="addCondition"
+
+      if errorMessage
+        .row
+          .col-md-12.has-error style="text-align:center"
+            = errorMessage
+            br
+            br
+
+      .row
+        .col-md-12
+          label Add a Condition
+          Ember.TextField type="text" valueBinding="condition" class="form-condition" placeholder="Crohn's Disease" id="condition"
+      .row
+        .col-md-6
+          a class="btn btn-default col-md-12" Add Condition
+

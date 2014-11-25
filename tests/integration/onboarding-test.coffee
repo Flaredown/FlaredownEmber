@@ -46,3 +46,29 @@ test "Invalid invite token gets 404 message", ->
       ok(currentRouteName() == "login", "Rediected to login")
       assertAlertPresent()
   )
+
+test "Existence of onboarding pages", ->
+  expect 8
+  visit('/onboarding/catalogs').then(
+    ->
+      ok(find(".navbar").length, "Page shows up")
+      ok(currentRouteName() == "onboarding.catalogs", "Route OK")
+  )
+
+  visit('/onboarding/checkin-finished').then(
+    ->
+      ok(find(".navbar").length, "Page shows up")
+      ok(currentRouteName() == "onboarding.checkin-finished", "Route OK")
+  )
+
+  visit('/onboarding/conditions').then(
+    ->
+      ok(find(".navbar").length, "Page shows up")
+      ok(currentRouteName() == "onboarding.conditions", "Route OK")
+  )
+
+  visit('/onboarding/symptoms').then(
+    ->
+      ok(find(".navbar").length, "Page shows up")
+      ok(currentRouteName() == "onboarding.symptoms", "Route OK")
+  )

@@ -1,0 +1,22 @@
+.container: .row
+  .col-md-12
+    h1 It's your first check-in
+    h2 Choose up to 8 symptoms to track
+
+    form.form-inline submit="addSymptom"
+
+      if errorMessage
+        .row
+          .col-md-12.has-error style="text-align:center"
+            = errorMessage
+            br
+            br
+
+      .row
+        .col-md-12
+          label Add a Symptom
+          Ember.TextField type="text" valueBinding="condition" class="form-symptom" placeholder="Droopy Lips" id="symptom"
+      .row
+        .col-md-6
+          a class="btn btn-default col-md-12" Add Symptom
+

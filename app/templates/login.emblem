@@ -4,14 +4,14 @@
       p You are already logged in!
     else
       form.form-inline submit="login"
-        
+
         if errorMessage
           .row
             .col-md-12.has-error style="text-align:center"
               = errorMessage
               br
               br
-        
+
         .row
           .col-md-12
             label Login Email
