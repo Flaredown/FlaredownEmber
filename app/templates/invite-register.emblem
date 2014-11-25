@@ -1,0 +1,4 @@
+h1 This is the invite registration page
+
+p here is the registration form
+partial "forms/registration"

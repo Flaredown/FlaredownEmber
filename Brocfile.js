@@ -18,11 +18,20 @@ var fonts = pickFiles('app/assets/fonts', {
    destDir: '/assets'
 });
 
+// var d3 = pickFiles("bower_components/d3", {
+//   srcDir: '/',
+//   files: ['d3.js'],
+//   destDir: '/assets'
+// })
+
 app.import('bower_components/pusher/dist/pusher.js');
 app.import('bower_components/moment/moment.js');
 app.import('bower_components/d3/d3.js');
 app.import('bower_components/sweetalert/lib/sweet-alert.js');
 app.import('bower_components/sweetalert/lib/sweet-alert.css');
+
+app.import({development: 'bower_components/jquery-mockjax/jquery.mockjax.js'});
+app.import({development: 'bower_components/jquery-simulate/jquery.simulate.js'});
 
 // app.import('vendor/bootstrap/js/transition.js');
 // app.import('vendor/bootstrap/js/modal.js');

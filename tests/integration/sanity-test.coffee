@@ -4,13 +4,14 @@
 
 App = null
 
-module('An Integration test', {
+module('App works...', {
   setup: -> App = startApp()
   teardown: -> Ember.run(App, App.destroy)
 })
 
-test "Page contents", ->
-  expect(1)
+test "Sanity Test", ->
+  expect 1
+
   visit('/').then(
-    -> ok(find(".navbar"), "Page shows up")
+    -> ok(find(".navbar").length, "Page shows up")
   )

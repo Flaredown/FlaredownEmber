@@ -2,24 +2,27 @@
 
 view = Ember.View.extend
   templateName: "entries/chart"
-  
+
+  willDestroy: ->
+    @get("force").stop()
+
   watchScores: Ember.observer ->
     that = @
     Ember.run.next -> that.renderChart()
   .observes("controller.scores").on("didInsertElement")
-  
-  x: Ember.computed -> 
+
+  x: Ember.computed ->
     d3.scale.linear()
       .domain([d3.min(@get("controller.scores"), (d) -> d.origin.x), d3.max(@get("controller.scores") , (d) -> d.origin.x)])
       .range [0, @get("width")]
   .property("width", "controller.scores.@each")
-  
-  y: Ember.computed -> 
+
+  y: Ember.computed ->
     d3.scale.linear()
       .domain([d3.min(@get("controller.scores") , (d) -> d.origin.y), d3.max(@get("controller.scores") , (d) -> d.origin.y)])
       .range [@get("height"),0]
   .property("height", "controller.scores.@each")
-  
+
   fillCoordinates: Ember.computed ->
     floor = @get("y")(@get("y").domain()[0])
     [
@@ -27,7 +30,7 @@ view = Ember.View.extend
     ].concat(@get("controller.scores"))
     .concat(Ember.Object.create({id: @get("controller.scores.lastObject.id")+1, x: @get("controller.scores.lastObject.x"), y: floor, origin: {y: -floor}}))
   .property("controller.scores.@each")
-  
+
   setup: ->
     that = @
     controller = @get("controller")
@@ -52,7 +55,7 @@ view = Ember.View.extend
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
       .append("g")
         .attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")"))
-    
+
     @get("svg").selectAll("line.horizontalGrid").data(@get("y").ticks(3)).enter()
       .append("line")
         .attr
@@ -65,7 +68,7 @@ view = Ember.View.extend
           "shape-rendering" : "crispEdges"
           "stroke" : "black"
           "stroke-width" : "1px"
-          
+
     @get("svg").selectAll("line.verticalGrid").data(@get("x").ticks(10)).enter()
       .append("line")
         .attr
@@ -78,24 +81,24 @@ view = Ember.View.extend
           "shape-rendering" : "crispEdges"
           "stroke" : "black"
           "stroke-width" : "1px"
-          
+
     @set("startLine", d3.svg.line()
       .x( (d) -> d.x )
       .y( (d) -> that.get("height")*2 )
     )
-      
+
     @set("endLine", d3.svg.line()
       .x( (d) -> d.x )
       .y( (d) -> that.get("y")(d.origin.y) )
     )
-      
+
   tick: (that) ->
       (e) ->
         k = 0.2 * e.alpha
-            
-        
+
+
         that.get("svg").selectAll("circle.score").each (d,i) ->
-          
+
           # if isNaN(d.x) or isNaN(d.y)
           #   # circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
           #   # d.x = parseFloat( if circle.attr("cx") then circle.attr("cx") else d.px )
@@ -106,35 +109,35 @@ view = Ember.View.extend
           #   circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
           #   d.x = parseFloat circle.attr("cx")
           #   d.y = parseFloat circle.attr("cy")
-            
+
           d.y += (that.get("y")(d.origin.y) - d.y) * k
           d.x += (that.get("x")(d.origin.x) - d.x) * k
-    
+
         # that.get("links")
         #   .attr("x1", (d) -> d.source.x)
         #   .attr("y1", (d) -> d.source.y)
         #   .attr("x2", (d) -> d.target.x)
         #   .attr("y2", (d) -> d.target.y)
-        
+
         that.get("svg").selectAll("circle.score")
           .attr
             cx: (d) -> d.x
             cy: (d) -> d.y
-          
+
   update: (first) ->
     that = @
     controller = @get("controller")
-    
+
     # @set("links", @get("svg").selectAll(".link").data(@get("controller").get("links"), (d) -> "#{d.source.id}-#{d.target.id}").enter()
     #   .append("line")
     #     .attr("class", "link")
     # )
-    
 
-  
+
+
     scoreCircle = @get("svg").selectAll("circle.score").data(controller.get("scores"), (d) -> d.id)
     scoreCircle.order()
-      
+
     scoreCircle
       .enter()
         .append("circle")
@@ -146,7 +149,7 @@ view = Ember.View.extend
             class: (d) -> "score #{d.classes}"
             r: 3
             opacity: 0
-      
+
     scoreCircle
       .each (d,i) ->
         if typeof(d.x) is "undefined"
@@ -165,7 +168,7 @@ view = Ember.View.extend
 
     scoreCircle
       .exit()
-      
+
       .transition()
         .each("start", (d,i) -> d.fixed = true)
         .duration(300)
@@ -175,12 +178,12 @@ view = Ember.View.extend
           cx: (d) -> d.x
         )
         .remove()
-        
+
     scoreText = @get("svg").selectAll("text.score-text").data(controller.get("scores"), (d) -> d.id)
     scoreText
       .exit()
         .remove()
-        
+
     scoreText
       .enter()
         .append("text")
@@ -190,7 +193,7 @@ view = Ember.View.extend
           .attr("font-family", "Arial")
           .attr("font-size", "10px")
           .text( (d) -> d.scoreText)
-          
+
     scoreText
       .attr
          dx: (d) -> that.get("x")(d.origin.x)
@@ -202,13 +205,13 @@ view = Ember.View.extend
     hitbox
       .exit()
         .remove()
-        
+
     hitbox
       .enter()
         .append("circle")
           .attr
             class: "hitbox"
-        
+
     hitbox
       .attr
         r: (d) -> (that.get("width") / scoreCircle[0].length) / 2
@@ -220,52 +223,52 @@ view = Ember.View.extend
           .duration(200)
           .attr("r", 30)
           .style("stroke-width", "3px")
-      
+
         d3.select(scoreText[0][d.index]).transition()
           .duration(200)
           .attr("opacity", 1)
           .style("font-size", "20px")
       )
-      .on("mouseleave", (d,i) ->  
-  
+      .on("mouseleave", (d,i) ->
+
         d3.select(scoreCircle[0][d.index]).transition()
           .duration(300)
           .attr("r", 6)
           .style("stroke-width", "2px")
-      
+
         d3.select(scoreText[0][d.index]).transition()
           .duration(300)
           .attr("opacity", 0)
           .style("font-size", "10px")
       )
       .on("click", (d,i) -> d.model.goTo())
-      
+
       # .each (d,i) ->
       #   hitbox = d3.select(that.get("svg").selectAll("circle.hitbox")[0][i])
       #   d.x = parseFloat hitbox.attr("cx")
       #   d.y = parseFloat hitbox.attr("cy")
-        
-        
+
+
     @get("force").nodes(controller.get("scores"), (d) -> d.id )
     Ember.A(@get("force").nodes()).sortBy("id").forEach (d,i) ->
       if isNaN(d.x) or isNaN(d.y)
         circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
         d.x = parseFloat circle.attr("cx")
         d.y = parseFloat circle.attr("cy")
-    
+
     # if @get("chartLine")
     #   @get("svg").selectAll("path.chart-line")
     #     .datum(controller.get("scores"))
     #     .transition()
     #       .duration(1000)
     #       .attr("d", @get("endLine"))
-    #       
+    #
     #   @get("svg").selectAll("path.chart-fill")
     #     .datum(@get("fillCoordinates"))
     #     .transition()
     #       .duration(1000)
     #       .attr("d", @get("endLine"))
-    #     
+    #
     # else
     #   @set("chartLine", @get("svg").append("path")
     #     .datum(controller.get("scores"))
@@ -275,7 +278,7 @@ view = Ember.View.extend
     #       .duration(1000)
     #       .attr("d", @get("endLine"))
     #   )
-    #   
+    #
     #   @set("chartFill", @get("svg").append("path")
     #     .datum(@get("fillCoordinates"))
     #     .attr("class", "chart-fill")
@@ -284,12 +287,12 @@ view = Ember.View.extend
     #       .duration(1000)
     #       .attr("d", @get("endLine"))
     #   )
-    
+
     @get("force").start()
-    
-  renderChart: ->      
+
+  renderChart: ->
     first = Ember.isEmpty @get("svg")
     @setup() if first
     @update(first)
-    
+
 `export default view`

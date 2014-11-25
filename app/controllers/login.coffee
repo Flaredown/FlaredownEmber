@@ -1,46 +1,44 @@
 `import Ember from 'ember'`
 `import config from '../config/environment'`
+`import ajax from 'ic-ajax'`
 
 controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormStatesMixin,
-  init: -> 
+  init: ->
     @_super()
     @get("setValidationsByName")
-  
+
   isAuthenticated: Ember.computed ->
     @get("currentUser.model.id")
   .property("currentUser.model")
 
   resetFormProperties: "email password".w()
-      
+
   redirectToTransition: ->
     attemptedTransition = @get("attemptedTransition")
     if attemptedTransition and attemptedTransition.targetName isnt "index"
       attemptedTransition.retry()
       @set("attemptedTransition", null)
-    else 
+    else
       @transitionToRoute(config.afterLoginRoute)
-    
+
   # credentialsObserver: Ember.observer ->
   #   if Ember.isEmpty(@get("loginId"))
   #     $.removeCookie("loginId")
   #   else
   #     $.cookie("loginId", @get("loginId"))
   # .observes("loginId")
-  
-  actions:    
+
+  actions:
     login: ->
       data = {}
-      data["api_v#{config.apiVersion}_user"] = @getProperties("email", "password")
+      data["v#{config.apiVersion}_user"] = @getProperties("email", "password")
 
-      $.ajax
+      ajax("#{config.apiNamespace}/users/sign_in.json",
         type: "POST"
-        url: "#{config.apiNamespace}/users/sign_in.json"
         data: data
-        context: @
-        
-        success: ->
-          # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
-          
+      ).then(
+        (response) => # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
+
           @store.find("currentUser", 0).then(
             (currentUser) =>
               @set("currentUser.model", currentUser)
@@ -48,9 +46,10 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
             ,
             -> console.log "!!! ERROR"
           )
-        
-        error: @errorCallback
-          
+
+        (response) -> @errorCallback
+      )
+
     # logout: ->
     #   $.ajax
     #     url: "#{config.apiNamespace}/users/sign_out.json"
@@ -60,5 +59,5 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
     #       @get("currentUser.pusherChannels").clear()
     #       @transitionToRoute("login")
     #     error: (response) -> @transitionToRoute("login")
-        
+
 `export default controller`

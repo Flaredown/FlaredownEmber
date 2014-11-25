@@ -13,6 +13,9 @@ export default function startApp(attrs) {
     location: 'none'
   });
 
+  $.mockjaxSettings.contentType = "application/json";
+  $.mockjaxSettings.responseTime = 10;
+
   Ember.run(function() {
     App = Application.create(attributes);
     App.setupForTesting();
@@ -20,6 +23,7 @@ export default function startApp(attrs) {
   });
 
   App.reset(); // this shouldn't be needed, i want to be able to "start an app at a specific URL"
+  $.mockjax.clear();
 
   return App;
 }

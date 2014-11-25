@@ -11,7 +11,7 @@ controller = Ember.Controller.extend
   .property("label", "dosage")
   
   entryDate: Ember.computed -> 
-    moment(@get("date")*1000).format("MMM-DD-YYYY")
+    moment.utc(@get("date")*1000).format("MMM-DD-YYYY")
   .property("x")
   
   level: Ember.computed ->
