@@ -29,6 +29,8 @@ app.import('bower_components/moment/moment.js');
 app.import('bower_components/d3/d3.js');
 app.import('bower_components/sweetalert/lib/sweet-alert.js');
 app.import('bower_components/sweetalert/lib/sweet-alert.css');
+app.import('bower_components/jbox/Source/jBox.js');
+app.import('bower_components/jbox/Source/jBox.css');
 
 app.import({development: 'bower_components/jquery-mockjax/jquery.mockjax.js'});
 app.import({development: 'bower_components/jquery-simulate/jquery.simulate.js'});
