@@ -54,9 +54,10 @@ test "Interaction", =>
 
 
   Ember.$.mockjax
-    url: "#{config.apiNamespace}/entries/Oct-24-2014",
-    type: 'GET'
-    # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
+    url: "#{config.apiNamespace}/entries",
+    type: 'POST'
+    data:
+      date: "Oct-24-2014"
     responseText: {
       entry: {
         id: "abc123",
@@ -73,5 +74,5 @@ test "Interaction", =>
         ->
           assetModalPresent()
           start()
-      , 400)
+      , 200)
   )
