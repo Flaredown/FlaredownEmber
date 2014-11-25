@@ -73,5 +73,5 @@ test "Interaction", =>
         ->
           assetModalPresent()
           start()
-      , 200)
+      , 400)
   )
