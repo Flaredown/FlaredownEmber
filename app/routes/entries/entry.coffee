@@ -14,12 +14,20 @@ route = AuthRoute.extend
     if controller and controller.get("model.entryDate") is date
       controller.get("model")
     else
-      ajax("#{config.apiNamespace}/entries/#{date}").then(
+      ajax(
+        "#{config.apiNamespace}/entries",
+        type: "POST",
+        data:
+          date: date
+      ).then(
         (response) =>
-          if response.entry.id
-            Ember.run => @store.find("entry", date)
-          else
-            Ember.run => @store.createRecord("entry", {catalogs: ["cdai"]}).save() # TODO replace with user catalogs
+          @store.pushPayload "entry", response
+          @store.find "entry", response.entry.id
+
+          # if response.entry.id
+          #   Ember.run => @store.find("entry", date)
+          # else
+          #   Ember.run => @store.createRecord("entry", {catalogs: ["cdai"]}).save() # TODO replace with user catalogs
         ,
         (response) ->
       )
