@@ -30,7 +30,7 @@ chartMocks = ->
     # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
     responseText: {
       chart: [{
-        name: "cdai",
+        name: "hbi",
         scores: [
           {x: 1414108800, y: 260},
           {x: 1414195200, y: 301},
