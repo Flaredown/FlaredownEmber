@@ -11,7 +11,7 @@ controller = Ember.ArrayController.extend
   startDateFormatted: Ember.computed( -> @get("startDate").format("MMM-DD-YYYY")).property("startDate")
   endDateFormatted: Ember.computed( -> @get("endDate").format("MMM-DD-YYYY")).property("startEnd")
 
-  catalogName: "cdai"
+  catalogName: "hbi" # TODO remove hard-coded
   catalog: Ember.computed ->
     that = @
     @get("content").find (catalog) -> catalog.name == that.get("catalogName")
