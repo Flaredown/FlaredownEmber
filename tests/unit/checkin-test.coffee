@@ -77,10 +77,10 @@ moduleFor("controller:entries/checkin", "Checkin Controller",
   {
     needs: ["router:main"]
     setup: ->
-      App = startApp()
-      store = App.__container__.lookup("store:main")
-      controller = @subject()
-
+      App         = startApp()
+      store       = App.__container__.lookup("store:main")
+      controller  = @subject()
+      controller.reopen { sectionChanged: -> } # stub stupid observer throwing null error on transitionToRoute. Works fine in integration.
 
       Ember.run ->
         store.pushPayload "entry", entryFixture
@@ -98,19 +98,38 @@ test "Catalog definitions are loaded up correctly", ->
 test "Generates #sections from catalog_definitions", ->
   expect 4
 
-  ok controller.get("sections.length") is (5 + 1) # hbi + foo + zero_spacer
-  ok controller.get("sections.firstObject.supersection") is "foo" # should be alphabetical
+  ok controller.get("sections.length") is (5 + 1)             # hbi + foo
+  ok controller.get("sections.firstObject.catalog") is "foo"  # should be alphabetical, "foo" before "hbi"
   ok controller.get("sections.firstObject.selected") is true
   ok controller.get("sections.lastObject.selected") is false
 
 test "#currentSection is set based on section integer", ->
-  expect 5
-  controller.reopen { sectionChanged: -> } # stub stupid observer throwing null error on transitionToRoute. Works fine in integration.
+  expect 7
 
   ok controller.get("currentSection").selected is true
-  ok controller.get("currentSection").number is 1
-  ok controller.get("currentSection").supersection is "foo"
+  ok controller.get("currentSection").number is 1           # 1st section total
+  ok controller.get("currentSection").catalog_section is 1  # 1st in catalog, also
+  ok controller.get("currentSection").catalog is "foo"
 
   controller.set("section", 3)
-  ok controller.get("currentSection").number is 3
-  ok controller.get("currentSection").supersection is "hbi"
+  ok controller.get("currentSection").number is 3           # 3rd section total
+  ok controller.get("currentSection").catalog_section is 2  # 2nd section in this catalog
+  ok controller.get("currentSection").catalog is "hbi"
+
+test "#sectionQuestions returns question(s) based on section", ->
+  expect 8
+
+  questions = controller.get("sectionQuestions")
+  ok Ember.typeOf(questions) is "array"
+
+  question_keys = Object.keys(questions[0])
+  ok question_keys.contains "name"
+  ok question_keys.contains "kind"
+  ok question_keys.contains "inputs"
+
+  input_keys = Object.keys(questions[0].inputs[0])
+  ok input_keys.contains "value"
+  ok input_keys.contains "label"
+  ok input_keys.contains "meta_label"
+  ok input_keys.contains "helper"
+
