@@ -47,6 +47,7 @@ controller = Ember.ObjectController.extend
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
+    return [] unless @get("catalog_definitions")
     catalog_questions = @get("catalog_definitions.#{section.catalog}")
     section_questions = catalog_questions[ Object.keys(catalog_questions)[section.catalog_section-1] ]
 
