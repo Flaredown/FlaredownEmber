@@ -1,11 +1,13 @@
-ul: each catalog in catalogs
-  li= catalog
-  
 .pagination
   ul
     li: a.page-prev.previous-link href="" click="previousSection" <<
-    each section in sections
-      li: a href="" click="setSection section.number" class={::section-number-link section.selected:selected}= section.number
+    each sec in sections
+      li: a href="" click="setSection section.number" class={::section-number-link sec.selected:selected}= sec.number
     li: a.page-next.next-link href="" click="nextSection" >>
 
-= partial "questioner/section"
+h2 Question:
+
+= currentSection.catalog
+.section: each question in sectionQuestions
+  h3= question.name
+  = questioner-input question.kind

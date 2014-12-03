@@ -1,4 +1,4 @@
-ul: each input in response.question.inputs
+ul: each input in question.inputs
   li
     form
       = input class="response-input form-control input-lg" type="number" valueBinding="response.value" submit="setResponse response response.value"

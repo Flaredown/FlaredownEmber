@@ -29,7 +29,12 @@ controller = Ember.ObjectController.extend
       Object.keys(@get("catalog_definitions.#{catalog}")).forEach (section,catalog_section) =>
 
         number = section_total+catalog_section+1
-        sections.addObject {number: number, selected: (number is @get("section")), catalog_section: catalog_section+1, catalog: catalog}
+        sections.addObject {
+          number: number
+          selected: (number is @get("section"))
+          catalog_section: catalog_section+1
+          catalog: catalog
+        }
 
       section_total = sections.length
 
@@ -43,7 +48,7 @@ controller = Ember.ObjectController.extend
     section = @get("currentSection")
 
     catalog_questions = @get("catalog_definitions.#{section.catalog}")
-    catalog_questions[ Object.keys(catalog_questions)[section.catalog_section-1] ]
+    section_questions = catalog_questions[ Object.keys(catalog_questions)[section.catalog_section-1] ]
 
   .property("section")
 

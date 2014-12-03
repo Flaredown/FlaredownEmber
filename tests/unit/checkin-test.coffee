@@ -127,9 +127,9 @@ test "#sectionQuestions returns question(s) based on section", ->
   ok question_keys.contains "kind"
   ok question_keys.contains "inputs"
 
+  # For the select input kind
   input_keys = Object.keys(questions[0].inputs[0])
   ok input_keys.contains "value"
   ok input_keys.contains "label"
   ok input_keys.contains "meta_label"
   ok input_keys.contains "helper"
-
