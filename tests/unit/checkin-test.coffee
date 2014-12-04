@@ -14,8 +14,8 @@ entryFixture = {
       "hbi", "foo"
     ],
     catalog_definitions: {
-      hbi: {
-        general_wellbeing: [{
+      hbi: [
+        [{
             name: "general_wellbeing", section: 0, kind: "select",
             inputs: [
               { value: 0, label: "very_well", meta_label: "happy_face", helper: null},
@@ -25,7 +25,7 @@ entryFixture = {
               { value: 4, label: "terrible", meta_label: "sad_face", helper: null }
             ]
         }],
-        ab_pain: [{
+        [{
             name: "ab_pain", section: 1, kind: "select",
             inputs: [
               { value: 0, label: "none", meta_label: "happy_face", helper: null},
@@ -34,11 +34,11 @@ entryFixture = {
               { value: 3, label: "severe", meta_label: "sad_face", helper: null}
             ]
         }],
-        stools: [{
+        [{
             name: "stools", section: 2, kind: "number",
             inputs: [ { value: 0, label: null, meta_label: null, helper: "stools_daily"} ]
         }],
-        ab_mass: [{
+        [{
             name: "ab_mass", section: 3, kind: "select",
             inputs: [
               { value: 0, label: "none", meta_label: "happy_face", helper: null },
@@ -47,7 +47,7 @@ entryFixture = {
               { value: 3, label: "definite_and_tender", meta_label: "sad_face", helper: null}
             ]
         }],
-        complications: [
+        [
           { name: "complication_arthralgia", section: 4, kind: "checkbox"},
           { name: "complication_uveitis", section: 4, kind: "checkbox"},
           { name: "complication_erythema_nodosum", section: 4, kind: "checkbox"},
@@ -56,9 +56,9 @@ entryFixture = {
           { name: "complication_fistula", section: 4, kind: "checkbox"},
           { name: "complication_abscess", section: 4, kind: "checkbox"}
         ]
-      },
-      foo: {
-        how_fantastic_are_you:  [{
+      ],
+      foo: [
+        [{
             name: "how_fantastic_are_you", section: 0, kind: "select",
             inputs: [
               { value: 0, label: "very_fantastic", meta_label: "happy_face", helper: null},
@@ -67,7 +67,7 @@ entryFixture = {
               { value: 3, label: "crazy_fantastic", meta_label: "happy_face", helper: null },
             ]
         }]
-      }
+      ]
     }
   }
 }

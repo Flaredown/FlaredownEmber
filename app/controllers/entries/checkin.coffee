@@ -18,27 +18,28 @@ controller = Ember.ObjectController.extend
   .observes("section")
 
   sections: Ember.computed ->
-    sections      = []
+    accum         = []
     section_total = 0
 
     return [] unless @get("catalogs.length")
 
     # TODO symptoms sections go here
 
+
     @get("catalogs").sort().forEach (catalog) =>
-      Object.keys(@get("catalog_definitions.#{catalog}")).forEach (section,catalog_section) =>
+      @get("catalog_definitions.#{catalog}").forEach (section,catalog_section) =>
 
         number = section_total+catalog_section+1
-        sections.addObject {
+        accum.addObject {
           number: number
           selected: (number is @get("section"))
           catalog_section: catalog_section+1
           catalog: catalog
         }
 
-      section_total = sections.length
+      section_total = accum.length
 
-    sections
+    accum
 
   .property("catalogs")
 
@@ -47,9 +48,9 @@ controller = Ember.ObjectController.extend
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
-    return [] unless @get("catalog_definitions")
+    return [] unless@get("catalog_definitions")
     catalog_questions = @get("catalog_definitions.#{section.catalog}")
-    section_questions = catalog_questions[ Object.keys(catalog_questions)[section.catalog_section-1] ]
+    catalog_questions[ section.catalog_section-1 ]
 
   .property("section")
 
