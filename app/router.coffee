@@ -7,6 +7,7 @@ Router = Ember.Router.extend
 Router.map ->
   @resource "login", path: "login"
   @resource "register", path: "register"
+  @resource "form-error", path: "form-error"
 
   @route "inviteRegister", path: "accept-invitation/:invitation_token"
 
