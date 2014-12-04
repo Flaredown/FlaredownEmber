@@ -1,5 +1,6 @@
 `import config from '../../config/environment'`
 `import Ember from "ember"`
+`import DS from 'ember-data'`
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
@@ -10,8 +11,20 @@ entryFixture = {
   entry: {
     id: "fd088f9929639fd742a209b4b083c421",
     date: "Aug-13-2014",
-    catalogs: [
-      "hbi", "foo"
+    catalogs: ["hbi", "foo"],
+    responses: [
+      {
+        id: "hbi_general_wellbeing_fd088f9929639fd742a209b4b083c421",
+        name: "general_wellbeing",
+        value: 2,
+        catalog: "hbi"
+      },
+      {
+        id: "hbi_ab_pain_fd088f9929639fd742a209b4b083c421",
+        name: "ab_pain",
+        value: 3
+        catalog: "hbi"
+      }
     ],
     catalog_definitions: {
       hbi: [
@@ -91,6 +104,7 @@ moduleFor("controller:entries/checkin", "Checkin Controller",
 
 test "Catalog definitions are loaded up correctly", ->
   expect 2
+
   ok controller.get("catalogs.length") is 2
   ok Object.keys(controller.get("catalog_definitions"))[0] is "hbi"
 
@@ -132,3 +146,8 @@ test "#sectionQuestions returns question(s) based on section", ->
   ok input_keys.contains "label"
   ok input_keys.contains "meta_label"
   ok input_keys.contains "helper"
+
+test "preloads #responses if any exist on the Entry", ->
+  ok controller.get("responses").findBy("catalog", "hbi").findBy("name", "ab_pain") is 3
+
+# test "builds #responses based on #currentSection and #setResponse", ->

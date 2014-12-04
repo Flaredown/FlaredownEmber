@@ -2,7 +2,7 @@
 `import DS from 'ember-data'`
 
 model = DS.Model.extend
-  user:       DS.belongsTo("user")
+  user:                 DS.belongsTo("user")
 
   date:                 DS.attr("string")
   responses:            DS.hasMany("response")
