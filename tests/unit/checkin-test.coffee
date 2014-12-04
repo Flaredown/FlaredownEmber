@@ -75,7 +75,6 @@ entryFixture = {
 
 moduleFor("controller:entries/checkin", "Checkin Controller",
   {
-    needs: ["router:main"]
     setup: ->
       App         = startApp()
       store       = App.__container__.lookup("store:main")
