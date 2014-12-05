@@ -15,7 +15,7 @@
       .row
         .col-md-12
           label Add a Symptom
-          Ember.TextField type="text" valueBinding="condition" class="form-symptom" placeholder="Droopy Lips" id="symptom"
+          = input type="text" valueBinding="condition" class="form-symptom" placeholder="Droopy Lips" id="symptom"
       .row
         .col-md-6
           a class="btn btn-default col-md-12" Add Symptom

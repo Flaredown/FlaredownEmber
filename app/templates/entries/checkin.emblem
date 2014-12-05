@@ -1,8 +1,8 @@
-.modal    
+.modal
   // label for="modal-1"
     .btn.js-btn Click for Modal
-    
-  Ember.Checkbox class="modal-state" id="modal-1" checkedBinding="modalOpen"
+
+  = input type="checkbox" class="modal-state" id="modal-1" checkedBinding="modalOpen"
   .modal-window
     .modal-inner
       label.modal-close for="modal-1"

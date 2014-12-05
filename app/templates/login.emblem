@@ -15,10 +15,10 @@
         .row
           .col-md-12
             label Login Email
-            Ember.TextField type="email" valueBinding="email" class="form-email form-control" placeholder="your email" id="email"
+            = input type="email" valueBinding="email" class="form-email form-control" placeholder="your email" id="email"
           .col-md-12
             label Password
-            Ember.TextField type="password" valueBinding="password" class="form-password form-control" placeholder="your password" id="password"
+            = input type="password" valueBinding="password" class="form-password form-control" placeholder="your password" id="password"
 
           br
         .row

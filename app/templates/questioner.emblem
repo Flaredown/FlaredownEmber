@@ -10,4 +10,3 @@ h2 Question:
 = currentSection.catalog
 .section: each question in sectionQuestions
   h3= question.name
-  = questioner-input question.kind
