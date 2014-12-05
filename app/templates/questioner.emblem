@@ -1,3 +1,4 @@
+= section
 .pagination
   ul
     li: a.page-prev.previous-link href="" click="previousSection" <<

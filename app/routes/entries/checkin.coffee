@@ -27,17 +27,8 @@ route = AuthRoute.extend
         (response) ->
       )
 
-  # afterModel: (model, transition, params) ->
-  #   model.set("section", @get("section"))
-  #
-  #   # Insert all possible responses for forms to depend on
-  #   model.get("questions").forEach (question) ->
-  #     uuid = "#{question.get("name")}_#{model.get("id")}"
-  #     response = model.get("responses").findBy("id", uuid )
-  #     if response
-  #       response.set("question", question)
-  #     else
-  #       model.get("responses").createRecord({id: uuid , name: question.get("name"), value: null, question: question})
+  afterModel: (model, transition, params) ->
+    model.set("section", @get("section"))
 
   actions:
     close: -> @transitionTo "entries.index"

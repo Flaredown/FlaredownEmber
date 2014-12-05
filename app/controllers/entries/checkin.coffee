@@ -4,7 +4,6 @@
 controller = Ember.ObjectController.extend
   titleBinding: "id"
   modalOpen: true
-  section: 1
 
   # Watch some user actions
   modalChanged: Ember.observer ->

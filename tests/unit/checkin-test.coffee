@@ -94,6 +94,7 @@ moduleFor("controller:entries/checkin", "Checkin Controller",
       App         = startApp()
       store       = App.__container__.lookup("store:main")
       controller  = @subject()
+
       controller.reopen { sectionChanged: -> } # stub stupid observer throwing null error on transitionToRoute. Works fine in integration.
 
       fixture     = entryFixture()
@@ -101,6 +102,8 @@ moduleFor("controller:entries/checkin", "Checkin Controller",
       Ember.run ->
         store.pushPayload "entry", fixture
         controller.set('model', store.find('entry', fixture.entry.id))
+
+      controller.set("section", 1)
 
     teardown: -> Ember.run(App, App.destroy)
   }
