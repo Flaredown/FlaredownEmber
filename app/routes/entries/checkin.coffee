@@ -23,11 +23,6 @@ route = AuthRoute.extend
         (response) =>
           @store.pushPayload "entry", response
           @store.find "entry", response.entry.id
-
-          # if response.entry.id
-          #   Ember.run => @store.find("entry", date)
-          # else
-          #   Ember.run => @store.createRecord("entry", {catalogs: ["cdai"]}).save() # TODO replace with user catalogs
         ,
         (response) ->
       )

@@ -12,7 +12,7 @@ form.form-inline submit="register"
 
       div class={errors.password:has-error errors.password_confirmation:has-error :col-md-6 :form-group}
         label Password
-        Ember.TextField type="password" valueBinding="password" placeholder="Desired password" class="form-password form-control" id="password"
+        input type="password" valueBinding="password" placeholder="Desired password" class="form-password form-control" id="password"
         if errors.password
           small= errors.password
         Ember.TextField type="password" valueBinding="password_confirmation" placeholder="Confirm Password" class="form-password-confirmation form-control" id="password_confirmation"

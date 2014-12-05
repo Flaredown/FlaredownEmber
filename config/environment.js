@@ -10,15 +10,15 @@ module.exports = function(environment) {
     apiNamespace:    '/v1',
     afterLoginRoute: 'entries',
 
-    // contentSecurityPolicy: {
-    //   'default-src': "'none'",
-    //   'script-src': "'self' 'unsafe-inline' 'unsafe-eval' use.typekit.net",
-    //   'font-src': "'self' data: use.typekit.net",
-    //   'connect-src': "'self'",
-    //   'img-src': "'self' p.typekit.net",
-    //   'style-src': "'self' 'unsafe-inline' use.typekit.net",
-    //   'frame-src': ""
-    // },
+    contentSecurityPolicy: {
+      'default-src': "'none'",
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' use.typekit.net",
+      'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
+      'connect-src': "'self'",
+      'img-src': "'self' p.typekit.net",
+      'style-src': "'self' 'unsafe-inline' use.typekit.net http://fonts.googleapis.com",
+      'frame-src': ""
+    },
 
     EmberENV: {
       FEATURES: {
