@@ -31,7 +31,7 @@ entryFixture = ->
       catalog_definitions: {
         hbi: [
           [{
-              name: "general_wellbeing", section: 0, kind: "select",
+              name: "general_wellbeing", kind: "select",
               inputs: [
                 { value: 0, label: "very_well", meta_label: "happy_face", helper: null},
                 { value: 1, label: "slightly_below_par", meta_label: "neutral_face", helper: null},
@@ -41,7 +41,7 @@ entryFixture = ->
               ]
           }],
           [{
-              name: "ab_pain", section: 1, kind: "select",
+              name: "ab_pain", kind: "select",
               inputs: [
                 { value: 0, label: "none", meta_label: "happy_face", helper: null},
                 { value: 1, label: "mild", meta_label: "neutral_face", helper: null},
@@ -50,11 +50,11 @@ entryFixture = ->
               ]
           }],
           [{
-              name: "stools", section: 2, kind: "number",
+              name: "stools", kind: "number",
               inputs: [ { value: 0, label: null, meta_label: null, helper: "stools_daily"} ]
           }],
           [{
-              name: "ab_mass", section: 3, kind: "select",
+              name: "ab_mass", kind: "select",
               inputs: [
                 { value: 0, label: "none", meta_label: "happy_face", helper: null },
                 { value: 1, label: "dubious", meta_label: "neutral_face", helper: null},
@@ -63,18 +63,18 @@ entryFixture = ->
               ]
           }],
           [
-            { name: "complication_arthralgia", section: 4, kind: "checkbox"},
-            { name: "complication_uveitis", section: 4, kind: "checkbox"},
-            { name: "complication_erythema_nodosum", section: 4, kind: "checkbox"},
-            { name: "complication_aphthous_ulcers", section: 4, kind: "checkbox"},
-            { name: "complication_anal_fissure", section: 4, kind: "checkbox"},
-            { name: "complication_fistula", section: 4, kind: "checkbox"},
-            { name: "complication_abscess", section: 4, kind: "checkbox"}
+            { name: "complication_arthralgia", kind: "checkbox"},
+            { name: "complication_uveitis", kind: "checkbox"},
+            { name: "complication_erythema_nodosum", kind: "checkbox"},
+            { name: "complication_aphthous_ulcers", kind: "checkbox"},
+            { name: "complication_anal_fissure", kind: "checkbox"},
+            { name: "complication_fistula", kind: "checkbox"},
+            { name: "complication_abscess", kind: "checkbox"}
           ]
         ],
         foo: [
           [{
-              name: "how_fantastic_are_you", section: 0, kind: "select",
+              name: "how_fantastic_are_you", kind: "select",
               inputs: [
                 { value: 0, label: "very_fantastic", meta_label: "happy_face", helper: null},
                 { value: 1, label: "super_fantastic", meta_label: "happy_face", helper: null},
@@ -106,6 +106,7 @@ moduleFor("controller:entries/checkin", "Checkin Controller",
   }
 )
 
+
 test "Catalog definitions are loaded up correctly", ->
   expect 2
 
@@ -133,6 +134,7 @@ test "#currentSection is set based on section integer", ->
   ok controller.get("currentSection").catalog_section is 2  # 2nd section in this catalog
   ok controller.get("currentSection").catalog is "hbi"
 
+### QUESTIONS ###
 test "#sectionQuestions returns question(s) based on section", ->
   expect 8
 
@@ -151,10 +153,9 @@ test "#sectionQuestions returns question(s) based on section", ->
   ok input_keys.contains "meta_label"
   ok input_keys.contains "helper"
 
-test "preloads #responses if any exist on the Entry", ->
+### RESPONSES ###
+test "builds #responsesData on for all questions, including any existing response values", ->
   expect 1
 
-  ok controller.get("responses").filterBy("catalog", "hbi").findBy("name", "ab_pain").get("value") is 3
-
-# test "builds #responses based on #currentSection and #setResponse", ->
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "ab_pain").get("value") is 3
 

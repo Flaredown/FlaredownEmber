@@ -27,8 +27,6 @@ model = DS.Model.extend
   .property("niceDate")
 
   validResponses: Ember.computed.filter("responses", (response) -> !Ember.isEmpty response.get("value"))
-  responsesData: Ember.computed.map "validResponses",
-    (response) -> {name: response.get("name"), value: response.get("value")}
 
   # responsesData: Ember.computed ->
   #   normalized = Ember.A([])

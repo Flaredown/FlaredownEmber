@@ -15,7 +15,7 @@ module.exports = function(environment) {
       'script-src': "'self' 'unsafe-inline' 'unsafe-eval' use.typekit.net",
       'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
       'connect-src': "'self'",
-      'img-src': "'self' p.typekit.net",
+      'img-src': "'none' p.typekit.net",
       'style-src': "'self' 'unsafe-inline' use.typekit.net http://fonts.googleapis.com",
       'frame-src': ""
     },

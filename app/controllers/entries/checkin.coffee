@@ -48,11 +48,28 @@ controller = Ember.ObjectController.extend
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
-    return [] unless@get("catalog_definitions")
+    return [] unless @get("catalog_definitions")
     catalog_questions = @get("catalog_definitions.#{section.catalog}")
     catalog_questions[ section.catalog_section-1 ]
 
   .property("section")
+
+  responsesData: Em.computed ->
+    responses = []
+    that      = @
+
+    @get("catalogs").sort().forEach (catalog) =>
+      @get("catalog_definitions.#{catalog}").forEach (section) =>
+        section.forEach (question) ->
+
+          # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
+          response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
+          value     = if response then response.get("value") else null
+
+          responses.push Ember.Object.create({name: question.name, value: value, catalog: catalog})
+
+    responses
+  .property("catalog_definitions")
 
   # sectionResponses: Ember.computed ->
   #   names = @get("questions").filterBy("section", @get("section")).mapBy("name")
@@ -60,8 +77,8 @@ controller = Ember.ObjectController.extend
   # .property("section", "responses.@each")
 
   actions:
-    setResponse: (response, value) ->
-      response.set("value", parseInt(value))
+    setResponse: (question, value) ->
+      # response.set("value", parseInt(value))
       @send("nextSection") if @get("sectionResponses.length") == 1
       @send("save")
 
