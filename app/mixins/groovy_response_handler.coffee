@@ -4,7 +4,7 @@ mixin = Ember.Mixin.create
 
   errors : null # to hold all errors
 
-  namespace : null # to hold namespace of errors we are dealing with
+  error_group : null # to hold namespace of errors we are dealing with
 
   ##
   # acts like a sort of constructor for
@@ -12,6 +12,6 @@ mixin = Ember.Mixin.create
   ##
   errorCallback : (response) ->
     @set("errors", response.errors)
-    @set("namespace", response.errors.namespace)
+    @set("error_group", response.errors.error_group)
 
 `export default mixin`

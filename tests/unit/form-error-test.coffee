@@ -6,45 +6,97 @@
 App = null
 controller = null
 
-response = {
+inline_response = {
   'errors' : {
-    'namespace' : 'inline',
+    'error_group' : 'inline',
     'fields' : {
-      'name' : ['empty', 'invalid'],
-      'email' : ['invalid']
-      'phone' : ['empty']
+      'name' : [
+        {
+          'type' : 'empty',
+          'message' : 'Name cannot be Empty'
+        }
+      ],
+      'email' : [
+        {
+          'type' : 'invalid',
+          'message' : 'Email is invalid'
+        }
+      ]
+      'phone' : [
+        {
+          'type' : 'invalid',
+          'message' : 'Phone is invalid'
+        },
+        {
+          'type' : 'length',
+          'message' : 'Phone number should not exceed 11 characters'
+        }
+      ]
     }
+  }
+}
+
+modal_response = {
+  'errors' : {
+    'error_group' : 'modal',
+    'title' : 'Some Error Occurred',
+    'message' : 'We are sorry that some error occurred'
+  }
+}
+
+growl_response = {
+  'errors' : {
+    'error_group' : 'growl',
+    'message' : "Sorry, Your account isn't verified yet"
   }
 }
 
 moduleFor("controller:form-error", "FormError Controller",
   {
-    needs: ["router:main"]
-
     setup: ->
       App = startApp()
       store = App.__container__.lookup("store:main")
       controller = @subject()
-      controller.reopen { sectionChanged: -> }
-
-      Ember.run ->
-        controller.errorCallback(response)
 
     teardown: -> Ember.run(App, App.destroy)
   }
 )
 
-test "errors are set", ->
+test "response for inline errors is ok", ->
+  expect 4
+
+  controller.errorCallback(inline_response) #setup response for inline
+
   ok controller.get("errors") isnt null
+  ok controller.get("error_group") is "inline"
 
-test "error namespace is set", ->
-  console.log controller.get("namespace")
-  ok controller.get("namespace") is "inline"
-
-test "response object contains fields", ->
   errors_keys = Object.keys(controller.get("errors"))
   ok errors_keys.contains ("fields")
 
-test "fields object should not be empty", ->
   field_keys = Object.keys(controller.get("errors.fields"))
   ok field_keys.length > 0
+
+test "response for modal is ok", ->
+  expect 4
+
+  controller.errorCallback(modal_response) #setup response for modal
+
+  ok controller.get("errors") isnt null
+  ok controller.get("error_group") is "modal"
+
+  errors_keys = Object.keys(controller.get("errors"))
+
+  ok errors_keys.contains ("title")
+  ok errors_keys.contains ("message")
+
+test "response for growl is ok", ->
+  expect 3
+
+  controller.errorCallback(growl_response) #setup response for growl
+
+  ok controller.get("errors") isnt null
+  ok controller.get("error_group") is "growl"
+
+  errors_keys = Object.keys(controller.get("errors"))
+
+  ok errors_keys.contains ("message")
