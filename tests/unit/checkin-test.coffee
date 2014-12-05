@@ -158,4 +158,3 @@ test "builds #responsesData on for all questions, including any existing respons
   expect 1
 
   ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "ab_pain").get("value") is 3
-

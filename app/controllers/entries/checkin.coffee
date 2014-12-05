@@ -78,6 +78,7 @@ controller = Ember.ObjectController.extend
 
   actions:
     setResponse: (question, value) ->
+      console.log value
       # response.set("value", parseInt(value))
       @send("nextSection") if @get("sectionResponses.length") == 1
       @send("save")

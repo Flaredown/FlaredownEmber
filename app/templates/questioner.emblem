@@ -9,5 +9,5 @@ h2 Question:
 
 = currentSection.catalog
 .section: each question in sectionQuestions
-  h3= question.name
-  = questioner-input question=question action="setResponse"
+  h4= question.name
+  = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
