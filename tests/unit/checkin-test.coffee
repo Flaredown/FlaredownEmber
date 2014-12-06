@@ -8,7 +8,7 @@
 App        = null
 controller = null
 
-moduleFor("controller:entries/checkin", "Checkin Controller",
+moduleFor("controller:entries/checkin", "Check-In Controller",
   {
     setup: ->
       App         = startApp()

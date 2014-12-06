@@ -2,9 +2,12 @@ import Ember from 'ember';
 import Application from '../../app';
 import Router from '../../router';
 import config from '../../config/environment';
+import helpers from '../helpers/helper-functions';
+
 
 export default function startApp(attrs) {
   var App;
+  helpers(); // slap those suckers on the global namespace
 
   var attributes = Ember.merge({}, config.APP);
   attributes = Ember.merge(attributes, attrs); // use defaults, but you can override;

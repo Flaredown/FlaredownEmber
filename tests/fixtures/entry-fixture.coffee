@@ -1,9 +1,11 @@
-fixture = ->
-  id = (new Date).getTime() # crazy stuff for avoiding collisions in store which I *CANNOT* seem to clear
+fixture = (date) ->
+  id    = (new Date).getTime() # crazy stuff for avoiding collisions in store which I *CANNOT* seem to clear
+  date ?= "Aug-13-2014"
+
   {
     entry: {
       id: "#{id}",
-      date: "Aug-13-2014",
+      date: date,
       catalogs: ["hbi", "foo"],
       responses: [
         {
