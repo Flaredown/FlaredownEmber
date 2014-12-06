@@ -183,3 +183,14 @@ test "builds #responsesData on for all questions, including any existing respons
 
   ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "ab_pain").get("value") is 3
   ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "stools").get("value") is null
+
+test "action#setResponse sets a value for a response given the current context", ->
+  expect 2
+
+  Ember.run -> controller.set("section", 6) # hbi complications section
+
+  # Ambiguous with multiple section questions... using as test case
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is null
+
+  controller.send("setResponse", "complication_abscess", 1)
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is 1

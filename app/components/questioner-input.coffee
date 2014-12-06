@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 
 component = Ember.Component.extend
-  templateName: Ember.computed(->
+  layoutName: Ember.computed(->
     "questioner/_#{@get("question.kind")}_input"
   ).property()
 

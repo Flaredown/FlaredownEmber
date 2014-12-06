@@ -56,7 +56,7 @@ controller = Ember.ObjectController.extend
 
   .property("section")
 
-  responsesData: Em.computed ->
+  responsesData: Ember.computed ->
     responses = []
     that      = @
 
@@ -73,12 +73,18 @@ controller = Ember.ObjectController.extend
     responses
   .property("catalog_definitions")
 
+  sectionResponses: Ember.computed( -> @get("responsesData").filterBy("catalog", @get("currentCategory")) ).property("currentCategory", "responsesData")
+
   actions:
-    setResponse: (question, value) ->
-      console.log value
-      # response.set("value", parseInt(value))
-      @send("nextSection") if @get("sectionResponses.length") == 1
-      @send("save")
+    setResponse: (question_name, value) ->
+      response = @get("sectionResponses").findBy("name",question_name)
+
+      if Ember.isPresent(response) and value isnt null
+        response.set("value", value)
+        @send("nextSection")
+        @send("save")
+
+      # TODO raise some error here if question not found?
 
     setSection: (section) ->
       @set("section", section) if @get("sections").mapBy("number").contains(section)
