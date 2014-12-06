@@ -6,7 +6,7 @@ component = Ember.Component.extend
   ).property()
 
   value: Ember.computed( ->
-    @get("responses").filterBy("catalog",@get("section.catalog")).findBy("name", @get("question.name")).get("value")
+    @get("responses").filterBy("catalog",@get("section.category")).findBy("name", @get("question.name")).get("value")
   ).property("question")
 
   actions:

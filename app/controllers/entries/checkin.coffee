@@ -17,39 +17,42 @@ controller = Ember.ObjectController.extend
   .observes("section")
 
   sections: Ember.computed ->
-    accum         = []
-    section_total = 0
+    accum           = []
+    category_count  = 0
 
     return [] unless @get("catalogs.length")
 
-    # TODO symptoms sections go here
-
-
     @get("catalogs").sort().forEach (catalog) =>
-      @get("catalog_definitions.#{catalog}").forEach (section,catalog_section) =>
+      @get("catalog_definitions.#{catalog}").forEach (section,category_number) =>
 
-        number = section_total+catalog_section+1
+        number = category_count+category_number+1
         accum.addObject {
           number: number
           selected: (number is @get("section"))
-          catalog_section: catalog_section+1
-          catalog: catalog
+          category_number: category_number+1
+          category: catalog
         }
 
-      section_total = accum.length
+      category_count = accum.length
+
+    # TODO symptoms sections go here (after catalogs)
 
     accum
 
-  .property("catalogs")
+  .property("catalogs", "section")
 
-  currentSection: Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section")
+  currentSection:           Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections")
+
+  categories:               Ember.computed( -> @get("sections").mapProperty("category").uniq()                ).property("sections")
+  currentCategory:          Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
+  currentCategorySections:  Ember.computed( -> @get("sections").filterBy("category", @get("currentCategory")) ).property("currentCategory")
 
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
     return [] unless @get("catalog_definitions")
-    catalog_questions = @get("catalog_definitions.#{section.catalog}")
-    catalog_questions[ section.catalog_section-1 ]
+    catalog_questions = @get("catalog_definitions.#{section.category}")
+    catalog_questions[ section.category_number-1 ]
 
   .property("section")
 
@@ -69,11 +72,6 @@ controller = Ember.ObjectController.extend
 
     responses
   .property("catalog_definitions")
-
-  # sectionResponses: Ember.computed ->
-  #   names = @get("questions").filterBy("section", @get("section")).mapBy("name")
-  #   @get("responses").filter (response) -> names.contains(response.get("name"))
-  # .property("section", "responses.@each")
 
   actions:
     setResponse: (question, value) ->

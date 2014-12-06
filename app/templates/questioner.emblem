@@ -1,4 +1,10 @@
-= section
+h5 Question Area
+hr
+ul
+  li Category Name #{currentCategory}
+  li Category Number #{currentSection.category_number} of #{categories.length}
+  li Section Number #{section} of #{sections.length}
+
 .pagination
   ul
     li: a.page-prev.previous-link href="" click="previousSection" <<
@@ -6,9 +12,12 @@
       li: a href="" click="setSection section.number" class={::section-number-link sec.selected:selected}= sec.number
     li: a.page-next.next-link href="" click="nextSection" >>
 
-h2 Question:
+br
+br
+h5 Question(s)
+hr
 
-= currentSection.catalog
-.section: each question in sectionQuestions
-  h4= question.name
-  = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
+section.section style="width:100%"
+  each question in sectionQuestions
+    h4= question.name
+    = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
