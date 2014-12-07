@@ -2,7 +2,6 @@
 `import Ember from "ember"`
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
-`import assertAlertPresent from "../helpers/assert-alert-present"`
 
 App = null
 

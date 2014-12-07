@@ -14,7 +14,7 @@
       .row
         .col-md-12
           label Add a Condition
-          Ember.TextField type="text" valueBinding="condition" class="form-condition" placeholder="Crohn's Disease" id="condition"
+          = input type="text" valueBinding="condition" class="form-condition" placeholder="Crohn's Disease" id="condition"
       .row
         .col-md-6
           a class="btn btn-default col-md-12" Add Condition

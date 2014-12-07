@@ -2,17 +2,12 @@
 `import Ember from "ember"`
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
-`import assetModalPresent from "../helpers/assert-modal-present"`
+
+`import chartFixture from "../fixtures/chart-fixture"`
 
 
 App = null
-
-module('Chart Integration', {
-  setup: -> App = startApp()
-  teardown: -> Ember.run(App, App.destroy)
-})
-
-chartMocks = ->
+mocks = ->
 
   Ember.$.mockjax
     url: "#{config.apiNamespace}/current_user",
@@ -28,21 +23,19 @@ chartMocks = ->
     url: "#{config.apiNamespace}/chart",
     type: 'GET'
     # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
-    responseText: {
-      chart: [{
-        name: "hbi",
-        scores: [
-          {x: 1414108800, y: 260},
-          {x: 1414195200, y: 301},
-          {x: 1414281600, y: 288}
-        ],
-        components: [ ]
-      }]
-    }
+    responseText: chartFixture()
+
+module('Chart Integration', {
+  setup: ->
+
+    App = startApp()
+    mocks()
+
+  teardown: -> Ember.run(App, App.destroy)
+})
 
 test "Recent Entries", ->
   expect 1
-  chartMocks()
 
   visit('/').then(
     -> ok(find("circle.score").length == 3, "Has 3 entries")
@@ -50,8 +43,6 @@ test "Recent Entries", ->
 
 test "Interaction", =>
   expect 1
-  chartMocks()
-
 
   Ember.$.mockjax
     url: "#{config.apiNamespace}/entries",
@@ -68,11 +59,11 @@ test "Interaction", =>
   visit('/').then(
     ->
       stop()
-      $($("circle.hitbox")[0]).simulate("click")
+      clickOn $("circle.hitbox")[0]
 
       setTimeout(
         ->
-          assetModalPresent()
+          assertModalPresent()
           start()
       , 200)
   )

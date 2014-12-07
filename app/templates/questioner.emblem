@@ -1,11 +1,23 @@
-ul: each catalog in catalogs
-  li= catalog
-  
+h5 Question Area
+hr
+ul
+  li Category Name #{currentCategory}
+  li Category Number #{currentSection.category_number} of #{categories.length}
+  li Section Number #{section} of #{sections.length}
+
 .pagination
   ul
     li: a.page-prev.previous-link href="" click="previousSection" <<
-    each section in sections
-      li: a href="" click="setSection section.number" class={::section-number-link section.selected:selected}= section.number
+    each sections
+      li: a href="" click="setSection number" class={::section-number-link selected:selected}= number
     li: a.page-next.next-link href="" click="nextSection" >>
 
-= partial "questioner/section"
+br
+br
+h5 Question(s)
+hr
+
+section.section style="width:100%"
+  each question in sectionQuestions
+    h4= question.name
+    = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
