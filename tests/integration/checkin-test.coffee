@@ -24,9 +24,9 @@ module('Check-In Integration', {
 
     Ember.$.mockjax
       url: "#{config.apiNamespace}/chart",
-      data:
-        start_date: "Nov-16-2014"
-        end_date: "Dec-06-2014"
+      # data:
+      #   start_date: "Nov-16-2014"
+      #   end_date: "Dec-06-2014"
 
       type: 'GET'
       responseText: chartFixture()
@@ -45,8 +45,8 @@ module('Check-In Integration', {
     Ember.$.mockjax
       url: "#{config.apiNamespace}/entries",
       type: 'POST'
-      data:
-        date: "Aug-13-2014"
+      # data:
+      #   date: "Aug-13-2014"
       responseText: entryFixture("Aug-13-2014")
 
   teardown: ->
