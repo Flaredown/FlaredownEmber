@@ -8,12 +8,13 @@ controller = Ember.ObjectController.extend
   # Watch some user actions
   modalChanged: Ember.observer ->
     unless @get("modalOpen")
-      @transitionToRoute("entries")
+      console.log "!?!?!?"
+      @transitionToRoute("graph.index")
       @set("modalOpen", true)
   .observes("modalOpen")
 
   sectionChanged: Ember.observer ->
-    @transitionToRoute("entries.checkin", @get("dateAsParam"), @get("section")) if @get("section")
+    @transitionToRoute("graph.checkin", @get("dateAsParam"), @get("section")) if @get("section")
   .observes("section")
 
   sections: Ember.computed ->

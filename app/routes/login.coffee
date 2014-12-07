@@ -3,7 +3,7 @@
 route = Ember.Route.extend
   beforeModel: (transition) ->
     if (@controllerFor('login').get("isAuthenticated"))
-      @transitionTo('entries')
+      @transitionTo('graph')
       
   setupController: (controller, model) ->
     # controller.resetForm()

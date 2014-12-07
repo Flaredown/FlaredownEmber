@@ -8,7 +8,7 @@ module.exports = function(environment) {
     locationType: 'auto',
     apiVersion:      1,
     apiNamespace:    '/v1',
-    afterLoginRoute: 'entries',
+    afterLoginRoute: 'graph',
 
     contentSecurityPolicy: {
       'default-src': "'none'",

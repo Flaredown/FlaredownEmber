@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
-`import EntryDatumController from './entry-datum'`
-`import config from '../config/environment'`
+`import GraphDatumController from './../graph-datum'`
+`import config from '../../config/environment'`
 
 controller = Ember.ArrayController.extend
   sortProperties: ["unixDate"]
@@ -37,8 +37,8 @@ controller = Ember.ArrayController.extend
 
   scoreByUnix: (unix) -> @get("catalog.scores").find (score) -> score.x == unix
 
-  datum:        (coord) -> EntryDatumController.create({id: coord.x.toString(), type: "normal", catalog: @get("catalogName"), x: coord.x, y: coord.y, origin: {x: coord.x, y: coord.y}, date: coord.x, controller: @})
-  missingDatum: (coord) -> EntryDatumController.create({id: coord.x.toString(), type: "missing", catalog: @get("catalogName"), x: coord.x, y: coord.y, origin: {x: coord.x, y: coord.y}, date: coord.x, controller: @})
+  datum:        (coord) -> GraphDatumController.create({id: coord.x.toString(), type: "normal", catalog: @get("catalogName"), x: coord.x, y: coord.y, origin: {x: coord.x, y: coord.y}, date: coord.x, controller: @})
+  missingDatum: (coord) -> GraphDatumController.create({id: coord.x.toString(), type: "missing", catalog: @get("catalogName"), x: coord.x, y: coord.y, origin: {x: coord.x, y: coord.y}, date: coord.x, controller: @})
 
   scoreData: Ember.computed.map("dateRange", (unix) ->
     that = @
@@ -72,23 +72,23 @@ controller = Ember.ArrayController.extend
 
       that = @
       $.ajax(
-        url: "#{config.apiNamespace}/chart"
+        url: "#{config.apiNamespace}/graph"
         method: "GET"
         data:
           start_date: start
           end_date: end
       ).then(
         (response) ->
-          # that.set "catalog.scores", response.chart[0].scores
-          # response.chart.forEach (catalog) ->
+          # that.set "catalog.scores", response.graph[0].scores
+          # response.graph.forEach (catalog) ->
           #   that.get("model").select (catalogs) -> catalogs
           #   catalog
           Ember.run.once ->
-            that.set("model", response.chart)
+            that.set("model", response.graph)
 
 
         (response) ->
-          console.log "?!?! error on getting chart"
+          console.log "?!?! error on getting graph"
       )
 
 `export default controller`

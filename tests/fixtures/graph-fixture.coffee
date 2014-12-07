@@ -1,7 +1,7 @@
-# /v1/chart?start_date=Nov-16-2014&end_date=Dec-06-2014
+# /v1/graph?start_date=Nov-16-2014&end_date=Dec-06-2014
 fixture = ->
   {
-    chart: [{
+    graph: [{
       name: "hbi",
       scores: [
         {x: 1414108800, y: 260},

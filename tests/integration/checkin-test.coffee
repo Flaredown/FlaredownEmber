@@ -4,7 +4,7 @@
 `import startApp from "../helpers/start-app"`
 
 `import entryFixture from "../fixtures/entry-fixture"`
-`import chartFixture from "../fixtures/chart-fixture"`
+`import graphFixture from "../fixtures/graph-fixture"`
 
 App = null
 
@@ -23,13 +23,13 @@ module('Check-In Integration', {
       }
 
     Ember.$.mockjax
-      url: "#{config.apiNamespace}/chart",
+      url: "#{config.apiNamespace}/graph",
       # data:
       #   start_date: "Nov-16-2014"
       #   end_date: "Dec-06-2014"
 
       type: 'GET'
-      responseText: chartFixture()
+      responseText: graphFixture()
 
 
     # For "today" tests
@@ -138,6 +138,10 @@ test "go to the next section when submitting a response", ->
 test "closing modal goes back to index", ->
   visit('/checkin/Aug-13-2014/1').then( ->
     ok currentURL() == "/checkin/Aug-13-2014/1"
-    clickOn $("#modal-1")
-    ok currentURL() == "/", "Went back to index"
+    triggerEvent $("#modal-1"), "click"
+
+    andThen ->
+      ok currentURL() == "/", "Went back to index"
+
+
   )
