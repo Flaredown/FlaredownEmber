@@ -3,8 +3,7 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
-`import chartFixture from "../fixtures/chart-fixture"`
-
+`import graphFixture from "../fixtures/graph-fixture"`
 
 App = null
 mocks = ->
@@ -20,10 +19,10 @@ mocks = ->
     }
 
   Ember.$.mockjax
-    url: "#{config.apiNamespace}/chart",
+    url: "#{config.apiNamespace}/graph",
     type: 'GET'
     # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
-    responseText: chartFixture()
+    responseText: graphFixture()
 
 module('Chart Integration', {
   setup: ->
@@ -38,7 +37,7 @@ test "Recent Entries", ->
   expect 1
 
   visit('/').then(
-    -> ok(find("circle.score").length == 3, "Has 3 entries")
+    -> ok(find("circle.score").length == 3, "Has 3 graph")
   )
 
 test "Interaction", =>

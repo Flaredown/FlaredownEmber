@@ -45,6 +45,6 @@ controller = Ember.Controller.extend
     @get("objectFormat").setProperties index: @get("data").indexOf(@), model: @
   .property("kind")
 
-  goTo: -> @transitionToRoute("entries.checkin", @get("entryDate"), 1)
+  goTo: -> @transitionToRoute("graph.checkin", @get("entryDate"), 1)
 
 `export default controller`

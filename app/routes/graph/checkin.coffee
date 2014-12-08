@@ -10,7 +10,7 @@ route = AuthRoute.extend
 
     date = today if params.date is "today" or today is params.date
 
-    controller = @controllerFor("entries/checkin")
+    controller = @controllerFor("graph.checkin")
     if controller and controller.get("model.niceDate") is date
       controller.get("model")
     else
@@ -31,6 +31,7 @@ route = AuthRoute.extend
     model.set("section", @get("section"))
 
   actions:
-    close: -> @transitionTo "entries.index"
+    close: -> @transitionTo "graph"
 
 `export default route`
+
