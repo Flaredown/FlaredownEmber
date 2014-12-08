@@ -10,6 +10,8 @@ component = Ember.Component.extend
   ).property("question")
 
   actions:
-    sendResponse: (value) -> @sendAction("action", @get("question.name"), value)
+    sendResponse: (value) ->
+      value = parseFloat(value)
+      @sendAction("action", @get("question.name"), value)
 
 `export default component`

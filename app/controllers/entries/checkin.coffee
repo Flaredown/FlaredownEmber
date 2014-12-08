@@ -96,12 +96,15 @@ controller = Ember.ObjectController.extend
     save: ->
       that = @
 
+      # Don't send null value responses, these are invalid
+      cleanedResponses = @get("responsesData").rejectBy("value", null)
+
       data =
         entry:
-          JSON.stringify({responses: @get("responsesData")})
+          JSON.stringify({responses: cleanedResponses})
 
       $.ajax
-        url: "#{config.apiNamespace}/entries/#{@get('id')}.json"
+        url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
         type: "PUT"
         data: data
         success: (response) ->
