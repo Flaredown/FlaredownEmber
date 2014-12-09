@@ -7,6 +7,7 @@ fixture = (date) ->
 
   {
     symptoms: [
+      # Day 0, is today, and the last day on the graph in terms of x
       {x: daysAgo(0), order: 1, points: 2, name: "fat toes", },
       {x: daysAgo(0), order: 2, points: 3, name: "droopy lips", },
       {x: daysAgo(0), order: 3, points: 1, name: "slippery tongue", },
@@ -38,6 +39,8 @@ fixture = (date) ->
       {x: daysAgo(2), order: 3, points: 1, name: "stools", },
       {x: daysAgo(2), order: 4, points: 1, name: "ab_mass", },
       {x: daysAgo(2), order: 5, points: 5, name: "complications", },
+
+      # Day 3 missing, oh no!
 
       {x: daysAgo(4), order: 1, points: 0, name: "general_wellbeing", },
       {x: daysAgo(4), order: 2, points: 0, name: "ab_pain", },

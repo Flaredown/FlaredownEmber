@@ -8,9 +8,10 @@ controller = Ember.ObjectController.extend
 
   ### Set by route ###
   # rawData, startDate, endDate, catalog
+  filteredResponseNames: []
 
   startDateFormatted: Ember.computed( -> @get("startDate").format("MMM-DD-YYYY")).property("startDate")
-  endDateFormatted: Ember.computed( -> @get("endDate").format("MMM-DD-YYYY")).property("startEnd")
+  endDateFormatted:   Ember.computed( -> @get("endDate").format("MMM-DD-YYYY")).property("startEnd")
 
   ### Responses, made a bit more friendly to our purposes ###
   rawDataResponses: Ember.computed(->
@@ -42,7 +43,17 @@ controller = Ember.ObjectController.extend
 
   ).property("rawDataResponses")
 
-  responseNames: Ember.computed( -> @get("rawDataResponses").mapBy("name").uniq() ).property("rawDataResponses")
+  # Some timeline preference helpers
+  isTwoWeeks:   Ember.computed.equal("days.length", 14)
+  isTwoMonths:  Ember.computed.equal("days.length", 60)
+  isOneYear:    Ember.computed.equal("days.length", 365)
+
+  responseNames:                Ember.computed( -> @get("rawDataResponses").mapBy("name").uniq() ).property("rawDataResponses")
+  catalogResponseNames:         Ember.computed( -> @get("rawDataResponses").filterBy("catalog", @get("catalog")).mapBy("name").uniq() ).property("rawDataResponses")
+  filteredCatalogResponseNames: Ember.computed( ->
+    filtered = @get("filteredResponseNames")
+    @get("catalogResponseNames").filter( (name) -> filtered.contains(name) ).compact()
+  ).property("catalogResponseNames", "filteredResponseNames")
 
   ### Catalogs and Catalog Based Filters ###
   catalogs: Ember.computed( -> Object.keys(@get("rawData")) ).property("rawData")
@@ -54,18 +65,27 @@ controller = Ember.ObjectController.extend
 
     # For each day (x coord) among all data
     @get("days").forEach (day) =>
-      @get("rawDataResponses").filterBy("x", day).sortBy("order").forEach (response_data) ->
+      @get("rawDataResponses").filterBy("x", day).sortBy("order").forEach (response) ->
 
-        if response_data.points isnt 0
-          [1..response_data.points].forEach (j) ->
-            y_order = response_data.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                                                                                                                      # ... as opposed to treatment or trigger
-            _datums.push graphDatum.create {x: response_data.x, catalog: response_data.catalog, order: y_order, type: "symptom" }
+        if response.points isnt 0
+          [1..response.points].forEach (j) ->
+            y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
+                                                                                                                                  # ... as opposed to treatment or trigger
+            _datums.push graphDatum.create {x: response.x, catalog: response.catalog, order: y_order, name: response.name, type: "symptom" }
 
     _datums
-  ).property("rawData")
+  ).property("rawData", "days")
 
   catalogDatums: Ember.computed(-> @get("datums").filterBy("catalog", @get("catalog")) ).property("catalog", "datums")
+
+  visibleDatums: Ember.computed(->
+    if Ember.isEmpty(@get("filteredResponseNames")) then return @get("catalogDatums")
+    @get("catalogDatums").filter (response) => @get("filteredResponseNames").contains response.name
+  ).property("catalogDatums", "filteredResponseNames")
+
+  visibleDatumsByDay: Ember.computed( ->
+    @get("days").map (day) => @get("visibleDatums").filterBy("x", day)
+  ).property("visibleDatums", "days")
 
   # catalog: Ember.computed ->
   #   that = @

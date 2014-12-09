@@ -2,32 +2,40 @@
 
 view = Ember.View.extend
 
+  daysBinding:                "controller.days"
+  datumsBinding:              "controller.datums"
+  visibleDatumsBinding:       "controller.visibleDatums"
+  visibleDatumsByDayBinding:  "controller.visibleDatumsByDay"
+
+
   willDestroy: ->
     @get("force").stop()
 
-  watchScores: Ember.observer ->
-    Ember.run.next => @renderGraph()
-  .observes("controller.scores").on("didInsertElement")
+  # watchScores: Ember.observer ->
+  #   Ember.run.next => @renderGraph()
+  # .observes("datums").on("didInsertElement")
 
   x: Ember.computed ->
     d3.scale.linear()
-      .domain([d3.min(@get("controller.scores"), (d) -> d.origin.x), d3.max(@get("controller.scores") , (d) -> d.origin.x)])
+      .domain([@get("days.firstObject"), @get("days.lastObject")])
       .range [0, @get("width")]
-  .property("width", "controller.scores.@each")
+  .property("width", "days.@each")
 
   y: Ember.computed ->
-    d3.scale.linear()
-      .domain([d3.min(@get("controller.scores") , (d) -> d.origin.y), d3.max(@get("controller.scores") , (d) -> d.origin.y)])
-      .range [@get("height"),0]
-  .property("height", "controller.scores.@each")
+    max = d3.max(@get("visibleDatumsByDay") , (dayDatums) -> dayDatums.length)
 
-  fillCoordinates: Ember.computed ->
-    floor = @get("y")(@get("y").domain()[0])
-    [
-      Ember.Object.create({id: -1, x: @get("controller.scores.firstObject.x"), y: floor, origin: {y: -floor}})
-    ].concat(@get("controller.scores"))
-    .concat(Ember.Object.create({id: @get("controller.scores.lastObject.id")+1, x: @get("controller.scores.lastObject.x"), y: floor, origin: {y: -floor}}))
-  .property("controller.scores.@each")
+    d3.scale.linear()
+      .domain([0, max])
+      .range [0,@get("height")]
+  .property("height", "visibleDatumsByDay.@each")
+
+  # fillCoordinates: Ember.computed ->
+  #   floor = @get("y")(@get("y").domain()[0])
+  #   [
+  #     Ember.Object.create({id: -1, x: @get("datums.firstObject.x"), y: floor, origin: {y: -floor}})
+  #   ].concat(@get("datums"))
+  #   .concat(Ember.Object.create({id: @get("datums.lastObject.id")+1, x: @get("datums.lastObject.x"), y: floor, origin: {y: -floor}}))
+  # .property("datums.@each")
 
   setup: ->
     that = @
