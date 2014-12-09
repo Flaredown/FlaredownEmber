@@ -2,9 +2,6 @@
 `import Ember from "ember"`
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
-`import assetModalPresent from "../helpers/assert-modal-present"`
-`import assertAlertPresent from "../helpers/assert-alert-present"`
-
 
 App = null
 
@@ -70,7 +67,7 @@ modalErrors =->
   #data: data
     status: 500
     responseText: modal_response
-    
+
 growlErrors =->
   data = {}
   data["v#{config.apiVersion}_user"] = {"email" : "abc@abc.com" : "password" : "123"}
@@ -97,7 +94,7 @@ test "Inline errors are shown on inline error response", ->
           start()
       , 200)
   )
-  
+
   test "modal is shown on modal error response", ->
   growlErrors()
 
@@ -107,7 +104,7 @@ test "Inline errors are shown on inline error response", ->
       $("#login-button").simulate("click")
       setTimeout(
         ->
-          assetModalPresent()
+          assertModalPresent()
           start()
       , 200)
   )
