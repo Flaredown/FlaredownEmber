@@ -6,7 +6,7 @@ view = Ember.View.extend
     @get("force").stop()
 
   watchScores: Ember.observer ->
-    Ember.run.next => @renderChart()
+    Ember.run.next => @renderGraph()
   .observes("controller.scores").on("didInsertElement")
 
   x: Ember.computed ->
@@ -288,7 +288,7 @@ view = Ember.View.extend
 
     @get("force").start()
 
-  renderChart: ->
+  renderGraph: ->
     first = Ember.isEmpty @get("svg")
     @setup() if first
     @update(first)

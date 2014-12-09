@@ -24,7 +24,7 @@ mocks = ->
     # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
     responseText: graphFixture()
 
-module('Chart Integration', {
+module('Graph Integration', {
   setup: ->
 
     App = startApp()
