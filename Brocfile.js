@@ -17,6 +17,11 @@ var fonts = pickFiles('app/assets/fonts', {
    files: ['*'],
    destDir: '/assets'
 });
+var images = pickFiles('app/assets/img', {
+   srcDir: '/',
+   files: ['*'],
+   destDir: '/assets'
+});
 
 // var d3 = pickFiles("bower_components/d3", {
 //   srcDir: '/',
@@ -53,3 +58,4 @@ app.import({development: 'bower_components/jquery-simulate/jquery.simulate.js'})
 // along with the exports of each module as its value.
 
 module.exports = app.toTree(fonts);
+module.exports = app.toTree(images);

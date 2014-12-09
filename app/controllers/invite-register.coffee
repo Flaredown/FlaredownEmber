@@ -28,7 +28,7 @@ controller = Ember.ObjectController.extend
             # self.set "controllers.login.loginId", response.id
             self.set "controllers.user.content", response
             self.reset()
-            self.transitionToRoute('entries')
+            self.transitionToRoute('graph')
 
         (response) ->
             errors = JSON.parse(response.responseText).errors

@@ -11,8 +11,8 @@ Router.map ->
 
   @route "inviteRegister", path: "accept-invitation/:invitation_token"
 
-  @resource "entries", path: "", ->
-    @route "entry", path: "/entry/:date/:section"
+  @resource "graph", path: "", ->
+    @route "checkin", path: "/checkin/:date/:section"
 
   @route "onboarding", path: "onboarding", ->
     @route "conditions", path: "/conditions"

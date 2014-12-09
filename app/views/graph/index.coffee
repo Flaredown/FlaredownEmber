@@ -1,14 +1,12 @@
 `import Ember from 'ember'`
 
 view = Ember.View.extend
-  templateName: "entries/chart"
 
   willDestroy: ->
     @get("force").stop()
 
   watchScores: Ember.observer ->
-    that = @
-    Ember.run.next -> that.renderChart()
+    Ember.run.next => @renderChart()
   .observes("controller.scores").on("didInsertElement")
 
   x: Ember.computed ->
@@ -35,7 +33,7 @@ view = Ember.View.extend
     that = @
     controller = @get("controller")
 
-    @set "container", $(".chart-container")
+    @set "container", $(".graph-container")
     @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
     @set "width", @get("container").width() - @get("margin").left - @get("margin").right
     @set "height", @get("container").height() - @get("margin").top - @get("margin").bottom
@@ -48,8 +46,8 @@ view = Ember.View.extend
       .on("tick", @tick(@))
     )
 
-    @set("svg", d3.select(".chart-container").append("svg")
-      .attr("id", "chart")
+    @set("svg", d3.select(".graph-container").append("svg")
+      .attr("id", "graph")
       .attr("width", "100%")
       .attr("height", "100%")
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
@@ -256,32 +254,32 @@ view = Ember.View.extend
         d.x = parseFloat circle.attr("cx")
         d.y = parseFloat circle.attr("cy")
 
-    # if @get("chartLine")
-    #   @get("svg").selectAll("path.chart-line")
+    # if @get("graphLine")
+    #   @get("svg").selectAll("path.graph-line")
     #     .datum(controller.get("scores"))
     #     .transition()
     #       .duration(1000)
     #       .attr("d", @get("endLine"))
     #
-    #   @get("svg").selectAll("path.chart-fill")
+    #   @get("svg").selectAll("path.graph-fill")
     #     .datum(@get("fillCoordinates"))
     #     .transition()
     #       .duration(1000)
     #       .attr("d", @get("endLine"))
     #
     # else
-    #   @set("chartLine", @get("svg").append("path")
+    #   @set("graphLine", @get("svg").append("path")
     #     .datum(controller.get("scores"))
-    #     .attr("class", "chart-line")
+    #     .attr("class", "graph-line")
     #     .attr("d", @get("startLine"))
     #     .transition()
     #       .duration(1000)
     #       .attr("d", @get("endLine"))
     #   )
     #
-    #   @set("chartFill", @get("svg").append("path")
+    #   @set("graphFill", @get("svg").append("path")
     #     .datum(@get("fillCoordinates"))
-    #     .attr("class", "chart-fill")
+    #     .attr("class", "graph-fill")
     #     .attr("d", @get("startLine"))
     #     .transition()
     #       .duration(1000)
