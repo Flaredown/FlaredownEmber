@@ -34,3 +34,12 @@
             button.btn.btn-success.col-md-12 id="login-button" Login
           .col-md-6
             link-to "register" class="btn btn-default col-md-12" | Register Now
+  
+  if modalOpen
+    .modal    
+      Ember.Checkbox class="modal-state" id="modal-1" checkedBinding="modalOpen"
+      .modal-window
+        .modal-inner
+          label.modal-close for="modal-1"
+          h1 = modal_title
+          p.intro = modal_message 
