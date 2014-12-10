@@ -14,9 +14,11 @@ route = AuthRoute.extend
   setupController: (controller, model) ->
     user = @get("currentUser")
 
-    controller.set("model", model.graph)
-    controller.set("startDate", moment.utc(user.get("defaultStartDate")))
-    controller.set("endDate", moment.utc(user.get("defaultEndDate")))
+    controller.set "model",     {}
+    controller.set "rawData", model
+    controller.set "catalog",   Object.keys(model).sort()[0]
+    controller.set "startDate", moment.utc(user.get("defaultStartDate"))
+    controller.set "endDate",   moment.utc(user.get("defaultEndDate"))
 
   enter: ->
     # user_id = @controllerFor("login").get("loginId")

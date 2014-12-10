@@ -1,4 +1,4 @@
-if hasScores
+if visibleDatums.length
   .graph-container
   .meds-graph-container
 else

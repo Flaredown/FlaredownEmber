@@ -8,7 +8,6 @@ controller = Ember.ObjectController.extend
   # Watch some user actions
   modalChanged: Ember.observer ->
     unless @get("modalOpen")
-      console.log "!?!?!?"
       @transitionToRoute("graph.index")
       @set("modalOpen", true)
   .observes("modalOpen")
