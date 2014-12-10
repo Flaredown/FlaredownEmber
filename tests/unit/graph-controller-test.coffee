@@ -12,7 +12,7 @@ fixture    = null
 
 moduleFor("controller:graph/index", "Graph Controller",
   {
-    needs: ["controller:graph/datum"]
+    needs: ["controller:graph/symptom-datum"]
     setup: ->
       App         = startApp()
       store       = App.__container__.lookup("store:main")
@@ -51,17 +51,18 @@ test "#filteredCatalogResponseNames gets the difference of #catalogResponseNames
 test "#days lists all possible response names", ->
   expect 2
 
+  console.log controller.get("days")[0]
   ok Ember.typeOf(controller.get("days")) is "array",                             "is an array"
   ok controller.get("days.length") is 6,                                          "5 days, and one without responses"
 
-test "#datums is an array of GraphDatums generated from rawData", ->
+test "#datums is an array of SymptomDatums generated from rawData", ->
   expect 4
 
   expected_datums = fixture.hbi.reduce ((accum, item) -> accum + item.points), 0
   expected_datums += fixture.symptoms.reduce ((accum, item) -> accum + item.points), 0
 
   ok Ember.typeOf(controller.get("datums")) is "array",                           "is an array"
-  ok Ember.typeOf(controller.get("datums.firstObject")) is                        "instance", "objects in array are instances (graphDatums)"
+  ok Ember.typeOf(controller.get("datums.firstObject")) is                        "instance", "objects in array are instances (symptomDatums)"
   ok controller.get("datums.firstObject").get("order") is 1.1,                    "rawData objects have decimal order property for y positionin"
   ok controller.get("datums.length") is expected_datums,                          "has as many datums as the sum of rawData 'points'"
 
@@ -71,11 +72,11 @@ test "#visibleDatums returns unfiltered datums based on their name, for the curr
   controller.set("filteredResponseNames", []) # default
   deepEqual controller.get("visibleDatums").mapBy("name").uniq().sort(), ["general_wellbeing", "ab_pain", "stools", "ab_mass", "complications"].sort(), "no filtered names means all are visible"
 
-  controller.set("filteredResponseNames", ["ab_pain"])
-  deepEqual controller.get("visibleDatums").mapBy("name").uniq().sort(), ["ab_pain"].sort(), "only matching datums"
+  controller.set("filteredResponseNames", ["general_wellbeing", "ab_pain", "stools", "ab_mass"])
+  deepEqual controller.get("visibleDatums").mapBy("name").uniq().sort(), ["complications"], "only matching datums"
 
   controller.set("filteredResponseNames", ["ab_pain", "droopy lips"])
-  deepEqual controller.get("visibleDatums").mapBy("name").uniq().sort(), ["ab_pain"].sort(), "doesn't care about filters from other catalogs"
+  deepEqual controller.get("visibleDatums").mapBy("name").uniq().sort(), ["general_wellbeing", "complications", "stools", "ab_mass"].sort(), "doesn't care about filters from other catalogs"
 
 test "#visibleDatumsByDay is an array of arrays containing datums for each day in #days", ->
   expect 3

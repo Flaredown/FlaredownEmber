@@ -4,6 +4,7 @@
 `import startApp from "../helpers/start-app"`
 
 `import graphFixture from "../fixtures/graph-fixture"`
+`import entryFixture from "../fixtures/entry-fixture"`
 
 App = null
 mocks = ->
@@ -24,6 +25,12 @@ mocks = ->
     # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
     responseText: graphFixture()
 
+  Ember.$.mockjax
+    url: "#{config.apiNamespace}/entries",
+    type: 'POST'
+    # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
+    responseText: entryFixture()
+
 module('Graph Integration', {
   setup: ->
 
@@ -37,7 +44,7 @@ test "Recent Entries", ->
   expect 1
 
   visit('/').then(
-    -> ok(find("circle.score").length == 3, "Has 3 graph")
+    -> ok(find("circle.score").length is 39, "Has 39 datums for HBI fixture")
   )
 
 test "Interaction", =>

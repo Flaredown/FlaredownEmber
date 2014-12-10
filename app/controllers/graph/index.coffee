@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import graphDatum from './datum'`
+`import symptomDatum from './symptom-datum'`
 `import config from '../../config/environment'`
 
 controller = Ember.ObjectController.extend
@@ -50,10 +50,7 @@ controller = Ember.ObjectController.extend
 
   responseNames:                Ember.computed( -> @get("rawDataResponses").mapBy("name").uniq() ).property("rawDataResponses")
   catalogResponseNames:         Ember.computed( -> @get("rawDataResponses").filterBy("catalog", @get("catalog")).mapBy("name").uniq() ).property("rawDataResponses")
-  filteredCatalogResponseNames: Ember.computed( ->
-    filtered = @get("filteredResponseNames")
-    @get("catalogResponseNames").filter( (name) -> filtered.contains(name) ).compact()
-  ).property("catalogResponseNames", "filteredResponseNames")
+  filteredCatalogResponseNames: Ember.computed( -> @get("catalogResponseNames").filter( (name) => @get("filteredResponseNames").contains(name) ).compact() ).property("catalogResponseNames", "filteredResponseNames")
 
   ### Catalogs and Catalog Based Filters ###
   catalogs: Ember.computed( -> Object.keys(@get("rawData")) ).property("rawData")
@@ -65,13 +62,13 @@ controller = Ember.ObjectController.extend
 
     # For each day (x coord) among all data
     @get("days").forEach (day) =>
-      @get("rawDataResponses").filterBy("x", day).sortBy("order").forEach (response) ->
+      @get("rawDataResponses").filterBy("x", day).sortBy("order").forEach (response) =>
 
         if response.points isnt 0
-          [1..response.points].forEach (j) ->
+          [1..response.points].forEach (j) =>
             y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                                                                                                                                  # ... as opposed to treatment or trigger
-            _datums.push graphDatum.create {x: response.x, catalog: response.catalog, order: y_order, name: response.name, type: "symptom" }
+                                                                                                                                                 #... as opposed to treatment or trigger
+            _datums.push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, type: "symptom" }
 
     _datums
   ).property("rawData", "days")
@@ -80,11 +77,11 @@ controller = Ember.ObjectController.extend
 
   visibleDatums: Ember.computed(->
     if Ember.isEmpty(@get("filteredResponseNames")) then return @get("catalogDatums")
-    @get("catalogDatums").filter (response) => @get("filteredResponseNames").contains response.name
+    @get("catalogDatums").reject (response) => @get("filteredResponseNames").contains response.get("name")
   ).property("catalogDatums", "filteredResponseNames")
 
   visibleDatumsByDay: Ember.computed( ->
-    @get("days").map (day) => @get("visibleDatums").filterBy("x", day)
+    @get("days").map (day) => @get("visibleDatums").filterBy("day", day)
   ).property("visibleDatums", "days")
 
   # catalog: Ember.computed ->
@@ -97,8 +94,8 @@ controller = Ember.ObjectController.extend
 
   # scoreByUnix: (unix) -> @get("catalog.scores").find (score) -> score.x == unix
 
-  # datum:        (coord) -> GraphDatumController.create({id: coord.x.toString(), type: "normal", catalog: @get("catalogName"), x: coord.x, y: coord.y, origin: {x: coord.x, y: coord.y}, date: coord.x, controller: @})
-  # missingDatum: (coord) -> GraphDatumController.create({id: coord.x.toString(), type: "missing", catalog: @get("catalogName"), x: coord.x, y: coord.y, origin: {x: coord.x, y: coord.y}, date: coord.x, controller: @})
+  # datum:        (coord) -> symptomDatumController.create({id: coord.x.toString(), type: "normal", catalog: @get("catalogName"), x: coord.x, y: coord.y, origin: {x: coord.x, y: coord.y}, date: coord.x, controller: @})
+  # missingDatum: (coord) -> symptomDatumController.create({id: coord.x.toString(), type: "missing", catalog: @get("catalogName"), x: coord.x, y: coord.y, origin: {x: coord.x, y: coord.y}, date: coord.x, controller: @})
 
   # scoreData: Ember.computed.map("dateRange", (unix) ->
   #   that = @
