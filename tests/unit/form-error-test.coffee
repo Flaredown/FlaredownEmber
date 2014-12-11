@@ -47,7 +47,9 @@ modal_response = {
 growl_response = {
   'errors' : {
     'error_group' : 'growl',
-    'message' : "Sorry, Your account isn't verified yet"
+    'title' : "Sorry, Your account isn't verified yet",
+    'message' : "Check back later when your account will be verified by our admin",
+    'type' : "error"
   }
 }
 
@@ -65,7 +67,7 @@ moduleFor("controller:form-error", "FormError Controller",
 test "response for inline errors is ok", ->
   expect 4
 
-  controller.errorCallback(inline_response) #setup response for inline
+  controller.errorCallback inline_response  #setup response for inline
 
   ok controller.get("errors") isnt null
   ok controller.get("error_group") is "inline"

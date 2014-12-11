@@ -82,6 +82,7 @@ growlErrors =->
     responseText: growl_response
 
 test "Inline errors are shown on inline error response", ->
+  expect 4
   inlineErrors()
 
   visit('/login').then(
@@ -98,8 +99,9 @@ test "Inline errors are shown on inline error response", ->
       , 200)
   )
   
-  test "modal is shown on modal error response", ->
-  growlErrors()
+test "modal is shown on modal error response", ->
+  expect 1
+  modalErrors()
 
   visit('/login').then(
     ->

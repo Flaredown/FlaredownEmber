@@ -43,8 +43,8 @@ mixin = Ember.Mixin.create
   handleInlineErrors : ->
     fields = Object.keys(@errors.fields)
     for field in fields
-      @proxy.set("#{field}Error", true)
-      @proxy.set("#{field}Messages", @errors.fields[field])
+      @get("proxy").set("#{field}Error", true)
+      @get("proxy").set("#{field}Messages", @errors.fields[field])
   
   handleModalErrors : ->
     @proxy.set("modal_error_title", @errors.title)
@@ -61,9 +61,11 @@ mixin = Ember.Mixin.create
     @set("modalOpen", false)
   
   setupProxy : (controller) ->
+    content = if typeof controller is "undefined" then {} else controller
+    
     proxy = Ember.ObjectProxy.create
-      content: controller
-
+      content: content
+      
     @set('proxy', proxy)
 
 `export default mixin`
