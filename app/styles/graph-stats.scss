@@ -1,6 +1,15 @@
 // Place all the styles related to the graph controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.start-date, .end-date {
+  @include span-columns(3);
+  margin: 20px 0 0 0;
+}
+.end-date {
+  @include shift(6);
+}
+
+// OLD STUFF
 .entry-form {
 	li {
 		padding: 20px;
