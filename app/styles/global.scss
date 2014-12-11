@@ -7,15 +7,35 @@ ul {
   list-style-type: none;
   padding: 0;
 }
-a:hover {
-  text-decoration: none;
+a {
+  color: $fd-blue;
+  &:hover {
+    text-decoration: none;
+  }
+}
+.container {
+  @include outer-container;
 }
 .navbar {
   background: white;
-  border: none;
-  padding: 1% 2%;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  padding: 15px 0;
+  .navbar-content {
+    @include outer-container;
+    display: flex;
+    align-items: center;
+  }
+  .navbar-sections {
+    @include span-columns(6);
+  }
+  .navbar-account {
+    @include span-columns(6);
+  }
+  .dropdown {
+    text-align: right;
+    .dropdown-container {
+      text-align: center;
+    }
+  }
 }
 .modal {
   .modal-dialog {
