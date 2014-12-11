@@ -7,9 +7,17 @@ view = Ember.View.extend
   visibleDatumsBinding:       "controller.visibleDatums"
   visibleDatumsByDayBinding:  "controller.visibleDatumsByDay"
 
+  symptomColors:
+    [
+      "#ff0000"
+      "#00ff00"
+      "#0000ff"
+    ]
 
   willDestroy: ->
     # @get("force").stop()
+
+  symptomsMax: Ember.computed(-> d3.max(@get("visibleDatumsByDay") , (dayDatums) -> dayDatums.length) ).property("visibleDatumsByDay")
 
   watchDatums: Ember.observer ->
     Ember.run.next => @renderGraph()
@@ -32,10 +40,8 @@ view = Ember.View.extend
   .property("width", "days.@each")
 
   y: Ember.computed ->
-    max = d3.max(@get("visibleDatumsByDay") , (dayDatums) -> dayDatums.length)
-
     d3.scale.linear()
-      .domain([0, max+1])
+      .domain([0, @get("symptomsMax")+1])
       .range [@get("height"),0]
 
   .property("height", "visibleDatumsByDay")
@@ -50,7 +56,7 @@ view = Ember.View.extend
 
   symptomDatumDimensions: Ember.computed( ->
     base_width  =  (@get("width") / @get("days.length"))
-    base_height =  (@get("height") / d3.max(@get("visibleDatumsByDay"), (dayDatums) -> dayDatums.length))
+    base_height =  (@get("height") / @get("symptomsMax"))
 
     width_margin_percent  = 0.20
     height_margin_percent = 0.20
@@ -76,7 +82,7 @@ view = Ember.View.extend
     controller = @get("controller")
 
     @set "container", $(".graph-container")
-    @set "colors", d3.scale.category20()
+    @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
     # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
     @set "width", @get("container").width() - @get("margin").left - @get("margin").right
