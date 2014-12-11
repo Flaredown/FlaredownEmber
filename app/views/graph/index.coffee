@@ -48,15 +48,25 @@ view = Ember.View.extend
   #   .concat(Ember.Object.create({id: @get("datums.lastObject.id")+1, x: @get("datums.lastObject.x"), y: floor, origin: {y: -floor}}))
   # .property("datums.@each")
 
-  symptomDatumMargins: Ember.computed(->
-    base_x = @get("x")(@get("days")[1]) # second day
-    base_y = @get("y")(1)               # second datum vertically
+  symptomDatumDimensions: Ember.computed( ->
+    base_width  =  (@get("width") / @get("days.length"))
+    base_height =  (@get("height") / d3.max(@get("visibleDatumsByDay"), (dayDatums) -> dayDatums.length))
+
+    width_margin_percent  = 0.20
+    height_margin_percent = 0.20
+
+    right       = base_width  * width_margin_percent
+    left        = base_width  * width_margin_percent
+    top         = base_height * height_margin_percent
+    bottom      = base_height * height_margin_percent
 
     {
-      right:  base_x*(0.25)
-      left:   base_x*(0.25)
-      top:    (@get("height")-base_y)*(0.05)
-      bottom: (@get("height")-base_y)*(0.05)
+      width:  base_width-left-right
+      height: base_height-top-bottom
+      right_margin:  right
+      left_margin:   left
+      top_margin:    top
+      bottom_margin: bottom
     }
   ).property("x", "y", "visibleDatums")
 
@@ -67,7 +77,8 @@ view = Ember.View.extend
 
     @set "container", $(".graph-container")
     @set "colors", d3.scale.category20()
-    @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
+    # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
+    @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
     @set "width", @get("container").width() - @get("margin").left - @get("margin").right
     @set "height", @get("container").height() - @get("margin").top - @get("margin").bottom
     @setupEndPositions()
@@ -145,29 +156,38 @@ view = Ember.View.extend
 
 
   update: (first) ->
-    scoreCircle = @get("svg").selectAll("circle.score").data(@get("visibleDatums"))
+
+    ### RECT VERSION ###
+    scorePip = @get("svg").selectAll("rect.score").data(@get("visibleDatums"))
     # scoreCircle.order()
 
-    scoreCircle
+    scorePip
       .enter()
-        .append("circle")
+        .append("rect")
           .datum( (d) =>
-            d.set "x", d.get("end_x")
-            d.set "y", d.get("end_y")
+            d.set "x", @get("x")(d.get("end_x"))
+            d.set "y", @get("y")(d.get("end_y"))
           )
           .attr
             class: (d) -> "score #{d.get("classes")}"
-            r: 3
-            stroke: (d) => @get("colors")(d.get("name"))
-            cx: (d) -> d.get("x")
-            cy: (d) => @get("y")(@get("days.length")*6) # way above the graph
+            # r: 3
+            ry: 3
+            rx: 3
+            x: (d) -> d.get("end_x")
+            # y: (d) -> d.get("end_y")
+            y: (d) => @get("y")(@get("days.length")*6) # way above the graph
+            width:  @get("symptomDatumDimensions").width
+            height: @get("symptomDatumDimensions").height
+            fill: (d) => @get("colors")(d.get("name"))
+            # cx: (d) -> d.get("x")
+            # cy: (d) => @get("y")(@get("days.length")*6) # way above the graph
             # opacity: 0
 
     @get("days").forEach (day) ->
       that = @
 
       filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
-      scoreCircle.filter(filterByDay)
+      scorePip.filter(filterByDay)
         .transition()
           # .each("start", (d,i) -> d.fixed = false)
           # .each("end", (d,i) -> that.get("force").stop())
@@ -176,21 +196,19 @@ view = Ember.View.extend
           .delay((d,i) -> i*60)
           .attr
             opacity: 100
-            r: 6
-            cy: (d) -> d.get("end_y")
+            y: (d) -> d.get("end_y")
 
-
-    scoreCircle
+    scorePip
       .exit()
 
       .transition()
-        .each("start", (d,i) -> d.fixed = true)
+        # .each("start", (d,i) -> d.fixed = true)
         .duration(300)
         .attr(
           fixed: true
-          cy: -1000
+          y: -1000
           opacity: 0
-          cx: (d) -> d.x
+          x: (d) -> d.get("x")
         )
         .remove()
 
@@ -202,7 +220,7 @@ view = Ember.View.extend
 
     hitbox
       .enter()
-        .append("circle")
+        .append("rect")
           .attr
             fixed: true
             class: "hitbox"
