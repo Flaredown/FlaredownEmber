@@ -13,7 +13,7 @@ view = Ember.View.extend
       "#F5A623"
       "#73C1BA"
       "#F47070"
-      "#A6D771"
+      "#AED584"
     ]
 
   willDestroy: ->
