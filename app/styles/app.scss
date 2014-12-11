@@ -5,10 +5,7 @@
 @import "bitters/base";
 
 //Colors
-
-//#d9e3eb awesome blue-grey;
-//#edece4 yellow-grey #edecd5 #f5f2e7;
-$background: lighten(#ede5ce, 4%);
+$background: #F2EEE8;
 $blue-dark: #405878;
 $blue-mid: #5F8393;
 $green-light: #D1DCD2;
@@ -17,9 +14,6 @@ $orange-mid: #f2cd5e;
 $orange-dark: #e8b007;
 $pink-mid: #de6896;
 $pink-dark: #cc3f75;
-body {
-    @include linear-gradient(to top, red, orange);
-}
 
 // Mixins
 @mixin standard-shadow {
