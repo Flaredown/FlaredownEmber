@@ -43,8 +43,8 @@ module('Graph Integration', {
 test "Recent Entries", ->
   expect 1
 
-  visit('/').then(
-    -> ok(find("circle.score").length is 39, "Has 39 datums for HBI fixture")
+  visit('/').then( ->
+    ok(find("rect.score").length is 39, "Has 39 datums for HBI fixture")
   )
 
 test "Interaction", =>
@@ -65,7 +65,7 @@ test "Interaction", =>
   visit('/').then(
     ->
       stop()
-      clickOn $("circle.hitbox")[0]
+      clickOn $("rect.hitbox")[0]
 
       setTimeout(
         ->
