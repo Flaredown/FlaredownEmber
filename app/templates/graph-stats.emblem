@@ -1,21 +1,3 @@
-= outlet
-  
-if hasScores
-  render "entries-chart" controller=this
-else
-  .container: h1.text-center No scores in date range
-
-
-.container: .row
-  .col-md-3
-    = input type="text" valueBinding="startDateFormatted"
-    button.response-continue-link type="submit" click="setDateRange startDateFormatted endDateFormatted" Set
-  .col-md-6
-  .col-md-3.text-right
-    = input type="text" valueBinding="endDateFormatted"
-    button.response-continue-link type="submit" click="setDateRange startDateFormatted endDateFormatted" Set
-hr
-
 .container
   #stats.row
     .col-xs-12.col-sm-6.col-md-4

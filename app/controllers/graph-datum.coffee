@@ -36,6 +36,6 @@ controller = Ember.Controller.extend
     Ember.Object.create(@getProperties("id", "text", "index", "origin", "scoreText", "classes")).setProperties fixed: false, startx: @get("x"), model: @
   .property()
 
-  goTo: -> @get("controller").transitionToRoute("entries.entry", @get("entryDate"), 1)
+  goTo: -> @get("controller").transitionToRoute("graph.checkin", @get("entryDate"), 1)
 
 `export default controller`

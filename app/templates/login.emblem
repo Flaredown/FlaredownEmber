@@ -15,14 +15,14 @@
         .row
           div class={emailError:has-error :col-md-12 :form-group}
             label Login Email
-            Ember.TextField type="email" valueBinding="email" class="form-email form-control" placeholder="your email" id="email"
+            = input type="email" valueBinding="email" class="form-email form-control" placeholder="your email" id="email"
             if emailError
               ul id="email-messages"
                 each message in emailMessages
                   li=message.message
           div class={passwordError:has-error :col-md-12 :form-group}
             label Password
-            Ember.TextField type="password" valueBinding="password" class="form-password form-control" placeholder="your password" id="password"
+            = input type="password" valueBinding="password" class="form-password form-control" placeholder="your password" id="password"
             if passwordError
               ul id="password-messages"
                 each message in passwordMessages
