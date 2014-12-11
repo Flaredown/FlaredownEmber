@@ -9,9 +9,11 @@ view = Ember.View.extend
 
   symptomColors:
     [
-      "#ff0000"
-      "#00ff00"
-      "#0000ff"
+      "#B081D9"
+      "#F5A623"
+      "#73C1BA"
+      "#F47070"
+      "#A6D771"
     ]
 
   willDestroy: ->
@@ -59,7 +61,7 @@ view = Ember.View.extend
     base_height =  (@get("height") / @get("symptomsMax"))
 
     width_margin_percent  = 0.20
-    height_margin_percent = 0.20
+    height_margin_percent = 0.10
 
     right       = base_width  * width_margin_percent
     left        = base_width  * width_margin_percent
@@ -107,31 +109,31 @@ view = Ember.View.extend
       .append("g")
         .attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")"))
 
-    @get("svg").selectAll("line.horizontalGrid").data(@get("y").ticks(3)).enter()
-      .append("line")
-        .attr
-          "class" : "horizontalGrid"
-          "x1" : 0
-          "x2" : @get("width")
-          "y1" : (d) -> that.get("y")(d)
-          "y2" : (d) -> that.get("y")(d)
-          "fill" : "none"
-          "shape-rendering" : "crispEdges"
-          "stroke" : "black"
-          "stroke-width" : "1px"
+    # @get("svg").selectAll("line.horizontalGrid").data(@get("y").ticks(3)).enter()
+    #   .append("line")
+    #     .attr
+    #       "class" : "horizontalGrid"
+    #       "x1" : 0
+    #       "x2" : @get("width")
+    #       "y1" : (d) -> that.get("y")(d)
+    #       "y2" : (d) -> that.get("y")(d)
+    #       "fill" : "none"
+    #       "shape-rendering" : "crispEdges"
+    #       "stroke" : "black"
+    #       "stroke-width" : "1px"
 
-    @get("svg").selectAll("line.verticalGrid").data(@get("x").ticks(10)).enter()
-      .append("line")
-        .attr
-          "class" : "verticalGrid"
-          "y1" : 0
-          "y2" : @get("height")
-          "x1" : (d) -> that.get("x")(d)
-          "x2" : (d) -> that.get("x")(d)
-          "fill" : "none"
-          "shape-rendering" : "crispEdges"
-          "stroke" : "black"
-          "stroke-width" : "1px"
+    # @get("svg").selectAll("line.verticalGrid").data(@get("x").ticks(10)).enter()
+    #   .append("line")
+    #     .attr
+    #       "class" : "verticalGrid"
+    #       "y1" : 0
+    #       "y2" : @get("height")
+    #       "x1" : (d) -> that.get("x")(d)
+    #       "x2" : (d) -> that.get("x")(d)
+    #       "fill" : "none"
+    #       "shape-rendering" : "crispEdges"
+    #       "stroke" : "black"
+    #       "stroke-width" : "1px"
 
     @set("startLine", d3.svg.line()
       .x( (d) -> d.x )
