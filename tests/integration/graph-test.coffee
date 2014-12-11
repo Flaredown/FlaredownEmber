@@ -43,8 +43,8 @@ module('Graph Integration', {
 test "Recent Entries", ->
   expect 1
 
-  visit('/').then(
-    -> ok(find("circle.score").length is 39, "Has 39 datums for HBI fixture")
+  visit('/').then( ->
+    ok(find("circle.score").length is 39, "Has 39 datums for HBI fixture")
   )
 
 test "Interaction", =>

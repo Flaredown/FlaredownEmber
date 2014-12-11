@@ -19,8 +19,9 @@ view = Ember.View.extend
     @get("visibleDatumsByDay").forEach (day) =>
       # TODO add in other types of datums
       day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
+        datum.set("end_x", @get("x")(datum.get("day")))
         datum.set("end_y", @get("y")(i+1))
-        datum.set("x", @get("x")(datum.get("day")))
+
 
   .observes("visibleDatumsByDay")
 
@@ -71,14 +72,15 @@ view = Ember.View.extend
     @set "height", @get("container").height() - @get("margin").top - @get("margin").bottom
     @setupEndPositions()
 
-    @set("force", d3.layout.force()
-      .charge( (d) -> d.charge)
-      .gravity(0)
-      .linkDistance(1)
-      .linkStrength(0.5)
-      .size([@get("width"), @get("height")])
-      .on("tick", @tick(@))
-    )
+    # @set("force", d3.layout.force()
+    #   # .charge( (d) -> d.charge)
+    #   # .gravity(0)
+    #   # .linkDistance(1)
+    #   # .linkStrength(0.5)
+    #   .alpha(1)
+    #   .size([@get("width"), @get("height")])
+    #   .on("tick", @tick(@))
+    # )
 
     @set("svg", d3.select(".graph-container").append("svg")
       .attr("id", "graph")
@@ -124,62 +126,60 @@ view = Ember.View.extend
       .y( (d) -> that.get("y")(d.origin.y) )
     )
 
-  tick: (self) ->
-      (e) ->
-        k = 0.2 * e.alpha
-
-        Ember.run ->
-
-          # that.get("svg").selectAll("circle.score").each (d,i) ->
-          #   d.set "y", (d.get("y") + (self.get("y")(d.get("start_y")) - d.get("y")) * k)
-          #   d.set "x", (d.get("x") + (self.get("x")(d.get("start_x")) - d.get("x")) * k)
-
-          # self.get("svg").selectAll("circle.score")
-          #   .attr
-          #     cx: (d) -> d.get("x")
-          #     cy: (d) -> d.get("end_y")
+  # tick: (self) ->
+  #     (e) ->
+  #       k = e.alpha
+  #
+  #       Ember.run ->
+  #         # Calculate next positions of datums based on physicsy stuff  ("cooling")
+  #         self.get("svg").selectAll("circle.score").each (d,i) ->
+  #           d.set "y", (d.get("y") + (self.get("y")(d.get("end_y")) - d.get("y")) * k)
+  #           # d.set "x", (d.get("x") + (self.get("x")(d.get("start_x")) - d.get("x")) * k)
+  #
+  #         # Now set those positions on the dom elements
+  #         self.get("svg").selectAll("circle.score")
+  #           .attr
+  #             cx: (d) -> d.get("end_x")
+  #             cy: (d) -> d.get("y")
 
 
 
   update: (first) ->
-    that = @
-
     scoreCircle = @get("svg").selectAll("circle.score").data(@get("visibleDatums"))
     # scoreCircle.order()
 
     scoreCircle
       .enter()
         .append("circle")
-          .datum( (d) ->
-            d.set "x", that.get("x")(d.get("start_x"))
-            d.set "y", that.get("end_y")
-            # d.set("x", that.get("x")(d.start_x))
-            # d.set("y", that.get("y").domain()[0]+100)
+          .datum( (d) =>
+            d.set "x", d.get("end_x")
+            d.set "y", d.get("end_y")
           )
           .attr
             class: (d) -> "score #{d.get("classes")}"
             r: 3
-            stroke: (d) -> that.get("colors")(d.get("name"))
+            stroke: (d) => @get("colors")(d.get("name"))
             cx: (d) -> d.get("x")
-            cy: (d) -> d.get("end_y")
+            cy: (d) => @get("y")(@get("days.length")*6) # way above the graph
             # opacity: 0
 
-    # scoreCircle
-    #   .each (d,i) ->
-    #     if typeof(d.x) is "undefined"
-    #       circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
-    #       d.x = parseFloat circle.attr("cx")
-    #       d.y = parseFloat circle.attr("cy")
-    #
-    #   .transition()
-    #     .each("start", (d,i) -> d.fixed = false)
-    #     # .each("end", (d,i) -> that.get("force").stop())
-    #     .duration(2000)
-    #     .delay((d,i) -> i*60)
-    #     .attr
-    #       opacity: 100
-    #       r: 6
-    #
+    @get("days").forEach (day) ->
+      that = @
+
+      filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
+      scoreCircle.filter(filterByDay)
+        .transition()
+          # .each("start", (d,i) -> d.fixed = false)
+          # .each("end", (d,i) -> that.get("force").stop())
+          .ease("quad")
+          .duration(700)
+          .delay((d,i) -> i*60)
+          .attr
+            opacity: 100
+            r: 6
+            cy: (d) -> d.get("end_y")
+
+
     scoreCircle
       .exit()
 
@@ -187,32 +187,12 @@ view = Ember.View.extend
         .each("start", (d,i) -> d.fixed = true)
         .duration(300)
         .attr(
+          fixed: true
           cy: -1000
           opacity: 0
           cx: (d) -> d.x
         )
         .remove()
-
-    # scoreText = @get("svg").selectAll("text.score-text").data(controller.get("scores"), (d) -> d.id)
-    # scoreText
-    #   .exit()
-    #     .remove()
-    #
-    # scoreText
-    #   .enter()
-    #     .append("text")
-    #       .attr
-    #          class: "score-text"
-    #       .style("text-anchor", "middle")
-    #       .attr("font-family", "Arial")
-    #       .attr("font-size", "10px")
-    #       .text( (d) -> d.scoreText)
-    #
-    # scoreText
-    #   .attr
-    #      dx: (d) -> that.get("x")(d.origin.x)
-    #      dy: (d) -> that.get("y")(d.origin.y) + 8
-    #      opacity: 0
 
     hitbox = @get("svg").selectAll("circle.hitbox").data(@get("visibleDatums"))
 
@@ -231,7 +211,7 @@ view = Ember.View.extend
             cx: (d) => d.get("x")
             cy: (d) => d.get("end_y")
 
-    hitbox.on("click", (d,i) -> that.get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
+    hitbox.on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
       # .attr
       #   r: (d) -> 10 #(that.get("width") / scoreCircle[0].length) / 2
       #   cx: (d) => d.get("x")
@@ -268,13 +248,13 @@ view = Ember.View.extend
       #   d.y = parseFloat hitbox.attr("cy")
 
 
-    @get("force").nodes(@get("visibleDatums"))
-    Ember.A(@get("force").nodes()).sortBy("id").forEach (d,i) ->
-      if isNaN(d.get("x")) or isNaN(d.get("y"))
-        circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
-        d.set "x", parseFloat circle.attr("cx")
-        d.set "y", parseFloat circle.attr("cy")
-
+    # @get("force").nodes(@get("visibleDatums"))
+    # Ember.A(@get("force").nodes()).sortBy("id").forEach (d,i) ->
+    #   if isNaN(d.get("x")) or isNaN(d.get("y"))
+    #     circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
+    #     d.set "x", parseFloat circle.attr("cx")
+    #     d.set "y", parseFloat circle.attr("cy")
+    #
     # @get("force").start()
 
   renderGraph: ->
