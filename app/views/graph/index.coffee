@@ -9,6 +9,10 @@ view = Ember.View.extend
 
   streamGraphStyle: false
 
+  # Animation Settings
+  dropInDuration: 700
+  perDatumDelay: 60
+
   symptomColors:
     [
       "#B081D9"
@@ -155,6 +159,7 @@ view = Ember.View.extend
             d.set "x", @get("x")(d.get("end_x"))
             d.set "y", @get("y")(d.get("end_y"))
           )
+          .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
           .attr
             class: (d) -> "score #{d.get("classes")}"
             # r: 3
@@ -166,21 +171,22 @@ view = Ember.View.extend
             width:  @get("symptomDatumDimensions").width
             height: @get("symptomDatumDimensions").height
             fill: (d) => @get("colors")(d.get("name"))
+
             # cx: (d) -> d.get("x")
             # cy: (d) => @get("y")(@get("days.length")*6) # way above the graph
             # opacity: 0
 
-    @get("days").forEach (day) ->
-      that = @
+    @get("days").forEach (day) =>
 
       filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
-      scorePip.filter(filterByDay)
+      dayPips = scorePip.filter(filterByDay)
+      dayPips
         .transition()
           # .each("start", (d,i) -> d.fixed = false)
           # .each("end", (d,i) -> that.get("force").stop())
           .ease("quad")
-          .duration(700)
-          .delay((d,i) -> i*60)
+          .duration(=> @get("dropInDuration"))
+          .delay((d,i) => i*@get("perDatumDelay"))
           .attr
             opacity: 100
             y: (d) -> d.get("end_y")
@@ -199,24 +205,24 @@ view = Ember.View.extend
         )
         .remove()
 
-    hitbox = @get("svg").selectAll("circle.hitbox").data(@get("visibleDatums"))
-
-    hitbox
-      .exit()
-        .remove()
-
-    hitbox
-      .enter()
-        .append("rect")
-          .attr
-            fixed: true
-            class: "hitbox"
-            fill: "transparent"
-            r: (d) -> 5 #(that.get("width") / scoreCircle[0].length) / 2
-            cx: (d) => d.get("x")
-            cy: (d) => d.get("end_y")
-
-    hitbox.on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
+    # hitbox = @get("svg").selectAll("circle.hitbox").data(@get("visibleDatums"))
+    #
+    # hitbox
+    #   .exit()
+    #     .remove()
+    #
+    # hitbox
+    #   .enter()
+    #     .append("rect")
+    #       .attr
+    #         fixed: true
+    #         class: "hitbox"
+    #         fill: "transparent"
+    #         r: (d) -> 5 #(that.get("width") / scoreCircle[0].length) / 2
+    #         cx: (d) => d.get("x")
+    #         cy: (d) => d.get("end_y")
+    #
+    # hitbox.on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
       # .attr
       #   r: (d) -> 10 #(that.get("width") / scoreCircle[0].length) / 2
       #   cx: (d) => d.get("x")
