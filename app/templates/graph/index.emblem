@@ -5,12 +5,10 @@ else
   .container: h1.text-center No scores in date range
 
 
-.container: .row
-  .col-md-3
+.container
+  .start-date
     = input type="text" valueBinding="startDateFormatted"
     button.response-continue-link type="submit" click="setDateRange startDateFormatted endDateFormatted" Set
-  .col-md-6
-  .col-md-3.text-right
+  .end-date
     = input type="text" valueBinding="endDateFormatted"
     button.response-continue-link type="submit" click="setDateRange startDateFormatted endDateFormatted" Set
-hr
