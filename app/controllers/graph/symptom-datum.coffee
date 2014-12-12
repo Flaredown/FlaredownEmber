@@ -33,8 +33,8 @@ controller = Ember.ObjectProxy.extend
   ).property("type")
 
   entryDate: Ember.computed ->
-    moment.utc(@get("x")*1000).format("MMM-DD-YYYY")
-  .property("x")
+    moment.utc(@get("day")*1000).format("MMM-DD-YYYY")
+  .property("day")
 
   # objectFormat: Ember.computed ->
   #   Ember.Object.create @getProperties("id", "text", "index", "origin", "scoreText")
