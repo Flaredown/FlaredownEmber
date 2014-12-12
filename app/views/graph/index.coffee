@@ -7,6 +7,8 @@ view = Ember.View.extend
   visibleDatumsBinding:       "controller.visibleDatums"
   visibleDatumsByDayBinding:  "controller.visibleDatumsByDay"
 
+  streamGraphStyle: false
+
   symptomColors:
     [
       "#B081D9"
@@ -25,13 +27,18 @@ view = Ember.View.extend
     Ember.run.next => @renderGraph()
   .observes("datums").on("didInsertElement")
 
-  setupEndPositions: Ember.observer ->
+  setupEndDatums: Ember.observer ->
     @get("visibleDatumsByDay").forEach (day) =>
       # TODO add in other types of datums
       day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
-        datum.set("end_x", @get("x")(datum.get("day")))
-        datum.set("end_y", @get("y")(i+1))
+        if @get("x")(1) and @get("y")(1)
+          datum.set("end_x", @get("x")(datum.get("day")))
 
+          if @get("streamGraphStyle") # half of the difference between max symptoms shown and this days symptoms
+            offset    = (@get("symptomsMax") - (day.length)) / 2
+            datum.set "end_y", @get("y")((i+1) + (offset))
+          else
+            datum.set "end_y", @get("y")(i+1)
 
   .observes("visibleDatumsByDay")
 
@@ -89,17 +96,7 @@ view = Ember.View.extend
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
     @set "width", @get("container").width() - @get("margin").left - @get("margin").right
     @set "height", @get("container").height() - @get("margin").top - @get("margin").bottom
-    @setupEndPositions()
-
-    # @set("force", d3.layout.force()
-    #   # .charge( (d) -> d.charge)
-    #   # .gravity(0)
-    #   # .linkDistance(1)
-    #   # .linkStrength(0.5)
-    #   .alpha(1)
-    #   .size([@get("width"), @get("height")])
-    #   .on("tick", @tick(@))
-    # )
+    @setupEndDatums()
 
     @set("svg", d3.select(".graph-container").append("svg")
       .attr("id", "graph")
@@ -144,24 +141,6 @@ view = Ember.View.extend
       .x( (d) -> d.x )
       .y( (d) -> that.get("y")(d.origin.y) )
     )
-
-  # tick: (self) ->
-  #     (e) ->
-  #       k = e.alpha
-  #
-  #       Ember.run ->
-  #         # Calculate next positions of datums based on physicsy stuff  ("cooling")
-  #         self.get("svg").selectAll("circle.score").each (d,i) ->
-  #           d.set "y", (d.get("y") + (self.get("y")(d.get("end_y")) - d.get("y")) * k)
-  #           # d.set "x", (d.get("x") + (self.get("x")(d.get("start_x")) - d.get("x")) * k)
-  #
-  #         # Now set those positions on the dom elements
-  #         self.get("svg").selectAll("circle.score")
-  #           .attr
-  #             cx: (d) -> d.get("end_x")
-  #             cy: (d) -> d.get("y")
-
-
 
   update: (first) ->
 
@@ -272,16 +251,6 @@ view = Ember.View.extend
       #   hitbox = d3.select(that.get("svg").selectAll("circle.hitbox")[0][i])
       #   d.x = parseFloat hitbox.attr("cx")
       #   d.y = parseFloat hitbox.attr("cy")
-
-
-    # @get("force").nodes(@get("visibleDatums"))
-    # Ember.A(@get("force").nodes()).sortBy("id").forEach (d,i) ->
-    #   if isNaN(d.get("x")) or isNaN(d.get("y"))
-    #     circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
-    #     d.set "x", parseFloat circle.attr("cx")
-    #     d.set "y", parseFloat circle.attr("cy")
-    #
-    # @get("force").start()
 
   renderGraph: ->
     first = Ember.isEmpty @get("svg")
