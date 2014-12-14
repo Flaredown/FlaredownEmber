@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
+`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
-controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormStatesMixin,
+controller = Ember.Controller.extend GroovyResponseHandlerMixin,
   init: ->
     @_super()
     @get("setValidationsByName")
@@ -30,6 +31,7 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
 
   actions:
     login: ->
+      that = @
       data = {}
       data["v#{config.apiVersion}_user"] = @getProperties("email", "password")
 
@@ -38,7 +40,7 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
         data: data
       ).then(
         (response) => # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
-
+          console.log response
           @store.find("currentUser", 0).then(
             (currentUser) =>
               @set("currentUser.model", currentUser)
@@ -47,7 +49,7 @@ controller = Ember.Controller.extend #App.ProfileValidationsMixin, App.FormState
             -> console.log "!!! ERROR"
           )
 
-        (response) -> @errorCallback
+        (response) -> that.errorCallback(response, that)
       )
 
     # logout: ->

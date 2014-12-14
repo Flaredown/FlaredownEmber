@@ -13,16 +13,33 @@
               br
 
         .row
-          .col-md-12
+          div class={emailError:has-error :col-md-12 :form-group}
             label Login Email
             = input type="email" valueBinding="email" class="form-email form-control" placeholder="your email" id="email"
-          .col-md-12
+            if emailError
+              ul id="email-messages"
+                each message in emailMessages
+                  li=message.message
+          div class={passwordError:has-error :col-md-12 :form-group}
             label Password
             = input type="password" valueBinding="password" class="form-password form-control" placeholder="your password" id="password"
+            if passwordError
+              ul id="password-messages"
+                each message in passwordMessages
+                  li=message.message
 
           br
         .row
           .col-md-6
-            button.btn.btn-success.col-md-12 Login
+            button.btn.btn-success.col-md-12 id="login-button" Login
           .col-md-6
             link-to "register" class="btn btn-default col-md-12" | Register Now
+  
+  if modalOpen
+    .modal    
+      Ember.Checkbox class="modal-state" id="modal-1" checkedBinding="modalOpen"
+      .modal-window
+        .modal-inner
+          label.modal-close for="modal-1"
+          h1 = modal_title
+          p.intro = modal_message 

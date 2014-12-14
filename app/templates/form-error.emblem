@@ -1,0 +1,21 @@
+form.form-inline submit="save"
+  fieldset
+    .row
+      div class={:col-md-6 :form-group}
+        label Name
+        Ember.TextField class="form-name"
+
+      div class={:col-md-6 :form-group}
+        label Email
+        Ember.TextField class="form-email"
+
+      div class={:col-md-6 :form-group}
+        label Phone
+        Ember.TextField class="form-phone"
+
+
+
+    br
+    br
+    .row
+      button#register-button.btn.btn-success.col-md-12 Save
