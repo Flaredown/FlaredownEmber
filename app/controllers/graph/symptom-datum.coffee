@@ -4,8 +4,8 @@ controller = Ember.ObjectProxy.extend
   # dataBinding: "controller.scoreData"
 
   # Initial attributes should be: day, catalog, order, name, type
-  fixed:          false
-  start_y:         100
+  fixed:           false
+  # start_y:         1000
   start_xBinding:  "day"
 
   id: Ember.computed(-> "#{@get("day")}_#{@get("order")}").property("day", "order")
@@ -33,8 +33,8 @@ controller = Ember.ObjectProxy.extend
   ).property("type")
 
   entryDate: Ember.computed ->
-    moment.utc(@get("x")*1000).format("MMM-DD-YYYY")
-  .property("x")
+    moment.utc(@get("day")*1000).format("MMM-DD-YYYY")
+  .property("day")
 
   # objectFormat: Ember.computed ->
   #   Ember.Object.create @getProperties("id", "text", "index", "origin", "scoreText")

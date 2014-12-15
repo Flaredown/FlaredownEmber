@@ -1,30 +1,40 @@
 body {
   background: $background;
   font-family: $proxima-regular;
+  margin: 0;
 }
 ul {
   list-style-type: none;
   padding: 0;
 }
-a:hover {
-  text-decoration: none;
+a {
+  color: $fd-blue;
+  &:hover {
+    text-decoration: none;
+  }
+}
+.container {
+  @include outer-container;
 }
 .navbar {
-  @include standard-shadow;
   background: white;
-  border: none;
-  padding: 1% 2%;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  .navbar-brand {
-  	font-family: $proxima-semibold;
-    font-size: 1.8em;
-    color: $green-mid;
+  padding: 15px 0;
+  .navbar-content {
+    @include outer-container;
+    display: flex;
+    align-items: center;
   }
-  .dropdown-menu {
-    @include standard-shadow;
-    border: none;
-    border-radius: 3px;
+  .navbar-sections {
+    @include span-columns(6);
+  }
+  .navbar-account {
+    @include span-columns(6);
+  }
+  .dropdown {
+    text-align: right;
+    .dropdown-container {
+      text-align: center;
+    }
   }
 }
 .modal {
