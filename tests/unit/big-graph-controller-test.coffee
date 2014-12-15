@@ -12,7 +12,7 @@ fixture     = null
 startDay    = null
 endDay      = null
 
-moduleFor("controller:graph/index", "Graph Controller (big)",
+moduleFor("controller:graph", "Graph Controller (big)",
   {
     needs: ["controller:graph/symptom-datum"]
     setup: ->

@@ -1,4 +1,4 @@
-if visibleDatums.length
+if viewportDays.length
   .graph-container
   .meds-graph-container
 else
