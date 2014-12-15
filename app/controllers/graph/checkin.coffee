@@ -2,7 +2,6 @@
 `import config from '../../config/environment'`
 
 controller = Ember.ObjectController.extend
-  titleBinding: "id"
   modalOpen: true
 
   # Watch some user actions

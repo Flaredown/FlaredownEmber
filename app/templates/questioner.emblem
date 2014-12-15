@@ -17,7 +17,8 @@ br
 h5 Question(s)
 hr
 
-section.section style="width:100%"
-  each question in sectionQuestions
-    h4= question.name
-    = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
+section.section style="width:100%" id="questions"
+  = liquid-with currentSection as currentSection
+    each question in sectionQuestions
+      h4= question.name
+      = questioner-input question=question section=currentSection responses=responsesData action="setResponse"

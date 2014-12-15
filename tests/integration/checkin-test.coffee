@@ -71,7 +71,7 @@ test "Can see the checkin for 'today' ", ->
   )
 
 test "Can navigate through the sections (today)", ->
-  expect 5
+  expect 3
 
   visit('/checkin/today/1').then( =>
     # foo (1) | hbi (2-6)
@@ -87,6 +87,9 @@ test "Can navigate through the sections (today)", ->
     clickOn nav[0]
     ok currentURL() == "/checkin/today/2", "Clicking a prev goes back"
   )
+
+test "Limits on prev/next", ->
+  expect 2
 
   visit('/checkin/today/6').then( =>
     nav = $(".pagination ul li a")

@@ -4,6 +4,5 @@
   .modal-window
     .modal-inner
       label.modal-close for="modal-1"
-      h1 = id
       p Intro text lorem ipsum dolor sit ametm, quas, eaque facilis aliquid cupiditate tempora cumque ipsum accusantium illo modi commodi  minima.
       p: view "questioner"

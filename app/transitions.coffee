@@ -1,9 +1,17 @@
 transitions = () ->
+
   @transition(
-    @fromRoute('login'),
-    @toRoute('register'),
-    @use('toLeft'),
-    @reverse('toRight')
-  )
+    @childOf("#questions")
+    @toModel (fromModel) -> (@number > fromModel.number)
+    @use('toLeft')
+    # @use('checkin-next')
+  );
+
+  @transition(
+    @childOf("#questions")
+    @toModel (fromModel) -> (@number < fromModel.number)
+    @use('toRight')
+    # @use('checkin-prev')
+  );
 
 `export default transitions`
