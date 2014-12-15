@@ -1,4 +1,4 @@
-if visibleDatums.length
+if unfilteredDatums.length
   .graph-container
   .meds-graph-container
 else

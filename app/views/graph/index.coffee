@@ -2,10 +2,10 @@
 
 view = Ember.View.extend
 
-  daysBinding:                "controller.days"
-  datumsBinding:              "controller.datums"
-  visibleDatumsBinding:       "controller.visibleDatums"
-  visibleDatumsByDayBinding:  "controller.visibleDatumsByDay"
+  viewportDaysBinding:            "controller.viewportDays"
+  viewportDatumsBinding:          "controller.viewportDatums"
+  unfilteredDatumsBinding:        "controller.unfilteredDatums"
+  unfilteredDatumsByDayBinding:   "controller.unfilteredDatumsByDay"
 
   streamGraphStyle: false
 
@@ -25,14 +25,12 @@ view = Ember.View.extend
   willDestroy: ->
     # @get("force").stop()
 
-  symptomsMax: Ember.computed(-> d3.max(@get("visibleDatumsByDay") , (dayDatums) -> dayDatums.length) ).property("visibleDatumsByDay")
+  symptomsMax: Ember.computed(-> d3.max(@get("unfilteredDatumsByDay") , (dayDatums) -> dayDatums.length) ).property("unfilteredDatumsByDay")
 
-  watchDatums: Ember.observer ->
-    Ember.run.next => @renderGraph()
-  .observes("datums").on("didInsertElement")
+  watchDatums: Ember.observer(-> Ember.run.next => @renderGraph()).observes("viewportDatums").on("didInsertElement")
 
   setupEndDatums: Ember.observer ->
-    @get("visibleDatumsByDay").forEach (day) =>
+    @get("unfilteredDatumsByDay").forEach (day) =>
       # TODO add in other types of datums
       day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
         if @get("x")(1) and @get("y")(1)
@@ -44,20 +42,23 @@ view = Ember.View.extend
           else
             datum.set "end_y", @get("y")(i+1)
 
-  .observes("visibleDatumsByDay")
+  .observes("unfilteredDatumsByDay")
 
   x: Ember.computed ->
+    # Add domain to make room for pips
+    tomorrow = moment(@get("viewportDays.lastObject")*1000).utc().add(1,"day").unix()
+
     d3.scale.linear()
-      .domain([@get("days.firstObject"), @get("days.lastObject")])
+      .domain([@get("viewportDays.firstObject"), tomorrow])
       .range [0, @get("width")]
-  .property("width", "days.@each")
+  .property("width", "viewportDays.@each")
 
   y: Ember.computed ->
     d3.scale.linear()
       .domain([0, @get("symptomsMax")+1])
       .range [@get("height"),0]
 
-  .property("height", "visibleDatumsByDay")
+  .property("height", "unfilteredDatumsByDay")
 
   # fillCoordinates: Ember.computed ->
   #   floor = @get("y")(@get("y").domain()[0])
@@ -68,7 +69,7 @@ view = Ember.View.extend
   # .property("datums.@each")
 
   symptomDatumDimensions: Ember.computed( ->
-    base_width  =  (@get("width") / @get("days.length"))
+    base_width  =  (@get("width") / @get("viewportDays.length"))
     base_height =  (@get("height") / @get("symptomsMax"))
 
     width_margin_percent  = 0.20
@@ -87,7 +88,7 @@ view = Ember.View.extend
       top_margin:    top
       bottom_margin: bottom
     }
-  ).property("x", "y", "visibleDatums")
+  ).property("x", "y", "unfilteredDatums")
 
   setup: ->
     # TODO can we get rid of "that" and "controller"?
@@ -149,7 +150,7 @@ view = Ember.View.extend
   update: (first) ->
 
     ### RECT VERSION ###
-    scorePip = @get("svg").selectAll("rect.score").data(@get("visibleDatums"))
+    scorePip = @get("svg").selectAll("rect.score").data(@get("unfilteredDatums"))
     # scoreCircle.order()
 
     scorePip
@@ -167,16 +168,16 @@ view = Ember.View.extend
             rx: 3
             x: (d) -> d.get("end_x")
             # y: (d) -> d.get("end_y")
-            y: (d) => @get("y")(@get("days.length")*6) # way above the graph
+            y: (d) => @get("y")(@get("viewportDays.length")*6) # way above the graph
             width:  @get("symptomDatumDimensions").width
             height: @get("symptomDatumDimensions").height
             fill: (d) => @get("colors")(d.get("name"))
 
             # cx: (d) -> d.get("x")
-            # cy: (d) => @get("y")(@get("days.length")*6) # way above the graph
+            # cy: (d) => @get("y")(@get("viewportDays.length")*6) # way above the graph
             # opacity: 0
 
-    @get("days").forEach (day) =>
+    @get("viewportDays").forEach (day) =>
 
       filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
       dayPips = scorePip.filter(filterByDay)
@@ -205,7 +206,7 @@ view = Ember.View.extend
         )
         .remove()
 
-    # hitbox = @get("svg").selectAll("circle.hitbox").data(@get("visibleDatums"))
+    # hitbox = @get("svg").selectAll("circle.hitbox").data(@get("unfilteredDatums"))
     #
     # hitbox
     #   .exit()

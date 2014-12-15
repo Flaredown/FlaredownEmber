@@ -1,9 +1,9 @@
 # /v1/graph?start_date=Nov-16-2014&end_date=Dec-06-2014
-fixture = (date) ->
+fixture = (startDate) ->
 
-  date ?= moment().utc().unix()
+  startDate ?= moment().utc()
 
-  daysAgo = (days) -> date - (86400*days)
+  daysAgo = (days) -> moment(startDate).startOf("day").utc().subtract(days, "days").unix()
 
   {
     symptoms: [
@@ -23,10 +23,10 @@ fixture = (date) ->
     ],
     hbi: [
       {x: daysAgo(0), order: 1, points: 2, name: "general_wellbeing", },
-      {x: daysAgo(0), order: 2, points: 3, name: "ab_pain", },
+      {x: daysAgo(0), order: 2, points: 1, name: "ab_pain", },
       {x: daysAgo(0), order: 3, points: 1, name: "stools", },
-      {x: daysAgo(0), order: 4, points: 1, name: "ab_mass", },
-      {x: daysAgo(0), order: 5, points: 1, name: "complications", },
+      {x: daysAgo(0), order: 4, points: 2, name: "ab_mass", },
+      {x: daysAgo(0), order: 5, points: 2, name: "complications", },
 
       {x: daysAgo(1), order: 1, points: 2, name: "general_wellbeing", },
       {x: daysAgo(1), order: 2, points: 3, name: "ab_pain", },
