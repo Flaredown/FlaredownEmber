@@ -1,5 +1,5 @@
-`import AuthRoute from './../authenticated'`
-`import config from '../../config/environment'`
+`import AuthRoute from './authenticated'`
+`import config from '../config/environment'`
 
 route = AuthRoute.extend
   model: (params) ->
@@ -15,7 +15,7 @@ route = AuthRoute.extend
     user = @get("currentUser")
 
     controller.set "model",     {}
-    controller.set "rawData", model
+    controller.set "rawData",   model
     controller.set "catalog",   Object.keys(model).sort()[0]
     controller.set "startDate", moment.utc(user.get("defaultStartDate"))
     controller.set "endDate",   moment.utc(user.get("defaultEndDate"))
@@ -30,6 +30,6 @@ route = AuthRoute.extend
   actions:
     updates: (message) ->
       # TODO use Pusher data, not hard-coded example
-      @controllerFor("graph.index").get("catalog.scores").pushObject {x: 1391922000, y: 500 }
+      @controllerFor("graph").get("catalog.scores").pushObject {x: 1391922000, y: 500 }
 
 `export default route`

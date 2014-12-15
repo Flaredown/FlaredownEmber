@@ -10,7 +10,7 @@ App        = null
 controller = null
 fixture    = null
 
-moduleFor("controller:graph/index", "Graph Controller",
+moduleFor("controller:graph", "Graph Controller",
   {
     needs: ["controller:graph/symptom-datum"]
     setup: ->

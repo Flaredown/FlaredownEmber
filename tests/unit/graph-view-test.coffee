@@ -11,12 +11,12 @@ view       = null
 controller = null
 fixture    = null
 
-moduleFor("view:graph/index", "Graph View",
+moduleFor("view:graph", "Graph View",
   {
-    needs: ["controller:graph/index"]
+    needs: ["controller:graph"]
     setup: ->
       App         = startApp()
-      controller  = App.__container__.lookup("controller:graph/index")
+      controller  = App.__container__.lookup("controller:graph")
       view        = @subject()
       fixture     = graphFixture()
 

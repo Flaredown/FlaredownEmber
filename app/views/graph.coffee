@@ -64,11 +64,11 @@ view = Ember.View.extend
     that = @
     controller = @get("controller")
 
-    @set "container", $(".graph-container")
+    @set "graph-container", $(".graph-container")
     @set "colors", d3.scale.category20()
     @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
-    @set "width", @get("container").width() - @get("margin").left - @get("margin").right
-    @set "height", @get("container").height() - @get("margin").top - @get("margin").bottom
+    @set "width", @get("graph-container").width() - @get("margin").left - @get("margin").right
+    @set "height", @get("graph-container").height() - @get("margin").top - @get("margin").bottom
     @setupEndPositions()
 
     @set("force", d3.layout.force()

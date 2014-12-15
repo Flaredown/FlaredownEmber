@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
-`import symptomDatum from './symptom-datum'`
-`import config from '../../config/environment'`
+`import symptomDatum from './graph/symptom-datum'`
+`import config from '../config/environment'`
 
 controller = Ember.ObjectController.extend
   # sortProperties: ["unixDate"]

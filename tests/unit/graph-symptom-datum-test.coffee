@@ -14,7 +14,7 @@ moduleFor("controller:graph/symptom-datum", "Graph Symptom Datum",
   {
     setup: ->
       App         = startApp()
-      # parent      = App.__container__.lookup("controller:graph/index")
+      # parent      = App.__container__.lookup("controller:graph")
       controller  = @subject()
       fixture     = {
         day:      1417787005

@@ -11,14 +11,14 @@ route       = null
 controller  = null
 fixture     = null
 
-moduleFor("route:graph/index", "Graph Route",
+moduleFor("route:graph", "Graph Route",
   {
     needs: ["controller:current-user", "model:user"]
     setup: ->
       App         = startApp()
       route       = @subject()
       store       = App.__container__.lookup("store:main")
-      controller  = App.__container__.lookup("controller:graph/index")
+      controller  = App.__container__.lookup("controller:graph")
       fixture     = graphFixture()
 
       Ember.run ->
