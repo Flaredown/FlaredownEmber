@@ -33,8 +33,8 @@ moduleFor("route:graph", "Graph Route",
   }
 )
 
-test "sets rawData, startDate, endDate and catalog", ->
+test "sets rawData, firstEntryDate and catalog", ->
   expect 1
 
   route.setupController(controller,fixture)
-  deepEqual Object.keys(controller.get("model")).sort(), ["rawData", "startDate", "endDate", "catalog"].sort()
+  deepEqual Object.keys(controller.get("model")).sort(), ["rawData", "firstEntryDate", "catalog"].sort()

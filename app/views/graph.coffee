@@ -2,42 +2,63 @@
 
 view = Ember.View.extend
 
-  daysBinding:                "controller.days"
-  datumsBinding:              "controller.datums"
-  visibleDatumsBinding:       "controller.visibleDatums"
-  visibleDatumsByDayBinding:  "controller.visibleDatumsByDay"
+  viewportDaysBinding:            "controller.viewportDays"
+  viewportDatumsBinding:          "controller.viewportDatums"
+  unfilteredDatumsBinding:        "controller.unfilteredDatums"
+  unfilteredDatumsByDayBinding:   "controller.unfilteredDatumsByDay"
 
+  streamGraphStyle: false
+
+  # Animation Settings
+  dropInDuration: 700
+  perDatumDelay: 60
+
+  symptomColors:
+    [
+      "#B081D9"
+      "#F5A623"
+      "#73C1BA"
+      "#F47070"
+      "#AED584"
+    ]
 
   willDestroy: ->
     # @get("force").stop()
 
-  watchDatums: Ember.observer ->
-    Ember.run.next => @renderGraph()
-  .observes("datums").on("didInsertElement")
+  symptomsMax: Ember.computed(-> d3.max(@get("unfilteredDatumsByDay") , (dayDatums) -> dayDatums.length) ).property("unfilteredDatumsByDay")
 
-  setupEndPositions: Ember.observer ->
-    @get("visibleDatumsByDay").forEach (day) =>
+  watchDatums: Ember.observer(-> Ember.run.next => @renderGraph()).observes("viewportDatums").on("didInsertElement")
+
+  setupEndDatums: Ember.observer ->
+    @get("unfilteredDatumsByDay").forEach (day) =>
       # TODO add in other types of datums
       day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
-        datum.set("end_y", @get("y")(i+1))
-        datum.set("x", @get("x")(datum.get("day")))
+        if @get("x")(1) and @get("y")(1)
+          datum.set("end_x", @get("x")(datum.get("day")))
 
-  .observes("visibleDatumsByDay")
+          if @get("streamGraphStyle") # half of the difference between max symptoms shown and this days symptoms
+            offset    = (@get("symptomsMax") - (day.length)) / 2
+            datum.set "end_y", @get("y")((i+1) + (offset))
+          else
+            datum.set "end_y", @get("y")(i+1)
+
+  .observes("unfilteredDatumsByDay")
 
   x: Ember.computed ->
+    # Add domain to make room for pips
+    tomorrow = moment(@get("viewportDays.lastObject")*1000).utc().add(1,"day").unix()
+
     d3.scale.linear()
-      .domain([@get("days.firstObject"), @get("days.lastObject")])
+      .domain([@get("viewportDays.firstObject"), tomorrow])
       .range [0, @get("width")]
-  .property("width", "days.@each")
+  .property("width", "viewportDays.@each")
 
   y: Ember.computed ->
-    max = d3.max(@get("visibleDatumsByDay") , (dayDatums) -> dayDatums.length)
-
     d3.scale.linear()
-      .domain([0, max+1])
+      .domain([0, @get("symptomsMax")+1])
       .range [@get("height"),0]
 
-  .property("height", "visibleDatumsByDay")
+  .property("height", "unfilteredDatumsByDay")
 
   # fillCoordinates: Ember.computed ->
   #   floor = @get("y")(@get("y").domain()[0])
@@ -47,17 +68,27 @@ view = Ember.View.extend
   #   .concat(Ember.Object.create({id: @get("datums.lastObject.id")+1, x: @get("datums.lastObject.x"), y: floor, origin: {y: -floor}}))
   # .property("datums.@each")
 
-  symptomDatumMargins: Ember.computed(->
-    base_x = @get("x")(@get("days")[1]) # second day
-    base_y = @get("y")(1)               # second datum vertically
+  symptomDatumDimensions: Ember.computed( ->
+    base_width  =  (@get("width") / @get("viewportDays.length"))
+    base_height =  (@get("height") / @get("symptomsMax"))
+
+    width_margin_percent  = 0.20
+    height_margin_percent = 0.10
+
+    right       = base_width  * width_margin_percent
+    left        = base_width  * width_margin_percent
+    top         = base_height * height_margin_percent
+    bottom      = base_height * height_margin_percent
 
     {
-      right:  base_x*(0.25)
-      left:   base_x*(0.25)
-      top:    (@get("height")-base_y)*(0.05)
-      bottom: (@get("height")-base_y)*(0.05)
+      width:  base_width-left-right
+      height: base_height-top-bottom
+      right_margin:  right
+      left_margin:   left
+      top_margin:    top
+      bottom_margin: bottom
     }
-  ).property("x", "y", "visibleDatums")
+  ).property("x", "y", "unfilteredDatums")
 
   setup: ->
     # TODO can we get rid of "that" and "controller"?
@@ -65,20 +96,12 @@ view = Ember.View.extend
     controller = @get("controller")
 
     @set "graph-container", $(".graph-container")
-    @set "colors", d3.scale.category20()
-    @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
+    @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
+    # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
+    @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
     @set "width", @get("graph-container").width() - @get("margin").left - @get("margin").right
     @set "height", @get("graph-container").height() - @get("margin").top - @get("margin").bottom
-    @setupEndPositions()
-
-    @set("force", d3.layout.force()
-      .charge( (d) -> d.charge)
-      .gravity(0)
-      .linkDistance(1)
-      .linkStrength(0.5)
-      .size([@get("width"), @get("height")])
-      .on("tick", @tick(@))
-    )
+    @setupEndDatums()
 
     @set("svg", d3.select(".graph-container").append("svg")
       .attr("id", "graph")
@@ -88,31 +111,31 @@ view = Ember.View.extend
       .append("g")
         .attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")"))
 
-    @get("svg").selectAll("line.horizontalGrid").data(@get("y").ticks(3)).enter()
-      .append("line")
-        .attr
-          "class" : "horizontalGrid"
-          "x1" : 0
-          "x2" : @get("width")
-          "y1" : (d) -> that.get("y")(d)
-          "y2" : (d) -> that.get("y")(d)
-          "fill" : "none"
-          "shape-rendering" : "crispEdges"
-          "stroke" : "black"
-          "stroke-width" : "1px"
+    # @get("svg").selectAll("line.horizontalGrid").data(@get("y").ticks(3)).enter()
+    #   .append("line")
+    #     .attr
+    #       "class" : "horizontalGrid"
+    #       "x1" : 0
+    #       "x2" : @get("width")
+    #       "y1" : (d) -> that.get("y")(d)
+    #       "y2" : (d) -> that.get("y")(d)
+    #       "fill" : "none"
+    #       "shape-rendering" : "crispEdges"
+    #       "stroke" : "black"
+    #       "stroke-width" : "1px"
 
-    @get("svg").selectAll("line.verticalGrid").data(@get("x").ticks(10)).enter()
-      .append("line")
-        .attr
-          "class" : "verticalGrid"
-          "y1" : 0
-          "y2" : @get("height")
-          "x1" : (d) -> that.get("x")(d)
-          "x2" : (d) -> that.get("x")(d)
-          "fill" : "none"
-          "shape-rendering" : "crispEdges"
-          "stroke" : "black"
-          "stroke-width" : "1px"
+    # @get("svg").selectAll("line.verticalGrid").data(@get("x").ticks(10)).enter()
+    #   .append("line")
+    #     .attr
+    #       "class" : "verticalGrid"
+    #       "y1" : 0
+    #       "y2" : @get("height")
+    #       "x1" : (d) -> that.get("x")(d)
+    #       "x2" : (d) -> that.get("x")(d)
+    #       "fill" : "none"
+    #       "shape-rendering" : "crispEdges"
+    #       "stroke" : "black"
+    #       "stroke-width" : "1px"
 
     @set("startLine", d3.svg.line()
       .x( (d) -> d.x )
@@ -124,114 +147,83 @@ view = Ember.View.extend
       .y( (d) -> that.get("y")(d.origin.y) )
     )
 
-  tick: (self) ->
-      (e) ->
-        k = 0.2 * e.alpha
-
-        Ember.run ->
-
-          # that.get("svg").selectAll("circle.score").each (d,i) ->
-          #   d.set "y", (d.get("y") + (self.get("y")(d.get("start_y")) - d.get("y")) * k)
-          #   d.set "x", (d.get("x") + (self.get("x")(d.get("start_x")) - d.get("x")) * k)
-
-          # self.get("svg").selectAll("circle.score")
-          #   .attr
-          #     cx: (d) -> d.get("x")
-          #     cy: (d) -> d.get("end_y")
-
-
-
   update: (first) ->
-    that = @
 
-    scoreCircle = @get("svg").selectAll("circle.score").data(@get("visibleDatums"))
+    ### RECT VERSION ###
+    scorePip = @get("svg").selectAll("rect.score").data(@get("unfilteredDatums"))
     # scoreCircle.order()
 
-    scoreCircle
+    scorePip
       .enter()
-        .append("circle")
-          .datum( (d) ->
-            d.set "x", that.get("x")(d.get("start_x"))
-            d.set "y", that.get("end_y")
-            # d.set("x", that.get("x")(d.start_x))
-            # d.set("y", that.get("y").domain()[0]+100)
+        .append("rect")
+          .datum( (d) =>
+            d.set "x", @get("x")(d.get("end_x"))
+            d.set "y", @get("y")(d.get("end_y"))
           )
+          .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
           .attr
             class: (d) -> "score #{d.get("classes")}"
-            r: 3
-            stroke: (d) -> that.get("colors")(d.get("name"))
-            cx: (d) -> d.get("x")
-            cy: (d) -> d.get("end_y")
+            # r: 3
+            ry: 3
+            rx: 3
+            x: (d) -> d.get("end_x")
+            # y: (d) -> d.get("end_y")
+            y: (d) => @get("y")(@get("viewportDays.length")*6) # way above the graph
+            width:  @get("symptomDatumDimensions").width
+            height: @get("symptomDatumDimensions").height
+            fill: (d) => @get("colors")(d.get("name"))
+
+            # cx: (d) -> d.get("x")
+            # cy: (d) => @get("y")(@get("viewportDays.length")*6) # way above the graph
             # opacity: 0
 
-    # scoreCircle
-    #   .each (d,i) ->
-    #     if typeof(d.x) is "undefined"
-    #       circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
-    #       d.x = parseFloat circle.attr("cx")
-    #       d.y = parseFloat circle.attr("cy")
-    #
-    #   .transition()
-    #     .each("start", (d,i) -> d.fixed = false)
-    #     # .each("end", (d,i) -> that.get("force").stop())
-    #     .duration(2000)
-    #     .delay((d,i) -> i*60)
-    #     .attr
-    #       opacity: 100
-    #       r: 6
-    #
-    scoreCircle
+    @get("viewportDays").forEach (day) =>
+
+      filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
+      dayPips = scorePip.filter(filterByDay)
+      dayPips
+        .transition()
+          # .each("start", (d,i) -> d.fixed = false)
+          # .each("end", (d,i) -> that.get("force").stop())
+          .ease("quad")
+          .duration(=> @get("dropInDuration"))
+          .delay((d,i) => i*@get("perDatumDelay"))
+          .attr
+            opacity: 100
+            y: (d) -> d.get("end_y")
+
+    scorePip
       .exit()
 
       .transition()
-        .each("start", (d,i) -> d.fixed = true)
+        # .each("start", (d,i) -> d.fixed = true)
         .duration(300)
         .attr(
-          cy: -1000
+          fixed: true
+          y: -1000
           opacity: 0
-          cx: (d) -> d.x
+          x: (d) -> d.get("x")
         )
         .remove()
 
-    # scoreText = @get("svg").selectAll("text.score-text").data(controller.get("scores"), (d) -> d.id)
-    # scoreText
+    # hitbox = @get("svg").selectAll("circle.hitbox").data(@get("unfilteredDatums"))
+    #
+    # hitbox
     #   .exit()
     #     .remove()
     #
-    # scoreText
+    # hitbox
     #   .enter()
-    #     .append("text")
+    #     .append("rect")
     #       .attr
-    #          class: "score-text"
-    #       .style("text-anchor", "middle")
-    #       .attr("font-family", "Arial")
-    #       .attr("font-size", "10px")
-    #       .text( (d) -> d.scoreText)
+    #         fixed: true
+    #         class: "hitbox"
+    #         fill: "transparent"
+    #         r: (d) -> 5 #(that.get("width") / scoreCircle[0].length) / 2
+    #         cx: (d) => d.get("x")
+    #         cy: (d) => d.get("end_y")
     #
-    # scoreText
-    #   .attr
-    #      dx: (d) -> that.get("x")(d.origin.x)
-    #      dy: (d) -> that.get("y")(d.origin.y) + 8
-    #      opacity: 0
-
-    hitbox = @get("svg").selectAll("circle.hitbox").data(@get("visibleDatums"))
-
-    hitbox
-      .exit()
-        .remove()
-
-    hitbox
-      .enter()
-        .append("circle")
-          .attr
-            fixed: true
-            class: "hitbox"
-            fill: "transparent"
-            r: (d) -> 5 #(that.get("width") / scoreCircle[0].length) / 2
-            cx: (d) => d.get("x")
-            cy: (d) => d.get("end_y")
-
-    hitbox.on("click", (d,i) -> that.get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
+    # hitbox.on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
       # .attr
       #   r: (d) -> 10 #(that.get("width") / scoreCircle[0].length) / 2
       #   cx: (d) => d.get("x")
@@ -266,16 +258,6 @@ view = Ember.View.extend
       #   hitbox = d3.select(that.get("svg").selectAll("circle.hitbox")[0][i])
       #   d.x = parseFloat hitbox.attr("cx")
       #   d.y = parseFloat hitbox.attr("cy")
-
-
-    @get("force").nodes(@get("visibleDatums"))
-    Ember.A(@get("force").nodes()).sortBy("id").forEach (d,i) ->
-      if isNaN(d.get("x")) or isNaN(d.get("y"))
-        circle = d3.select(that.get("svg").selectAll("circle.score")[0][i])
-        d.set "x", parseFloat circle.attr("cx")
-        d.set "y", parseFloat circle.attr("cy")
-
-    # @get("force").start()
 
   renderGraph: ->
     first = Ember.isEmpty @get("svg")
