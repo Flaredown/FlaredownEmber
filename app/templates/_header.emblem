@@ -7,14 +7,16 @@ nav.navbar role="navigation"
       a href="#" Insights
       span &nbsp;/&nbsp;
       a href="#" Reports
-    .navbar-account
-      .dropdown
-        .dropdown-container
-          p.dropdown-description Account
-          p.dropdown-button = currentUser.email
-          ul.menu
-            li Account
-            li Edit check-in
-            li Print report
-            a href="/users/sign_out" id="logout"
-              li Logout
+
+    if currentUser.loggedIn
+      .navbar-account
+        .dropdown
+          .dropdown-container
+            p.dropdown-description Account
+            p.dropdown-button = currentUser.email
+            ul.menu
+              li Account
+              li Edit check-in
+              li Print report
+              a href="/users/sign_out" id="logout"
+                li Logout

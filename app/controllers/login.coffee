@@ -49,7 +49,7 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
             -> console.log "!!! ERROR"
           )
 
-        (response) -> that.errorCallback(response, that)
+        (response) => @errorCallback(response, @)
       )
 
     # logout: ->
