@@ -39,7 +39,7 @@ test "Generates #sections from catalog_definitions", ->
   expect 4
 
   ok controller.get("sections.length") is (5 + 1)                       # hbi + foo
-  ok controller.get("sections.firstObject.category") is "foo"   # should be alphabetical, "foo" before "hbi"
+  ok controller.get("sections.firstObject.category") is "foo"           , "should be alphabetical, 'foo' before 'hbi'"
   ok controller.get("sections.firstObject.selected") is true
   ok controller.get("sections.lastObject.selected") is false
 
@@ -47,13 +47,13 @@ test "#currentSection is set based on section integer", ->
   expect 7
 
   ok controller.get("currentSection").selected is true
-  ok controller.get("currentSection").number is 1                       # 1st section total
-  ok controller.get("currentSection").category_number is 1              # 1st in catalog, also
+  ok controller.get("currentSection").number is 1                       , "1st section total"
+  ok controller.get("currentSection").category_number is 1              , "1st in catalog, also"
   ok controller.get("currentSection").category is "foo"
 
   controller.set("section", 3)
-  ok controller.get("currentSection").number is 3                       # 3rd section total
-  ok controller.get("currentSection").category_number is 2              # 2nd section in this catalog
+  ok controller.get("currentSection").number is 3                       , "3rd section total"
+  ok controller.get("currentSection").category_number is 2              , "2nd section in this catalog"
   ok controller.get("currentSection").category is "hbi"
 
 test "#categories grabs all category names", ->
@@ -100,8 +100,8 @@ test "#sectionQuestions returns question(s) based on section", ->
 test "builds #responsesData on for all questions, including any existing response values", ->
   expect 2
 
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "ab_pain").get("value") is 3
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "stools").get("value") is null
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "ab_pain").get("value") is 3, "sets proper value for included response"
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "stools").get("value") is null, "doesn't set any value when no response present"
 
 test "action#setResponse sets a value for a response given the current context", ->
   expect 2
@@ -109,7 +109,7 @@ test "action#setResponse sets a value for a response given the current context",
   Ember.run -> controller.set("section", 6) # hbi complications section
 
   # Ambiguous with multiple section questions... using as test case
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is null
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is null, "should start null"
 
   controller.send("setResponse", "complication_abscess", 1)
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is 1
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is 1, "sets to 1 (true)"
