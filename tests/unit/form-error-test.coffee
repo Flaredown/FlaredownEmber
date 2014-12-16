@@ -92,7 +92,7 @@ test "response for modal is ok", ->
   ok errors_keys.contains ("message")
 
 test "response for growl is ok", ->
-  expect 3
+  expect 4
 
   controller.errorCallback(growl_response) #setup response for growl
 
@@ -102,3 +102,4 @@ test "response for growl is ok", ->
   errors_keys = Object.keys(controller.get("errors"))
 
   ok errors_keys.contains ("message")
+  assertAlertPresent()

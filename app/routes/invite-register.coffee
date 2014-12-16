@@ -1,21 +1,22 @@
 `import Ember from 'ember'`
 `import config from '../config/environment'`
+`import ajax from 'ic-ajax'`
+`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
-route = Ember.Route.extend
+route = Ember.Route.extend GroovyResponseHandlerMixin,
   # authedOnly: false
 
   model: (params) ->
-    Ember.$.ajax(
+    ajax(
       type: "get"
       url: "#{config.apiNamespace}/users/invitee/#{params.invitation_token}"
-      context: @
     ).then(
-      (response) -> response
-      (response) ->
-        if response.status == 404
+      (response) => response
+      (response) =>
+        if response.jqXHR.status is 404
           @transitionTo("login")
           sweetAlert("Invitation not found...", "We couldn't find that invitation, perhaps you've already used it?", "error")
-        # TODO @errorCallback
+          # TODO @errorCallback
     )
 
   setupController: (controller,model) ->

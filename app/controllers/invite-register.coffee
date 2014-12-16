@@ -1,4 +1,5 @@
 `import Ember from 'ember'`
+`import ajax from 'ic-ajax'`
 
 controller = Ember.ObjectController.extend
 
@@ -18,7 +19,7 @@ controller = Ember.ObjectController.extend
 
       @set('errors', {})
 
-      Ember.$.ajax(
+      ajax(
         type: "POST"
         url: "/users.json"
         data: data

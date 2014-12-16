@@ -1,9 +1,10 @@
 `import AuthRoute from './authenticated'`
 `import config from '../config/environment'`
+`import ajax from 'ic-ajax'`
 
 route = AuthRoute.extend
   model: (params) ->
-    Ember.$.ajax(
+    ajax(
       url: "#{config.apiNamespace}/graph"
       data: { start_date: @get("currentUser").get("defaultStartDate"), end_date: @get("currentUser").get("defaultEndDate") }
     ).then(
