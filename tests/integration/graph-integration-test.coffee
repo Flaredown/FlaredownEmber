@@ -52,7 +52,7 @@ test "Interaction", =>
   visit('/').then(
     ->
       stop()
-      clickOn $("rect.score")[0]
+      $("rect.score:eq(0)").simulate("click")
 
       setTimeout(
         ->

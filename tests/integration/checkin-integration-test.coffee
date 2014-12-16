@@ -76,15 +76,14 @@ test "Can navigate through the sections (today)", ->
   visit('/checkin/today/1').then( =>
     # foo (1) | hbi (2-6)
     # prev 1 2 3 4 5 6 next
-    nav = $(".pagination ul li a")
-
-    clickOn nav[2]
+    triggerEvent(".pagination ul li a:eq(2)", "click")
     ok currentURL() == "/checkin/today/2", "Clicking a number goes to that section"
 
-    clickOn nav[7]
-    ok currentURL() == "/checkin/today/3", "Clicking a next goes forward"
+    triggerEvent(".pagination ul li a:eq(7)", "click")
+    andThen ->
+      ok currentURL() == "/checkin/today/3", "Clicking a next goes forward"
 
-    clickOn nav[0]
+    triggerEvent(".pagination ul li a:eq(0)", "click")
     ok currentURL() == "/checkin/today/2", "Clicking a prev goes back"
   )
 
@@ -92,14 +91,12 @@ test "Limits on prev/next", ->
   expect 2
 
   visit('/checkin/today/6').then( =>
-    nav = $(".pagination ul li a")
-    clickOn nav[7]
+    triggerEvent(".pagination ul li a:eq(7)", "click")
     ok currentURL() == "/checkin/today/6", "Next button limited"
   )
 
   visit('/checkin/today/1').then( =>
-    nav = $(".pagination ul li a")
-    clickOn nav[0]
+    triggerEvent(".pagination ul li a:eq(0)", "click")
     ok currentURL() == "/checkin/today/1", "Previous button limited"
   )
 
@@ -107,9 +104,7 @@ test "Can navigate through the sections (other date)", ->
   expect 1
 
   visit('/checkin/Aug-13-2014/1').then( ->
-    nav = $(".pagination ul li a")
-
-    clickOn nav[2]
+    triggerEvent(".pagination ul li a:eq(2)", "click")
     ok currentURL() == "/checkin/Aug-13-2014/2", "Clicking a number goes to that section"
   )
 
@@ -134,7 +129,7 @@ test "go to the next section when submitting a response", ->
 
   visit('/checkin/Aug-13-2014/1').then( ->
     ok currentURL() == "/checkin/Aug-13-2014/1"
-    clickOn $(".response-select a")[0]
+    triggerEvent ".response-select a:eq(0)", "click"
     ok currentURL() == "/checkin/Aug-13-2014/2", "Went to the next section"
   )
 

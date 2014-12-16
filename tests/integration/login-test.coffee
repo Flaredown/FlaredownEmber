@@ -5,7 +5,7 @@
 
 App = null
 
-module('Login', {
+module('Login Errors', {
   setup: -> App = startApp()
   teardown: -> Ember.run(App, App.destroy)
 })
@@ -84,32 +84,23 @@ test "Inline errors are shown on inline error response", ->
 
   visit('/login').then(
     ->
-      stop()
-      $("#login-button").simulate("click")
-      setTimeout(
-        ->
-          ok $("#email").closest('.form-group').hasClass('has-error'), 'Email has class "has-error"'
-          ok $("#password").closest('.form-group').hasClass('has-error'), 'Password has class "has-error"'
-          ok $("ul#email-messages li").length > 0, 'Email errors are listed'
-          ok $("ul#password-messages li").length > 0, 'Password errors are listed'
-          start()
-      , 200)
+      triggerEvent("#login-button", "click")
+      andThen ->
+        ok $("#email").closest('.form-group').hasClass('has-error'), 'Email has class "has-error"'
+        ok $("#password").closest('.form-group').hasClass('has-error'), 'Password has class "has-error"'
+        ok $("ul#email-messages li").length > 0, 'Email errors are listed'
+        ok $("ul#password-messages li").length > 0, 'Password errors are listed'
   )
 
-  
+
 test "modal is shown on modal error response", ->
   expect 1
   modalErrors()
 
   visit('/login').then(
     ->
-      stop()
-      $("#login-button").simulate("click")
-      setTimeout(
-        ->
-          assertModalPresent()
-          start()
-      , 200)
+      triggerEvent("#login-button", "click")
+      andThen -> assertModalPresent()
   )
 
 test "alert is shown on growl error response", ->
@@ -117,11 +108,6 @@ test "alert is shown on growl error response", ->
 
   visit('/login').then(
     ->
-      stop()
-      $("#login-button").simulate("click")
-      setTimeout(
-        ->
-          assertAlertPresent()
-          start()
-      , 200)
+      triggerEvent("#login-button", "click")
+      andThen -> assertAlertPresent()
   )
