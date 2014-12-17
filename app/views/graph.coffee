@@ -10,7 +10,7 @@ view = Ember.View.extend
   streamGraphStyle: false
 
   # Animation Settings
-  dropInDuration: 700
+  dropInDuration: 400
   perDatumDelay: 60
 
   symptomColors:
@@ -22,8 +22,30 @@ view = Ember.View.extend
       "#AED584"
     ]
 
-  willDestroy: ->
-    # @get("force").stop()
+  draggable: 'true'
+  attributeBindings: 'draggable'
+
+  dragTooltip: new jBox("Tooltip")
+  didInsertElement: -> @dragTooltip.attach(@$(".graph-container"))
+
+  dragStart: (event) ->
+    @set "dragStartX", event.originalEvent.x
+  drag: (event) ->
+    if @get("viewportDays.length") and @get("dragStartX") and event.originalEvent.x > 0
+      difference = event.originalEvent.x - @get("dragStartX")
+      days = Math.floor(difference / (@get("width") / @get("viewportDays.length")))
+      @set("shiftViewportDays", days)
+      if days > 0
+        @dragTooltip.setContent("Go Back: #{days} days")
+      else
+        @dragTooltip.setContent("Go Forward: #{Math.abs(days)} days")
+
+  dragEnd: (event) ->
+    @set "dragStartX", false
+    if @get("shiftViewportDays")
+      direction = if @get("shiftViewportDays") > 0 then "past" else "future"
+      @controller.send("shiftViewport", Math.abs(@get("shiftViewportDays")), direction)
+      @set("shiftViewportDays", false)
 
   symptomsMax: Ember.computed(-> d3.max(@get("unfilteredDatumsByDay") , (dayDatums) -> dayDatums.length) ).property("unfilteredDatumsByDay")
 
