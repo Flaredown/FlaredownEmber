@@ -34,19 +34,34 @@ module('Graph Integration', {
       # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
       responseText: entryFixture()
 
-
-
   teardown: -> Ember.run(App, App.destroy)
 })
 
-test "Recent Entries", ->
+test "Datums show up", ->
   expect 1
 
   visit('/').then( ->
-    ok(find("rect.score").length is 39, "Has 39 datums for HBI fixture")
+    ok find("rect.score").length is 39, "Has 39 datums for HBI fixture"
   )
 
-test "Interaction", =>
+test "Datums disappear when shifted out of viewport", ->
+  expect 2
+
+  visit('/').then( ->
+    ok find("rect.score").length is 39, "Has 39 datums for HBI fixture"
+
+    triggerEvent ".shift-viewport-1-past", "click"
+
+    stop()
+    setTimeout(
+      ->
+        ok find("rect.score").length is 31, "Has 31 datums when contracted 1 day"
+        start()
+    , 1000)
+
+  )
+
+test "Modal by clicking datum", =>
   expect 1
 
   visit('/').then(
@@ -60,3 +75,4 @@ test "Interaction", =>
           start()
       , 100)
   )
+

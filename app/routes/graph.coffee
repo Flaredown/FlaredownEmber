@@ -15,10 +15,11 @@ route = AuthRoute.extend
   setupController: (controller, model) ->
     user = @get("currentUser")
 
-    controller.set "model",     {}
-    controller.set "rawData", model
-    controller.set "firstEntryDate", moment().utc().startOf("day").subtract(365,"days") # TODO unhaxorize this
-    controller.set "catalog",   Object.keys(model).sort()[0]
+    controller.set "model",           {}
+    controller.set "rawData",         model
+    controller.set "firstEntryDate",  moment().utc().startOf("day").subtract(365,"days") # TODO unhaxorize this
+    controller.set "catalog",         Object.keys(model).sort()[0]
+    controller.set "viewportStart",   moment().utc().startOf("day").subtract(14,"days")
 
     # TODO these are antiquated -> /dev/null
     # controller.set "startDate", moment.utc(user.get("defaultStartDate"))

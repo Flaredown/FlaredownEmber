@@ -28,7 +28,7 @@ moduleFor("view:graph", "Graph View",
         controller.set "rawData", fixture
         controller.set "catalog", "hbi"
         controller.set "viewportSize", 6
-        controller.set "viewportStart", moment(startDay).utc().subtract(5, "days")
+        controller.set "viewportStart", moment(startDay).utc().subtract(6, "days")
         controller.set "firstEntryDate", moment(startDay).utc().subtract(10, "days")
 
         view.set("controller", controller)
