@@ -34,8 +34,6 @@ module('Graph Integration', {
       # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
       responseText: entryFixture()
 
-
-
   teardown: -> Ember.run(App, App.destroy)
 })
 

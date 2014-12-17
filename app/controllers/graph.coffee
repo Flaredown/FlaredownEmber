@@ -28,16 +28,36 @@ controller = Ember.ObjectController.extend
   filteredCatalogResponseNames: Ember.computed( -> @get("catalogResponseNames").filter( (name) => @get("filteredResponseNames").contains(name) ).compact() ).property("catalogResponseNames", "filteredResponseNames")
 
   ### Timeline manipulation, viewport stuff ###
-  bufferMin:      10
-  viewportSize:   14
-  viewportStart: Ember.computed(-> moment().utc().startOf("day").subtract(@get("viewportSize")-1, "days")).property("viewportSize")
-  # watchViewportSize: Ember.observer( ->
-  #   if moment
-  #   @set("viewportStart", )
-  # ).observes("viewportSize")
+  bufferMin:        10
+  viewportSize:     14
+  viewportMinSize:  14
+  # viewportStart
+  # firstEntrydate
+
+  viewportStartNice: Ember.computed(-> @get("viewportStart").format("MMM-DD-YYYY")).property("viewportStart")
+
+  changeViewport: (size_change, new_start) ->
+    today     = moment().utc().startOf("day")
+    new_size  = @get("viewportSize")+size_change
+    new_size  = @get("viewportMinSize") if new_size < @get("viewportMinSize")
+
+    # Don't accept changes invalid ranges
+    return if today.diff(new_start, "days") <= 0
+
+    # Limit based on firstEntryDate
+    if new_start < @get("firstEntryDate")
+      @set "viewportStart", moment(@get("firstEntryDate"))
+    else
+      @set "viewportStart", new_start
+
+    # Limit based on today
+    if moment(@get("viewportStart")).add(new_size, "days") > today
+      @set "viewportSize", Math.abs(today.diff(@get("viewportStart"), "days"))
+    else
+      @set "viewportSize", new_size
 
   viewportDays: Ember.computed( ->
-    [0..@get("viewportSize")].map (i) =>
+    [1..@get("viewportSize")].map (i) =>
       moment(@get("viewportStart")).add(i, "days")
     .filter (date) =>
       date >= @get("firstEntryDate") and date <= moment().utc().startOf("day")
@@ -106,8 +126,20 @@ controller = Ember.ObjectController.extend
   ).property("unfilteredDatums", "viewportDays")
 
   actions:
-    expandViewport: (days, direction) ->
-      # default direction is both
+    resizeViewport: (days, direction) ->
+      if typeof(direction) is "undefined" # default direction is both ("pinch")
+        @changeViewport (days*2), moment(@get("viewportStart")).subtract(days,"days")
+      else
+        if direction is "past"
+          @changeViewport days, moment(@get("viewportStart")).subtract(days,"days")
+        else
+          @changeViewport days, moment(@get("viewportStart"))
+
+    shiftViewport: (days, direction) ->
+      if direction is "past"
+        @changeViewport 0, moment(@get("viewportStart")).subtract(days,"days")
+      else # "future"
+        @changeViewport 0, moment(@get("viewportStart")).add(days,"days")
 
     setDateRange: (start, end) ->
       # TODO check formatting of start/end

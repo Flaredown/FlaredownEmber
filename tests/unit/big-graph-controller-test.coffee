@@ -33,7 +33,7 @@ moduleFor("controller:graph", "Graph Controller (big)",
         controller.set "model", {}
         controller.set "rawData", modifiedFixture
         controller.set "viewportSize", 14
-        # controller.set "viewportStart", moment(startDay).add(, "day")
+        controller.set "viewportStart", moment(startDay)
         controller.set "firstEntryDate", moment().utc().startOf("day").subtract(364, "days")
         controller.set "catalog", "symptoms"
 
@@ -45,21 +45,14 @@ moduleFor("controller:graph", "Graph Controller (big)",
 # test "#viewport adjusts ", ->
 
 test "#viewportDays all days visible in viewportSize", ->
-  expect 4
+  expect 5
 
+  ok controller.get("viewportDays.length") is controller.get("viewportSize"),                                                         "matches viewport size"
+  ok controller.get("viewportDays.firstObject") is moment(controller.get("viewportStart")).add(1,"day").unix(),                       "first day is same as viewportStart + 1 (non-inclusive)"
+  ok controller.get("viewportDays.lastObject") is controller.get("viewportStart").add(controller.get("viewportSize"),"days").unix(),  "last day is same as viewportStart + viewportSize"
 
-  ok controller.get("viewportDays.length") is controller.get("viewportSize"),               "matches viewport size"
-  ok controller.get("viewportDays.firstObject") is controller.get("viewportStart").unix(),  "first day is same as viewportStart"
-  # TODO remove computed property viewportStart
-  # ok controller.get("days").contains(controller.get("viewportStart").unix()),               "days contains the viewportStart"
-  # ok controller.get("days").contains(controller.get("viewportDays.lastObject")),            "days contains other viewportDays"
-
-  controller.set("viewportSize", 500)
-  # TODO after removing computed property viewportStart, this should be less than 365
-  ok controller.get("viewportDays.length") is 365, "viewport can't get bigger than limits"
-
-  controller.set("viewportStart", controller.get("firstEntryDate"))
-  ok controller.get("viewportDays.length") is 365, "viewport can't get bigger than limits"
+  ok controller.get("days").contains(controller.get("viewportStart").unix()),               "days contains the viewportStart"
+  ok controller.get("days").contains(controller.get("viewportDays.lastObject")),            "days contains other viewportDays"
 
 test "#bufferRadius is based on viewportSize, but has minimum", ->
   expect 2
@@ -68,6 +61,26 @@ test "#bufferRadius is based on viewportSize, but has minimum", ->
 
   controller.set "viewportSize", 50
   ok controller.get("bufferRadius") is 25, "Should be half the viewport"
+
+test "viewport can't overrun graph limitations", ->
+  expect 2
+
+  controller.send("resizeViewport", 500)
+  ok controller.get("viewportSize") is 364, "expands to max based on limitations"
+  ok controller.get("viewportStart").unix() is controller.get("firstEntryDate").unix()
+
+test "viewport can't size down below minimum", ->
+  expect 1
+
+  controller.send("resizeViewport", -500)
+  ok controller.get("viewportSize") is controller.get("viewportMinSize")
+
+test "viewport can't size up viewport past 'today'", ->
+  expect 1
+
+  controller.set("viewportStart", moment().utc().startOf("day").subtract(14, "days"))
+  controller.send("resizeViewport", 10, "future")
+  ok controller.get("viewportSize") is 14
 
 test "#days loaded from rawData", ->
   expect 4
@@ -78,6 +91,31 @@ test "#days loaded from rawData", ->
   ok controller.get("days.lastObject") is endDay.unix(),    "endDay matches last day"
 
 ### Actions ###
-test "#expandViewport(days) expands the day range towards the past", ->
-  expect 0
-  # ok controller.send("expandViewport", ) is 7,                "First x coordinate has 5 responses -> 7 datum points"
+test "#resizeViewport(days, 'past/future') expands the viewportSize in one direction", ->
+  expect 4
+
+  controller.send("resizeViewport", 2, "past")
+  ok controller.get("viewportSize") is 16,                                                  "expand 2 days towards the past"
+  ok controller.get("viewportStart").unix() is moment(startDay).subtract(2,"days").unix(),  "viewportStart goes back 2 days as well"
+
+  controller.send("resizeViewport", 2, "future")
+  ok controller.get("viewportSize") is 18,                                                  "expand 2 days towards the future"
+  ok controller.get("viewportStart").unix() is moment(startDay).subtract(2,"days").unix(),  "viewportStart doesn't change"
+
+test "#resizeViewport(days) expands the viewportSize in both directions", ->
+  expect 2
+
+  controller.send("resizeViewport", 4)
+  ok controller.get("viewportSize") is 22, "expand in both directions"
+  ok controller.get("viewportStart").unix() is moment(startDay).subtract(4,"days").unix()
+
+test "#shiftViewport(days) changes the viewportStart", ->
+  expect 4
+
+  controller.send("shiftViewport", 3, "past")
+  ok controller.get("viewportSize") is 14, "size stays the same"
+  ok controller.get("viewportStart").unix() is moment(startDay).subtract(3,"days").unix()
+
+  controller.send("shiftViewport", 5, "future")
+  ok controller.get("viewportSize") is 14, "size stays the same"
+  ok controller.get("viewportStart").unix() is moment(startDay).add(2,"days").unix()

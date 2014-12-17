@@ -91,16 +91,11 @@ view = Ember.View.extend
   ).property("x", "y", "unfilteredDatums")
 
   setup: ->
-    # TODO can we get rid of "that" and "controller"?
-    that = @
-    controller = @get("controller")
-
-    @set "graph-container", $(".graph-container")
     @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
     # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
-    @set "width", @get("graph-container").width() - @get("margin").left - @get("margin").right
-    @set "height", @get("graph-container").height() - @get("margin").top - @get("margin").bottom
+    @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
+    @set "height", $(".graph-container").height() - @get("margin").top - @get("margin").bottom
     @setupEndDatums()
 
     @set("svg", d3.select(".graph-container").append("svg")
@@ -137,21 +132,19 @@ view = Ember.View.extend
     #       "stroke" : "black"
     #       "stroke-width" : "1px"
 
-    @set("startLine", d3.svg.line()
-      .x( (d) -> d.x )
-      .y( (d) -> that.get("height")*2 )
-    )
-
-    @set("endLine", d3.svg.line()
-      .x( (d) -> d.x )
-      .y( (d) -> that.get("y")(d.origin.y) )
-    )
+    # @set("startLine", d3.svg.line()
+    #   .x( (d) -> d.x )
+    #   .y( (d) => @get("height")*2 )
+    # )
+    #
+    # @set("endLine", d3.svg.line()
+    #   .x( (d) -> d.x )
+    #   .y( (d) => @get("y")(d.get("end_y")) )
+    # )
 
   update: (first) ->
-
     ### RECT VERSION ###
-    scorePip = @get("svg").selectAll("rect.score").data(@get("unfilteredDatums"))
-    # scoreCircle.order()
+    scorePip = @get("svg").selectAll("rect.score").data(@get("unfilteredDatums"), (d) -> d.get("id"))
 
     scorePip
       .enter()
@@ -163,19 +156,11 @@ view = Ember.View.extend
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
           .attr
             class: (d) -> "score #{d.get("classes")}"
-            # r: 3
             ry: 3
             rx: 3
             x: (d) -> d.get("end_x")
-            # y: (d) -> d.get("end_y")
             y: (d) => @get("y")(@get("viewportDays.length")*6) # way above the graph
-            width:  @get("symptomDatumDimensions").width
-            height: @get("symptomDatumDimensions").height
             fill: (d) => @get("colors")(d.get("name"))
-
-            # cx: (d) -> d.get("x")
-            # cy: (d) => @get("y")(@get("viewportDays.length")*6) # way above the graph
-            # opacity: 0
 
     @get("viewportDays").forEach (day) =>
 
@@ -183,81 +168,32 @@ view = Ember.View.extend
       dayPips = scorePip.filter(filterByDay)
       dayPips
         .transition()
-          # .each("start", (d,i) -> d.fixed = false)
-          # .each("end", (d,i) -> that.get("force").stop())
           .ease("quad")
-          .duration(=> @get("dropInDuration"))
-          .delay((d,i) => i*@get("perDatumDelay"))
+          .duration (d) =>
+            if d.get("placed") then 100 else @get("dropInDuration")
+          .delay (d,i) =>
+            if d.get("placed") then i*10 else i*@get("perDatumDelay")
           .attr
+            width:  @get("symptomDatumDimensions").width
+            height: @get("symptomDatumDimensions").height
             opacity: 100
             y: (d) -> d.get("end_y")
+            x: (d) -> d.get("end_x")
+          .each "end", (d) -> d.set("placed", true)
 
     scorePip
       .exit()
 
       .transition()
-        # .each("start", (d,i) -> d.fixed = true)
-        .duration(300)
-        .attr(
-          fixed: true
+        .ease("quad")
+        .duration(500)
+        .attr
           y: -1000
           opacity: 0
-          x: (d) -> d.get("x")
-        )
+          fill: "transparent"
+        .each "end", (d) -> d.set("placed", false)
         .remove()
 
-    # hitbox = @get("svg").selectAll("circle.hitbox").data(@get("unfilteredDatums"))
-    #
-    # hitbox
-    #   .exit()
-    #     .remove()
-    #
-    # hitbox
-    #   .enter()
-    #     .append("rect")
-    #       .attr
-    #         fixed: true
-    #         class: "hitbox"
-    #         fill: "transparent"
-    #         r: (d) -> 5 #(that.get("width") / scoreCircle[0].length) / 2
-    #         cx: (d) => d.get("x")
-    #         cy: (d) => d.get("end_y")
-    #
-    # hitbox.on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
-      # .attr
-      #   r: (d) -> 10 #(that.get("width") / scoreCircle[0].length) / 2
-      #   cx: (d) => d.get("x")
-      #   cy: (d) => d.get("end_y")
-      #   fill: "black"
-      # .on("mouseenter", (d,i) ->
-      #   d3.select(scoreCircle[0][d.index]).transition()
-      #     .duration(200)
-      #     .attr("r", 30)
-      #     .style("stroke-width", "3px")
-      #
-      #   d3.select(scoreText[0][d.index]).transition()
-      #     .duration(200)
-      #     .attr("opacity", 1)
-      #     .style("font-size", "20px")
-      # )
-      # .on("mouseleave", (d,i) ->
-      #
-      #   d3.select(scoreCircle[0][d.index]).transition()
-      #     .duration(300)
-      #     .attr("r", 6)
-      #     .style("stroke-width", "2px")
-      #
-      #   d3.select(scoreText[0][d.index]).transition()
-      #     .duration(300)
-      #     .attr("opacity", 0)
-      #     .style("font-size", "10px")
-      # )
-
-
-      # .each (d,i) ->
-      #   hitbox = d3.select(that.get("svg").selectAll("circle.hitbox")[0][i])
-      #   d.x = parseFloat hitbox.attr("cx")
-      #   d.y = parseFloat hitbox.attr("cy")
 
   renderGraph: ->
     first = Ember.isEmpty @get("svg")

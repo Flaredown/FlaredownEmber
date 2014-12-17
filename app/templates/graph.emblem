@@ -5,14 +5,31 @@ else
   .container: h1.text-center No scores in date range
 
 
-/ .container: .row
-/   .col-md-3
-/     = input type="text" valueBinding="startDateFormatted"
-/     button.response-continue-link type="submit" click="setDateRange startDateFormatted endDateFormatted" Set
-/   .col-md-6
-/   .col-md-3.text-right
-/     = input type="text" valueBinding="endDateFormatted"
-/     button.response-continue-link type="submit" click="setDateRange startDateFormatted endDateFormatted" Set
+h3 Viewport: showing {{viewportSize}} days, starting at {{viewportStartNice}}
+
+div style="width: 33%; float:left"
+  strong expand viewport
+  ul
+    li: a href="javascript:void(0);" click="resizeViewport 1 'past'"   1 towards the past
+    li: a href="javascript:void(0);" click="resizeViewport 10 'past'"  10 towards the past
+    li: a href="javascript:void(0);" click="resizeViewport 1 'future'" 1 towards the future
+    li: a href="javascript:void(0);" click="resizeViewport 10 'future'" 10 towards the future
+div style="width: 33%; float:left"
+  strong contract viewport
+  ul
+    li: a href="javascript:void(0);" click="resizeViewport -1 'past'"    1 towards the past
+    li: a href="javascript:void(0);" click="resizeViewport -10 'past'"   10 towards the past
+    li: a href="javascript:void(0);" click="resizeViewport -1 'future'"  1 towards the future
+    li: a href="javascript:void(0);" click="resizeViewport -10 'future'" 10 towards the future
+
+div style="width: 33%; float:left"
+  strong shift viewport
+  ul
+    li: a href="javascript:void(0);" click="shiftViewport 1 'past'"  1 towards the past
+    li: a href="javascript:void(0);" click="shiftViewport 10 'past'" 10 towards the past
+    li: a href="javascript:void(0);" click="shiftViewport 1 'future'"  1 towards the future
+    li: a href="javascript:void(0);" click="shiftViewport 10 'future'" 10 towards the future
+
 hr
 
 outlet
