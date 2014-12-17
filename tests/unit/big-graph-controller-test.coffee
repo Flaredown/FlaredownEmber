@@ -72,7 +72,13 @@ test "viewport can't overrun graph limitations", ->
 test "viewport can't size down below minimum", ->
   expect 1
 
-  controller.send("resizeViewport", -500)
+  controller.send("resizeViewport", -100, startDay)
+  ok controller.get("viewportSize") is controller.get("viewportMinSize")
+
+test "viewport can't shift below minimum size", ->
+  expect 1
+
+  controller.send("resizeViewport", 0, moment.utc().startOf("day"))
   ok controller.get("viewportSize") is controller.get("viewportMinSize")
 
 test "viewport can't size up viewport past 'today'", ->

@@ -39,22 +39,16 @@ controller = Ember.ObjectController.extend
   changeViewport: (size_change, new_start) ->
     today     = moment().utc().startOf("day")
     new_size  = @get("viewportSize")+size_change
-    new_size  = @get("viewportMinSize") if new_size < @get("viewportMinSize")
 
-    # Don't accept changes invalid ranges
-    return if today.diff(new_start, "days") <= 0
+    return if today.diff(new_start, "days") <= 0                                                            # Don't accept changes to invalid viewportStart
+    new_start = @get("firstEntryDate") if new_start < @get("firstEntryDate")                                # Limit based on firstEntryDate
+    new_size  = Math.abs(today.diff(new_start, "days")) if moment(new_start).add(new_size, "days") > today  # Limit based on no time travel
+    new_size  = @get("viewportMinSize") if new_size < @get("viewportMinSize")                               # Can't go below min size
+    return if moment(new_start).add(new_size, "days") > today                                               # Can't shift viewport past today
 
-    # Limit based on firstEntryDate
-    if new_start < @get("firstEntryDate")
-      @set "viewportStart", moment(@get("firstEntryDate"))
-    else
-      @set "viewportStart", new_start
-
-    # Limit based on today
-    if moment(@get("viewportStart")).add(new_size, "days") > today
-      @set "viewportSize", Math.abs(today.diff(@get("viewportStart"), "days"))
-    else
-      @set "viewportSize", new_size
+    @setProperties
+      viewportSize:   new_size
+      viewportStart:  new_start
 
   viewportDays: Ember.computed( ->
     [1..@get("viewportSize")].map (i) =>
