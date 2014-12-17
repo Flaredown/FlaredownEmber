@@ -10,25 +10,25 @@ h3 Viewport: showing {{viewportSize}} days, starting at {{viewportStartNice}}
 div style="width: 33%; float:left"
   strong expand viewport
   ul
-    li: a href="javascript:void(0);" click="resizeViewport 1 'past'"   1 towards the past
-    li: a href="javascript:void(0);" click="resizeViewport 10 'past'"  10 towards the past
-    li: a href="javascript:void(0);" click="resizeViewport 1 'future'" 1 towards the future
-    li: a href="javascript:void(0);" click="resizeViewport 10 'future'" 10 towards the future
+    li: a.expand-viewport-1-past    href="javascript:void(0);" click="resizeViewport 1 'past'"   1 towards the past
+    li: a.expand-viewport-10-past   href="javascript:void(0);" click="resizeViewport 10 'past'"  10 towards the past
+    li: a.expand-viewport-10-future href="javascript:void(0);" click="resizeViewport 1 'future'" 1 towards the future
+    li: a.expand-viewport-1-future  href="javascript:void(0);" click="resizeViewport 10 'future'" 10 towards the future
 div style="width: 33%; float:left"
   strong contract viewport
   ul
-    li: a href="javascript:void(0);" click="resizeViewport -1 'past'"    1 towards the past
-    li: a href="javascript:void(0);" click="resizeViewport -10 'past'"   10 towards the past
-    li: a href="javascript:void(0);" click="resizeViewport -1 'future'"  1 towards the future
-    li: a href="javascript:void(0);" click="resizeViewport -10 'future'" 10 towards the future
+    li: a.contract-viewport-1-past    href="javascript:void(0);" click="resizeViewport -1 'past'"    1 towards the past
+    li: a.contract-viewport-10-past   href="javascript:void(0);" click="resizeViewport -10 'past'"   10 towards the past
+    li: a.contract-viewport-10-future href="javascript:void(0);" click="resizeViewport -1 'future'"  1 towards the future
+    li: a.contract-viewport-1-future  href="javascript:void(0);" click="resizeViewport -10 'future'" 10 towards the future
 
 div style="width: 33%; float:left"
   strong shift viewport
   ul
-    li: a href="javascript:void(0);" click="shiftViewport 1 'past'"  1 towards the past
-    li: a href="javascript:void(0);" click="shiftViewport 10 'past'" 10 towards the past
-    li: a href="javascript:void(0);" click="shiftViewport 1 'future'"  1 towards the future
-    li: a href="javascript:void(0);" click="shiftViewport 10 'future'" 10 towards the future
+    li: a.shift-viewport-1-past    href="javascript:void(0);" click="shiftViewport 1 'past'"  1 towards the past
+    li: a.shift-viewport-10-past   href="javascript:void(0);" click="shiftViewport 10 'past'" 10 towards the past
+    li: a.shift-viewport-10-future href="javascript:void(0);" click="shiftViewport 1 'future'"  1 towards the future
+    li: a.shift-viewport-1-future  href="javascript:void(0);" click="shiftViewport 10 'future'" 10 towards the future
 
 hr
 
