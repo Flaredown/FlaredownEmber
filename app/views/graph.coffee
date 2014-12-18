@@ -2,12 +2,14 @@
 
 view = Ember.View.extend
 
+  ### CONFIG ###
   viewportDaysBinding:            "controller.viewportDays"
   viewportDatumsBinding:          "controller.viewportDatums"
   unfilteredDatumsBinding:        "controller.unfilteredDatums"
   unfilteredDatumsByDayBinding:   "controller.unfilteredDatumsByDay"
 
   streamGraphStyle: false
+  dragAmplifier: 1.2 # amplify drag a bit
 
   # Animation Settings
   dropInDuration: 400
@@ -36,17 +38,15 @@ view = Ember.View.extend
     if @get("viewportDays.length") and @get("dragStartX") and event.originalEvent.x > 0
       difference          = event.originalEvent.x - @get("dragStartX")
       absolute_difference = Math.abs(difference)
-      datum_width         = @get("width") / @get("viewportDays.length")
       direction           = if difference > 0 then "past" else "future"
+      translation         = absolute_difference * @get("dragAmplifier")
 
-      @shift(difference) # move those pips around
+      @shift(difference) # first off, move them pips around
 
-      translation         = absolute_difference * 1.2 # scroll multiplier for easier dragging
-
-      if translation > 10 and translation < datum_width and not @get("translationThreshold")
+      if translation > 10 and translation < @get("datumWidth") and not @get("translationThreshold")
         @set "translationThreshold", true
 
-      if translation > datum_width
+      if translation > @get("datumWidth")
         @controller.send("shiftViewport", 1, direction)
         @set "dragStartX", event.originalEvent.x
 
@@ -58,7 +58,7 @@ view = Ember.View.extend
   symptomsMax: Ember.computed(-> d3.max(@get("unfilteredDatumsByDay") , (dayDatums) -> dayDatums.length) ).property("unfilteredDatumsByDay")
   watchDatums: Ember.observer(-> Ember.run.next => @renderGraph()).observes("viewportDatums").on("didInsertElement")
 
-  setupEndDatums: Ember.observer ->
+  setupEndPositions: Ember.observer ->
     @get("unfilteredDatumsByDay").forEach (day) =>
       # TODO add in other types of datums
       day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
@@ -66,20 +66,52 @@ view = Ember.View.extend
           datum.set("end_x", @get("x")(datum.get("day")))
 
           if @get("streamGraphStyle") # half of the difference between max symptoms shown and this days symptoms
-            offset    = (@get("symptomsMax") - (day.length)) / 2
+            offset = (@get("symptomsMax") - (day.length)) / 2
             datum.set "end_y", @get("y")((i+1) + (offset))
           else
             datum.set "end_y", @get("y")(i+1)
 
   .observes("unfilteredDatumsByDay")
 
+  renderGraph: ->
+    first =
+    if @get("isSetup")
+      @update()
+      @positionByDay() unless @get("isDragging")
+    else
+      @setup()
+
+  ### COMMON DIMENSIONS ###
+  datumWidth:   Ember.computed( ->  @get("width") / @get("viewportDays.length") ).property("viewportDays.length", "width")
+  datumHeight:  Ember.computed( ->  @get("height") / @get("symptomsMax") ).property("symptomsMax", "height")
+
+  symptomDatumDimensions: Ember.computed( ->
+    width_margin_percent  = 0.20
+    height_margin_percent = 0.10
+
+    right       = @get("datumWidth")  * width_margin_percent
+    left        = @get("datumWidth")  * width_margin_percent
+    top         = @get("datumHeight") * height_margin_percent
+    bottom      = @get("datumHeight") * height_margin_percent
+
+    {
+      width:  @get("datumWidth")-left-right
+      height: @get("datumHeight")-top-bottom
+      right_margin:  right
+      left_margin:   left
+      top_margin:    top
+      bottom_margin: bottom
+    }
+  ).property("x", "y", "unfilteredDatums")
+
+  ### D3 STUFF ###
   x: Ember.computed ->
     # Add domain to make room for pip width
     tomorrow = moment(@get("viewportDays.lastObject")*1000).utc().add(1,"day").unix()
 
     d3.scale.linear()
       .domain([@get("viewportDays.firstObject"), tomorrow])
-      .range [0, @get("width")]
+      .range [@get("symptomDatumDimensions.right_margin")*2, @get("width")]
   .property("width", "viewportDays.@each")
 
   y: Ember.computed ->
@@ -89,35 +121,13 @@ view = Ember.View.extend
 
   .property("height", "unfilteredDatumsByDay")
 
-  symptomDatumDimensions: Ember.computed( ->
-    base_width  =  (@get("width") / @get("viewportDays.length"))
-    base_height =  (@get("height") / @get("symptomsMax"))
-
-    width_margin_percent  = 0.20
-    height_margin_percent = 0.10
-
-    right       = base_width  * width_margin_percent
-    left        = base_width  * width_margin_percent
-    top         = base_height * height_margin_percent
-    bottom      = base_height * height_margin_percent
-
-    {
-      width:  base_width-left-right
-      height: base_height-top-bottom
-      right_margin:  right
-      left_margin:   left
-      top_margin:    top
-      bottom_margin: bottom
-    }
-  ).property("x", "y", "unfilteredDatums")
-
   setup: ->
     @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
     # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
     @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
     @set "height", $(".graph-container").height() - @get("margin").top - @get("margin").bottom
-    @setupEndDatums()
+    @setupEndPositions()
 
     @set("svg", d3.select(".graph-container").append("svg")
       .attr("id", "graph")
@@ -211,14 +221,5 @@ view = Ember.View.extend
       #     opacity: 0
       #     fill: "transparent"
       # .each "end", (d) -> d.set("placed", false)
-
-
-  renderGraph: ->
-    first =
-    if @get("isSetup")
-      @update()
-      @positionByDay() unless @get("isDragging")
-    else
-      @setup()
 
 `export default view`

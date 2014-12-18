@@ -52,10 +52,10 @@ test "setups up #y correctly with #unfilteredDatumsByDay", ->
   ok 1000-parseInt(view.get("y")(1)) is 63, "assuming max datums of 15, we should get back about 63px (from top) with a height of 1000px"
 
 test "setups up #x correctly with #viewportDays", ->
-  expect 2
+  expect 1
 
-  ok view.get("x")(fixture.hbi[24].x) is 0,               "oldest day should have the 0px x position"
-  ok parseInt(view.get("x")(fixture.hbi[18].x)) is 166,  "second oldest day should be at about 166px, assuming 6 days and 1000px width"
+  left_offset = view.get("symptomDatumDimensions.left_margin")*2
+  ok view.get("x")(fixture.hbi[24].x) is left_offset, "oldest day should have the 0px x position + margin offset"
 
 test "#symptomDatumMargins yields margins object", ->
   expect 6
