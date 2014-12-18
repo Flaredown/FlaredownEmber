@@ -28,6 +28,19 @@ moduleFor("controller:graph/checkin", "Check-In Controller",
   }
 )
 
+### The Check-In ###
+# Catalogs are loaded based on the `catalog_definitions` in the `Entry`.
+# From there, "categories" and "sections" are generated to build a navigable form
+# User action changes currentSection and currentCategory which controls the display
+# of the form.
+
+# Category: a supersection of the Check-In, such as a catalog (e.g. HBI), treatments or notes
+# Section: a particular "page" of the entire Check-In that is navigable by URL
+
+# sectionQuestions are generated for the categories that are associated with a catalog
+# this is used to build the form
+
+# responsesData data is built up based on user input and any pre-existing responses in the `Entry`
 
 test "Catalog definitions are loaded up correctly", ->
   expect 2
