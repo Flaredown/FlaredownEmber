@@ -22,6 +22,7 @@ moduleFor("view:graph", "Graph View",
       fixture     = graphFixture(startDay)
 
       view.reopen { renderGraph: -> } # don't need to actually run the graph
+      controller.reopen { bufferWatcher: -> } # don't need to buffer
 
       Ember.run ->
         controller.set "model",           {}
@@ -33,6 +34,7 @@ moduleFor("view:graph", "Graph View",
         controller.set "firstEntryDate",  moment(startDay)
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment().utc().startOf("day")
+        Ember.run -> controller.datumsObserver()
 
         view.set("controller", controller)
 

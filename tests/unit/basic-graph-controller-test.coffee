@@ -20,6 +20,8 @@ moduleFor("controller:graph", "Graph Controller (basic)",
       startDay    = moment().utc().startOf("day").subtract(5,"days")
       fixture     = graphFixture(startDay)
 
+      controller.reopen { bufferWatcher: -> }
+
       Ember.run ->
         controller.set "model",           {}
         controller.set "rawData",         fixture
@@ -30,6 +32,7 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "firstEntryDate",  moment(startDay)
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment().utc().startOf("day")
+      Ember.run -> controller.datumsObserver()
 
     teardown: -> Ember.run(App, App.destroy)
   }

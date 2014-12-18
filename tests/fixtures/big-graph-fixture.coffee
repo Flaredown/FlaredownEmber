@@ -1,7 +1,7 @@
 fixture = (days) ->
 
   days ?= 365
-  daysFromStart = (days) -> moment().utc().startOf("day").add(days, "days").unix()
+  daysFromStart = (days) -> moment().utc().startOf("day").subtract(days, "days").unix()
   randomInt = (min, max) ->
     Math.floor(Math.random() * (max - min)) + min; # max exclusive
 
