@@ -6,7 +6,7 @@ route = AuthRoute.extend
   model: (params) ->
     ajax(
       url: "#{config.apiNamespace}/graph"
-      data: { start_date: @get("currentUser").get("defaultStartDate"), end_date: @get("currentUser").get("defaultEndDate") }
+      data: { start_date: @get("currentUser").get("defaultStartDate").format("MMM-DD-YYYY"), end_date: @get("currentUser").get("defaultEndDate").format("MMM-DD-YYYY") }
     ).then(
       (response) -> response
       (response) -> # TODO handler here
@@ -16,6 +16,8 @@ route = AuthRoute.extend
     user = @get("currentUser")
 
     controller.set "model",           {}
+    controller.set "loadedStartDate", @get("currentUser").get("defaultStartDate")
+    controller.set "loadedEndDate",   @get("currentUser").get("defaultEndDate")
     controller.set "rawData",         model
     controller.set "firstEntryDate",  moment().utc().startOf("day").subtract(365,"days") # TODO unhaxorize this
     controller.set "catalog",         Object.keys(model).sort()[0]

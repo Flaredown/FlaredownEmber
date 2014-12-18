@@ -36,6 +36,8 @@ moduleFor("controller:graph", "Graph Controller (big)",
         controller.set "viewportStart", moment(startDay)
         controller.set "firstEntryDate", moment().utc().startOf("day").subtract(364, "days")
         controller.set "catalog", "symptoms"
+        controller.set "loadedStartDate", moment(startDay)
+        controller.set "loadedEndDate",   moment(endDay)
 
     teardown: -> Ember.run(App, App.destroy)
   }

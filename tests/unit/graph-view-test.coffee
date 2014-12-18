@@ -18,18 +18,21 @@ moduleFor("view:graph", "Graph View",
       App         = startApp()
       controller  = App.__container__.lookup("controller:graph")
       view        = @subject()
-      startDay    = moment().utc().startOf("day")
+      startDay    = moment().utc().startOf("day").subtract(5,"days")
       fixture     = graphFixture(startDay)
 
       view.reopen { renderGraph: -> } # don't need to actually run the graph
 
       Ember.run ->
-        controller.set "model", {}
-        controller.set "rawData", fixture
-        controller.set "catalog", "hbi"
-        controller.set "viewportSize", 6
-        controller.set "viewportStart", moment(startDay).utc().subtract(6, "days")
-        controller.set "firstEntryDate", moment(startDay).utc().subtract(10, "days")
+        controller.set "model",           {}
+        controller.set "rawData",         fixture
+        controller.set "catalog",         "hbi"
+        controller.set "viewportSize",    6
+        controller.set "viewportMinSize", 6
+        controller.set "viewportStart",   moment(startDay).subtract(1,"day")
+        controller.set "firstEntryDate",  moment(startDay)
+        controller.set "loadedStartDate", moment(startDay)
+        controller.set "loadedEndDate",   moment().utc().startOf("day")
 
         view.set("controller", controller)
 
@@ -55,7 +58,7 @@ test "setups up #x correctly with #viewportDays", ->
   expect 1
 
   left_offset = view.get("symptomDatumDimensions.left_margin")*2
-  ok view.get("x")(fixture.hbi[24].x) is left_offset, "oldest day should have the 0px x position + margin offset"
+  ok view.get("x")(fixture.hbi[0].x) is left_offset, "oldest day should have the 0px x position + margin offset"
 
 test "#symptomDatumMargins yields margins object", ->
   expect 6
@@ -71,4 +74,4 @@ test "#setupEndPositions determines y positioning based on unfilteredDatums and 
   expect 2
 
   ok 1000 - parseInt(view.get("unfilteredDatums.firstObject.end_y")) is 63, "first y pos is around 63"
-  ok parseInt(view.get("unfilteredDatumsByDay")[3][14].get("end_y")) is 62, "highest datum (4th day from origin, datum 15) should be 62"
+  ok parseInt(view.get("unfilteredDatumsByDay")[2][14].get("end_y")) is 62, "highest datum (4th day from origin, datum 15) should be 62"

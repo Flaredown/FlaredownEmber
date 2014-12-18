@@ -139,7 +139,7 @@ view = Ember.View.extend
 
     @set("isSetup", true)
 
-    scorePip = @get("svg").selectAll("rect.score").data(@get("unfilteredDatums"), (d) -> d.get("id"))
+    scorePip = @get("svg").selectAll("rect.symptom").data(@get("unfilteredDatums"), (d) -> d.get("id"))
     scorePip
       .enter()
         .append("rect")
@@ -149,7 +149,7 @@ view = Ember.View.extend
           )
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
           .attr
-            class: (d) -> "score #{d.get("classes")}"
+            class: (d) -> d.get("classes")
             ry: 3
             rx: 3
             x: (d) -> d.get("end_x")
@@ -159,7 +159,7 @@ view = Ember.View.extend
     @positionByDay()
 
   positionByDay: () ->
-    scorePip = @get("svg").selectAll("rect.score").data(@get("unfilteredDatums"), (d) -> d.get("id"))
+    scorePip = @get("svg").selectAll("rect.symptom").data(@get("unfilteredDatums"), (d) -> d.get("id"))
 
     @get("viewportDays").forEach (day) =>
 
@@ -182,13 +182,13 @@ view = Ember.View.extend
 
 
   shift: (pixels) ->
-    scorePip = @get("svg").selectAll("rect.score").data(@get("unfilteredDatums"), (d) -> d.get("id"))
+    scorePip = @get("svg").selectAll("rect.symptom").data(@get("unfilteredDatums"), (d) -> d.get("id"))
     scorePip
       .attr
         x: (d) -> d.get("end_x")+pixels
 
   update: ->
-    scorePip = @get("svg").selectAll("rect.score").data(@get("unfilteredDatums"), (d) -> d.get("id"))
+    scorePip = @get("svg").selectAll("rect.symptom").data(@get("unfilteredDatums"), (d) -> d.get("id"))
 
     scorePip
       .enter()
@@ -200,7 +200,7 @@ view = Ember.View.extend
           )
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
           .attr
-            class: (d) -> "score #{d.get("classes")}"
+            class: (d) -> d.get("classes")
             ry: 3
             rx: 3
             x: (d) -> d.get("end_x")

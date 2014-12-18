@@ -17,17 +17,19 @@ moduleFor("controller:graph", "Graph Controller (basic)",
       App         = startApp()
       store       = App.__container__.lookup("store:main")
       controller  = @subject()
-      startDay    = moment().utc().startOf("day")
+      startDay    = moment().utc().startOf("day").subtract(5,"days")
       fixture     = graphFixture(startDay)
 
-
       Ember.run ->
-        controller.set "model", {}
-        controller.set "rawData", fixture
-        controller.set "catalog", "hbi"
-        controller.set "viewportSize", 6
-        controller.set "viewportStart", moment(startDay).utc().subtract(6, "days")
-        controller.set "firstEntryDate", moment(startDay).utc().subtract(6, "days")
+        controller.set "model",           {}
+        controller.set "rawData",         fixture
+        controller.set "catalog",         "hbi"
+        controller.set "viewportSize",    6
+        controller.set "viewportMinSize", 6
+        controller.set "viewportStart",   moment(startDay).subtract(1,"day")
+        controller.set "firstEntryDate",  moment(startDay)
+        controller.set "loadedStartDate", moment(startDay)
+        controller.set "loadedEndDate",   moment().utc().startOf("day")
 
     teardown: -> Ember.run(App, App.destroy)
   }
@@ -59,6 +61,7 @@ test "#datums is an array of SymptomDatums generated from rawData", ->
 
   expected_datums = fixture.hbi.reduce ((accum, item) -> accum + item.points), 0
   expected_datums += fixture.symptoms.reduce ((accum, item) -> accum + item.points), 0
+  expected_datums += 1 + 3 # 1 missing for hbi, 3 for symptoms
 
   ok Ember.typeOf(controller.get("datums")) is "array",                           "is an array"
   ok Ember.typeOf(controller.get("datums.firstObject")) is "instance",            "objects in array are instances (symptomDatums)"
@@ -67,28 +70,27 @@ test "#datums is an array of SymptomDatums generated from rawData", ->
 
 test "#viewportDatums: all datums that fit in the viewport", ->
   expect 1
-  ok controller.get("viewportDatums.length") is 57,                               "has expected length from fixtures (all datums, all catalogs)"
+  ok controller.get("viewportDatums.length") is 57+4,                              "has expected length from fixtures (all datums, all catalogs) + 4 total missing days"
 
 test "#catalogDatums: all datums that fit in the viewport and catalog", ->
   expect 1
-  ok controller.get("catalogDatums.length") is 39,                               "has expected length from fixtures (all datums in current catalog)"
-
+  ok controller.get("catalogDatums.length") is 39+1,                               "has expected length from fixtures (all datums in current catalog) + 1 missing day"
 
 test "#unfilteredDatums returns datums not being filtered based on their name, for the current catalog", ->
   expect 3
 
   controller.set("filteredResponseNames", []) # default
-  deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().sort(), ["general_wellbeing", "ab_pain", "stools", "ab_mass", "complications"].sort(), "no filtered names means all are visible"
+  deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().compact().sort(), ["general_wellbeing", "ab_pain", "stools", "ab_mass", "complications"].sort(), "no filtered names means all are visible"
 
   controller.set("filteredResponseNames", ["general_wellbeing", "ab_pain", "stools", "ab_mass"])
-  deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().sort(), ["complications"], "only matching datums"
+  deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().compact().sort(), ["complications"], "only matching datums"
 
   controller.set("filteredResponseNames", ["ab_pain", "droopy lips"])
-  deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().sort(), ["general_wellbeing", "complications", "stools", "ab_mass"].sort(), "doesn't care about filters from other catalogs"
+  deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().compact().sort(), ["general_wellbeing", "complications", "stools", "ab_mass"].sort(), "doesn't care about filters from other catalogs"
 
 test "#unfilteredDatumsByDay is an array of arrays containing datums for each day in #days", ->
   expect 3
 
   ok Ember.typeOf(controller.get("unfilteredDatumsByDay")) is "array",               "is an array"
   ok Ember.typeOf(controller.get("unfilteredDatumsByDay.firstObject")) is "array",   "made up of arrays"
-  ok controller.get("unfilteredDatumsByDay.firstObject.length") is 7,                "First x coordinate has 5 responses -> 7 datum points"
+  ok controller.get("unfilteredDatumsByDay.firstObject.length") is (2+1+1+2+2),      "First x coordinate has 5 responses -> 8 datum points"

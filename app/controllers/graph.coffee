@@ -4,28 +4,8 @@
 
 controller = Ember.ObjectController.extend
   ### Set by route ###
-  # rawData, firstEntryDate, viewportStart, catalog
-  filteredResponseNames: []
-
-  # startDateFormatted: Ember.computed( -> @get("startDate").format("MMM-DD-YYYY")).property("startDate")
-  # endDateFormatted:   Ember.computed( -> @get("endDate").format("MMM-DD-YYYY")).property("startEnd")
-
-  ### Responses, made a bit more friendly to our purposes ###
-  rawDataResponses: Ember.computed(->
-    _data = []
-
-    # Push together all the catalog datapoints keeping track of catalog
-    @get("catalogs").forEach (catalog) =>
-      @get("rawData.#{catalog}").forEach (datapoint) ->
-        datapoint["catalog"] = catalog
-        _data.push datapoint
-
-    _data.sortBy("x")
-  ).property("rawData")
-
-  responseNames:                Ember.computed( -> @get("rawDataResponses").mapBy("name").uniq() ).property("rawDataResponses")
-  catalogResponseNames:         Ember.computed( -> @get("rawDataResponses").filterBy("catalog", @get("catalog")).mapBy("name").uniq() ).property("rawDataResponses")
-  filteredCatalogResponseNames: Ember.computed( -> @get("catalogResponseNames").filter( (name) => @get("filteredResponseNames").contains(name) ).compact() ).property("catalogResponseNames", "filteredResponseNames")
+  # rawData, firstEntryDate, viewportStart, catalog, loadedStartDate, loadedEndDate
+  filteredResponseNames: [] # default to no filtering
 
   ### Timeline manipulation, viewport stuff ###
   bufferMin:        10
@@ -59,22 +39,6 @@ controller = Ember.ObjectController.extend
       date.unix()
   ).property("viewportSize", "viewportStart")
 
-  days: Ember.computed( ->
-    _days     = @get("rawDataResponses").mapBy("x").uniq()
-    current   = moment(_days.get("firstObject")*1000).utc().startOf("day")
-    last      = moment(_days.get("lastObject")*1000)
-    range     = Ember.A([current.unix()])
-
-    # Fill in days in between first data point even if no responses are present
-    if _days.length
-      until range.get("lastObject") is last.unix()
-        range.pushObject current.add(1, "days").unix()
-      range
-    else
-      []
-
-  ).property("rawDataResponses")
-
   bufferRadius: Ember.computed( ->
     radius = Math.floor(@get("viewportSize") / 2)
     if radius < @get("bufferMin") then @get("bufferMin") else radius
@@ -84,6 +48,37 @@ controller = Ember.ObjectController.extend
   isTwoWeeks:   Ember.computed.equal("viewportDays.length", 14)
   isTwoMonths:  Ember.computed.equal("viewportDays.length", 60)
   isOneYear:    Ember.computed.equal("viewportDays.length", 365)
+
+
+  ### Responses, made a bit more friendly to our purposes ###
+  rawDataResponses: Ember.computed(->
+    _data = []
+
+    # Push together all the catalog datapoints keeping track of catalog
+    @get("catalogs").forEach (catalog) =>
+      @get("rawData.#{catalog}").forEach (datapoint) ->
+        datapoint["catalog"] = catalog
+        _data.push datapoint
+
+    _data.sortBy("x")
+  ).property("rawData")
+
+
+  responseNames:                Ember.computed( -> @get("rawDataResponses").mapBy("name").uniq() ).property("rawDataResponses")
+  catalogResponseNames:         Ember.computed( -> @get("rawDataResponses").filterBy("catalog", @get("catalog")).mapBy("name").uniq() ).property("rawDataResponses")
+  filteredCatalogResponseNames: Ember.computed( -> @get("catalogResponseNames").filter( (name) => @get("filteredResponseNames").contains(name) ).compact() ).property("catalogResponseNames", "filteredResponseNames")
+
+  ### All the days possible inside the raw responses ###
+  days: Ember.computed( ->
+
+    current   = moment(@get("loadedStartDate"))
+    range     = Ember.A([current.unix()])
+
+    until range.get("lastObject") is @get("loadedEndDate").unix() or range.length > 1000
+      range.pushObject current.add(1, "days").unix()
+    range
+
+  ).property("loadedStartDate", "loadedEndDate")
 
   ### Catalogs and Catalog Based Filters ###
   catalogs: Ember.computed( -> Object.keys(@get("rawData")) ).property("rawData")
@@ -95,18 +90,28 @@ controller = Ember.ObjectController.extend
 
     # For each day (x coord) among all data
     @get("days").forEach (day) =>
-      @get("rawDataResponses").filterBy("x", day).sortBy("order").forEach (response) =>
 
-        if response.points isnt 0
-          [1..response.points].forEach (j) =>
-            y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                                                                                                                                                 #... as opposed to treatment or trigger
-            _datums.push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, type: "symptom" }
+      responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
+
+      @get("catalogs").forEach (catalog) ->
+        responsesForDayByCatalog = responsesForDay.filterBy("catalog", catalog)
+        if responsesForDayByCatalog.length
+          responsesForDayByCatalog.forEach (response) =>
+
+            if response.points isnt 0
+              [1..response.points].forEach (j) =>
+                y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
+                                                                                                                                                     #... as opposed to treatment or trigger
+                _datums.push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
+
+        else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
+          _datums.push symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
+
 
     _datums
   ).property("rawData", "days")
 
-
+  ### Filtering ###
   viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums", "viewportDays")
   catalogDatums: Ember.computed(-> @get("viewportDatums").filterBy("catalog", @get("catalog")) ).property("catalog", "viewportDatums")
 
