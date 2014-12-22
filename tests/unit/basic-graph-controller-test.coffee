@@ -60,17 +60,11 @@ test "#filteredCatalogResponseNames gets the difference of #catalogResponseNames
 
 ### Datums ###
 test "#datums is an array of SymptomDatums generated from rawData", ->
-  expect 4
+  expect 3
 
-  expected_datums = fixture.hbi.reduce ((accum, item) -> accum + item.points), 0
-  expected_datums += fixture.symptoms.reduce ((accum, item) -> accum + item.points), 0
-  expected_datums += 1 + 3 # 1 missing for hbi, 3 for symptoms
-
-  Ember.run -> controller.processRawData()
   ok Ember.typeOf(controller.get("datums")) is "array",                           "is an array"
   ok Ember.typeOf(controller.get("datums.firstObject")) is "instance",            "objects in array are instances (symptomDatums)"
   ok controller.get("datums.firstObject").get("order") is 1.1,                    "rawData objects have decimal order property for y positionin"
-  ok controller.get("datums.length") is expected_datums,                          "has as many datums as the sum of rawData 'points'"
 
 test "#viewportDatums: all datums that fit in the viewport", ->
   expect 1
