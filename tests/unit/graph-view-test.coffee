@@ -34,7 +34,7 @@ moduleFor("view:graph", "Graph View",
         controller.set "firstEntryDate",  moment(startDay)
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment().utc().startOf("day")
-        Ember.run -> controller.datumsObserver()
+        controller.processRawData()
 
         view.set("controller", controller)
 

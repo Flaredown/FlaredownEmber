@@ -22,7 +22,7 @@ route = AuthRoute.extend
     controller.set "firstEntryDate",  moment().utc().startOf("day").subtract(365,"days") # TODO unhaxorize this
     controller.set "catalog",         Object.keys(model).sort()[0]
     controller.set "viewportStart",   moment().utc().startOf("day").subtract(14,"days")
-    Ember.run -> controller.datumsObserver()
+    controller.processRawData()
 
     # TODO these are antiquated -> /dev/null
     # controller.set "startDate", moment.utc(user.get("defaultStartDate"))

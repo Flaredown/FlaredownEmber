@@ -47,7 +47,7 @@ moduleFor("controller:graph", "Graph Controller (big)",
         controller.set "catalog",         "symptoms"
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment(endDay)
-      Ember.run -> controller.datumsObserver()
+        controller.processRawData()
 
     teardown: -> Ember.run(App, App.destroy)
   }

@@ -3,7 +3,7 @@
 
 route = Ember.Route.extend
   model: ->
-    @store.find("currentUser", 0).then(
+    @get("store").find("currentUser", 0).then(
       (currentUser) =>
         @controllerFor("currentUser").set "content", currentUser
       () ->

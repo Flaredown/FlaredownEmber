@@ -82,31 +82,31 @@ controller = Ember.ObjectController.extend
 
   ### Datums! ###
   datums: []
-  datumsObserver: Ember.observer ->
+  processRawData: ->
+    @propertyWillChange("datums")
+    Ember.run.once =>
+      if @get("rawDataResponses") and @get("days")
+        # For each day (x coord) among all data
+        existing_days     = @get("datums").mapBy("day").uniq()
+        unprocessed_days  = @get("days").reject (day) -> existing_days.contains(day)
 
-    if @get("rawDataResponses") and @get("days")
-      # For each day (x coord) among all data
-      existing_days     = @get("datums").mapBy("day").uniq()
-      unprocessed_days  = @get("days").reject (day) -> existing_days.contains(day)
+        unprocessed_days.forEach (day) =>
+          responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
 
-      unprocessed_days.forEach (day) =>
-        responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
+          @get("catalogs").forEach (catalog) =>
+            responsesForDayByCatalog = responsesForDay.filterBy("catalog", catalog)
+            if responsesForDayByCatalog.length
+              responsesForDayByCatalog.forEach (response) =>
 
-        @get("catalogs").forEach (catalog) =>
-          responsesForDayByCatalog = responsesForDay.filterBy("catalog", catalog)
-          if responsesForDayByCatalog.length
-            responsesForDayByCatalog.forEach (response) =>
+                if response.points isnt 0
+                  [1..response.points].forEach (j) =>
+                    y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
+                    @get("datums").push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
 
-              if response.points isnt 0
-                [1..response.points].forEach (j) =>
-                  y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                  @get("datums").push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
+            else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
+              @get("datums").push symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
 
-          else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
-            @get("datums").push symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
-
-  .observes("rawDataResponses")
-
+      @propertyDidChange("datums")
 
   ### Filtering ###
   viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums", "viewportDays")
@@ -146,7 +146,7 @@ controller = Ember.ObjectController.extend
             @set "loadedStartDate",new_loaded_start
             # @propertyWillChange("rawData")
             @set "rawData", Ember.merge(@get("rawData"), response)
-            @propertyDidChange("rawData")
+            @processRawData()
           (response) => console.log "?!?! error on getting graph"
         )
 
@@ -166,9 +166,8 @@ controller = Ember.ObjectController.extend
       #   ).then(
       #     (response) =>
       #       @set "loadedEndDate", new_loaded_end
-      #       @propertyWillChange("rawData")
       #       @set "rawData", Ember.merge(@get("rawData"), response)
-      #       @propertyDidChange("rawData")
+      #       @processRawData()
       #
       #     (response) => console.log "?!?! error on getting graph"
       #   )
