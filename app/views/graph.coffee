@@ -67,9 +67,11 @@ view = Ember.View.extend
 
   ### Watch underlying datums ###
   symptomsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.length) ).property("datumsByDayInViewport")
-  watchDatums: Ember.observer(-> Ember.run.next => @renderGraph()).observes("datums", "viewportDays").on("didInsertElement")
+  # watchDatums: Ember.observer(-> ).observes("datums", "viewportDays")
+
 
   setupEndPositions: Ember.observer ->
+
     @get("datumsByDay").forEach (day) =>
       # TODO add in other types of datums
       day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
@@ -81,6 +83,8 @@ view = Ember.View.extend
             datum.set "end_y", @get("y")((i+1) + (offset))
           else
             datum.set "end_y", @get("y")(i+1)
+
+    Ember.run.next => @renderGraph()
 
   .observes("datumsByDay", "viewportDays")
 
@@ -162,7 +166,7 @@ view = Ember.View.extend
             ry: 3
             rx: 3
             x: (d) -> d.get("end_x")
-            y: (d) => @get("y")(@get("symptomsMax")*6) # way above the graph
+            y: (d) => @get("y")(@get("symptomsMax")) # way above the graph
             fill: (d) => @get("colors")(d.get("name"))
 
     @positionByDay()
@@ -170,6 +174,9 @@ view = Ember.View.extend
   positionByDay: () ->
     scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
 
+    # TODO determine wether graph is shifted
+    # onyl transition if graph is not shifted, otherwise skip transition
+    # graphShifted =
     @resetGraphShift()
 
     @get("days").forEach (day) =>
@@ -177,6 +184,7 @@ view = Ember.View.extend
       filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
       dayPips = scorePip.filter(filterByDay)
       dayPips
+
         # .transition()
         #   .ease("quad")
         #   .duration (d) =>

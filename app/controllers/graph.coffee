@@ -83,6 +83,7 @@ controller = Ember.ObjectController.extend
   ### Datums! ###
   datums: []
   processRawData: ->
+    @propertyWillChange("datums")
     Ember.run.once =>
       if @get("rawDataResponses") and @get("days")
         # For each day (x coord) among all data
@@ -150,7 +151,7 @@ controller = Ember.ObjectController.extend
           (response) =>
             @set "loadedStartDate",new_loaded_start
             # @propertyWillChange("rawData")
-            @set "rawData", Ember.merge(@get("rawData"), response)
+            @set "rawData", response
             Ember.run => @processRawData()
           (response) => console.log "?!?! error on getting graph"
         )
@@ -171,7 +172,7 @@ controller = Ember.ObjectController.extend
       #   ).then(
       #     (response) =>
       #       @set "loadedEndDate", new_loaded_end
-      #       @set "rawData", Ember.merge(@get("rawData"), response)
+      #       @set "rawData", response
       #       @processRawData()
       #
       #     (response) => console.log "?!?! error on getting graph"
