@@ -49,7 +49,7 @@ moduleFor("view:graph", "Graph View",
 test "has #viewportDatums", ->
   expect 1
 
-  ok view.get("viewportDatums.firstObject.order") is 1.1, "got an expected symptomDatum property"
+  ok view.get("datums.firstObject.order") is 1.1, "got an expected symptomDatum property"
 
 test "setups up #y correctly with #unfilteredDatumsByDay", ->
   expect 1
@@ -75,5 +75,5 @@ test "#symptomDatumMargins yields margins object", ->
 test "#setupEndPositions determines y positioning based on unfilteredDatums and order", ->
   expect 2
 
-  ok 1000 - parseInt(view.get("unfilteredDatums.firstObject.end_y")) is 63, "first y pos is around 63"
-  ok parseInt(view.get("unfilteredDatumsByDay")[2][14].get("end_y")) is 62, "highest datum (4th day from origin, datum 15) should be 62"
+  ok 1000 - parseInt(view.get("datums.firstObject.end_y")) is 63, "first y pos is around 63"
+  ok parseInt(view.get("datumsByDay")[2][14].get("end_y")) is 62, "highest datum (4th day from origin, datum 15) should be 62"
