@@ -109,15 +109,21 @@ controller = Ember.ObjectController.extend
 
   ### Filtering ###
   viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums", "viewportDays")
-  catalogDatums: Ember.computed(-> @get("viewportDatums").filterBy("catalog", @get("catalog")) ).property("catalog", "viewportDatums")
 
+  # catalogDatums -> unfilteredDatums -> unfilteredDatumsByDay -> unfilteredDatumsByDayInViewport
+  catalogDatums: Ember.computed(-> @get("datums").filterBy("catalog", @get("catalog")) ).property("datums", "catalog")
   unfilteredDatums: Ember.computed(->
     if Ember.isEmpty(@get("filteredResponseNames")) then return @get("catalogDatums")
     @get("catalogDatums").reject (response) => @get("filteredResponseNames").contains response.get("name")
   ).property("catalogDatums", "filteredResponseNames")
 
   unfilteredDatumsByDay: Ember.computed( ->
-    @get("viewportDays").map (day) => @get("unfilteredDatums").filterBy("day", day)
+    @get("days").map (day) => @get("unfilteredDatums").filterBy("day", day)
+  ).property("unfilteredDatums", "days")
+
+  unfilteredDatumsByDayInViewport: Ember.computed(->
+    in_viewport = @get("unfilteredDatums").filter((datum) => @get("viewportDays").contains(datum.get("day")))
+    @get("viewportDays").map (day) => in_viewport.filterBy("day", day)
   ).property("unfilteredDatums", "viewportDays")
 
   ### Loading/Buffering ###

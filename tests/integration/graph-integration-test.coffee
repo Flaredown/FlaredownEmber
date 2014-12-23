@@ -55,7 +55,8 @@ test "Datums disappear when shifted out of viewport", ->
 
     setTimeout(
       ->
-        ok find("rect.symptom.present").length is 32, "Has 32 datums when contracted 1 day"
+        in_bounds = Ember.A(find("rect.symptom.present")).filter (d) -> parseInt($(@).attr("x")) < $("svg").width()
+        ok in_bounds.length is 32, "Has 32 datums when contracted 1 day"
         start()
     , 1000)
 

@@ -3,9 +3,12 @@
 view = Ember.View.extend
 
   ### CONFIG ###
-  daysBinding:          "controller.viewportDays"
-  datumsBinding:        "controller.unfilteredDatums"
-  datumsByDayBinding:   "controller.unfilteredDatumsByDay"
+  daysBinding:                    "controller.days"
+  viewportDaysBinding:            "controller.viewportDays"
+
+  datumsBinding:                  "controller.unfilteredDatums"
+  datumsByDayBinding:             "controller.unfilteredDatumsByDay"
+  datumsByDayInViewportBinding:   "controller.unfilteredDatumsByDayInViewport"
 
   streamGraphStyle: false
   dragAmplifier: 1.2 # amplify drag a bit
@@ -26,7 +29,6 @@ view = Ember.View.extend
   ### DRAG FUNCTIONALITY ###
   draggable: 'true'
   attributeBindings: 'draggable'
-  isDraggingBinding: "dragStartX"
 
   dragStart: (event) ->
     @set "translationThreshold", false
@@ -34,28 +36,38 @@ view = Ember.View.extend
     @set "dragStartX", event.originalEvent.x
 
   drag: (event) ->
-    if @get("days.length") and @get("dragStartX") and event.originalEvent.x > 0
+    if @get("viewportDays.length") and @get("dragStartX") and event.originalEvent.x > 0
       difference          = event.originalEvent.x - @get("dragStartX")
-      absolute_difference = Math.abs(difference)
-      direction           = if difference > 0 then "past" else "future"
-      translation         = absolute_difference * @get("dragAmplifier")
-
-      @shift(difference) # first off, move them pips around
-
-      if translation > 10 and translation < @get("datumWidth") and not @get("translationThreshold")
-        @set "translationThreshold", true
-
-      if translation > @get("datumWidth")
-        @controller.send("shiftViewport", 1, direction)
-        @set "dragStartX", event.originalEvent.x
+      @set "shiftGraphPx", difference * @get("dragAmplifier")
 
   dragEnd: (event) ->
+    translation         = Math.abs(@get("shiftGraphPx"))
+    direction           = if @get("shiftGraphPx") > 0 then "past" else "future"
+
+    if translation > @get("datumWidth")
+      days = Math.floor(Math.round(translation / @get("datumWidth")))
+
+      # If graph timeline is overrun, just reset it
+      if direction is "future"
+        if @get("viewportDays.lastObject") is moment.utc().startOf("day").unix()
+          @resetGraphShift()
+        else if moment(@get("viewportDays.lastObject")*1000).utc().startOf("day").add(days, "days") > moment.utc().startOf("day")
+          days-- until moment(@get("viewportDays.lastObject")*1000).utc().startOf("day").add(days, "days").unix() is moment.utc().startOf("day").unix()
+
+      @controller.send("shiftViewport", days, direction)
+
     @set "dragStartX", false
-    @positionByDay()
+
+  shift: Ember.observer ->
+    @get("svg").attr("transform", "translate(" + @get("shiftGraphPx") + "," + @get("margin").top + ")")
+  .observes("shiftGraphPx")
+
+  resetGraphShift: ->
+    @get("svg").attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")")
 
   ### Watch underlying datums ###
-  symptomsMax: Ember.computed(-> d3.max(@get("datumsByDay") , (dayDatums) -> dayDatums.length) ).property("datumsByDay")
-  watchDatums: Ember.observer(-> Ember.run.next => @renderGraph()).observes("datums").on("didInsertElement")
+  symptomsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.length) ).property("datumsByDayInViewport")
+  watchDatums: Ember.observer(-> Ember.run.next => @renderGraph()).observes("datums", "viewportDays").on("didInsertElement")
 
   setupEndPositions: Ember.observer ->
     @get("datumsByDay").forEach (day) =>
@@ -70,18 +82,17 @@ view = Ember.View.extend
           else
             datum.set "end_y", @get("y")(i+1)
 
-  .observes("datumsByDay")
+  .observes("datumsByDay", "viewportDays")
 
   renderGraph: ->
-    first =
     if @get("isSetup")
       @update()
-      @positionByDay() unless @get("isDragging")
+      @positionByDay() unless @get("dragStartX") # == is dragging
     else
       @setup()
 
   ### COMMON DIMENSIONS ###
-  datumWidth:   Ember.computed( ->  @get("width") / @get("days.length") ).property("days.length", "width")
+  datumWidth:   Ember.computed( ->  @get("width") / @get("viewportDays.length") ).property("viewportDays.length", "width")
   datumHeight:  Ember.computed( ->  @get("height") / @get("symptomsMax") ).property("symptomsMax", "height")
 
   symptomDatumDimensions: Ember.computed( ->
@@ -106,19 +117,19 @@ view = Ember.View.extend
   ### D3 STUFF ###
   x: Ember.computed ->
     # Add domain to make room for pip width
-    tomorrow = moment(@get("days.lastObject")*1000).utc().add(1,"day").unix()
+    last_day = moment(@get("viewportDays.lastObject")*1000).utc().add(1,"day").unix()
 
     d3.scale.linear()
-      .domain([@get("days.firstObject"), tomorrow])
+      .domain([@get("viewportDays.firstObject"), last_day])
       .range [@get("symptomDatumDimensions.right_margin")*2, @get("width")]
-  .property("width", "days.@each")
+  .property("width", "viewportDays.@each")
 
   y: Ember.computed ->
     d3.scale.linear()
       .domain([0, @get("symptomsMax")+1])
       .range [@get("height"),0]
 
-  .property("height", "datumsByDay")
+  .property("height", "symptomsMax")
 
   setup: ->
     @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
@@ -137,7 +148,6 @@ view = Ember.View.extend
         .attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")"))
 
     @set("isSetup", true)
-
     scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
     scorePip
       .enter()
@@ -152,7 +162,7 @@ view = Ember.View.extend
             ry: 3
             rx: 3
             x: (d) -> d.get("end_x")
-            y: (d) => @get("y")(@get("days.length")*6) # way above the graph
+            y: (d) => @get("y")(@get("symptomsMax")*6) # way above the graph
             fill: (d) => @get("colors")(d.get("name"))
 
     @positionByDay()
@@ -160,31 +170,28 @@ view = Ember.View.extend
   positionByDay: () ->
     scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
 
+    @resetGraphShift()
+
     @get("days").forEach (day) =>
 
       filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
       dayPips = scorePip.filter(filterByDay)
       dayPips
-        .transition()
-          .ease("quad")
-          .duration (d) =>
-            if d.get("placed") then 100 else @get("dropInDuration")
-          .delay (d,i) =>
-            if d.get("placed") then i*10 else i*@get("perDatumDelay")
-          .each "end", (d) -> d.set("placed", true)
-          .attr
-            width:  @get("symptomDatumDimensions").width
-            height: @get("symptomDatumDimensions").height
-            opacity: 100
-            y: (d) -> d.get("end_y")
-            x: (d) -> d.get("end_x")
+        # .transition()
+        #   .ease("quad")
+        #   .duration (d) =>
+        #     if d.get("placed") then 100 else @get("dropInDuration")
+        #   .delay (d,i) =>
+        #     if d.get("placed") then i*10 else i*@get("perDatumDelay")
+        #   .each "end", (d) -> d.set("placed", true)
+        .attr
+          width:  @get("symptomDatumDimensions").width
+          height: @get("symptomDatumDimensions").height
+          opacity: 100
+          y: (d) -> d.get("end_y")
+          x: (d) -> d.get("end_x")
 
 
-  shift: (pixels) ->
-    scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
-    scorePip
-      .attr
-        x: (d) -> d.get("end_x")+pixels
 
   update: ->
     scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
