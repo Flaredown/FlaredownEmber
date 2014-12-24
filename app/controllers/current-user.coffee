@@ -7,7 +7,7 @@ controller = Ember.ObjectController.extend
     @get("controllers.login.isAuthenticated")
   .property("controllers.login.isAuthenticated")
 
-  defaultStartDate: moment().utc().subtract(30,"days").startOf("day")
+  defaultStartDate: moment().utc().subtract(40,"days").startOf("day")
   defaultEndDate: moment().utc().startOf("day")
 
 `export default controller`

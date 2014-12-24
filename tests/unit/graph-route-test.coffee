@@ -22,7 +22,9 @@ moduleFor("route:graph", "Graph Route",
       fixture     = graphFixture()
 
       Ember.run ->
-        route.set("currentUser", store.createRecord("user", {id: 1,email: "test@test.com"}))
+        current_user = App.__container__.lookup("controller:current_user")
+        current_user.set "model", store.createRecord("user", {id: 1,email: "test@test.com"})
+        route.set("currentUser", current_user)
 
       Ember.$.mockjax
         url: "#{config.apiNamespace}/graph"

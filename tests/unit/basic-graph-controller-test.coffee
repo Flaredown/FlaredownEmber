@@ -32,7 +32,7 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "firstEntryDate",  moment(startDay)
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment().utc().startOf("day")
-        controller.processRawData()
+        # controller.processRawData()
 
     teardown: -> Ember.run(App, App.destroy)
   }

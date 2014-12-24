@@ -8,8 +8,8 @@ ul
 .pagination
   ul
     li: a.page-prev.previous-link href="" click="previousSection" <<
-    each sections
-      li: a href="" click="setSection number" class={::section-number-link selected:selected}= number
+    each section in sections
+      li: a href="" click="setSection section.number" class={::section-number-link section.selected:selected}= section.number
     li: a.page-next.next-link href="" click="nextSection" >>
 
 br

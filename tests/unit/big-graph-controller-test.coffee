@@ -31,7 +31,7 @@ moduleFor("controller:graph", "Graph Controller (big)",
       # Setup somewhere in the middle of available data
       # amount should account for buffer so it doesn't send off another request
       startDay      = moment().utc().startOf("day").subtract(100, "days")   # 100 days ago
-      endDay        = moment(startDay).add(53, "days")                      # 13 additional days, +20 buffer on either side
+      endDay        = moment(startDay).add(53, "days")                      # 13 additional days (match viewport), +20 buffer on either side
       viewportStart = moment(startDay).add(20,"days")                       # place buffer on the left
       firstEntry    = moment().utc().startOf("day").subtract(364, "days")   # a year ago
 
@@ -47,7 +47,7 @@ moduleFor("controller:graph", "Graph Controller (big)",
         controller.set "catalog",         "symptoms"
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment(endDay)
-        controller.processRawData()
+        # controller.processRawData()Data()
 
     teardown: -> Ember.run(App, App.destroy)
   }
@@ -106,22 +106,24 @@ test "#days loaded from rawData", ->
 test "#bufferRadius is based on viewportSize, but has minimum", ->
   expect 2
 
-  ok controller.get("bufferRadius") is 10, "Returns min with small viewport"
+  ok controller.get("bufferRadius") is 20, "Returns min with small viewport"
 
   controller.set "viewportSize", 50
-  ok controller.get("bufferRadius") is 25, "Should be half the viewport"
+  ok controller.get("bufferRadius") is 50, "Should be same size as the viewport"
 
 test "shifting viewport outside of loaded range triggers loading", ->
   expect 2
 
-  controller.send("shiftViewport", 11, "past")
+  # min buffer is 20
+  # 20 days buffered, shift 1 to trigger more buffer
+  controller.send("shiftViewport", 1, "past")
   stop()
 
   # What an ugly test you are
   setTimeout(
     ->
       Ember.run ->
-        ok controller.get("loadedStartDate").unix() is moment(controller.get("viewportStart")).subtract(19,"days").unix(), "adds 10 to the existing buffer"
+        ok controller.get("loadedStartDate").unix() is moment(controller.get("viewportStart")).subtract(39,"days").unix(), "adds 20 more to the existing buffer"
       start()
 
       controller.send("shiftViewport", 1, "past")
@@ -129,7 +131,7 @@ test "shifting viewport outside of loaded range triggers loading", ->
       setTimeout(
         ->
           Ember.run ->
-            ok controller.get("loadedStartDate").unix() is moment(controller.get("viewportStart")).subtract(18,"days").unix(), "doesn't rebuffer unless radius is crossed again"
+            ok controller.get("loadedStartDate").unix() is moment(controller.get("viewportStart")).subtract(38,"days").unix(), "doesn't rebuffer unless radius is crossed again"
             start()
       , 10)
   , 10)
