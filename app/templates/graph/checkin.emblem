@@ -3,6 +3,5 @@
   = input type="checkbox" class="modal-state" id="modal-1" checkedBinding="modalOpen"
   .modal-window
     .modal-inner
-      label.modal-close for="modal-1"
-      p Intro text lorem ipsum dolor sit ametm, quas, eaque facilis aliquid cupiditate tempora cumque ipsum accusantium illo modi commodi  minima.
-      p: view "questioner"
+      label.modal-close for="modal-1" &times;
+      div: view "questioner"

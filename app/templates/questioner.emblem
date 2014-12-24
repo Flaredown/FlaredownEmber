@@ -1,24 +1,15 @@
-h5 Question Area
-hr
-ul
-  li Category Name #{currentCategory}
-  li Category Number #{currentSection.category_number} of #{categories.length}
-  li Section Number #{section} of #{sections.length}
-
-.pagination
+.checkin-date April 28, 2014
+.checkin-pagination
   ul
-    li: a.page-prev.previous-link href="" click="previousSection" <<
     each sections
-      li: a href="" click="setSection number" class={::section-number-link selected:selected}= number
-    li: a.page-next.next-link href="" click="nextSection" >>
+      li click="setSection number": a.checkin-dot href="" class={selected:selected}
 
-br
-br
-h5 Question(s)
-hr
-
-section.section style="width:100%" id="questions"
+.checkin-questions
   = liquid-with currentSection as currentSection
     each question in sectionQuestions
-      h4= question.name
+      h4 How active was your #{question.name} today?
       = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
+
+.checkin-navigate
+  a.checkin-back href="" click="previousSection" BACK
+  a.checkin-next href="" click="nextSection" NEXT

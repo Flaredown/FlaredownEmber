@@ -1,5 +1,5 @@
-ul: each input in question.inputs
-  li
-    form submit="sendResponse value"
-      = input class="response-input form-control input-lg" type="number" valueBinding="value"
-      button.response-continue-link type="submit" Continue
+.checkin-response
+	ul: each input in question.inputs
+	  li
+	    form submit="sendResponse value"
+	      = input class="response-input form-control input-lg" type="number" valueBinding="value"

@@ -1,4 +1,5 @@
-ul.response-select: each input in question.inputs
-  li
-    a href="" click="sendResponse input.value"
-    	= input.value
+.checkin-response
+	ul.checkin-response-select: each input in question.inputs
+	  li
+	    a.checkin-response-select-btn href="" click="sendResponse input.value"
+	    	= input.value

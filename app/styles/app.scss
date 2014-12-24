@@ -20,16 +20,6 @@ $pink-dark: #cc3f75;
 @mixin standard-shadow {
 	box-shadow: 0 4px 0 darken($background, 8%);
 }
-@mixin grad-green-orange-red {
-	background: #98cb60;
-	background: -moz-linear-gradient(left,  #98cb60 0%, #e2a745 50%, #d46976 100%);
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#98cb60), color-stop(50%,#e2a745), color-stop(100%,#d46976));
-	background: -webkit-linear-gradient(left,  #98cb60 0%,#e2a745 50%,#d46976 100%);
-	background: -o-linear-gradient(left,  #98cb60 0%,#e2a745 50%,#d46976 100%);
-	background: -ms-linear-gradient(left,  #98cb60 0%,#e2a745 50%,#d46976 100%);
-	background: linear-gradient(to right,  #98cb60 0%,#e2a745 50%,#d46976 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#98cb60', endColorstr='#d46976',GradientType=1 );
-}
 
 //External styles
 @import "progress_bar";
