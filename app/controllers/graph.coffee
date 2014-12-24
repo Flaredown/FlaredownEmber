@@ -9,7 +9,7 @@ controller = Ember.ObjectController.extend
   filteredResponseNames: [] # default to no filtering
 
   ### Timeline manipulation, viewport stuff ###
-  bufferMin:        10
+  bufferMin:        20
   viewportSize:     14
   viewportMinSize:  14
   # viewportStart
@@ -80,33 +80,58 @@ controller = Ember.ObjectController.extend
   ### Catalogs and Catalog Based Filters ###
   catalogs: Ember.computed( -> Object.keys(@get("rawData")) ).property("rawData")
 
-  ### Datums! ###
-  datums: []
-  processRawData: ->
-    @propertyWillChange("datums")
-    Ember.run.once =>
-      if @get("rawDataResponses") and @get("days")
-        # For each day (x coord) among all data
-        existing_days     = @get("datums").mapBy("day").uniq()
-        unprocessed_days  = @get("days").reject (day) -> existing_days.contains(day)
+  ## Datums! ###
+  _processedDatumDays: []
+  _processedDatums: []
+  datums: Ember.computed ->
+    if @get("rawDataResponses") and @get("days")
 
-        unprocessed_days.forEach (day) =>
-          responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
+      unprocessed_days = @get("days").reject (day) => @get("_processedDatumDays").contains(day)
 
-          @get("catalogs").forEach (catalog) =>
-            responsesForDayByCatalog = responsesForDay.filterBy("catalog", catalog)
-            if responsesForDayByCatalog.length
-              responsesForDayByCatalog.forEach (response) =>
+      unprocessed_days.forEach (day) =>
+        @get("_processedDatumDays").push day
+        responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
 
-                if response.points isnt 0
-                  [1..response.points].forEach (j) =>
-                    y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                    @get("datums").push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
+        @get("catalogs").forEach (catalog) =>
+          responsesForDayByCatalog = responsesForDay.filterBy("catalog", catalog)
+          if responsesForDayByCatalog.length
+            responsesForDayByCatalog.forEach (response) =>
 
-            else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
-              @get("datums").push symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
+              if response.points isnt 0
+                [1..response.points].forEach (j) =>
+                  y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
+                  @get("_processedDatums").push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
 
-      @propertyDidChange("datums")
+          else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
+            @get("_processedDatums").push symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
+
+    @get("_processedDatums")
+  .property("rawDataResponses")
+
+  ### THIS VERSION WORKS WITH TESTS =( ###
+  # datums: Ember.computed ->
+  #   _datums = []
+  #   if @get("rawDataResponses") and @get("days")
+  #
+  #     @get("days").forEach (day) =>
+  #       # @get("_processedDatumDays").push day
+  #       responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
+  #
+  #       @get("catalogs").forEach (catalog) =>
+  #         responsesForDayByCatalog = responsesForDay.filterBy("catalog", catalog)
+  #         if responsesForDayByCatalog.length
+  #           responsesForDayByCatalog.forEach (response) =>
+  #
+  #             if response.points isnt 0
+  #               [1..response.points].forEach (j) =>
+  #                 y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
+  #                 _datums.push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
+  #
+  #         else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
+  #           _datums.push symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
+  #
+  #   _datums
+  # .property("rawDataResponses")
 
   ### Filtering ###
   viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums", "viewportDays")
@@ -129,7 +154,8 @@ controller = Ember.ObjectController.extend
 
   ### Loading/Buffering ###
   bufferRadius: Ember.computed( ->
-    radius = Math.floor(@get("viewportSize") / 2)
+    # radius = Math.floor(@get("viewportSize") / 2)
+    radius = @get("viewportSize")
     if radius < @get("bufferMin") then @get("bufferMin") else radius
   ).property("viewportSize")
 
@@ -150,9 +176,8 @@ controller = Ember.ObjectController.extend
         ).then(
           (response) =>
             @set "loadedStartDate",new_loaded_start
-            # @propertyWillChange("rawData")
-            @set "rawData", response
-            Ember.run => @processRawData()
+            @loadMore(response)
+
           (response) => console.log "?!?! error on getting graph"
         )
 
@@ -178,6 +203,14 @@ controller = Ember.ObjectController.extend
       #     (response) => console.log "?!?! error on getting graph"
       #   )
   .observes("loadedStartDate", "loadedEndDate", "viewportStart")
+
+  loadMore: (raw) ->
+    newRaw = {}
+    Object.keys(raw).forEach (key) =>
+      newRaw[key] = []
+      newRaw[key].pushObjects raw[key]
+      newRaw[key].pushObjects @get("rawData.#{key}")
+    @set "rawData", newRaw
 
   actions:
     resizeViewport: (days, direction) ->

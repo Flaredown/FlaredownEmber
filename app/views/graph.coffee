@@ -30,17 +30,20 @@ view = Ember.View.extend
   draggable: 'true'
   attributeBindings: 'draggable'
 
-  dragStart: (event) ->
-    @set "translationThreshold", false
-    @set "shiftdays", false
-    @set "dragStartX", event.originalEvent.x
+  touchStart: (event) -> @set "dragStartX", event.originalEvent.touches[0].pageX
+  touchMove:  (event) -> @dragGraph event.originalEvent.touches[0].pageX
+  touchEnd:   (event) -> @changeViewport()
 
-  drag: (event) ->
-    if @get("viewportDays.length") and @get("dragStartX") and event.originalEvent.x > 0
-      difference          = event.originalEvent.x - @get("dragStartX")
+  dragStart:  (event) -> @set "dragStartX", event.originalEvent.x
+  drag:       (event) -> @dragGraph event.originalEvent.x
+  dragEnd:    (event) -> @changeViewport()
+
+  dragGraph: (pixels) ->
+    if @get("viewportDays.length") and @get("dragStartX") and pixels > 0
+      difference          = pixels - @get("dragStartX")
       @set "shiftGraphPx", difference * @get("dragAmplifier")
 
-  dragEnd: (event) ->
+  changeViewport: ->
     translation         = Math.abs(@get("shiftGraphPx"))
     direction           = if @get("shiftGraphPx") > 0 then "past" else "future"
 
@@ -69,20 +72,19 @@ view = Ember.View.extend
   symptomsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.length) ).property("datumsByDayInViewport")
   # watchDatums: Ember.observer(-> ).observes("datums", "viewportDays")
 
-
   setupEndPositions: Ember.observer ->
+    Ember.run.once =>
+      @get("datumsByDay").forEach (day) =>
+        # TODO add in other types of datums
+        day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
+          if @get("x")(1) and @get("y")(1)
+            datum.set("end_x", @get("x")(datum.get("day")))
 
-    @get("datumsByDay").forEach (day) =>
-      # TODO add in other types of datums
-      day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
-        if @get("x")(1) and @get("y")(1)
-          datum.set("end_x", @get("x")(datum.get("day")))
-
-          if @get("streamGraphStyle") # half of the difference between max symptoms shown and this days symptoms
-            offset = (@get("symptomsMax") - (day.length)) / 2
-            datum.set "end_y", @get("y")((i+1) + (offset))
-          else
-            datum.set "end_y", @get("y")(i+1)
+            if @get("streamGraphStyle") # half of the difference between max symptoms shown and this days symptoms
+              offset = (@get("symptomsMax") - (day.length)) / 2
+              datum.set "end_y", @get("y")((i+1) + (offset))
+            else
+              datum.set "end_y", @get("y")(i+1)
 
     Ember.run.next => @renderGraph()
 
@@ -179,25 +181,34 @@ view = Ember.View.extend
     # graphShifted =
     @resetGraphShift()
 
-    @get("days").forEach (day) =>
+    scorePip
+      .attr
+        width:  @get("symptomDatumDimensions").width
+        height: @get("symptomDatumDimensions").height
+        opacity: 100
+        y: (d) -> d.get("end_y")
+        x: (d) -> d.get("end_x")
 
-      filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
-      dayPips = scorePip.filter(filterByDay)
-      dayPips
-
-        # .transition()
-        #   .ease("quad")
-        #   .duration (d) =>
-        #     if d.get("placed") then 100 else @get("dropInDuration")
-        #   .delay (d,i) =>
-        #     if d.get("placed") then i*10 else i*@get("perDatumDelay")
-        #   .each "end", (d) -> d.set("placed", true)
-        .attr
-          width:  @get("symptomDatumDimensions").width
-          height: @get("symptomDatumDimensions").height
-          opacity: 100
-          y: (d) -> d.get("end_y")
-          x: (d) -> d.get("end_x")
+    ### CPU INTENSIVE ###
+    # @get("days").forEach (day) =>
+    #
+    #   filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
+    #   dayPips = scorePip.filter(filterByDay)
+    #   dayPips
+    #
+    #     # .transition()
+    #     #   .ease("quad")
+    #     #   .duration (d) =>
+    #     #     if d.get("placed") then 100 else @get("dropInDuration")
+    #     #   .delay (d,i) =>
+    #     #     if d.get("placed") then i*10 else i*@get("perDatumDelay")
+    #     #   .each "end", (d) -> d.set("placed", true)
+    #     .attr
+    #       width:  @get("symptomDatumDimensions").width
+    #       height: @get("symptomDatumDimensions").height
+    #       opacity: 100
+    #       y: (d) -> d.get("end_y")
+    #       x: (d) -> d.get("end_x")
 
 
 
