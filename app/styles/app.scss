@@ -18,7 +18,7 @@ $pink-dark: #cc3f75;
 
 // Mixins
 @mixin standard-shadow {
-	box-shadow: 0 4px 0 darken($background, 8%);
+	box-shadow: 0 4px 0 #E1D8C8;
 }
 
 //External styles

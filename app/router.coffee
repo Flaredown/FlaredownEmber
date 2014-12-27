@@ -15,6 +15,10 @@ Router.map ->
   @resource "graph", path: "", ->
     @route "checkin", path: "/checkin/:date/:section"
 
+  @resource "insights", path: "insights"
+
+  @resource "reports", path: "reports"
+
   @route "onboarding", path: "onboarding", ->
     @route "conditions", path: "/conditions"
     @route "symptoms", path: "/symptoms"

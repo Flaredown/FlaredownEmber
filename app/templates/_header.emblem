@@ -2,11 +2,11 @@ nav.navbar role="navigation"
   .navbar-content
     .navbar-sections
       strong FD&nbsp;
-      a href="#" Graph
+      a href="" Graph
       span &nbsp;/&nbsp;
-      a href="#" Insights
+      a href="/insights" Insights
       span &nbsp;/&nbsp;
-      a href="#" Reports
+      a href="/reports" Reports
 
     if currentUser.loggedIn
       .navbar-account
