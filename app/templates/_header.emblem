@@ -11,12 +11,10 @@ nav.navbar role="navigation"
     if currentUser.loggedIn
       .navbar-account
         .dropdown
-          .dropdown-container
-            p.dropdown-description Account
-            p.dropdown-button = currentUser.email
-            ul.menu
-              li Account
-              li Edit check-in
-              li Print report
-              a href="/v1/users/sign_out" id="logout"
-                li Logout
+          .dropdown-button #{currentUser.email} &#9662;
+          ul.menu
+            li Account
+            li Edit check-in
+            li Print report
+            a href="/v1/users/sign_out" id="logout"
+              li Logout

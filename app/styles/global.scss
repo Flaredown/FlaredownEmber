@@ -18,9 +18,12 @@ a {
 }
 .navbar {
   background: white;
-  padding: 15px 0;
+  padding: 10px 25px;
+  @include outer-container;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-top: 15px;
   .navbar-content {
-    @include outer-container;
     display: flex;
     align-items: center;
   }
@@ -34,13 +37,6 @@ a {
     text-align: right;
     .dropdown-container {
       text-align: center;
-    }
-  }
-}
-.modal {
-  .modal-dialog {
-    .modal-content {
-      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
     }
   }
 }
