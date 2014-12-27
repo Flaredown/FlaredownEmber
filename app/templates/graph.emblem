@@ -32,4 +32,5 @@ div style="width: 33%; float:left"
 
 hr
 
-outlet
+.container
+  outlet

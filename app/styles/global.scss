@@ -13,6 +13,9 @@ a {
     text-decoration: none;
   }
 }
+h1, h2, h3, h4 {
+  font-weight: normal;
+}
 .container {
   @include outer-container;
 }
@@ -20,6 +23,7 @@ a {
   background: white;
   padding: 10px 25px;
   @include outer-container;
+  @include standard-shadow;
   border-radius: 5px;
   box-sizing: border-box;
   margin-top: 15px;
