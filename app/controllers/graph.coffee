@@ -54,7 +54,7 @@ controller = Ember.ObjectController.extend
     @get("catalogs").forEach (catalog) =>
       @get("rawData.#{catalog}").forEach (datapoint) ->
         datapoint["catalog"] = catalog
-        _data.push datapoint
+        _data.pushObject datapoint
 
     _data.sortBy("x")
   ).property("rawData")
@@ -89,7 +89,7 @@ controller = Ember.ObjectController.extend
       unprocessed_days = @get("days").reject (day) => @get("_processedDatumDays").contains(day)
 
       unprocessed_days.forEach (day) =>
-        @get("_processedDatumDays").push day
+        @get("_processedDatumDays").pushObject day
         responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
 
         @get("catalogs").forEach (catalog) =>
@@ -100,10 +100,10 @@ controller = Ember.ObjectController.extend
               if response.points isnt 0
                 [1..response.points].forEach (j) =>
                   y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                  @get("_processedDatums").push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
+                  @get("_processedDatums").pushObject symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
 
           else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
-            @get("_processedDatums").push symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
+            @get("_processedDatums").pushObject symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
 
     @get("_processedDatums")
   .property("rawDataResponses")
@@ -233,7 +233,7 @@ controller = Ember.ObjectController.extend
       if filtered.contains symptom
         filtered.removeObject symptom
       else
-        filtered.addObject symptom
+        filtered.pushObject symptom
 
     changeCatalog: (catalog) -> @set("catalog", catalog)
 

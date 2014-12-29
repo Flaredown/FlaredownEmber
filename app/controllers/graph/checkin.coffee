@@ -67,7 +67,7 @@ controller = Ember.ObjectController.extend
           response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
           value     = if response then response.get("value") else null
 
-          responses.push Ember.Object.create({name: question.name, value: value, catalog: catalog})
+          responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
 
     responses
   .property("catalog_definitions")
