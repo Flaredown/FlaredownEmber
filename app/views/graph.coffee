@@ -214,6 +214,7 @@ view = Ember.View.extend
 
   update: ->
     scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
+    @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
 
     scorePip
       .enter()
@@ -236,8 +237,6 @@ view = Ember.View.extend
 
     scorePip
       .exit()
-      .remove()
-
       # .transition()
       #   .ease("quad")
       #   .duration(500)
@@ -245,6 +244,10 @@ view = Ember.View.extend
       #     y: -1000
       #     opacity: 0
       #     fill: "transparent"
+
+      .remove()
+
+
       # .each "end", (d) -> d.set("placed", false)
 
 `export default view`

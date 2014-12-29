@@ -5,7 +5,7 @@ controller = Ember.ObjectProxy.extend
   # Initial attributes should be: day, catalog, order, name, type, missing
   start_xBinding:  "day"
 
-  id: Ember.computed(-> "#{@get("day")}_#{@get("order")}").property("day", "order")
+  id: Ember.computed(-> "#{@get("catalog")}_#{@get("day")}_#{@get("order")}").property("day", "order")
   classes: Ember.computed(->
     names = ["symptom"]
     names.push if @get("missing") then "missing" else "present"
