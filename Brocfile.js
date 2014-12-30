@@ -40,6 +40,8 @@ app.import('bower_components/jbox/Source/jBox.css');
 app.import({development: 'bower_components/jquery-mockjax/jquery.mockjax.js'});
 app.import({development: 'bower_components/jquery-simulate/jquery.simulate.js'});
 
+app.import('bower_components/ember-i18n/lib/i18n.js');
+
 // app.import('vendor/bootstrap/js/transition.js');
 // app.import('vendor/bootstrap/js/modal.js');
 // app.import('vendor/bootstrap/js/dropdown.js');

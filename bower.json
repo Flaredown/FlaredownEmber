@@ -19,7 +19,8 @@
     "sweetalert": "~0.3.1",
     "jbox": "~0.3.2",
     "bourbon": "3.2.1",
-    "handlebars": "2.0.0"
+    "handlebars": "2.0.0",
+    "ember-i18n": "3.0.0-beta.3"
   },
   "devDependencies": {
     "jquery-mockjax": "~1.6.1",
