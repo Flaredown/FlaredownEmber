@@ -54,7 +54,7 @@ controller = Ember.ObjectController.extend
     @get("catalogs").forEach (catalog) =>
       @get("rawData.#{catalog}").forEach (datapoint) ->
         datapoint["catalog"] = catalog
-        _data.push datapoint
+        _data.pushObject datapoint
 
     _data.sortBy("x")
   ).property("rawData")
@@ -62,7 +62,7 @@ controller = Ember.ObjectController.extend
 
   responseNames:                Ember.computed( -> @get("rawDataResponses").mapBy("name").uniq() ).property("rawDataResponses")
   catalogResponseNames:         Ember.computed( -> @get("rawDataResponses").filterBy("catalog", @get("catalog")).mapBy("name").uniq() ).property("rawDataResponses")
-  filteredCatalogResponseNames: Ember.computed( -> @get("catalogResponseNames").filter( (name) => @get("filteredResponseNames").contains(name) ).compact() ).property("catalogResponseNames", "filteredResponseNames")
+  filteredCatalogResponseNames: Ember.computed( -> @get("catalogResponseNames").filter( (name) => @get("filteredResponseNames").contains(name) ).compact() ).property("catalogResponseNames", "filteredResponseNames.@each")
 
   ### All the days possible inside the raw responses ###
   days: Ember.computed( ->
@@ -78,7 +78,7 @@ controller = Ember.ObjectController.extend
   ).property("loadedStartDate", "loadedEndDate")
 
   ### Catalogs and Catalog Based Filters ###
-  catalogs: Ember.computed( -> Object.keys(@get("rawData")) ).property("rawData")
+  catalogs: Ember.computed( -> Object.keys(@get("rawData")).sort() ).property("rawData")
 
   ## Datums! ###
   _processedDatumDays: []
@@ -89,7 +89,7 @@ controller = Ember.ObjectController.extend
       unprocessed_days = @get("days").reject (day) => @get("_processedDatumDays").contains(day)
 
       unprocessed_days.forEach (day) =>
-        @get("_processedDatumDays").push day
+        @get("_processedDatumDays").pushObject day
         responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
 
         @get("catalogs").forEach (catalog) =>
@@ -100,10 +100,10 @@ controller = Ember.ObjectController.extend
               if response.points isnt 0
                 [1..response.points].forEach (j) =>
                   y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                  @get("_processedDatums").push symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
+                  @get("_processedDatums").pushObject symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
 
           else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
-            @get("_processedDatums").push symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
+            @get("_processedDatums").pushObject symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
 
     @get("_processedDatums")
   .property("rawDataResponses")
@@ -136,12 +136,12 @@ controller = Ember.ObjectController.extend
   ### Filtering ###
   viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums", "viewportDays")
 
-  # catalogDatums -> unfilteredDatums -> unfilteredDatumsByDay -> unfilteredDatumsByDayInViewport
+  ### catalogDatums -> unfilteredDatums -> unfilteredDatumsByDay -> unfilteredDatumsByDayInViewport ###
   catalogDatums: Ember.computed(-> @get("datums").filterBy("catalog", @get("catalog")) ).property("datums", "catalog")
   unfilteredDatums: Ember.computed(->
     if Ember.isEmpty(@get("filteredResponseNames")) then return @get("catalogDatums")
     @get("catalogDatums").reject (response) => @get("filteredResponseNames").contains response.get("name")
-  ).property("catalogDatums", "filteredResponseNames")
+  ).property("catalogDatums", "filteredResponseNames.@each")
 
   unfilteredDatumsByDay: Ember.computed( ->
     @get("days").map (day) => @get("unfilteredDatums").filterBy("day", day)
@@ -227,5 +227,14 @@ controller = Ember.ObjectController.extend
         @changeViewport 0, moment(@get("viewportStart")).subtract(days,"days")
       else # "future"
         @changeViewport 0, moment(@get("viewportStart")).add(days,"days")
+
+    filter: (symptom) ->
+      filtered = @get("filteredResponseNames")
+      if filtered.contains symptom
+        filtered.removeObject symptom
+      else
+        filtered.pushObject symptom
+
+    changeCatalog: (catalog) -> @set("catalog", catalog)
 
 `export default controller`

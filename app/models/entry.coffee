@@ -28,21 +28,4 @@ model = DS.Model.extend
 
   validResponses: Ember.computed.filter("responses", (response) -> !Ember.isEmpty response.get("value"))
 
-  # responsesData: Ember.computed ->
-  #   normalized = Ember.A([])
-  #   @get("responses").forEach (response) ->
-  #     switch response.get("question.kind")
-  #       when "number"
-  #         if response.get("value")
-  #           normalized.push(response)
-  #           response.set("value", parseInt(response.get("value")) )
-  #       when "select"
-  #         if response.get("value")
-  #           normalized.push(response)
-  #           response.set("value", parseInt(response.get("value")) )
-  #       when "checkbox"
-  #         response.set("value", 0) unless response.get("value")
-  #         normalized.push(response)
-  # .property("responses.@each.value")
-
 `export default model`

@@ -4,6 +4,25 @@ if viewportDays.length
 else
   .container: h1.text-center No scores in date range
 
+h3 Hackypants Dev Controls
+br
+
+div style="width: 33%; float:left;"
+  h4 Catalogs
+  each cat in catalogs
+    a.available-catalog href="javascript:void(0);" click="changeCatalog cat"= cat
+div style="width: 33%; float:left;"
+  h4 Filterables
+  each filterable in catalogResponseNames
+    a.filterable-symptom href="javascript:void(0);" click="filter filterable"= filterable
+    |&nbsp;
+div style="width: 33%; float:left;"
+  h4 Filtered
+  each filtered in filteredResponseNames
+    a.filtered-symptom href="javascript:void(0);" click="filter filtered"= filtered
+    |&nbsp;
+
+.clearfix style="clear:both;"
 
 h3 Viewport: showing {{viewportSize}} days, starting at {{viewportStartNice}}
 
