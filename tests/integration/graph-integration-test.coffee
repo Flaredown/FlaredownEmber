@@ -6,6 +6,7 @@
 
 `import graphFixture from "../fixtures/graph-fixture"`
 `import entryFixture from "../fixtures/entry-fixture"`
+`import localeFixture from "../fixtures/locale-fixture"`
 
 App = null
 
