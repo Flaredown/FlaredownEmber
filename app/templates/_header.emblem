@@ -2,13 +2,15 @@ nav.navbar role="navigation"
   .navbar-content
     .navbar-sections
       strong FD&nbsp;
-      link-to "graph" | Graph
 
-      span &nbsp;/&nbsp;
-      link-to "insights" | Insights
+      if currentUser.loggedIn
+        link-to "graph" | Graph
 
-      span &nbsp;/&nbsp;
-      link-to "reports" | Reports
+        span &nbsp;/&nbsp;
+        link-to "insights" | Insights
+
+        span &nbsp;/&nbsp;
+        link-to "reports" | Reports
 
     if currentUser.loggedIn
       .navbar-account

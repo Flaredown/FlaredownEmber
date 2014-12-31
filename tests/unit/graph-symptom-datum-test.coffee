@@ -4,6 +4,7 @@
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+
 App        = null
 view       = null
 # parent     = null
@@ -27,7 +28,9 @@ moduleFor("controller:graph/symptom-datum", "Graph Symptom Datum",
       Ember.run ->
         controller.set("content", fixture)
 
-    teardown: -> Ember.run(App, App.destroy)
+    teardown: ->
+      Ember.run(App, App.destroy);
+      $.mockjax.clear();
   }
 )
 

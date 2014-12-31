@@ -40,13 +40,21 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
         data: data
       ).then(
         (response) => # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
-          console.log response
           @store.find("currentUser", 0).then(
             (currentUser) =>
               @set("currentUser.model", currentUser)
-              @redirectToTransition()
+
+              # Ask the API for the locale for the current user
+              ajax("#{config.apiNamespace}/locales/#{@get("currentUser.locale")}").then(
+                (locale) =>
+                  Ember.I18n.translations = locale
+                  @redirectToTransition()
+
+                (response) =>
+                  @errorCallback(response, @) # TODO this doesn't work
+              )
             ,
-            -> console.log "!!! ERROR"
+            -> # @errorCallback(response, @) # TODO this doesn't work
           )
 
         (response) => @errorCallback(response, @)
