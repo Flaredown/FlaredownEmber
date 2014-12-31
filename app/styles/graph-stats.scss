@@ -18,7 +18,7 @@
   color: #bbbbbb;
 }
 .stat-box {
-  @include span-columns(4);
+//  @include span-columns(4);
   @include omega (3n);
   @include standard-shadow;
   margin-bottom: 3%;
