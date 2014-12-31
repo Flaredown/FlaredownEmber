@@ -3,32 +3,31 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+
 `import entryFixture from "../fixtures/entry-fixture"`
 `import graphFixture from "../fixtures/graph-fixture"`
+`import localeFixture from "../fixtures/locale-fixture"`
 
 App = null
 
 module('Check-In Integration', {
   setup: ->
-    App = startApp()
-
     Ember.$.mockjax
       url: "#{config.apiNamespace}/current_user",
-      type: 'GET'
       responseText: {
         current_user: {
           id: 1,
-          email: "test@test.com"
+          email: "test@test.com",
+          locale: "en"
         }
       }
 
     Ember.$.mockjax
-      url: "#{config.apiNamespace}/graph",
-      # data:
-      #   start_date: "Nov-16-2014"
-      #   end_date: "Dec-06-2014"
+      url: "#{config.apiNamespace}/locales/en",
+      responseText: localeFixture
 
-      type: 'GET'
+    Ember.$.mockjax
+      url: "#{config.apiNamespace}/graph",
       responseText: graphFixture()
 
 
@@ -49,8 +48,12 @@ module('Check-In Integration', {
       #   date: "Aug-13-2014"
       responseText: entryFixture("Aug-13-2014")
 
+    App = startApp()
+
   teardown: ->
     Ember.run(App, App.destroy)
+    $.mockjax.clear()
+
 })
 
 test "Can see the checkin", ->

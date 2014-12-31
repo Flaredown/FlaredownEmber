@@ -3,11 +3,14 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+
 App = null
 
 module('Onboarding Integration Tests', {
   setup: -> App = startApp()
-  teardown: -> Ember.run(App, App.destroy)
+  teardown: ->
+    Ember.run(App, App.destroy);
+    $.mockjax.clear();
 })
 
 test "Shows invitee registration page using invite token", ->

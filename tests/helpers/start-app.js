@@ -4,7 +4,6 @@ import Router from '../../router';
 import config from '../../config/environment';
 import helpers from '../helpers/helper-functions';
 
-
 export default function startApp(attrs) {
   var App;
   helpers(); // slap those suckers on the global namespace
@@ -25,8 +24,8 @@ export default function startApp(attrs) {
     App.injectTestHelpers();
   });
 
-  App.reset(); // this shouldn't be needed, i want to be able to "start an app at a specific URL"
-  $.mockjax.clear();
+  // Ember.run.once(function() {App.reset()});  // this shouldn't be needed, i want to be able to "start an app at a specific URL"
+  App.reset();
 
   return App;
 }

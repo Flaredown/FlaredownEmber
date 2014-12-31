@@ -45,7 +45,7 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
               @set("currentUser.model", currentUser)
 
               # Ask the API for the locale for the current user
-              ajax("#{config.apiNamespace}/locales/#{@get("currentUser.locale")}.json").then(
+              ajax("#{config.apiNamespace}/locales/#{@get("currentUser.locale")}").then(
                 (locale) =>
                   Ember.I18n.translations = locale
                   @redirectToTransition()

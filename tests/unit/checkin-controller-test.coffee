@@ -3,6 +3,7 @@
 `import DS from 'ember-data'`
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
+
 `import entryFixture from "../fixtures/entry-fixture"`
 
 App        = null
@@ -24,7 +25,9 @@ moduleFor("controller:graph/checkin", "Check-In Controller",
 
       controller.set("section", 1)                                      # Default to the first section, normally set by route
 
-    teardown: -> Ember.run(App, App.destroy)
+    teardown: ->
+      Ember.run(App, App.destroy);
+      $.mockjax.clear();
   }
 )
 

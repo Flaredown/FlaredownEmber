@@ -3,11 +3,14 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+
 App = null
 
 module('Login Errors', {
   setup: -> App = startApp()
-  teardown: -> Ember.run(App, App.destroy)
+  teardown: ->
+    Ember.run(App, App.destroy);
+    $.mockjax.clear();
 })
 
 inline_response = {

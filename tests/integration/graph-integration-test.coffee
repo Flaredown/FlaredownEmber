@@ -3,6 +3,7 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+
 `import graphFixture from "../fixtures/graph-fixture"`
 `import entryFixture from "../fixtures/entry-fixture"`
 
@@ -18,9 +19,14 @@ module('Graph Integration', {
       responseText: {
         current_user: {
           id: 1,
-          email: "test@test.com"
+          email: "test@test.com",
+          locale: "en"
         }
       }
+
+    Ember.$.mockjax
+      url: "#{config.apiNamespace}/locales/en",
+      responseText: localeFixture
 
     Ember.$.mockjax
       url: "#{config.apiNamespace}/graph",
@@ -34,7 +40,9 @@ module('Graph Integration', {
       # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
       responseText: entryFixture()
 
-  teardown: -> Ember.run(App, App.destroy)
+  teardown: ->
+    Ember.run(App, App.destroy);
+    $.mockjax.clear();
 })
 
 test "Datums show up", ->

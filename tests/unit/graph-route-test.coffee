@@ -4,6 +4,7 @@
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+
 `import graphFixture from "../fixtures/graph-fixture"`
 
 App         = null
@@ -31,7 +32,9 @@ moduleFor("route:graph", "Graph Route",
         type: 'GET'
         responseText: fixture
 
-    teardown: -> Ember.run(App, App.destroy)
+    teardown: ->
+      Ember.run(App, App.destroy);
+      $.mockjax.clear();
   }
 )
 

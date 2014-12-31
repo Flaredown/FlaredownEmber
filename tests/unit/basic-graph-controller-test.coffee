@@ -4,6 +4,7 @@
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+
 `import graphFixture from "../fixtures/graph-fixture"`
 
 App         = null
@@ -34,7 +35,9 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "loadedEndDate",   moment().utc().startOf("day")
         # controller.processRawData()
 
-    teardown: -> Ember.run(App, App.destroy)
+    teardown: ->
+      Ember.run(App, App.destroy);
+      $.mockjax.clear();
   }
 )
 

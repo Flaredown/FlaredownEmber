@@ -3,6 +3,7 @@
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+
 App = null
 controller = null
 
@@ -60,7 +61,9 @@ moduleFor("controller:form-error", "FormError Controller",
       store = App.__container__.lookup("store:main")
       controller = @subject()
 
-    teardown: -> Ember.run(App, App.destroy)
+    teardown: ->
+      Ember.run(App, App.destroy);
+      $.mockjax.clear();
   }
 )
 
