@@ -1,13 +1,7 @@
 `import Ember from 'ember'`
 `import ajax from 'ic-ajax'`
 
-route = Ember.Route.extend
-  model: ->
-    @get("store").find("currentUser", 0).then(
-      (currentUser) =>
-        @controllerFor("currentUser").set "content", currentUser
-      () ->
-    )
+route = Ember.Route.extend()
 
   # actions:
   #   error: (reason, transition) ->

@@ -1,15 +1,16 @@
 .checkin-date April 28, 2014
 .checkin-pagination
   ul
-    each sections
-      li click="setSection number": a.checkin-dot href="" class={selected:selected}
+    each sec in sections
+      li click="setSection sec.number"
+        a.checkin-dot href="javascript:void(0);" class={sec.selected:selected}
 
 .checkin-questions
   = liquid-with currentSection as currentSection
+    h4 = t currentSectionPrompt
     each question in sectionQuestions
-      h4 How active was your #{question.name} today?
       = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
 
 .checkin-navigate
-  a.checkin-back href="" click="previousSection" BACK
-  a.checkin-next href="" click="nextSection" NEXT
+  a.checkin-back href="javascript:void(0);" click="previousSection" BACK
+  a.checkin-next href="javascript:void(0);" click="nextSection" NEXT

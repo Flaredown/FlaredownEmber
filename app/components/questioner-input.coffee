@@ -1,6 +1,8 @@
 `import Ember from 'ember'`
 
 component = Ember.Component.extend
+  questionName: Ember.computed(-> "#{@get("currentUser.locale")}.catalogs.#{@get("section.category")}.#{@get("question.name")}").property("question.name")
+
   layoutName: Ember.computed(->
     "questioner/_#{@get("question.kind")}_input"
   ).property()

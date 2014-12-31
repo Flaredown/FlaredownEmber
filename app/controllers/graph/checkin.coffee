@@ -46,6 +46,11 @@ controller = Ember.ObjectController.extend
   currentCategory:          Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
   currentCategorySections:  Ember.computed( -> @get("sections").filterBy("category", @get("currentCategory")) ).property("currentCategory")
 
+  ### Translation keys ###
+  catalogStub:          Ember.computed( -> "#{@get("currentUser.locale")}.catalogs.#{@get("currentCategory")}" ).property("currentCategory")
+  currentSectionPrompt: Ember.computed( -> "#{@get("catalogStub")}.section_#{@get("currentSection.number")}_prompt" ).property("currentSection.number")
+
+
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
