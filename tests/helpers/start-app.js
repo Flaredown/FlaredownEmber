@@ -22,10 +22,10 @@ export default function startApp(attrs) {
     App = Application.create(attributes);
     App.setupForTesting();
     App.injectTestHelpers();
+
   });
 
-  // Ember.run.once(function() {App.reset()});  // this shouldn't be needed, i want to be able to "start an app at a specific URL"
-  App.reset();
+  // App.reset(); // this shouldn't be needed, i want to be able to "start an app at a specific URL"
 
   return App;
 }
