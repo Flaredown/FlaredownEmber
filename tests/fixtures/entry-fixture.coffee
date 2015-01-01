@@ -26,20 +26,20 @@ fixture = (date) ->
           [{
               name: "general_wellbeing", kind: "select",
               inputs: [
-                { value: 0, label: "very_well", meta_label: "happy_face", helper: null},
-                { value: 1, label: "slightly_below_par", meta_label: "neutral_face", helper: null},
-                { value: 2, label: "poor", meta_label: "frowny_face", helper: null },
-                { value: 3, label: "very_poor", meta_label: "sad_face", helper: null },
-                { value: 4, label: "terrible", meta_label: "sad_face", helper: null }
+                { value: 0, label: "very_well", meta_label: "", helper: null},
+                { value: 1, label: "slightly_below_par", meta_label: "", helper: null},
+                { value: 2, label: "poor", meta_label: "", helper: null },
+                { value: 3, label: "very_poor", meta_label: "", helper: null },
+                { value: 4, label: "terrible", meta_label: "", helper: null }
               ]
           }],
           [{
               name: "ab_pain", kind: "select",
               inputs: [
-                { value: 0, label: "none", meta_label: "happy_face", helper: null},
-                { value: 1, label: "mild", meta_label: "neutral_face", helper: null},
-                { value: 2, label: "moderate", meta_label: "frowny_face", helper: null},
-                { value: 3, label: "severe", meta_label: "sad_face", helper: null}
+                { value: 0, label: "none", meta_label: "", helper: null},
+                { value: 1, label: "mild", meta_label: "", helper: null},
+                { value: 2, label: "moderate", meta_label: "", helper: null},
+                { value: 3, label: "severe", meta_label: "", helper: null}
               ]
           }],
           [{
@@ -49,10 +49,10 @@ fixture = (date) ->
           [{
               name: "ab_mass", kind: "select",
               inputs: [
-                { value: 0, label: "none", meta_label: "happy_face", helper: null },
-                { value: 1, label: "dubious", meta_label: "neutral_face", helper: null},
-                { value: 2, label: "definite", meta_label: "frowny_face", helper: null},
-                { value: 3, label: "definite_and_tender", meta_label: "sad_face", helper: null}
+                { value: 0, label: "none", meta_label: "", helper: null },
+                { value: 1, label: "dubious", meta_label: "", helper: null},
+                { value: 2, label: "definite", meta_label: "", helper: null},
+                { value: 3, label: "definite_and_tender", meta_label: "", helper: null}
               ]
           }],
           [
@@ -69,10 +69,21 @@ fixture = (date) ->
           [{
               name: "how_fantastic_are_you", kind: "select",
               inputs: [
-                { value: 0, label: "very_fantastic", meta_label: "happy_face", helper: null},
-                { value: 1, label: "super_fantastic", meta_label: "happy_face", helper: null},
-                { value: 2, label: "extra_fantastic", meta_label: "happy_face", helper: null },
-                { value: 3, label: "crazy_fantastic", meta_label: "happy_face", helper: null },
+                { value: 0, label: "very_fantastic", meta_label: "", helper: null},
+                { value: 1, label: "super_fantastic", meta_label: "", helper: null},
+                { value: 2, label: "extra_fantastic", meta_label: "", helper: null },
+                { value: 3, label: "crazy_fantastic", meta_label: "", helper: null },
+              ]
+          }]
+        ],
+        symptoms: [
+          [{
+              name: "droopy lips", kind: "select",
+              inputs: [
+                { value: 0, meta_label: "", helper: null},
+                { value: 1, meta_label: "", helper: null},
+                { value: 2, meta_label: "", helper: null },
+                { value: 3, meta_label: "", helper: null },
               ]
           }]
         ]

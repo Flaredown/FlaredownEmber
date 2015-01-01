@@ -52,35 +52,37 @@ test "Catalog definitions are loaded up correctly", ->
   ok Object.keys(controller.get("catalog_definitions"))[0] is "hbi"
 
 test "Generates #sections from catalog_definitions", ->
-  expect 4
+  expect 5
 
-  ok controller.get("sections.length") is (5 + 1)                       # hbi + foo
-  ok controller.get("sections.firstObject.category") is "foo"           , "should be alphabetical, 'foo' before 'hbi'"
+  ok controller.get("sections.length") is (1 + 1 + 5 + 1 + 1 + 1 + 1)   , "start + foo + hbi + symptoms + treatments + notes + finish"
+  ok controller.get("sections.firstObject.category") is "start"         , "first section is 'start'"
+  ok controller.get("sections")[1].category is "foo"                    , "should be alphabetical, 'foo' before 'hbi'"
   ok controller.get("sections.firstObject.selected") is true
   ok controller.get("sections.lastObject.selected") is false
 
 test "#currentSection is set based on section integer", ->
   expect 7
 
+  controller.set("section", 2)
   ok controller.get("currentSection").selected is true
-  ok controller.get("currentSection").number is 1                       , "1st section total"
-  ok controller.get("currentSection").category_number is 1              , "1st in catalog, also"
+  ok controller.get("currentSection").number is 2                       , "2nd section total"
+  ok controller.get("currentSection").category_number is 1              , "1st in catalog"
   ok controller.get("currentSection").category is "foo"
 
-  controller.set("section", 3)
-  ok controller.get("currentSection").number is 3                       , "3rd section total"
+  controller.set("section", 4)
+  ok controller.get("currentSection").number is 4                       , "4rd section total"
   ok controller.get("currentSection").category_number is 2              , "2nd section in this catalog"
   ok controller.get("currentSection").category is "hbi"
 
 test "#categories grabs all category names", ->
   expect 1
 
-  deepEqual controller.get("categories"), ["foo", "hbi"]
+  deepEqual controller.get("categories"), ["start", "foo", "hbi", "symptoms", "treatments", "notes", "finish"]
 
 test "#currentCategory gives the name of currentSection's category", ->
   expect 2
 
-  ok controller.get("currentCategory") is "foo"
+  ok controller.get("currentCategory") is "start"
 
   Ember.run -> controller.set("section", 3)
   ok controller.get("currentCategory") is "hbi"
@@ -97,6 +99,7 @@ test "#currentCategorySections grabs all sections for the currentCategory", ->
 test "#sectionQuestions returns question(s) based on section", ->
   expect 8
 
+  controller.set("section", 2)
   questions = controller.get("sectionQuestions")
   ok Ember.typeOf(questions) is "array"
 

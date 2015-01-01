@@ -1,15 +1,15 @@
 transitions = () ->
 
   @transition(
-    @childOf(".checkin-questions")
+    @childOf(".checkin-content")
     @toModel (fromModel) -> (@number > fromModel.number)
     @use('toLeft')
     # @use('checkin-next')
   );
 
   @transition(
-    @childOf(".checkin-questions")
-    @toModel (fromModel) -> (@number < fromModel.number)
+    @childOf(".checkin-content")
+    @toModel (fromModel) -> console.log "?!";(@number < fromModel.number)
     @use('toRight')
     # @use('checkin-prev')
   );

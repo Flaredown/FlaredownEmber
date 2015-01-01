@@ -23,10 +23,11 @@ view = Ember.View.extend
 
   .observes("entry.section").on("init")
 
+
   keyDown: (e) ->
     unless $(document.activeElement).is("input")
       switch e.keyCode
-        when 48 then @get("entry").send("setSection", 10)   # keyboard: 10
+        when 48 then @get("entry").send("setSection", 10)   # keyboard: 0
         when 49 then @get("entry").send("setSection", 1)    # keyboard: 1
         when 50 then @get("entry").send("setSection", 2)    # keyboard: 2
         when 51 then @get("entry").send("setSection", 3)    # keyboard: 3
@@ -38,5 +39,6 @@ view = Ember.View.extend
         when 57 then @get("entry").send("setSection", 9)    # keyboard: 9
         when 37 then @get("entry").send("previousSection")  # keyboard: left arrow
         when 39 then @get("entry").send("nextSection")      # keyboard: right arrow
+        when 27 then @get("entry").set("modalOpen", false)  # keyboard: escape
 
 `export default view`
