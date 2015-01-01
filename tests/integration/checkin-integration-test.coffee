@@ -93,7 +93,7 @@ test "Limits on prev/next", ->
   expect 2
 
   visit('/checkin/today/6').then( =>
-    triggerEvent(".checkin-pagination ul li a:eq(5)", "click")
+    triggerEvent(".checkin-pagination ul li:eq(5)", "click")
     ok currentURL() == "/checkin/today/6", "Next button limited"
   )
 
@@ -106,7 +106,7 @@ test "Can navigate through the sections (other date)", ->
   expect 1
 
   visit('/checkin/Aug-13-2014/1').then( ->
-    triggerEvent(".checkin-pagination ul li a:eq(1)", "click")
+    triggerEvent(".checkin-pagination ul li:eq(1)", "click")
     ok currentURL() == "/checkin/Aug-13-2014/2", "Clicking a number goes to that section"
   )
 
@@ -131,7 +131,7 @@ test "go to the next section when submitting a response", ->
 
   visit('/checkin/Aug-13-2014/1').then( ->
     ok currentURL() == "/checkin/Aug-13-2014/1"
-    triggerEvent ".checkin-response-select a:eq(0)", "click"
+    triggerEvent ".checkin-response-select li:eq(0)", "click"
     ok currentURL() == "/checkin/Aug-13-2014/2", "Went to the next section"
   )
 
