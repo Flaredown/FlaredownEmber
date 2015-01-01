@@ -129,10 +129,10 @@ test "go to URL with unavailable section defaults to 1", ->
 test "go to the next section when submitting a response", ->
   expect 2
 
-  visit('/checkin/Aug-13-2014/1').then( ->
-    ok currentURL() == "/checkin/Aug-13-2014/1"
+  visit('/checkin/Aug-13-2014/2').then( ->
+    ok currentURL() == "/checkin/Aug-13-2014/2"
     triggerEvent ".checkin-response-select a:eq(0)", "click"
-    ok currentURL() == "/checkin/Aug-13-2014/2", "Went to the next section"
+    ok currentURL() == "/checkin/Aug-13-2014/3", "Went to the next section"
   )
 
 test "closing modal goes back to index", ->

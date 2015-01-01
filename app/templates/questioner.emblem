@@ -5,12 +5,19 @@
       li click="setSection sec.number"
         a.checkin-dot href="javascript:void(0);" class={sec.selected:selected}
 
-.checkin-questions
-  = liquid-with currentSection as currentSection
-    h4 = currentSectionPrompt
-    each question in sectionQuestions
-      = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
+if isStart
+  partial "questioner/start"
+else
+  if isFinish
+    partial "questioner/finish"
+  else
+    .checkin-questions
+      = liquid-with currentSection as currentSection
+        h4 = currentSectionPrompt
+        each question in sectionQuestions
+          = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
 
 .checkin-navigate
   a.checkin-back href="javascript:void(0);" click="previousSection" BACK
   a.checkin-next href="javascript:void(0);" click="nextSection" NEXT
+

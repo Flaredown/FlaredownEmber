@@ -15,26 +15,48 @@ controller = Ember.ObjectController.extend
     @transitionToRoute("graph.checkin", @get("dateAsParam"), @get("section")) if @get("section")
   .observes("section")
 
+  catalogsSorted: Ember.computed(->
+    catalogs = @get("catalogs")
+    catalogs.removeObject("symptoms")
+    catalogs.sort()
+    catalogs.addObject("symptoms")
+  ).property("catalogs")
+
+  ### Sections: All the pages in the checkin form ###
   sections: Ember.computed ->
     accum           = []
     category_count  = 0
 
     return [] unless @get("catalogs.length")
 
-    @get("catalogs").sort().forEach (catalog) =>
+    # Start page
+    accum.addObject
+      number: 1
+      selected: category_count+1 is @get("section")
+      category_number: 1
+      category: "start"
+
+    category_count++
+
+    @get("catalogsSorted").forEach (catalog) =>
       @get("catalog_definitions.#{catalog}").forEach (section,category_number) =>
 
         number = category_count+category_number+1
         accum.addObject {
           number: number
-          selected: (number is @get("section"))
+          selected: number is @get("section")
           category_number: category_number+1
           category: catalog
         }
 
       category_count = accum.length
 
-    # TODO symptoms sections go here (after catalogs)
+    # End page
+    accum.addObject
+      number: accum.length+1
+      selected: category_count+1 is @get("section")
+      category_number: 1
+      category: "finish"
 
     accum
 
@@ -45,6 +67,9 @@ controller = Ember.ObjectController.extend
   categories:               Ember.computed( -> @get("sections").mapProperty("category").uniq()                ).property("sections")
   currentCategory:          Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
   currentCategorySections:  Ember.computed( -> @get("sections").filterBy("category", @get("currentCategory")) ).property("currentCategory")
+
+  isStart:  Ember.computed.equal("currentCategory", "start")
+  isFinish: Ember.computed.equal("currentCategory", "finish")
 
   ### Translation keys ###
   catalogStub:          Ember.computed( -> "#{@get("currentUser.locale")}.catalogs.#{@get("currentCategory")}" ).property("currentCategory")
@@ -59,7 +84,7 @@ controller = Ember.ObjectController.extend
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
-    return [] unless @get("catalog_definitions")
+    return [] unless @get("catalog_definitions") and not ["start", "finish"].contains(section.category)
     catalog_questions = @get("catalog_definitions.#{section.category}")
     catalog_questions[ section.category_number-1 ]
 
@@ -69,7 +94,7 @@ controller = Ember.ObjectController.extend
     responses = []
     that      = @
 
-    @get("catalogs").sort().forEach (catalog) =>
+    @get("catalogsSorted").forEach (catalog) =>
       @get("catalog_definitions.#{catalog}").forEach (section) =>
         section.forEach (question) ->
 
