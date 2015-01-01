@@ -49,8 +49,10 @@ controller = Ember.ObjectController.extend
   ### Translation keys ###
   catalogStub:          Ember.computed( -> "#{@get("currentUser.locale")}.catalogs.#{@get("currentCategory")}" ).property("currentCategory")
   currentSectionPrompt: Ember.computed( ->
-    return @get("sectionQuestions.firstObject.name").capitalize() if @get("currentSection.category") is "symptoms"
-    Ember.I18n.t "#{@get("catalogStub")}.section_#{@get("currentSection.category_number")}_prompt"
+    if @get("currentSection.category") is "symptoms"
+      Ember.I18n.t "#{@get("currentUser.locale")}.symptom_question_prompt", name: @get("sectionQuestions.firstObject.name").capitalize()
+    else
+      Ember.I18n.t "#{@get("catalogStub")}.section_#{@get("currentSection.category_number")}_prompt"
   ).property("currentSection")
 
 

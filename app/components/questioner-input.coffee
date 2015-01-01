@@ -8,7 +8,11 @@ component = Ember.Component.extend
   ).property("question.kind")
 
   inputs: Ember.computed(->
-    @get("question.inputs").map (input) => { value: input.value, selected: (input.value is @get("value")) }
+    @get("question.inputs").map (input) =>
+      value: input.value,
+      selected: input.value is @get("value")
+      label: if input.label then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
+
   ).property("question.inputs")
 
   value: Ember.computed( ->

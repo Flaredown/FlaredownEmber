@@ -5,6 +5,9 @@ import config from './config/environment';
 
 Ember.MODEL_FACTORY_INJECTIONS = true;
 
+window.dragImg = document.createElement("img");
+window.dragImg.src = "/assets/trans-pixel.png";
+
 var App = Ember.Application.extend({
   modulePrefix: config.modulePrefix,
   podModulePrefix: config.podModulePrefix,
