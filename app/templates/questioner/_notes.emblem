@@ -1,3 +1,4 @@
-h1 Notes!
-
-p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+.checkin-note
+	h4 Leave a note
+	.checkin-note-textarea <span class="placeholder">Use <span class="hashtag">#hashtags</span> to mark triggers on the graph</span>
+	

@@ -28,9 +28,11 @@
       background: $fd-blue;
     }
   }
+  .checkin-content {
+    margin: 20px 0 0 0;
+  }
   .checkin-questions {
     box-sizing: border-box;
-    margin: 15px 0 0 0;
     padding: 0 30px;
     max-height: 300px;
     overflow: auto;
@@ -74,20 +76,20 @@
       background: $fd-blue;
       color: white;
     }
-    @media (min-width: $tablet) {
-      padding: 10px 25px;
-      width: auto;
-      &:first-of-type {
-        border-radius: 0;
-        border-top-left-radius: 7px;
-        border-bottom-left-radius: 7px;
-      }
-      &:last-of-type {
-        border-radius: 0;
-        border-top-right-radius: 7px;
-        border-bottom-right-radius: 7px;
-      }
-    }
+    // @media (min-width: $tablet) {
+    //   padding: 10px 25px;
+    //   width: auto;
+    //   &:first-of-type {
+    //     border-radius: 0;
+    //     border-top-left-radius: 7px;
+    //     border-bottom-left-radius: 7px;
+    //   }
+    //   &:last-of-type {
+    //     border-radius: 0;
+    //     border-top-right-radius: 7px;
+    //     border-bottom-right-radius: 7px;
+    //   }
+    // }
   }
 }
 
@@ -149,4 +151,27 @@ input.cmn-toggle-round.checked + label:before {
 }
 input.cmn-toggle-round.checked + label:after {
   margin-left: 30px;
+}
+
+
+/////////////////// NOTE /////////////////////
+.checkin-note {
+  .checkin-note-textarea {
+    height: 200px;
+    width: 100%;
+    padding: 15px;
+    box-shadow: none;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    margin-top: 20px;
+    font-size: 1.2em;
+    box-sizing: border-box;
+    text-align: left;
+    .placeholder {
+      opacity: .5;
+    }
+    .hashtag {
+      color: $fd-blue;
+    }
+  }
 }
