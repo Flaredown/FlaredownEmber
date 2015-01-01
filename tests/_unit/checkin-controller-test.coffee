@@ -54,7 +54,7 @@ test "Catalog definitions are loaded up correctly", ->
 test "Generates #sections from catalog_definitions", ->
   expect 5
 
-  ok controller.get("sections.length") is (1 + 1 + 5 + 1 + 1)           , "start + foo + hbi + symptoms + finish"
+  ok controller.get("sections.length") is (1 + 1 + 5 + 1 + 1 + 1 + 1)   , "start + foo + hbi + symptoms + treatments + notes + finish"
   ok controller.get("sections.firstObject.category") is "start"         , "first section is 'start'"
   ok controller.get("sections")[1].category is "foo"                    , "should be alphabetical, 'foo' before 'hbi'"
   ok controller.get("sections.firstObject.selected") is true
@@ -77,7 +77,7 @@ test "#currentSection is set based on section integer", ->
 test "#categories grabs all category names", ->
   expect 1
 
-  deepEqual controller.get("categories"), ["start", "foo", "hbi", "symptoms", "finish"]
+  deepEqual controller.get("categories"), ["start", "foo", "hbi", "symptoms", "treatments", "notes", "finish"]
 
 test "#currentCategory gives the name of currentSection's category", ->
   expect 2

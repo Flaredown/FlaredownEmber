@@ -9,17 +9,10 @@ model = DS.Model.extend
   catalogs:             DS.attr()
   catalog_definitions:  DS.attr()
 
-  moment: Ember.computed ->
-    moment.utc(@get("date"))
-  .property("date")
-
-  unixDate: Ember.computed ->
-    @get("moment").unix()
-  .property("moment")
-
-  niceDate: Ember.computed ->
-    @get("moment").format("MMM-DD-YYYY")
-  .property("moment")
+  moment:     Ember.computed(-> moment.utc(@get("date")) ).property("date")
+  unixDate:   Ember.computed(-> @get("moment").unix() ).property("moment")
+  niceDate:   Ember.computed(-> @get("moment").format("MMM-DD-YYYY") ).property("moment")
+  fancyDate:  Ember.computed(-> @get("moment").format("MMMM D, YYYY") ).property("moment")
 
   dateAsParam: Ember.computed ->
     return "today" if moment.utc().format("MMM-DD-YYYY") is @get("niceDate")

@@ -25,38 +25,29 @@ controller = Ember.ObjectController.extend
   ### Sections: All the pages in the checkin form ###
   sections: Ember.computed ->
     accum           = []
-    category_count  = 0
-
     return [] unless @get("catalogs.length")
 
-    # Start page
-    accum.addObject
+    accum.addObject # Start page
       number: 1
-      selected: category_count+1 is @get("section")
+      selected: accum.length+1 is @get("section")
       category_number: 1
       category: "start"
 
-    category_count++
-
     @get("catalogsSorted").forEach (catalog) =>
-      @get("catalog_definitions.#{catalog}").forEach (section,category_number) =>
-
-        number = category_count+category_number+1
+      @get("catalog_definitions.#{catalog}").forEach (category,category_number) =>
         accum.addObject {
-          number: number
-          selected: number is @get("section")
+          number: accum.length+1
+          selected: accum.length+1 is @get("section")
           category_number: category_number+1
           category: catalog
         }
 
-      category_count = accum.length
-
-    # End page
-    accum.addObject
-      number: accum.length+1
-      selected: category_count+1 is @get("section")
-      category_number: 1
-      category: "finish"
+    ["treatments", "notes", "finish"].forEach (category) =>
+      accum.addObject
+        number: accum.length+1
+        selected: accum.length+1 is @get("section")
+        category_number: 1
+        category: category
 
     accum
 
@@ -68,8 +59,10 @@ controller = Ember.ObjectController.extend
   currentCategory:          Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
   currentCategorySections:  Ember.computed( -> @get("sections").filterBy("category", @get("currentCategory")) ).property("currentCategory")
 
-  isStart:  Ember.computed.equal("currentCategory", "start")
-  isFinish: Ember.computed.equal("currentCategory", "finish")
+  currentPartial:           Ember.computed( ->
+    return "questioner/#{@get("currentCategory")}" if ["start", "treatments", "notes", "finish"].contains(@get("currentCategory"))
+    "questioner/questions"
+  ).property("currentCategory")
 
   ### Translation keys ###
   catalogStub:          Ember.computed( -> "#{@get("currentUser.locale")}.catalogs.#{@get("currentCategory")}" ).property("currentCategory")
@@ -84,7 +77,7 @@ controller = Ember.ObjectController.extend
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
-    return [] unless @get("catalog_definitions") and not ["start", "finish"].contains(section.category)
+    return [] unless @get("catalog_definitions") and not ["start", "treatments", "notes", "finish"].contains(section.category)
     catalog_questions = @get("catalog_definitions.#{section.category}")
     catalog_questions[ section.category_number-1 ]
 
