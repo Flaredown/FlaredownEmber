@@ -108,7 +108,7 @@ controller = Ember.ObjectController.extend
 
       if Ember.isPresent(response) and value isnt null
         response.set("value", value)
-        @send("nextSection")
+        @send("nextSection") if @get("sectionQuestions.length") is 1
         @send("save")
 
       # TODO raise some error here if question not found?

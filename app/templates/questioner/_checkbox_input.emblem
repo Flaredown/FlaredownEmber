@@ -1,15 +1,5 @@
-if value
-  .cmn-toggle click="sendResponse 0"
-else
-  .cmn-toggle click="sendResponse 1"
-
-
-/   <div class="switch">
-/     <input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round" type="checkbox">
-/     <label for="cmn-toggle-1"></label>
-/   </div>
 .checkin-response-checkbox
 	.switch
-		input.cmn-toggle.cmn-toggle-round class={value:checked:unchecked} type="checkbox" id=questionName
+		input.cmn-toggle.cmn-toggle-round class={checked:checked:unchecked} click="toggleBoolean value" type="checkbox" id=questionName
 		label for=questionName
 		label for=questionName #{questionName}
