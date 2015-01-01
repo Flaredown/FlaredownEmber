@@ -1,4 +1,4 @@
-.stats draggable="false"
+.stats
   .stat-box
     h1 Remission
     h4 for 19 days
