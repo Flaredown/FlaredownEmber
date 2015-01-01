@@ -2,4 +2,4 @@
 	.switch
 		input.cmn-toggle.cmn-toggle-round class={checked:checked:unchecked} click="toggleBoolean value" type="checkbox" id=questionName
 		label for=questionName
-		label for=questionName #{questionName}
+		label for=questionName = t questionName
