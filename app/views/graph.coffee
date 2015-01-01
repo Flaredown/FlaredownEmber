@@ -34,8 +34,12 @@ view = Ember.View.extend
   touchMove:  (event) -> @dragGraph event.originalEvent.touches[0].pageX
   touchEnd:   (event) -> @changeViewport()
 
-  dragStart:  (event) -> @set "dragStartX", event.originalEvent.x
-  drag:       (event) -> @dragGraph event.originalEvent.x
+  dragStart:  (event) ->
+    event.dataTransfer.setDragImage(window.dragImg, 0, 0)
+    event.dataTransfer.setData("text/plain", "")
+    @set "dragStartX", event.originalEvent.pageX
+
+  dragOver: (event) -> @dragGraph event.originalEvent.pageX
   dragEnd:    (event) -> @changeViewport()
 
   dragGraph: (pixels) ->
