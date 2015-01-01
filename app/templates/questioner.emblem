@@ -6,10 +6,10 @@
         a.checkin-dot href="javascript:void(0);" class={sec.selected:selected}
 
 .checkin-questions
-  = liquid-with currentSection as currentSection
-    h4 = t currentSectionPrompt
-    each question in sectionQuestions
-      = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
+  /= liquid-with currentSection as currentSection
+  h4 = currentSectionPrompt
+  each question in sectionQuestions
+    = questioner-input question=question section=currentSection responses=responsesData action="setResponse"
 
 .checkin-navigate
   a.checkin-back href="javascript:void(0);" click="previousSection" BACK

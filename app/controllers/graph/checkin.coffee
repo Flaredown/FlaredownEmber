@@ -40,7 +40,7 @@ controller = Ember.ObjectController.extend
 
   .property("catalogs", "section")
 
-  currentSection:           Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections")
+  currentSection:           Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each")
 
   categories:               Ember.computed( -> @get("sections").mapProperty("category").uniq()                ).property("sections")
   currentCategory:          Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
@@ -48,7 +48,10 @@ controller = Ember.ObjectController.extend
 
   ### Translation keys ###
   catalogStub:          Ember.computed( -> "#{@get("currentUser.locale")}.catalogs.#{@get("currentCategory")}" ).property("currentCategory")
-  currentSectionPrompt: Ember.computed( -> "#{@get("catalogStub")}.section_#{@get("currentSection.number")}_prompt" ).property("currentSection.number")
+  currentSectionPrompt: Ember.computed( ->
+    return @get("sectionQuestions.firstObject.name").capitalize() if @get("currentSection.category") is "symptoms"
+    Ember.I18n.t "#{@get("catalogStub")}.section_#{@get("currentSection.category_number")}_prompt"
+  ).property("currentSection")
 
 
   sectionQuestions: Ember.computed ->
@@ -58,7 +61,7 @@ controller = Ember.ObjectController.extend
     catalog_questions = @get("catalog_definitions.#{section.category}")
     catalog_questions[ section.category_number-1 ]
 
-  .property("section")
+  .property("section.category", "currentSection")
 
   responsesData: Ember.computed ->
     responses = []

@@ -45,7 +45,7 @@
   display: inline-block;
   text-align: center;
   padding: 20px 0;
-  width: 50%; 
+  width: 50%;
 }
 .checkin-response {
   margin-top: 10px;
@@ -65,7 +65,7 @@
   font-size: 2em;
   margin: 3px;
   background: lightgrey;
-  &:hover {
+  &:hover, &.selected {
     background: $fd-blue;
     color: white;
   }

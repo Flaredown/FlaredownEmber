@@ -1,15 +1,20 @@
 `import Ember from 'ember'`
 
 component = Ember.Component.extend
-  questionName: Ember.computed(-> "#{@get("currentUser.locale")}.catalogs.#{@get("section.category")}.#{@get("question.name")}").property("question.name")
+  questionName: Ember.computed(-> "#{@get("currentUser.locale")}.catalogs.#{@get("section.category")}.#{@get("question.name")}").property("question.name", "section.category")
 
   layoutName: Ember.computed(->
     "questioner/_#{@get("question.kind")}_input"
-  ).property()
+  ).property("question.kind")
+
+  inputs: Ember.computed(->
+    @get("question.inputs").map (input) => { value: input.value, selected: (input.value is @get("value")) }
+  ).property("question.inputs")
 
   value: Ember.computed( ->
-    @get("responses").filterBy("catalog",@get("section.category")).findBy("name", @get("question.name")).get("value")
-  ).property("question")
+    question = @get("responses").filterBy("catalog",@get("section.category")).findBy("name", @get("question.name"))
+    if question then question.get("value") else null
+  ).property("question", "section.category")
 
   actions:
     sendResponse: (value) ->
