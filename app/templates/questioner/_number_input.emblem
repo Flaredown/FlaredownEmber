@@ -2,4 +2,4 @@
 	ul: each input in question.inputs
 	  li
 	    form submit="sendResponse value"
-	      = input class="response-input form-control input-lg" type="number" valueBinding="value"
+	      = input class="response-input form-control input-lg" type="text" valueBinding="value"
