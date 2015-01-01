@@ -1,72 +1,92 @@
+////////////// Global Questioner Styles ///////////////
 #questioner {
   text-align: center;
   outline: none;
-  display: table;
   width: 100%;
-}
-.checkin-date {
-  margin: 30px 0;
-}
-.checkin-pagination {
-  li {
-    display: inline-block;
-    cursor: pointer;
-    &:hover {
-      .checkin-dot {
-        background: grey;
+  .checkin-date {
+    padding: 40px 0 20px 0;
+  }
+  .checkin-pagination {
+    li {
+      display: inline-block;
+      cursor: pointer;
+      &:hover {
+        .checkin-dot {
+          background: grey;
+        }
       }
     }
   }
-}
-.checkin-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: lightgrey;
-  margin: 3px;
-  &.selected {
-    background: $fd-blue;
+  .checkin-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: lightgrey;
+    margin: 3px;
+    &.selected {
+      background: $fd-blue;
+    }
+  }
+  .checkin-questions {
+    box-sizing: border-box;
+    margin: 15px 0 0 0;
+    padding: 0 30px;
+    max-height: 300px;
+    overflow: auto;
+  }
+  .checkin-navigate {
+    display: inline-block;
+    width: 100%;
+    margin-top: 20px;
+  }
+  .checkin-back, .checkin-next {
+    display: inline-block;
+    text-align: center;
+    padding: 20px 0;
+    width: 50%;
+  }
+  .checkin-response {
+    margin-top: 10px;
   }
 }
-.checkin-questions {
-  box-sizing: border-box;
-  margin: 15px 0 0 0;
-  padding: 0 30px;
-  max-height: 300px;
-  overflow: auto;
-}
-.checkin-navigate {
-  display: inline-block;
-  width: 100%;
-  margin-top: 20px;
-}
-.checkin-back, .checkin-next {
-  display: inline-block;
-  text-align: center;
-  padding: 20px 0;
-  width: 50%;
-}
-.checkin-response {
-  margin-top: 10px;
-}
+
+////////////// Select Input Styles ///////////////
 .checkin-response-select {
   li {
     display: inline-block;
-  }
-}
-.checkin-response-select-btn {
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  border-radius: 999px;
-  color: grey;
-  font-size: 2em;
-  margin: 3px;
-  background: lightgrey;
-  &:hover, &.selected {
-    background: $fd-blue;
-    color: white;
+    padding: 5px 0;
+    width: 100%;
+    text-align: center;
+    color: grey;
+    font-size: 1.2em;
+    margin: 1px;
+    background: lightgrey;
+    &:first-of-type {
+      border-top-left-radius: 7px;
+      border-top-right-radius: 7px;
+    }
+    &:last-of-type {
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+    }
+    &:hover, &.selected {
+      background: $fd-blue;
+      color: white;
+    }
+    @media (min-width: $tablet) {
+      padding: 10px 25px;
+      width: auto;
+      &:first-of-type {
+        border-radius: 0;
+        border-top-left-radius: 7px;
+        border-bottom-left-radius: 7px;
+      }
+      &:last-of-type {
+        border-radius: 0;
+        border-top-right-radius: 7px;
+        border-bottom-right-radius: 7px;
+      }
+    }
   }
 }

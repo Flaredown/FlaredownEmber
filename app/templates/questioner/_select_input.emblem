@@ -2,6 +2,5 @@
 h4 = responseValue
 .checkin-response
 	ul.checkin-response-select: each input in inputs
-	  li
-	    a.checkin-response-select-btn href="" class={input.selected:selected} click="sendResponse input.value"
-	    	= input.value
+		li class={input.selected:selected} click="sendResponse input.value"
+			= input.value

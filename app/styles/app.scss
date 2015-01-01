@@ -16,6 +16,10 @@ $orange-dark: #e8b007;
 $pink-mid: #de6896;
 $pink-dark: #cc3f75;
 
+//Breakpoints
+$tablet: 768px;
+$mobile: 320px;
+
 // Mixins
 @mixin standard-shadow {
 	box-shadow: 0 4px 0 #E1D8C8;
