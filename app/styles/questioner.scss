@@ -25,7 +25,7 @@
     background: lightgrey;
     margin: 3px;
     &.selected {
-      background: $fd-blue;
+      background: $fd-primary;
     }
   }
   .checkin-content {
@@ -73,7 +73,7 @@
       border-bottom-right-radius: 7px;
     }
     &:hover, &.selected {
-      background: $fd-blue;
+      background: $fd-primary;
       color: white;
     }
     // @media (min-width: $tablet) {
@@ -97,6 +97,9 @@
 .checkin-response-checkbox {
   .switch {
     margin: 20px 0 0 0;
+    width: 70%;
+    text-align: left;
+    display: inline-block;
   }
   label {
     display: inline-block;
@@ -147,7 +150,7 @@ input.cmn-toggle-round + label:after {
   transition: margin 0.4s;
 }
 input.cmn-toggle-round.checked + label:before {
-  background-color: #8ce196;
+  background-color: $fd-primary;
 }
 input.cmn-toggle-round.checked + label:after {
   margin-left: 30px;
@@ -171,7 +174,7 @@ input.cmn-toggle-round.checked + label:after {
       opacity: .5;
     }
     .hashtag {
-      color: $fd-blue;
+      color: $fd-primary;
     }
   }
 }
