@@ -1,18 +1,46 @@
 // Place all the styles related to the graph controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.start-date, .end-date {
-  @include span-columns(3);
-  margin: 20px 0 0 0;
-}
-.end-date {
-  @include shift(6);
+
+/////////////// Graph Controls //////////////////
+.graph-controls {
+  @include standard-shadow;
+  border-radius: 5px;
+  background: white;
+  margin: 20px 0 30px 0;
+  padding: 25px;
+  .graph-controls-header {
+    text-align: center;
+  }
+  .graph-controls-body {
+    @include row;
+  }
+  .graph-controls-time, .graph-controls-symptoms, .graph-controls-treatments {
+    @include span-columns(12);
+    li {
+      padding: 5px 0;
+    }
+    @media (min-width: $tablet) {
+      @include span-columns(4);
+    }
+  }
+  .available-catalog {
+    border-bottom: 1px solid lightgrey;
+  }
+  .graph-controls-catalog-block, .graph-controls-symptom-block, .graph-controls-treatment-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: $fd-primary;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .graph-controls-treatment-dot {
+    border-radius: 99px;
+  }
 }
 
-.test-box {
-  @include span-columns(4);
-}
-
+/////////////// Stat Boxes //////////////////
 .stats {
   cursor: default;
   color: #bbbbbb;
