@@ -8,6 +8,7 @@
 $background: #F2EEE8;
 $fd-primary: #73C1BA;
 $fd-secondary: #F5A623;
+$lightgrey: #ddd;
 
 //Breakpoints
 $tablet: 768px;
@@ -26,6 +27,7 @@ $mobile: 320px;
 @import "modal";
 @import "dropdown";
 @import "pagination";
+@import "switch";
 
 //Internal styles
 @import "global";
