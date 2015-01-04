@@ -19,6 +19,17 @@
     @include span-columns(12);
     li {
       padding: 5px 0;
+      display: flex;
+      align-items: center;
+      @media (min-width: $tablet) {
+        &:hover {
+          .graph-controls-catalog-block, .graph-controls-symptom-block, .graph-controls-treatment-dot {
+            height: 2px;
+            background: $lightgrey;
+            transition: all .15s;
+          }
+        }
+      }
     }
     @media (min-width: $tablet) {
       @include span-columns(4);
@@ -28,12 +39,13 @@
     border-bottom: 1px solid $lightgrey;
   }
   .graph-controls-catalog-block, .graph-controls-symptom-block, .graph-controls-treatment-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 2px;
     background: $primary;
     display: inline-block;
     margin-right: 10px;
+    transition: all .15s;
   }
   .graph-controls-treatment-dot {
     border-radius: 99px;
