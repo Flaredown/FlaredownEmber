@@ -22,6 +22,7 @@ label {
 .container {
   @include outer-container;
 }
+
 .navbar {
   background: white;
   padding: 10px 25px;
@@ -34,8 +35,20 @@ label {
     display: flex;
     align-items: center;
   }
+  .navbar-logo {
+    display: inline-block;
+    margin-right: 15px;
+  }
   .navbar-sections {
     @include span-columns(6);
+    ul {
+      display: inline-block;
+      font-size: .9em;
+    }
+    li {
+      display: inline-block;
+      margin-right: 15px;
+    }
   }
   .navbar-account {
     @include span-columns(6);
