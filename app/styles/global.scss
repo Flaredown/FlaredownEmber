@@ -1,3 +1,20 @@
+//Colors
+$background: #F2EEE8;
+$fd-primary: #73C1BA;
+$fd-secondary: #F5A623;
+$lightgrey: #ddd;
+
+//Breakpoints
+$tablet: 768px;
+$mobile: 320px;
+$container: 68em;
+
+// Mixins
+@mixin standard-shadow {
+  box-shadow: 0 4px 0 #E1D8C8;
+}
+
+// Defaults
 body {
   background: $background;
   font-family: $proxima-regular;
@@ -26,6 +43,7 @@ label {
   @include outer-container;
 }
 
+// Navbar
 .navbar {
   @include outer-container;
   @include standard-shadow;
