@@ -13,6 +13,7 @@ $lightgrey: #ddd;
 //Breakpoints
 $tablet: 768px;
 $mobile: 320px;
+$container: 68em;
 
 // Mixins
 @mixin standard-shadow {
@@ -28,6 +29,7 @@ $mobile: 320px;
 @import "dropdown";
 @import "pagination";
 @import "switch";
+@import "slide-menu";
 
 //Internal styles
 @import "global";

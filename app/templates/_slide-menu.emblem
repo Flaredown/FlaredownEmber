@@ -1,0 +1,14 @@
+if currentUser.loggedIn
+  nav.js-menu.sliding-menu-content
+    ul
+      li: link-to "graph" | GRAPH
+      li: link-to "insights" | STATS
+      li: link-to "reports" | INVESTIGATIONS
+      li.navbar-slide-account #{currentUser.email}
+      li Account
+      li Conditions
+      li Symptoms
+      li Treatments
+      li Print
+      li Logout
+  .js-menu-screen.menu-screen

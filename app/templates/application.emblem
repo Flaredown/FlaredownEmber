@@ -1,4 +1,5 @@
 partial "header"
+partial "slide-menu"
 
 .main
   #content= outlet
