@@ -46,8 +46,6 @@
   color: #bbbbbb;
 }
 .stat-box {
-  @include span-columns(4);
-  @include omega (3n);
   @include standard-shadow;
   margin-bottom: 3%;
   padding: 2%;
@@ -69,5 +67,9 @@
     top: 1px;
     color: #666666;
     box-shadow: 0 3px 0 darken($background, 15%);
+  }
+  @media (min-width: $tablet) {
+    @include span-columns(4);
+    @include omega (3n);
   }
 }
