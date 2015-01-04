@@ -25,7 +25,7 @@
     background: $lightgrey;
     margin: 3px;
     &.selected {
-      background: $fd-primary;
+      background: $primary;
     }
   }
   .checkin-content {
@@ -73,7 +73,7 @@
       border-bottom-right-radius: 7px;
     }
     &:hover, &.selected {
-      background: $fd-primary;
+      background: $primary;
       color: white;
     }
     // @media (min-width: $tablet) {
@@ -134,7 +134,7 @@
       opacity: .5;
     }
     .hashtag {
-      color: $fd-primary;
+      color: $primary;
     }
   }
 }

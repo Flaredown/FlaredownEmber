@@ -1,7 +1,7 @@
 //Colors
 $background: #F2EEE8;
-$fd-primary: #73C1BA;
-$fd-secondary: #F5A623;
+$primary: #73C1BA;
+$secondary: #F5A623;
 $lightgrey: #ddd;
 
 //Breakpoints
@@ -28,7 +28,7 @@ ul {
   padding: 0;
 }
 a {
-  color: $fd-primary;
+  color: $primary;
   &:hover {
     text-decoration: none;
   }
