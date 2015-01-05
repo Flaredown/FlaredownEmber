@@ -3,7 +3,6 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
-
 `import entryFixture from "../fixtures/entry-fixture"`
 `import graphFixture from "../fixtures/graph-fixture"`
 `import localeFixture from "../fixtures/locale-fixture"`
@@ -76,8 +75,7 @@ test "Can navigate through the sections (today)", ->
   expect 3
 
   visit('/checkin/today/1').then( =>
-    # foo (0) | hbi (1-5)
-    # 0 1 2 3 4 5
+
     triggerEvent(".checkin-pagination ul li:eq(1)", "click")
     ok currentURL() == "/checkin/today/2", "Clicking a number goes to that section"
 
