@@ -65,7 +65,7 @@ test "Clears placeholder on focus", ->
     andThen ->
       Ember.run.later(
         -> ok $(".checkin-note-textarea").text() is "", "goes away when focused"
-        200
+        400
       )
 
 # test "Tags them tags", ->
