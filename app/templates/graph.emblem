@@ -18,10 +18,10 @@ else
           li.available-catalog click="changeCatalog cat"
             .graph-controls-catalog-block
             = cat
-        each filterable in catalogResponseNames
-          li.filterable-symptom click="filter filterable"
+        each filter in responseFilters
+          li click="filter filter.name" class={filter.enabled:filtered-symptom:filterable-symptom}
             .graph-controls-symptom-block
-            = filterable
+            = filter.name
       ul.graph-controls-treatments
         li.filterable-treatment
           .graph-controls-treatment-dot
