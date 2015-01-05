@@ -25,7 +25,8 @@ view = Ember.View.extend
 
 
   keyDown: (e) ->
-    unless $(document.activeElement).is("input")
+    active = $(document.activeElement)
+    unless active.is("input") or active.hasClass("checkin-note-textarea")
       switch e.keyCode
         when 48 then @get("entry").send("setSection", 10)   # keyboard: 0
         when 49 then @get("entry").send("setSection", 1)    # keyboard: 1
