@@ -11,7 +11,6 @@ view = Ember.View.extend
 
   # Variables:
   editable: true
-  isTyping: false
 
   contenteditable: (->
     editable = @get("editable")
@@ -21,7 +20,6 @@ view = Ember.View.extend
   spellcheck: true
   role: "textbox"
   "aria-multiline": true
-
 
   attributeBindings: ["contenteditable", "spellcheck", "role", "aria-multiline"]
 
@@ -122,11 +120,8 @@ view = Ember.View.extend
     @setContent()
 
   focusOut:         ->
-  focusIn:          ->
-    @$().text("") if @$().text() is "Use #hashtags to mark triggers on the graph"
+  focusIn:          -> @$().text("") if @$().text() is "Use #hashtags to mark triggers on the graph"
   keyDown:  (event) ->
-  keyUp:    (event) ->
-    debugger
-    @set "value", @$().html().replace(/(\r\n|\n|\r)/gm,"")
+  keyUp:    (event) -> @set "value", @$().html().replace(/(\r\n|\n|\r)/gm,"")
 
 `export default view`
