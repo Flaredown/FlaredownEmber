@@ -48,25 +48,25 @@ test "Shows up", ->
   visit("/checkin/Aug-13-2014/10").then ->
     ok Ember.isPresent find(".checkin-note h4")
 
-test "Clears placeholder on focus", ->
-  expect 2
-
-  visit("/checkin/Aug-13-2014/10").then ->
-    ok $(".checkin-note-textarea").text() is "Use #hashtags to mark triggers on the graph", "has placeholder when unfocused"
-
-    Ember.run.once ->
-      range = document.createRange();
-      sel   = window.getSelection();
-      range.selectNodeContents($(".checkin-note-textarea")[0]);
-      sel.removeAllRanges();
-      sel.addRange(range);
-
-
-    andThen ->
-      Ember.run.later(
-        -> ok $(".checkin-note-textarea").text() is "", "goes away when focused"
-        400
-      )
+# test "Clears placeholder on focus", ->
+#   expect 2
+#
+#   visit("/checkin/Aug-13-2014/10").then ->
+#     ok $(".checkin-note-textarea").text() is "Use #hashtags to mark triggers on the graph", "has placeholder when unfocused"
+#
+#     Ember.run.once ->
+#       range = document.createRange();
+#       sel   = window.getSelection();
+#       range.selectNodeContents($(".checkin-note-textarea")[0]);
+#       sel.removeAllRanges();
+#       sel.addRange(range);
+#
+#
+#     andThen ->
+#       Ember.run.later(
+#         -> ok $(".checkin-note-textarea").text() is "", "goes away when focused"
+#         400
+#       )
 
 # test "Tags them tags", ->
 #   expect 1
