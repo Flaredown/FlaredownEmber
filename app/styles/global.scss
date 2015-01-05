@@ -13,6 +13,11 @@ $container: 68em;
 @mixin standard-shadow {
   box-shadow: 0 4px 0 #E1D8C8;
 }
+@mixin wrap-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 // Defaults
 body {

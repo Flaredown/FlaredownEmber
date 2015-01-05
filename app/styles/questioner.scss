@@ -30,6 +30,10 @@
   }
   .checkin-content {
     margin: 20px 0 0 0;
+    h4 {
+      max-width: 90%;
+      margin: 0 auto;
+    }
   }
   .checkin-questions {
     box-sizing: border-box;
@@ -113,6 +117,37 @@
   @media (min-width: $tablet) {
     width: 70%;
     margin: 0 auto;
+  }
+}
+
+.checkin-treatments {
+  ul {
+    @include row;
+    width: 90%;
+    margin: 20px auto 0 auto;
+    font-size: 1.2em;
+    max-width: 20em;
+    li {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .checkin-treatments-name {
+    @include span-columns(10);
+    @include wrap-ellipsis;
+    text-align: left;
+    background: $primary;
+    padding: 5px 15px;
+    border-radius: 999px;
+    color: white;
+    &.on {
+      background: $lightgrey;
+      color: grey;
+    }
+  }
+  .checkin-treatments-edit, .checkin-treatments-remove {
+    @include span-columns(1);
+    text-align: center;
   }
 }
 
