@@ -134,10 +134,35 @@ test "go to the next section when submitting a response", ->
   )
 
 test "closing modal goes back to index", ->
+  expect 2
+
   visit('/checkin/Aug-13-2014/1').then( ->
     ok currentURL() == "/checkin/Aug-13-2014/1"
     triggerEvent $("#modal-1"), "click"
 
     andThen ->
       ok currentURL() == "/", "Went back to index"
+  )
+
+test "Can edit treatment", ->
+  expect 2
+
+  visit('/checkin/Aug-13-2014/9').then( ->
+    triggerEvent $(".checkin-treatments-edit:eq(0)"), "click"
+
+    andThen ->
+      ok find(".treatment-name-input")
+      fillIn(".treatment-name-input", "Jelly Bellies")
+      triggerEvent ".save-treatment", "click"
+      andThen ->
+        ok $(".checkin-treatments-name").text() is "Jelly Bellies"
+  )
+
+test "Warned of treatment removal", ->
+  expect 1
+
+  visit('/checkin/Aug-13-2014/9').then( ->
+    triggerEvent $(".checkin-treatments-remove:eq(0)"), "click"
+
+    andThen -> window.assertAlertPresent()
   )

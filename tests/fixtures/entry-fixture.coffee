@@ -9,16 +9,24 @@ fixture = (date) ->
       catalogs: ["hbi", "foo"],
       responses: [
         {
-          id: "hbi_general_wellbeing_#{id}",
-          name: "general_wellbeing",
-          value: 2,
+          id: "hbi_general_wellbeing_#{id}"
+          name: "general_wellbeing"
+          value: 2
           catalog: "hbi"
         },
         {
-          id: "hbi_ab_pain_#{id}",
-          name: "ab_pain",
+          id: "hbi_ab_pain_#{id}"
+          name: "ab_pain"
           value: 3
           catalog: "hbi"
+        }
+      ],
+      treatments: [
+        {
+          id: "Jelly Beans_25_beans_#{id}"
+          name: "Jelly Beans"
+          quantity: 25.0
+          unit: "beans"
         }
       ],
       catalog_definitions: {
