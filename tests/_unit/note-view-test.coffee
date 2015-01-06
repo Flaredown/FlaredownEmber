@@ -30,5 +30,4 @@ test "Creates hashtag html from entered text", ->
   expect 1
 
   view.set "value", "some #hashtag here"
-  console.log view.get("hashtaggedContent")
   ok view.get("hashtaggedContent") is "some <a class='hashtag'>#hashtag</a> here"

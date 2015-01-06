@@ -128,7 +128,10 @@ controller = Ember.ObjectController.extend
 
       data =
         entry:
-          JSON.stringify({responses: cleanedResponses})
+          JSON.stringify({
+            responses: cleanedResponses
+            notes: @get("notes")
+          })
 
       $.ajax
         url: "#{config.apiNamespace}/entries/#{@get('date')}.json"

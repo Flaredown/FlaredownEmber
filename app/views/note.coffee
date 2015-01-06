@@ -24,6 +24,7 @@ view = Ember.View.extend
   attributeBindings: ["contenteditable", "spellcheck", "role", "aria-multiline"]
 
   placeholder: "<span class='placeholder'>Use <span class='hashtag'>#hashtags</span> to mark triggers on the graph</span>"
+  isPlaceheld: Ember.computed(-> @$().text() is "Use #hashtags to mark triggers on the graph").property()
 
   hashtaggedContent: Ember.computed(->
     replaced = @get("value").replace(@finishedTagRegex, "$1</a>$2")
@@ -52,7 +53,7 @@ view = Ember.View.extend
     sel.removeAllRanges()
     sel.addRange(range)
 
-  setPlaceholder: -> @$().html(@placeholder) if Ember.isEmpty(@get("value")) and not @get("isTyping")
+  setPlaceholder: -> @$().html(@placeholder) if Ember.isEmpty(@$().text())
   setContent: Ember.observer(->
     unless Ember.isEmpty(@get("value"))
 
@@ -75,19 +76,25 @@ view = Ember.View.extend
         currentTagNode  = 0
 
         nodes.forEach (node, index) ->
-          console.log match[1], node.textContent
           currentTagNode = index if match[1] is node.textContent
         @setStart(nodes[currentTagNode+1], 1)
+
+      @get("controller").set("notes", @$().text())
 
   ).observes("value")
 
   didInsertElement: ->
+    @set "value", @get("controller.notes")
     @setPlaceholder()
     @setContent()
+    Ember.run.next => @$().focus() unless @get("isPlaceheld")
 
-  focusOut:         ->
-  focusIn:          -> @$().text("") if @$().text() is "Use #hashtags to mark triggers on the graph"
-  keyDown:  (event) ->
+  willDestroyElement: ->
+    @get("controller").send("save")
+
+  # focusOut:         ->
+  focusIn:          -> @$().text("") if @get("isPlaceheld")
+  # keyDown:  (event) ->
   keyUp:    (event) -> @set "value", @$().html().replace(/(\r\n|\n|\r)/gm,"")
 
 `export default view`
