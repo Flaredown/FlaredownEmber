@@ -1,0 +1,12 @@
+li
+  if view.editing
+    form submit="save target=view"
+      = input class="treatment-name-input"      type="text" valueBinding="name"
+      = input class="treatment-quantity-input"  type="number" step="0.01" min="0" valueBinding="quantity"
+      = input class="treatment-unit-input"      type="text" valueBinding="unit"
+      = input class="save-treatment" type="submit"
+        |Save
+  else
+    .checkin-treatments-name= name
+    .checkin-treatments-edit click="edit target=view" |
+    .checkin-treatments-remove click="destroy id target=view" &times;

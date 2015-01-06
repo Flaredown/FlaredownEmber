@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 
 view = Ember.View.extend
-    
+
   didInsertElement: ->
     $(".dropdown-button").click ->
       $(".menu").toggleClass("show-menu")
@@ -9,8 +9,7 @@ view = Ember.View.extend
       #   debugger
       #   $(".dropdown-button").html($(@).html())
       #   $(".menu").removeClass("show-menu")
-    
+
   willDestroyElement: ->
-    
-    
+
 `export default view`

@@ -1,8 +1,6 @@
 .checkin-treatments
-	h4 Which treatments did you take today
+  h4 Which treatments did you take today
 
-	ul
-		li
-			.checkin-treatments-name Prednisone
-			.checkin-treatments-edit |
-			.checkin-treatments-remove &times;
+  ul: each treatment in treatments
+    with treatment
+      view "treatment"

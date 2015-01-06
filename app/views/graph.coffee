@@ -2,6 +2,17 @@
 
 view = Ember.View.extend
 
+  # Enable keyboard to manipulate graph, needing focus is bad though
+  # didInsertElement: ->
+  #   @$().attr({ tabindex: 1 })
+  #   @$().focus()
+  #
+  # keyDown: (e) ->
+  #   amount = if e.shiftKey then 10 else 1
+  #   switch e.keyCode
+  #     when 37 then @controller.send("shiftViewport", amount, "past")    # keyboard: left arrow
+  #     when 39 then @controller.send("shiftViewport", amount, "future")  # keyboard: right arrow
+
   ### CONFIG ###
   daysBinding:                    "controller.days"
   viewportDaysBinding:            "controller.viewportDays"
@@ -26,7 +37,7 @@ view = Ember.View.extend
       "#AED584"
     ]
 
-  ### DRAG FUNCTIONALITY ###
+  ### CONTROL FUNCTIONALITY ###
   draggable: 'true'
   attributeBindings: 'draggable'
 

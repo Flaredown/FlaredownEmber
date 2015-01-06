@@ -24,20 +24,8 @@ view = Ember.View.extend
   attributeBindings: ["contenteditable", "spellcheck", "role", "aria-multiline"]
 
   placeholder: "<span class='placeholder'>Use <span class='hashtag'>#hashtags</span> to mark triggers on the graph</span>"
+  isPlaceheld: Ember.computed(-> @$().text() is "Use #hashtags to mark triggers on the graph").property()
 
-  # processValue: -> @setContent()  if not @get("isUserTyping") and @get("value")
-
-  # contentObserver: Ember.observer(->
-  #     placeholder = '<span class="placeholder">Use <span class="hashtag">#hashtags</span> to mark triggers on the graph</span>'
-  #     content = if Ember.isEmpty(@get("value")) then placeholder else @get("value")
-  #
-  #     @$().html(Ember.Handlebars.Utils.escapeExpression(content))
-  #   ).observes("value")
-
-  # valueObserver: Ember.observer(->
-  #   Ember.run.once => @processValue
-  #   return
-  # ).observes("value", "isUserTyping")
   hashtaggedContent: Ember.computed(->
     replaced = @get("value").replace(@finishedTagRegex, "$1</a>$2")
     replaced = replaced.replace(@tagRegex, "<a class='hashtag'>$1</a>")
@@ -65,7 +53,7 @@ view = Ember.View.extend
     sel.removeAllRanges()
     sel.addRange(range)
 
-  setPlaceholder: -> @$().html(@placeholder) if Ember.isEmpty(@get("value")) and not @get("isTyping")
+  setPlaceholder: -> @$().html(@placeholder) if Ember.isEmpty(@$().text())
   setContent: Ember.observer(->
     unless Ember.isEmpty(@get("value"))
 
@@ -88,40 +76,29 @@ view = Ember.View.extend
         currentTagNode  = 0
 
         nodes.forEach (node, index) ->
-          console.log match[1], node.textContent
           currentTagNode = index if match[1] is node.textContent
         @setStart(nodes[currentTagNode+1], 1)
 
-      # else
-      #   el          = @$()[0]
-      #   extent      = 0
-      #   currentNode = 0
-
-        # until extent >= @get("caretOffset") or extent > 1000
-        #   extent = extent + @allTextNodes(@$()[0])[currentNode].length
-        #   currentNode++
-        #
-        # offset = if currentNode > 1 then extent-@get("caretOffset") else extent
-        #
-        # if currentNode > 1
-        #   node = sel.focusNode.childNodes[currentNode-1].childNodes[0]
-        #   range.setStart(node, offset+node.length)
-        # else
-        #
-        #   node = if el.textContent is sel.focusNode.textContent then el else sel.focusNode
-        #   node = if Em.isPresent(node.childNodes) then node.childNodes[0] else node
-        #   range.setStart(node, offset)
-
+      @get("controller").set("notes", @$().text())
 
   ).observes("value")
 
   didInsertElement: ->
+    @set "value", @get("controller.notes")
     @setPlaceholder()
     @setContent()
+    Ember.run.next => @$().focus() unless @get("isPlaceheld")
 
-  focusOut:         ->
-  focusIn:          -> @$().text("") if @$().text() is "Use #hashtags to mark triggers on the graph"
-  keyDown:  (event) ->
-  keyUp:    (event) -> @set "value", @$().html().replace(/(\r\n|\n|\r)/gm,"")
+  willDestroyElement: ->
+    @get("controller").send("save")
+
+  # focusOut:         ->
+  focusIn:          -> @$().text("") if @get("isPlaceheld")
+  # keyDown:  (event) ->
+  keyUp:    (event) ->
+    if event.keyCode is 27
+      @get("controller").set("modalOpen", false)  # keyboard: escape
+    else
+      @set "value", @$().html().replace(/(\r\n|\n|\r)/gm,"")
 
 `export default view`
