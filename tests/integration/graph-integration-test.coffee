@@ -52,23 +52,23 @@ test "Datums show up", ->
     ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
   )
 
-test "Datums disappear when shifted out of viewport", ->
-  expect 2
-
-  visit('/').then( ->
-    ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
-
-    triggerEvent ".shift-viewport-1-past", "click"
-    stop()
-
-    setTimeout(
-      ->
-        in_bounds = Ember.A(find("rect.symptom.present")).filter (d) -> parseInt($(@).attr("x")) < $("svg").width()
-        ok in_bounds.length is 32, "Has 32 datums when contracted 1 day"
-        start()
-    , 1000)
-
-  )
+# test "Datums disappear when shifted out of viewport", ->
+#   expect 2
+#
+#   visit('/').then( ->
+#     ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
+#
+#     triggerEvent ".shift-viewport-1-past", "click"
+#     stop()
+#
+#     setTimeout(
+#       ->
+#         in_bounds = Ember.A(find("rect.symptom.present")).filter (d) -> parseInt($(@).attr("x")) < $("svg").width()
+#         ok in_bounds.length is 32, "Has 32 datums when contracted 1 day"
+#         start()
+#     , 1000)
+#
+#   )
 
 test "Modal by clicking datum", =>
   expect 1

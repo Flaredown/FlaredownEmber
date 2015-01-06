@@ -1,35 +1,22 @@
+// Bourbon
 @import "bourbon";
 @import "neat-helpers";
 @import "neat";
 @import "bitters/grid-settings";
 @import "bitters/base";
 
-//Colors
-$background: #F2EEE8;
-$fd-primary: #73C1BA;
-$fd-secondary: #F5A623;
-
-//Breakpoints
-$tablet: 768px;
-$mobile: 320px;
-
-// Mixins
-@mixin standard-shadow {
-	box-shadow: 0 4px 0 #E1D8C8;
-}
-
-//External styles
-@import "progress_bar";
-@import "fonts";
-
-// Some Bourbon stuff
-@import "modal";
-@import "dropdown";
-@import "pagination";
-
 //Internal styles
+@import "fonts";
 @import "global";
 @import "graph";
 @import "graph-stats";
 @import "questioner";
+
+// Components
+@import "progress_bar";
+@import "modal";
+@import "dropdown";
+@import "pagination";
+@import "switch";
+@import "slide-menu";
 @import "circle";

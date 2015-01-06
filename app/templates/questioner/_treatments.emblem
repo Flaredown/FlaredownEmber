@@ -1,3 +1,8 @@
-h1 Treatments!
+.checkin-treatments
+	h4 Which treatments did you take today
 
-p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+	ul
+		li
+			.checkin-treatments-name Prednisone
+			.checkin-treatments-edit |
+			.checkin-treatments-remove &times;

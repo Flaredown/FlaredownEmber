@@ -1,14 +1,39 @@
+//Colors
+$background: #F2EEE8;
+$primary: #73C1BA;
+$secondary: #F5A623;
+$lightgrey: #ddd;
+
+//Breakpoints
+$tablet: 768px;
+$mobile: 320px;
+$container: 68em;
+
+// Mixins
+@mixin standard-shadow {
+  box-shadow: 0 4px 0 #E1D8C8;
+}
+@mixin wrap-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Defaults
 body {
   background: $background;
   font-family: $proxima-regular;
-  margin: 0;
+  margin: 0 10px;
+  @media (min-width: $container) {
+    margin: 0;
+  }
 }
 ul {
   list-style-type: none;
   padding: 0;
 }
 a {
-  color: $fd-primary;
+  color: $primary;
   &:hover {
     text-decoration: none;
   }
@@ -16,28 +41,59 @@ a {
 h1, h2, h3, h4 {
   font-weight: normal;
 }
+label {
+  font-weight: normal;
+}
 .container {
   @include outer-container;
 }
+
+// Navbar
 .navbar {
-  background: white;
-  padding: 10px 25px;
   @include outer-container;
   @include standard-shadow;
+  background: white;
+  padding: 10px;
   border-radius: 5px;
   box-sizing: border-box;
-  margin-top: 15px;
+  margin-top: 10px;
   .navbar-content {
     display: flex;
     align-items: center;
   }
-  .navbar-sections {
+  .navbar-left {
     @include span-columns(6);
+    display: flex;
+    align-items: center;
   }
-  .navbar-account {
+  .sliding-menu-button {
+    @media (min-width: $tablet) {
+      display: none;
+    }
+  }
+  .navbar-logo {
+    display: inline-block;
+    margin: 0 15px;
+  }
+  .navbar-sections {
+    display: none;
+    @media (min-width: $tablet) {
+      display: inline-block;
+      li {
+        display: inline-block;
+        margin-right: 15px;
+      }
+    }
+  }
+  .navbar-right {
     @include span-columns(6);
+    display: none;
+    @media (min-width: $tablet) {
+      display: inline-block;
+    }
   }
   .dropdown {
+    margin-right: 15px;
     text-align: right;
     .dropdown-container {
       text-align: center;

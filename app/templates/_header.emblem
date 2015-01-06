@@ -1,19 +1,25 @@
 nav.navbar role="navigation"
   .navbar-content
-    .navbar-sections
-      strong FD&nbsp;
+    .navbar-left
+
+      // Slide menu button
+      button.js-menu-trigger.sliding-menu-button type="button"
+        img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/menu-white.png" alt="menu"
+
+      // Logo
+      .navbar-logo FD
 
       if currentUser.loggedIn
-        link-to "graph" | Graph
+        // Sections
+        ul.navbar-sections
+          li: link-to "graph" | GRAPH
+          li: link-to "insights" | STATS
+          li: link-to "reports" | INVESTIGATIONS
 
-        span &nbsp;/&nbsp;
-        link-to "insights" | Insights
-
-        span &nbsp;/&nbsp;
-        link-to "reports" | Reports
-
+      
     if currentUser.loggedIn
-      .navbar-account
+      //Account
+      .navbar-right
         .dropdown
           .dropdown-button #{currentUser.email} &#9662;
           ul.menu

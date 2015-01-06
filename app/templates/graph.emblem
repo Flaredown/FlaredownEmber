@@ -4,52 +4,74 @@ if viewportDays.length
 else
   .container: h1.text-center No scores in date range
 
-h3 Hackypants Dev Controls
-br
-
-div style="width: 33%; float:left;"
-  h4 Catalogs
-  each cat in catalogs
-    a.available-catalog href="javascript:void(0);" click="changeCatalog cat"= cat
-div style="width: 33%; float:left;"
-  h4 Filterables
-  each filterable in catalogResponseNames
-    a.filterable-symptom href="javascript:void(0);" click="filter filterable"= filterable
-    |&nbsp;
-div style="width: 33%; float:left;"
-  h4 Filtered
-  each filtered in filteredResponseNames
-    a.filtered-symptom href="javascript:void(0);" click="filter filtered"= filtered
-    |&nbsp;
-
-.clearfix style="clear:both;"
-
-h3 Viewport: showing {{viewportSize}} days, starting at {{viewportStartNice}}
-
-div style="width: 33%; float:left"
-  strong expand viewport
-  ul
-    li: a.expand-viewport-1-past    href="javascript:void(0);" click="resizeViewport 1 'past'"   1 towards the past
-    li: a.expand-viewport-10-past   href="javascript:void(0);" click="resizeViewport 10 'past'"  10 towards the past
-    li: a.expand-viewport-10-future href="javascript:void(0);" click="resizeViewport 1 'future'" 1 towards the future
-    li: a.expand-viewport-1-future  href="javascript:void(0);" click="resizeViewport 10 'future'" 10 towards the future
-div style="width: 33%; float:left"
-  strong contract viewport
-  ul
-    li: a.contract-viewport-1-past    href="javascript:void(0);" click="resizeViewport -1 'past'"    1 towards the past
-    li: a.contract-viewport-10-past   href="javascript:void(0);" click="resizeViewport -10 'past'"   10 towards the past
-    li: a.contract-viewport-10-future href="javascript:void(0);" click="resizeViewport -1 'future'"  1 towards the future
-    li: a.contract-viewport-1-future  href="javascript:void(0);" click="resizeViewport -10 'future'" 10 towards the future
-
-div style="width: 33%; float:left"
-  strong shift viewport
-  ul
-    li: a.shift-viewport-1-past    href="javascript:void(0);" click="shiftViewport 1 'past'"  1 towards the past
-    li: a.shift-viewport-10-past   href="javascript:void(0);" click="shiftViewport 10 'past'" 10 towards the past
-    li: a.shift-viewport-10-future href="javascript:void(0);" click="shiftViewport 1 'future'"  1 towards the future
-    li: a.shift-viewport-1-future  href="javascript:void(0);" click="shiftViewport 10 'future'" 10 towards the future
-
-hr
-
 .container
+  .graph-controls
+    .graph-controls-header Showing <b>3 of 4 symptoms</b> and <b>all treatments</b> over <b>{{viewportSize}}</b> days
+    .graph-controls-body
+      hr
+      ul.graph-controls-time
+        p Date range
+        input.graph-controls-startDate type="date"
+        input.graphy-controls-endDate type="date"
+      ul.graph-controls-symptoms
+        each cat in catalogs
+          li.available-catalog click="changeCatalog cat"
+            .graph-controls-catalog-block
+            = cat
+        each filter in responseFilters
+          li click="filter filter.name" class={filter.enabled:filtered-symptom:filterable-symptom}
+            .graph-controls-symptom-block
+            = filter.name
+      ul.graph-controls-treatments
+        li.filterable-treatment
+          .graph-controls-treatment-dot
+          | Prednisone
+        li.filterable-treatment
+          .graph-controls-treatment-dot
+          | Methotrexate
+
   outlet
+
+/ div style="width: 33%; float:left;"
+/   h4 Catalogs
+/   each cat in catalogs
+/     a.available-catalog href="javascript:void(0);" click="changeCatalog cat"= cat
+/ div style="width: 33%; float:left;"
+/   h4 Filterables
+/   each filterable in catalogResponseNames
+/     a.filterable-symptom href="javascript:void(0);" click="filter filterable"= filterable
+/     |&nbsp;
+/ div style="width: 33%; float:left;"
+/   h4 Filtered
+/   each filtered in filteredResponseNames
+/     a.filtered-symptom href="javascript:void(0);" click="filter filtered"= filtered
+/     |&nbsp;
+
+/ .clearfix style="clear:both;"
+
+/ h3 Viewport: showing {{viewportSize}} days, starting at {{viewportStartNice}}
+
+/ div style="width: 33%; float:left"
+/   strong expand viewport
+/   ul
+/     li: a.expand-viewport-1-past    href="javascript:void(0);" click="resizeViewport 1 'past'"   1 towards the past
+/     li: a.expand-viewport-10-past   href="javascript:void(0);" click="resizeViewport 10 'past'"  10 towards the past
+/     li: a.expand-viewport-10-future href="javascript:void(0);" click="resizeViewport 1 'future'" 1 towards the future
+/     li: a.expand-viewport-1-future  href="javascript:void(0);" click="resizeViewport 10 'future'" 10 towards the future
+/ div style="width: 33%; float:left"
+/   strong contract viewport
+/   ul
+/     li: a.contract-viewport-1-past    href="javascript:void(0);" click="resizeViewport -1 'past'"    1 towards the past
+/     li: a.contract-viewport-10-past   href="javascript:void(0);" click="resizeViewport -10 'past'"   10 towards the past
+/     li: a.contract-viewport-10-future href="javascript:void(0);" click="resizeViewport -1 'future'"  1 towards the future
+/     li: a.contract-viewport-1-future  href="javascript:void(0);" click="resizeViewport -10 'future'" 10 towards the future
+
+/ div style="width: 33%; float:left"
+/   strong shift viewport
+/   ul
+/     li: a.shift-viewport-1-past    href="javascript:void(0);" click="shiftViewport 1 'past'"  1 towards the past
+/     li: a.shift-viewport-10-past   href="javascript:void(0);" click="shiftViewport 10 'past'" 10 towards the past
+/     li: a.shift-viewport-10-future href="javascript:void(0);" click="shiftViewport 1 'future'"  1 towards the future
+/     li: a.shift-viewport-1-future  href="javascript:void(0);" click="shiftViewport 10 'future'" 10 towards the future
+
+/ hr
