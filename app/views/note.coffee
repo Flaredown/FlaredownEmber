@@ -95,6 +95,10 @@ view = Ember.View.extend
   # focusOut:         ->
   focusIn:          -> @$().text("") if @get("isPlaceheld")
   # keyDown:  (event) ->
-  keyUp:    (event) -> @set "value", @$().html().replace(/(\r\n|\n|\r)/gm,"")
+  keyUp:    (event) ->
+    if event.keyCode is 27
+      @get("controller").set("modalOpen", false)  # keyboard: escape
+    else
+      @set "value", @$().html().replace(/(\r\n|\n|\r)/gm,"")
 
 `export default view`
