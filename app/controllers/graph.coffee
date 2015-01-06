@@ -87,38 +87,71 @@ controller = Ember.ObjectController.extend
   catalogs: Ember.computed( -> Object.keys(@get("rawData")).sort() ).property("rawData")
 
   ## Datums! ###
-  _processedDatumDays: []
-  _processedDatums: []
+  serverProcessingDays: [] # days marked for processing on the API side
+
+  _processedDatumDays:  [] # internal for use in setting up #datums when new data comes in
+  _processedDatums:     [] # internal for use in setting up #datums when new data comes in
   datums: Ember.computed ->
     if @get("rawDataResponses") and @get("days")
 
+      # Remove any server processing days from the already processed days so they are reprocessed below
+      if @get("serverProcessingDays.length")
+        @get("_processedDatumDays").removeObjects( @get("serverProcessingDays") )
+        @set("_processedDatums", @get("_processedDatums").reject( (datum) => @get("serverProcessingDays").contains(datum.get("day")) ))
+
+      # Only do the work for days not already loaded in
       unprocessed_days = @get("days").reject (day) => @get("_processedDatumDays").contains(day)
 
+      # For all days in loaded range
       unprocessed_days.forEach (day) =>
         @get("_processedDatumDays").pushObject day
         responsesForDay = @get("rawDataResponses").filterBy("x", day).sortBy("order")
 
         @get("catalogs").forEach (catalog) =>
           responsesForDayByCatalog = responsesForDay.filterBy("catalog", catalog)
-          if responsesForDayByCatalog.length
+
+          # if there is data for that day and catalog then put it in
+          if responsesForDayByCatalog.length and not @get("serverProcessingDays").contains(day)
             responsesForDayByCatalog.forEach (response) =>
 
               if response.points isnt 0
                 [1..response.points].forEach (j) =>
                   y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                  @get("_processedDatums").pushObject symptomDatum.create content: {day: response.x, catalog: response.catalog, order: y_order, name: response.name, missing: false, type: "symptom" }
+                  @get("_processedDatums").pushObject symptomDatum.create content:
+                    day:      response.x
+                    catalog:  response.catalog
+                    order:    y_order
+                    name:     response.name
+                    missing:  false
+                    type:     "symptom"
 
-          else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
-            @get("_processedDatums").pushObject symptomDatum.create content: {day: day, catalog: catalog, order: 1.1, type: "symptom", missing: true }
+          else
+            if @get("serverProcessingDays").contains(day)
+
+              [1..3].forEach (i) =>
+                @get("_processedDatums").pushObject symptomDatum.create content:
+                  day:      day
+                  catalog:  catalog
+                  order:    i
+                  type:     "processing"
+                  missing:  false
+
+            else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
+              @get("_processedDatums").pushObject symptomDatum.create content:
+                day:      day
+                catalog:  catalog
+                order:    1.1
+                type:     "symptom"
+                missing:  true
 
     @get("_processedDatums")
-  .property("rawDataResponses")
+  .property("rawDataResponses", "serverProcessingDays.@each")
 
   ### Filtering ###
-  viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums", "viewportDays")
+  viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums.@each", "viewportDays")
 
   ### catalogDatums -> unfilteredDatums -> unfilteredDatumsByDay -> unfilteredDatumsByDayInViewport ###
-  catalogDatums: Ember.computed(-> @get("datums").filterBy("catalog", @get("catalog")) ).property("datums", "catalog")
+  catalogDatums: Ember.computed(-> @get("datums").filterBy("catalog", @get("catalog")) ).property("datums.@each", "catalog")
   unfilteredDatums: Ember.computed(->
     if Ember.isEmpty(@get("filteredResponseNames")) then return @get("catalogDatums")
     @get("catalogDatums").reject (response) => @get("filteredResponseNames").contains response.get("name")
@@ -148,19 +181,20 @@ controller = Ember.ObjectController.extend
 
       if days_in_past_buffer < @get("bufferRadius")
         new_loaded_start = moment(@get("loadedStartDate")).subtract(@get("bufferRadius"),"days")
-        ajax(
-          url: "#{config.apiNamespace}/graph"
-          method: "GET"
-          data:
-            start_date: new_loaded_start.format("MMM-DD-YYYY")
-            end_date: @get("viewportStart").format("MMM-DD-YYYY")
-        ).then(
-          (response) =>
-            @set "loadedStartDate",new_loaded_start
-            @loadMore(response)
-
-          (response) => console.log "?!?! error on getting graph"
-        )
+        @loadMore(new_loaded_start, @get("viewportStart"))
+        # ajax(
+        #   url: "#{config.apiNamespace}/graph"
+        #   method: "GET"
+        #   data:
+        #     start_date: new_loaded_start.format("MMM-DD-YYYY")
+        #     end_date: @get("viewportStart").format("MMM-DD-YYYY")
+        # ).then(
+        #   (response) =>
+        #     @set "loadedStartDate",new_loaded_start
+        #     @loadMore(response)
+        #
+        #   (response) => console.log "?!?! error on getting graph"
+        # )
 
       # TODO deal with future loading later
       # available_future_days = Math.abs(@get("loadedEndDate").diff(moment.utc().startOf("day"),"days"))
@@ -185,7 +219,22 @@ controller = Ember.ObjectController.extend
       #   )
   .observes("loadedStartDate", "loadedEndDate", "viewportStart")
 
-  loadMore: (raw) ->
+  loadMore: (start,end) ->
+
+    ajax(
+      url: "#{config.apiNamespace}/graph"
+      method: "GET"
+      data:
+        start_date: start.format("MMM-DD-YYYY")
+        end_date: end.format("MMM-DD-YYYY")
+    ).then(
+      (response) =>
+        @set("loadedStartDate",start) if start < @get("loadedStartDate")
+        @loadMoreRaw(response)
+
+      (response) => console.log "?!?! error on getting graph"
+    )
+  loadMoreRaw: (raw) ->
     newRaw = {}
     Object.keys(raw).forEach (key) =>
       newRaw[key] = []
@@ -194,6 +243,14 @@ controller = Ember.ObjectController.extend
     @set "rawData", newRaw
 
   actions:
+    dayProcessing: (day) ->
+      @get("serverProcessingDays").addObject(moment(day).utc().startOf("day").unix())
+
+    dayProcessed: (day) ->
+      date = moment(day).utc().startOf("day")
+      @get("serverProcessingDays").removeObject(date.unix())
+      loadMore(date, date)
+
     resizeViewport: (days, direction) ->
       if typeof(direction) is "undefined" # default direction is both ("pinch")
         @changeViewport (days*2), moment(@get("viewportStart")).subtract(days,"days")

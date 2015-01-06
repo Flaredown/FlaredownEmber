@@ -4,7 +4,6 @@
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
-
 `import graphFixture from "../fixtures/graph-fixture"`
 
 App         = null
@@ -27,6 +26,7 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "model",           {}
         controller.set "rawData",         fixture
         controller.set "catalog",         "hbi"
+        controller.set "catalog",         "hbi"
         controller.set "viewportSize",    6
         controller.set "viewportMinSize", 6
         controller.set "viewportStart",   moment(startDay).subtract(1,"day")
@@ -34,11 +34,17 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment().utc().startOf("day")
 
+        # Not reset properly by App.destroy
+        controller.set "_processedDatumDays",   []
+        controller.set "_processedDatums",      []
+        controller.set "serverProcessingDays",  []
+
     teardown: ->
       Ember.run(App, App.destroy);
       $.mockjax.clear();
   }
 )
+
 
 test "#rawDataResponses is a flattened array of responses from rawData", ->
   expect 2
@@ -94,3 +100,11 @@ test "#unfilteredDatumsByDay is an array of arrays containing datums for each da
   ok Ember.typeOf(controller.get("unfilteredDatumsByDay")) is "array",               "is an array"
   ok Ember.typeOf(controller.get("unfilteredDatumsByDay.firstObject")) is "array",   "made up of arrays"
   ok controller.get("unfilteredDatumsByDay.firstObject.length") is (2+1+1+2+2),      "First x coordinate has 5 responses -> 8 datum points"
+
+### PROCESSING ###
+test "#dayProcessing replaces datums for a day with processing representation", ->
+  expect 2
+
+  controller.get("serverProcessingDays").addObject(controller.get("days.lastObject"))
+  ok controller.get("unfilteredDatumsByDay.lastObject.length") is 3,                           "3 datums in the processing representation"
+  ok controller.get("unfilteredDatumsByDay.lastObject.firstObject.type") is "processing",      "is processing type"

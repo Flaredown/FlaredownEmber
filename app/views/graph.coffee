@@ -90,8 +90,8 @@ view = Ember.View.extend
   setupEndPositions: Ember.observer ->
     Ember.run.once =>
       @get("datumsByDay").forEach (day) =>
-        # TODO add in other types of datums
-        day.filterBy("type", "symptom").sortBy("order").forEach (datum,i) =>
+        # day.filter( (datum) -> ["symptom", "processing"].contains(datum.get("type"))).sortBy("order").forEach (datum,i) =>
+        day.sortBy("order").forEach (datum,i) =>
           if @get("x")(1) and @get("y")(1)
             datum.set("end_x", @get("x")(datum.get("day")))
 
@@ -230,6 +230,8 @@ view = Ember.View.extend
   update: ->
     scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
     @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
+
+
 
     scorePip
       .enter()

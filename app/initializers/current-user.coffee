@@ -27,7 +27,7 @@ initializer = {
         if currentUserController.get("loggedIn")
 
           # Ask the API for the locale for the current user
-          Ember.$.ajax("#{config.apiNamespace}/locales/#{currentUserController.get("locale")}").then(
+          ajax("#{config.apiNamespace}/locales/#{currentUserController.get("locale")}").then(
             (locale) =>
               Ember.I18n.translations = locale
 
