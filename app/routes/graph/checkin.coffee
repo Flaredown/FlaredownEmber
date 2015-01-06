@@ -21,6 +21,7 @@ route = AuthRoute.extend
           date: date
       ).then(
         (response) =>
+          console.log response
           @store.pushPayload "entry", response
           @store.find "entry", response.entry.id
         ,

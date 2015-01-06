@@ -103,6 +103,10 @@ controller = Ember.ObjectController.extend
   sectionResponses: Ember.computed( -> @get("responsesData").filterBy("catalog", @get("currentCategory")) ).property("currentCategory", "responsesData")
 
   actions:
+    treatmentEdited: ->
+      @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
+      @send("save")
+
     setResponse: (question_name, value) ->
       response = @get("sectionResponses").findBy("name",question_name)
 
@@ -131,6 +135,7 @@ controller = Ember.ObjectController.extend
           JSON.stringify({
             responses: cleanedResponses
             notes: @get("notes")
+            treatments: @get("treatments").map (treatment) -> treatment.getProperties("name", "quantity", "unit")
           })
 
       $.ajax

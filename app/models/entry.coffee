@@ -9,6 +9,7 @@ model = DS.Model.extend
   catalogs:             DS.attr()
   catalog_definitions:  DS.attr()
   notes:                DS.attr("string")
+  treatments:           DS.hasMany("treatment")
 
   moment:     Ember.computed(-> moment.utc(@get("date")) ).property("date")
   unixDate:   Ember.computed(-> @get("moment").unix() ).property("moment")
