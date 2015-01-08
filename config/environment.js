@@ -14,7 +14,6 @@ module.exports = function(environment) {
       app_id: "65526"
     },
 
-
     contentSecurityPolicy: {
       'default-src': "'self'",
       'script-src': "'self' 'unsafe-inline' 'unsafe-eval' use.typekit.net",
@@ -58,8 +57,15 @@ module.exports = function(environment) {
     ENV.APP.rootElement = '#ember-testing';
   }
 
-  if (environment === 'production') {
+  if (environment === 'staging') {
+    ENV.pusher.key = '40edeaadb34fd870d29e';
+    ENV.pusher.app_id = '102551';
+  }
 
+  if (environment === 'production') {
+    // TODO changeme
+    ENV.pusher.key = '40edeaadb34fd870d29e';
+    ENV.pusher.app_id = '102551';
   }
 
   return ENV;
