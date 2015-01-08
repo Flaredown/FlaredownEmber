@@ -60,7 +60,6 @@ controller = Ember.ObjectController.extend
     _data.sortBy("x")
   ).property("rawData")
 
-
   responseNames:                Ember.computed( -> @get("rawDataResponses").mapBy("name").uniq() ).property("rawDataResponses")
   catalogResponseNames:         Ember.computed( -> @get("rawDataResponses").filterBy("catalog", @get("catalog")).mapBy("name").uniq() ).property("rawDataResponses", "catalog")
   filteredCatalogResponseNames: Ember.computed( -> @get("catalogResponseNames").filter( (name) => @get("filteredResponseNames").contains(name) ).compact() ).property("catalogResponseNames", "filteredResponseNames.@each")
@@ -92,14 +91,16 @@ controller = Ember.ObjectController.extend
 
   _processedDatumDays:  [] # internal for use in setting up #datums when new data comes in
   _processedDatums:     [] # internal for use in setting up #datums when new data comes in
+  clearDatumsForDays: (days) ->
+    @get("_processedDatumDays").removeObjects( days )
+    @set("_processedDatums", @get("_processedDatums").reject( (datum) => days.contains(datum.get("day")) ))
+
   datums: Ember.computed ->
-    console.log @get("rawDataResponses").length
     if @get("rawDataResponses") and @get("days")
 
       # Remove any server processing days from the already processed days so they are reprocessed below
       if @get("serverProcessingDays.length")
-        @get("_processedDatumDays").removeObjects( @get("serverProcessingDays") )
-        @set("_processedDatums", @get("_processedDatums").reject( (datum) => @get("serverProcessingDays").contains(datum.get("day")) ))
+        @clearDatumsForDays(@get("serverProcessingDays"))
 
       # Only do the work for days not already loaded in
       unprocessed_days = @get("days").reject (day) => @get("_processedDatumDays").contains(day)
@@ -115,11 +116,7 @@ controller = Ember.ObjectController.extend
           # if there is data for that day and catalog then put it in
           if responsesForDayByCatalog.length and not @get("serverProcessingDays").contains(day)
 
-            # clear out old datums in case rawData was updated
-            Ember.run => @get("_processedDatums").removeObjects @get("_processedDatums").filterBy("catalog", catalog).filterBy("day", day)
-
             responsesForDayByCatalog.forEach (response) =>
-
               if response.points isnt 0
                 [1..response.points].forEach (j) =>
                   y_order = response.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
@@ -151,7 +148,7 @@ controller = Ember.ObjectController.extend
                 missing:  true
 
     @get("_processedDatums")
-  .property("rawDataResponses", "serverProcessingDays.@each")
+  .property("rawDataResponses.@each", "serverProcessingDays.@each")
 
   ### Filtering ###
   viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums.@each", "viewportDays")
@@ -241,18 +238,21 @@ controller = Ember.ObjectController.extend
       (response) => console.log "?!?! error on getting graph"
     )
   loadMoreRaw: (raw) ->
-    newRaw = {}
+    newRaw  = @get("rawData")
+    days    = []
+
     Object.keys(raw).forEach (catalog) =>
-      newRaw[catalog] = []
+      days.addObjects raw[catalog].mapBy("x").uniq()
+      newRaw[catalog] = newRaw[catalog].reject (response) -> days.contains(response.x) # get rid of existing days and use newer versions
 
-      newRaw[catalog].addObjects @get("rawData.#{catalog}")
-      raw[catalog].forEach (datapoint) =>
-        datapoint["catalog"]  = catalog
-        datapoint["id"]       = "#{catalog}_#{datapoint.x}_#{datapoint.name}"
+      raw[catalog].forEach (raw_response) =>
+        newRaw[catalog].pushObject raw_response
 
-        newRaw[catalog].addObject raw[catalog] unless @get("rawData.#{catalog}").findBy("id", datapoint.id)
+    @clearDatumsForDays(days)
+    Ember.run.next =>
+      @set "rawData", newRaw
+      @propertyDidChange("rawData")
 
-    @set "rawData", newRaw
 
   actions:
     dayProcessing: (day) -> @get("serverProcessingDays").addObject(moment(day).utc().startOf("day").unix())
