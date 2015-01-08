@@ -12,7 +12,6 @@ initializer = {
 
     # Register the `user:current` namespace
     container.register 'current-user:current', currentUserController, { instantiate: false, singleton: true }
-    Ember.debug("Current User Inject: #{currentUserController}")
 
     # Inject the namespace into controllers and routes
     container.injection('route', 'currentUser', 'current-user:current')
@@ -27,7 +26,7 @@ initializer = {
         if currentUserController.get("loggedIn")
 
           # Ask the API for the locale for the current user
-          Ember.$.ajax("#{config.apiNamespace}/locales/#{currentUserController.get("locale")}").then(
+          ajax("#{config.apiNamespace}/locales/#{currentUserController.get("locale")}").then(
             (locale) =>
               Ember.I18n.translations = locale
 

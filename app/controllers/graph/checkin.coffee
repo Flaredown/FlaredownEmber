@@ -1,8 +1,11 @@
 `import Ember from 'ember'`
 `import config from '../../config/environment'`
+`import ajax from 'ic-ajax'`
 
 controller = Ember.ObjectController.extend
   modalOpen: true
+
+  needs: ["graph"]
 
   # Watch some user actions
   modalChanged: Ember.observer ->
@@ -138,13 +141,13 @@ controller = Ember.ObjectController.extend
             treatments: @get("treatments").map (treatment) -> treatment.getProperties("name", "quantity", "unit")
           })
 
-      $.ajax
+      ajax(
         url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
         type: "PUT"
         data: data
-        success: (response) ->
-          null
-        error: (response) ->
-          console.log "response error !!!"
+      ).then(
+        ((response) -> @get("controllers.graph").send("dayProcessing", @get("date"))).bind(@)
+        (response) -> console.log "error!!"
+      )
 
 `export default controller`

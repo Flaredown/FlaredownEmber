@@ -9,12 +9,16 @@ module.exports = function(environment) {
     apiVersion:      1,
     apiNamespace:    '/v1',
     afterLoginRoute: 'graph',
+    pusher: {
+      key: "12bdfdebc5307b2d8918",
+      app_id: "65526"
+    },
 
     contentSecurityPolicy: {
-      'default-src': "'none'",
+      'default-src': "'self'",
       'script-src': "'self' 'unsafe-inline' 'unsafe-eval' use.typekit.net",
       'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
-      'connect-src': "'self'",
+      'connect-src': "`self` ws://*.pusherapp.com http://*.pusher.com",
       'img-src': "'none' p.typekit.net",
       'style-src': "'self' 'unsafe-inline' use.typekit.net http://fonts.googleapis.com",
       'frame-src': ""
@@ -53,8 +57,15 @@ module.exports = function(environment) {
     ENV.APP.rootElement = '#ember-testing';
   }
 
-  if (environment === 'production') {
+  if (environment === 'staging') {
+    ENV.pusher.key = '40edeaadb34fd870d29e';
+    ENV.pusher.app_id = '102551';
+  }
 
+  if (environment === 'production') {
+    // TODO changeme
+    ENV.pusher.key = '40edeaadb34fd870d29e';
+    ENV.pusher.app_id = '102551';
   }
 
   return ENV;

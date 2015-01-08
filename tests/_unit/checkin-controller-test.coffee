@@ -11,6 +11,7 @@ controller = null
 
 moduleFor("controller:graph/checkin", "Check-In Controller",
   {
+    needs: ["controller:graph"]
     setup: ->
       App         = startApp()
       store       = App.__container__.lookup("store:main")

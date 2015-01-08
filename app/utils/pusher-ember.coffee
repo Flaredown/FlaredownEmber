@@ -1,7 +1,8 @@
 `import Ember from 'ember'`
+`import config from '../config/environment'`
 
 pusher = Ember.Object.extend(
-  key: window.bootstrap_pusher_key
+  key: config.pusher.key
   init: ->
     _this = this
     @service = new Pusher(@get("key"))
@@ -20,7 +21,7 @@ pusher = Ember.Object.extend(
     @addSocketIdToXHR()
     return
 
-  
+
   # add X-Pusher-Socket header so we can exclude the sender from their own actions
   # http://pusher.com/docs/server_api_guide/server_excluding_recipients
   addSocketIdToXHR: ->
@@ -39,7 +40,7 @@ pusher = Ember.Object.extend(
   handleEvent: (eventName, data) ->
     router = undefined
     unhandled = undefined
-    
+
     # ignore pusher internal events
     return  if eventName.match(/^pusher:/)
     router = @get("container").lookup("router:main")
