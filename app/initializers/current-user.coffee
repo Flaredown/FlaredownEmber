@@ -12,7 +12,6 @@ initializer = {
 
     # Register the `user:current` namespace
     container.register 'current-user:current', currentUserController, { instantiate: false, singleton: true }
-    Ember.debug("Current User Inject: #{currentUserController}")
 
     # Inject the namespace into controllers and routes
     container.injection('route', 'currentUser', 'current-user:current')

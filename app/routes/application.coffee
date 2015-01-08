@@ -1,9 +1,10 @@
 `import Ember from 'ember'`
 `import ajax from 'ic-ajax'`
 
-route = Ember.Route.extend()
+route = Ember.Route.extend
 
-  # actions:
+  actions:
+    entry_processed: (data) -> @controllerFor("graph").send("dayProcessed", data.entry_date)
   #   error: (reason, transition) ->
   #     if (reason.status is 401)
   #       @redirectToLogin(transition)

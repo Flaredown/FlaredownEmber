@@ -247,9 +247,14 @@ controller = Ember.ObjectController.extend
       @get("serverProcessingDays").addObject(moment(day).utc().startOf("day").unix())
 
     dayProcessed: (day) ->
-      date = moment(day).utc().startOf("day")
-      @get("serverProcessingDays").removeObject(date.unix())
-      loadMore(date, date)
+      date  = moment(day).utc().startOf("day")
+      day   = date.unix()
+      if @get("serverProcessingDays").contains(day)
+        @get("_processedDatumDays").removeObject(day)
+        @set("_processedDatums", @get("_processedDatums").reject( (datum) -> datum.get("day") is day ))
+        @get("serverProcessingDays").removeObject(day)
+
+        Ember.run.next => @loadMore(date, date)
 
     resizeViewport: (days, direction) ->
       if typeof(direction) is "undefined" # default direction is both ("pinch")

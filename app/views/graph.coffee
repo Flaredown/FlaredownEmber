@@ -231,8 +231,6 @@ view = Ember.View.extend
     scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
     @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
 
-
-
     scorePip
       .enter()
         .append("rect")
