@@ -53,7 +53,8 @@ controller = Ember.ObjectController.extend
     # Push together all the catalog datapoints keeping track of catalog
     @get("catalogs").forEach (catalog) =>
       @get("rawData.#{catalog}").forEach (datapoint) ->
-        datapoint["catalog"] = catalog
+        datapoint["catalog"]  = catalog
+        datapoint["id"]       = "#{catalog}_#{datapoint.x}_#{datapoint.name}"
         _data.pushObject datapoint
 
     _data.sortBy("x")
@@ -92,6 +93,7 @@ controller = Ember.ObjectController.extend
   _processedDatumDays:  [] # internal for use in setting up #datums when new data comes in
   _processedDatums:     [] # internal for use in setting up #datums when new data comes in
   datums: Ember.computed ->
+    console.log @get("rawDataResponses").length
     if @get("rawDataResponses") and @get("days")
 
       # Remove any server processing days from the already processed days so they are reprocessed below
@@ -112,6 +114,10 @@ controller = Ember.ObjectController.extend
 
           # if there is data for that day and catalog then put it in
           if responsesForDayByCatalog.length and not @get("serverProcessingDays").contains(day)
+
+            # clear out old datums in case rawData was updated
+            Ember.run => @get("_processedDatums").removeObjects @get("_processedDatums").filterBy("catalog", catalog).filterBy("day", day)
+
             responsesForDayByCatalog.forEach (response) =>
 
               if response.points isnt 0
@@ -236,25 +242,28 @@ controller = Ember.ObjectController.extend
     )
   loadMoreRaw: (raw) ->
     newRaw = {}
-    Object.keys(raw).forEach (key) =>
-      newRaw[key] = []
-      newRaw[key].pushObjects raw[key]
-      newRaw[key].pushObjects @get("rawData.#{key}")
+    Object.keys(raw).forEach (catalog) =>
+      newRaw[catalog] = []
+
+      newRaw[catalog].addObjects @get("rawData.#{catalog}")
+      raw[catalog].forEach (datapoint) =>
+        datapoint["catalog"]  = catalog
+        datapoint["id"]       = "#{catalog}_#{datapoint.x}_#{datapoint.name}"
+
+        newRaw[catalog].addObject raw[catalog] unless @get("rawData.#{catalog}").findBy("id", datapoint.id)
+
     @set "rawData", newRaw
 
   actions:
-    dayProcessing: (day) ->
-      @get("serverProcessingDays").addObject(moment(day).utc().startOf("day").unix())
-
+    dayProcessing: (day) -> @get("serverProcessingDays").addObject(moment(day).utc().startOf("day").unix())
     dayProcessed: (day) ->
       date  = moment(day).utc().startOf("day")
       day   = date.unix()
       if @get("serverProcessingDays").contains(day)
         @get("_processedDatumDays").removeObject(day)
-        @set("_processedDatums", @get("_processedDatums").reject( (datum) -> datum.get("day") is day ))
         @get("serverProcessingDays").removeObject(day)
 
-        Ember.run.next => @loadMore(date, date)
+      Ember.run.next => @loadMore(date, date)
 
     resizeViewport: (days, direction) ->
       if typeof(direction) is "undefined" # default direction is both ("pinch")

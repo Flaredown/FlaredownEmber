@@ -40,6 +40,7 @@ view = Ember.View.extend
   ### CONTROL FUNCTIONALITY ###
   draggable: 'true'
   attributeBindings: 'draggable'
+  graphShifted: false
 
   touchStart: (event) -> @set "dragStartX", event.originalEvent.touches[0].pageX
   touchMove:  (event) -> @dragGraph event.originalEvent.touches[0].pageX
@@ -75,12 +76,14 @@ view = Ember.View.extend
       @controller.send("shiftViewport", days, direction)
 
     @set "dragStartX", false
+    @set "graphShifted", true
 
   shift: Ember.observer ->
     @get("svg").attr("transform", "translate(" + @get("shiftGraphPx") + "," + @get("margin").top + ")")
   .observes("shiftGraphPx")
 
   resetGraphShift: ->
+    @set "graphShifted", false
     @get("svg").attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")")
 
   ### Watch underlying datums ###
@@ -108,7 +111,6 @@ view = Ember.View.extend
   renderGraph: ->
     if @get("isSetup")
       @update()
-      @positionByDay() unless @get("dragStartX") # == is dragging
     else
       @setup()
 
@@ -176,6 +178,30 @@ view = Ember.View.extend
           .datum( (d) =>
             d.set "x", @get("x")(d.get("end_x"))
             d.set "y", @get("y")(d.get("end_y"))
+            d.set "placed", true
+          )
+          .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
+          .attr
+            class: (d) -> d.get("classes")
+            ry: 3
+            rx: 3
+            y: (d) -> d.get("end_y")
+            x: (d) -> d.get("end_x")
+            fill: (d) => @get("colors")(d.get("name"))
+
+    @update()
+
+  update: ->
+    scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
+    @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
+
+    scorePip
+      .enter()
+        .append("rect")
+          .datum( (d) =>
+            d.set "x", @get("x")(d.get("end_x"))
+            d.set "y", @get("y")(d.get("end_y"))
+            d.set "placed", false
           )
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
           .attr
@@ -183,18 +209,11 @@ view = Ember.View.extend
             ry: 3
             rx: 3
             x: (d) -> d.get("end_x")
-            y: (d) => @get("y")(@get("symptomsMax")) # way above the graph
+            y: (d) -> d.get("end_y")
+            width:  @get("symptomDatumDimensions").width
+            height: @get("symptomDatumDimensions").height
             fill: (d) => @get("colors")(d.get("name"))
 
-    @positionByDay()
-
-  positionByDay: () ->
-    scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
-
-    # TODO determine wether graph is shifted
-    # onyl transition if graph is not shifted, otherwise skip transition
-    # graphShifted =
-    @resetGraphShift()
 
     scorePip
       .attr
@@ -203,6 +222,19 @@ view = Ember.View.extend
         opacity: 100
         y: (d) -> d.get("end_y")
         x: (d) -> d.get("end_x")
+
+    unless @get("graphShifted") # don't do animations if the graph has shifted
+      scorePip
+        .filter (d,i) -> not d.get("placed")
+        .attr
+          y: -5000
+        .transition()
+          .ease("quad")
+          .duration (d) => if d.get("placed") then 100 else @get("dropInDuration")
+          .delay (d,i) => if d.get("placed") then i*10 else i*@get("perDatumDelay")
+          .each "end", (d) -> d.set("placed", true)
+          .attr
+            y: (d) -> d.get("end_y")
 
     ### CPU INTENSIVE ###
     # @get("days").forEach (day) =>
@@ -226,30 +258,6 @@ view = Ember.View.extend
     #       x: (d) -> d.get("end_x")
 
 
-
-  update: ->
-    scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
-    @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
-
-    scorePip
-      .enter()
-        .append("rect")
-          .datum( (d) =>
-            d.set "x", @get("x")(d.get("end_x"))
-            d.set "y", @get("y")(d.get("end_y"))
-            d.set "placed", true
-          )
-          .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
-          .attr
-            class: (d) -> d.get("classes")
-            ry: 3
-            rx: 3
-            x: (d) -> d.get("end_x")
-            y: (d) -> d.get("end_y")
-            width:  @get("symptomDatumDimensions").width
-            height: @get("symptomDatumDimensions").height
-            fill: (d) => @get("colors")(d.get("name"))
-
     scorePip
       .exit()
       # .transition()
@@ -264,5 +272,7 @@ view = Ember.View.extend
 
 
       # .each "end", (d) -> d.set("placed", false)
+
+    @resetGraphShift()
 
 `export default view`
