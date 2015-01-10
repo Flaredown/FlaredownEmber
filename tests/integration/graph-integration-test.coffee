@@ -5,10 +5,12 @@
 
 
 `import graphFixture from "../fixtures/graph-fixture"`
+`import singleGraphDayFixture from "../fixtures/single-graph-day-fixture"`
 `import entryFixture from "../fixtures/entry-fixture"`
 `import localeFixture from "../fixtures/locale-fixture"`
 
-App = null
+App   = null
+today = moment().utc().startOf("day").format("MMM-DD-YYYY")
 
 module('Graph Integration', {
   setup: ->
@@ -28,6 +30,11 @@ module('Graph Integration', {
       responseText: localeFixture
 
     Ember.$.mockjax
+      url: "#{config.apiNamespace}/entries/*",
+      type: 'PUT'
+      responseText: {}
+
+    Ember.$.mockjax
       url: "#{config.apiNamespace}/graph",
       type: 'GET'
       # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
@@ -37,7 +44,7 @@ module('Graph Integration', {
       url: "#{config.apiNamespace}/entries",
       type: 'POST'
       # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
-      responseText: entryFixture()
+      responseText: entryFixture(today)
 
     App = startApp()
   teardown: ->
@@ -106,4 +113,35 @@ test "Filtering removes matching datums", ->
 
       andThen ->
         ok find("rect.symptom.present").length is 39, "Back to 39"
+  )
+
+test "Updating entry goes to loading state and updates entry on graph", ->
+  expect 3
+
+  controller = App.__container__.lookup("controller:graph")
+
+  visit('/').then( ->
+    ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
+
+    andThen ->
+      $("rect.symptom.present:eq(0)").simulate("click")
+      Ember.run.next ->
+        triggerEvent ".checkin-next", "click"
+        Ember.run.next ->
+          triggerEvent ".checkin-response-select li:eq(0)", "click" # should be first day (today)
+          triggerEvent ".modal-close", "click"
+          andThen ->
+            ok find("rect.symptom.processing").length is 3, "Has loading datums"
+
+            $.mockjax.clear();
+            # Use the single day graph response when loading new "processed" day at the end of test
+            Ember.$.mockjax
+              url: "#{config.apiNamespace}/graph",
+              type: 'GET'
+              # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
+              responseText: singleGraphDayFixture()
+
+            controller.send("dayProcessed", today)
+            Ember.run.later (-> ok find("rect.symptom.present").length is 39-2, "Has 39 (original) - 2 (new day difference) datums for HBI fixture"), 100
+
   )

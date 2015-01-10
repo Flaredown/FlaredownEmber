@@ -13,17 +13,18 @@ controller = Ember.ObjectController.extend
   ### PUSHER ###
   pusherChannels: []
   modelDidLoad: (->
-    @get("pusherChannels").addArrayObserver(@,
-      didChange: (channels, offset, removeAmt, addAmt) =>
-        if addAmt
-          range = [offset..(addAmt-1+offset)]
-          channels.objectsAt(range).forEach (channel) => @get("pusher").subscribe(channel)
+    if @get("pusher.enabled")
+      @get("pusherChannels").addArrayObserver(@,
+        didChange: (channels, offset, removeAmt, addAmt) =>
+          if addAmt
+            range = [offset..(addAmt-1+offset)]
+            channels.objectsAt(range).forEach (channel) => @get("pusher").subscribe(channel)
 
-      willChange: (channels, offset, removeAmt, addAmt) =>
-        # if removeAmt
-        #   range = [offset..(removeAmt-1+offset)]
-        #   channels.objectsAt(range).forEach (channel) =>
-        #     @get("pusher").unsubscribe(channel)
+        willChange: (channels, offset, removeAmt, addAmt) =>
+          # if removeAmt
+          #   range = [offset..(removeAmt-1+offset)]
+          #   channels.objectsAt(range).forEach (channel) =>
+          #     @get("pusher").unsubscribe(channel)
 
     )
 

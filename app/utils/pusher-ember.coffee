@@ -3,18 +3,19 @@
 
 pusher = Ember.Object.extend(
   key: config.pusher.key
+  enabled : true
   init: ->
-    _this = this
-    @service = new Pusher(@get("key"))
-    @service.connection.bind "connected", ->
-      _this.connected()
-      return
+    if @get("key")
+      @service = new Pusher(@get("key"))
+      @service.connection.bind "connected", =>
+        @connected()
+        return
 
-    @service.bind_all (eventName, data) ->
-      _this.handleEvent eventName, data
-      return
-
-    return
+      @service.bind_all (eventName, data) =>
+        @handleEvent eventName, data
+        return
+    else
+      @set "enabled", false
 
   connected: ->
     @socketId = @service.connection.socket_id
@@ -25,9 +26,8 @@ pusher = Ember.Object.extend(
   # add X-Pusher-Socket header so we can exclude the sender from their own actions
   # http://pusher.com/docs/server_api_guide/server_excluding_recipients
   addSocketIdToXHR: ->
-    _this = this
-    Ember.$.ajaxPrefilter (options, originalOptions, xhr) ->
-      xhr.setRequestHeader "X-Pusher-Socket", _this.socketId
+    Ember.$.ajaxPrefilter (options, originalOptions, xhr) =>
+      xhr.setRequestHeader "X-Pusher-Socket", @socketId
 
     return
 

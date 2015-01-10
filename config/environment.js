@@ -49,6 +49,7 @@ module.exports = function(environment) {
     // Testem prefers this...
     ENV.baseURL = '/';
     ENV.locationType = 'auto';
+    ENV.pusher.key = null; // don't use pusher in tests
 
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
