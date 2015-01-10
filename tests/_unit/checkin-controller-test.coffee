@@ -120,8 +120,8 @@ test "#sectionQuestions returns question(s) based on section", ->
 test "builds #responsesData on for all questions, including any existing response values", ->
   expect 2
 
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "ab_pain").get("value") is 3, "sets proper value for included response"
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "stools").get("value") is null, "doesn't set any value when no response present"
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "ab_pain").get("value") is 1, "sets proper value for included response"
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_arthralgia").get("value") is 0, "defaults to 0 for boolean"
 
 test "action#setResponse sets a value for a response given the current context", ->
   expect 2
@@ -129,7 +129,7 @@ test "action#setResponse sets a value for a response given the current context",
   Ember.run -> controller.set("section", 6) # hbi complications section
 
   # Ambiguous with multiple section questions... using as test case
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is null, "should start null"
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is 0, "should start 0"
 
   controller.send("setResponse", "complication_abscess", 1)
   ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is 1, "sets to 1 (true)"

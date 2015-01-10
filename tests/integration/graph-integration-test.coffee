@@ -121,27 +121,35 @@ test "Updating entry goes to loading state and updates entry on graph", ->
   controller = App.__container__.lookup("controller:graph")
 
   visit('/').then( ->
+
     ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
-
+    $("rect.symptom.present:eq(0)").simulate("click") # should be first day (today)
     andThen ->
-      $("rect.symptom.present:eq(0)").simulate("click")
-      Ember.run.next ->
-        triggerEvent ".checkin-next", "click"
-        Ember.run.next ->
-          triggerEvent ".checkin-response-select li:eq(0)", "click" # should be first day (today)
-          triggerEvent ".modal-close", "click"
+
+      Ember.run.later(
+        (->
+          triggerEvent ".checkin-next", "click"
+
           andThen ->
-            ok find("rect.symptom.processing").length is 3, "Has loading datums"
+            triggerEvent ".checkin-response-select li:eq(0)", "click"
+            triggerEvent ".modal-close", "click"
 
-            $.mockjax.clear();
-            # Use the single day graph response when loading new "processed" day at the end of test
-            Ember.$.mockjax
-              url: "#{config.apiNamespace}/graph",
-              type: 'GET'
-              # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
-              responseText: singleGraphDayFixture()
+            andThen ->
+              ok find("rect.symptom.processing").length is 3, "Has loading datums"
+              $.mockjax.clear();
+              # Use the single day graph response when loading new "processed" day at the end of test
+              Ember.$.mockjax
+                url: "#{config.apiNamespace}/graph",
+                type: 'GET'
+                # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
+                responseText: singleGraphDayFixture()
 
-            controller.send("dayProcessed", today)
-            Ember.run.later (-> ok find("rect.symptom.present").length is 39-2, "Has 39 (original) - 2 (new day difference) datums for HBI fixture"), 100
+
+              Ember.run.next ->
+                controller.send("dayProcessed", today)
+                Ember.run.later (-> ok find("rect.symptom.present").length is 39-2, "Has 39 (original) - 2 (new day difference) datums for HBI fixture"), 200
+        )
+        , 200
+      )
 
   )

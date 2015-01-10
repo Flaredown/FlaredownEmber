@@ -89,8 +89,9 @@ view = Ember.View.extend
     @setContent()
     Ember.run.next => @$().focus() unless @get("isPlaceheld")
 
-  willDestroyElement: ->
-    @get("controller").send("save")
+  # Only on modal close instead
+  # willDestroyElement: ->
+  #   @get("controller").send("save")
 
   # focusOut:         ->
   focusIn:          -> @$().text("") if @get("isPlaceheld")

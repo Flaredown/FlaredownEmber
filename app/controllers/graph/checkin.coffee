@@ -10,9 +10,15 @@ controller = Ember.ObjectController.extend
   # Watch some user actions
   modalChanged: Ember.observer ->
     unless @get("modalOpen")
+      @send("save")
       @transitionToRoute("graph")
       @set("modalOpen", true)
   .observes("modalOpen")
+
+  checkinComplete: Ember.computed( ->
+    return false if @get("responsesData").filterBy("value", null).length
+    true
+  ).property("responsesData")
 
   sectionChanged: Ember.observer ->
     @transitionToRoute("graph.checkin", @get("dateAsParam"), @get("section")) if @get("section")
@@ -46,11 +52,12 @@ controller = Ember.ObjectController.extend
         }
 
     ["treatments", "notes", "finish"].forEach (category) =>
-      accum.addObject
-        number: accum.length+1
-        selected: accum.length+1 is @get("section")
-        category_number: 1
-        category: category
+      unless category is "finish" and not @get("checkinComplete")
+        accum.addObject
+          number: accum.length+1
+          selected: accum.length+1 is @get("section")
+          category_number: 1
+          category: category
 
     accum
 
@@ -80,15 +87,19 @@ controller = Ember.ObjectController.extend
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
-    return [] unless @get("catalog_definitions") and not ["start", "treatments", "notes", "finish"].contains(section.category)
+    return [] unless @get("catalog_definitions") and @get("catalogs").contains(section.category)
     catalog_questions = @get("catalog_definitions.#{section.category}")
     catalog_questions[ section.category_number-1 ]
 
   .property("section.category", "currentSection")
 
   responsesData: Ember.computed ->
-    responses = []
-    that      = @
+    that            = @
+    responses       = []
+    default_values  =
+      checkbox: 0
+      select: null
+      number: null
 
     @get("catalogsSorted").forEach (catalog) =>
       @get("catalog_definitions.#{catalog}").forEach (section) =>
@@ -96,7 +107,7 @@ controller = Ember.ObjectController.extend
 
           # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
           response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
-          value     = if response then response.get("value") else null
+          value     = if response then response.get("value") else default_values[question.kind]
 
           responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
 
@@ -106,9 +117,7 @@ controller = Ember.ObjectController.extend
   sectionResponses: Ember.computed( -> @get("responsesData").filterBy("catalog", @get("currentCategory")) ).property("currentCategory", "responsesData")
 
   actions:
-    treatmentEdited: ->
-      @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
-      @send("save")
+    treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
 
     setResponse: (question_name, value) ->
       response = @get("sectionResponses").findBy("name",question_name)
@@ -116,7 +125,6 @@ controller = Ember.ObjectController.extend
       if Ember.isPresent(response) and value isnt null
         response.set("value", value)
         @send("nextSection") if @get("sectionQuestions.length") is 1
-        @send("save")
 
       # TODO raise some error here if question not found?
 
@@ -128,15 +136,10 @@ controller = Ember.ObjectController.extend
       @set("section", @get("section")-1) unless @get("section") is @get("sections.firstObject.number")
 
     save: ->
-      that = @
-
-      # Don't send null value responses, these are invalid
-      cleanedResponses = @get("responsesData").rejectBy("value", null)
-
       data =
         entry:
           JSON.stringify({
-            responses: cleanedResponses
+            responses: @get("responsesData").rejectBy("value", null) # Don't send null value responses, these are invalid
             notes: @get("notes")
             treatments: @get("treatments").map (treatment) -> treatment.getProperties("name", "quantity", "unit")
           })
@@ -146,7 +149,11 @@ controller = Ember.ObjectController.extend
         type: "PUT"
         data: data
       ).then(
-        ((response) -> @get("controllers.graph").send("dayProcessing", @get("date"))).bind(@)
+        (
+          (response) ->
+            if @get("checkinComplete") # only process the entry if it's complete
+              @get("controllers.graph").send("dayProcessing", @get("date"))
+        ).bind(@)
         (response) -> console.log "error!!"
       )
 

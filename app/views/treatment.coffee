@@ -21,9 +21,7 @@ view = Ember.View.extend
         # confirmButtonColor: "#DD6B55"
         # confirmButtonText: "Yes, delete it!"
         closeOnConfirm: true
-        =>
-          @get("controller.treatments").removeObject(treatment)
-          @get("controller").send("save")
+        => @get("controller.treatments").removeObject(treatment)
     save: ->
       @set("editing", false)
       @get("controller").send("treatmentEdited")

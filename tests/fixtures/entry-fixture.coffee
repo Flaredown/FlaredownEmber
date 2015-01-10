@@ -7,19 +7,18 @@ fixture = (date) ->
       id: "#{id}",
       date: date,
       catalogs: ["hbi", "foo"],
+      notes: "123 #abc"
+      complete: true
       responses: [
-        {
-          id: "hbi_general_wellbeing_#{id}"
-          name: "general_wellbeing"
-          value: 2
-          catalog: "hbi"
-        },
-        {
-          id: "hbi_ab_pain_#{id}"
-          name: "ab_pain"
-          value: 3
-          catalog: "hbi"
-        }
+        { id: "hbi_general_wellbeing_#{id}", name: "general_wellbeing", value: 1, catalog: "hbi" }
+        { id: "hbi_ab_pain_#{id}", name: "ab_pain", value: 1, catalog: "hbi" }
+        { id: "hbi_stools_#{id}", name: "stools", value: 1, catalog: "hbi" }
+        { id: "hbi_ab_mass_#{id}", name: "ab_mass", value: 1, catalog: "hbi" }
+        { id: "hbi_complication_uveitis_#{id}", name: "complication_uveitis", value: 1, catalog: "hbi" }
+
+        { id: "foo_how_fantastic_are_you_#{id}", name: "how_fantastic_are_you", value: 1, catalog: "foo" }
+
+        { id: "symptoms_droopy lips_#{id}", name: "droopy lips", value: 1, catalog: "symptoms" }
       ],
       treatments: [
         {
