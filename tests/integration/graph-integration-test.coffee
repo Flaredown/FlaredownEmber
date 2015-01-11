@@ -147,9 +147,9 @@ test "Updating entry goes to loading state and updates entry on graph", ->
 
               Ember.run.next ->
                 controller.send("dayProcessed", today)
-                Ember.run.later (-> ok find("rect.symptom.present").length is 39-2, "Has 39 (original) - 2 (new day difference) datums for HBI fixture"), 500
+                Ember.run.later (-> ok find("rect.symptom.present").length is 39-2, "Has 39 (original) - 2 (new day difference) datums for HBI fixture"), 2000
         )
-        , 500
+        , 2000
       )
 
   )
