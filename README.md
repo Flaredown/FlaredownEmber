@@ -1,6 +1,6 @@
 # Flaredown
 
-[![Build Status](https://snap-ci.com/j9bsmTAkZYJd6CebOAVbIrTpzvtmlbjWLJlh5THkasI/build_image)](https://snap-ci.com/FathomLabs/FlaredownEmber/branch/master)
+[![Build Status](https://snap-ci.com/Y1w8mU2-w7qyZObQTS4gKi4YLza8_FLQzqCENigs8Fo/build_image)](https://snap-ci.com/FathomDigital/FlaredownEmber/branch/master)
 
 This README outlines the details of collaborating on this Ember application.
 
