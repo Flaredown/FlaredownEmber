@@ -6,6 +6,8 @@ model = DS.Model.extend
 
   locale:         DS.attr "string"
   email:          DS.attr "string"
-  weight:         DS.attr "number"
+
+  symptomColors:   DS.attr()
+  treatmentColors: DS.attr()
 
 `export default model`

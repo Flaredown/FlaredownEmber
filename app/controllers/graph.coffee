@@ -127,6 +127,7 @@ controller = Ember.ObjectController.extend
                     name:     response.name
                     missing:  false
                     type:     "symptom"
+                    controller: @
 
           else
             if @get("serverProcessingDays").contains(day)
@@ -138,6 +139,7 @@ controller = Ember.ObjectController.extend
                   order:    i
                   type:     "processing"
                   missing:  false
+                  controller: @
 
             else # There are no datums for the day and catalog... so put in a "missing" datum for that catalog
               @get("_processedDatums").pushObject symptomDatum.create content:
@@ -146,6 +148,7 @@ controller = Ember.ObjectController.extend
                 order:    1.1
                 type:     "symptom"
                 missing:  true
+                controller: @
 
     @get("_processedDatums")
   .property("rawDataResponses.@each", "serverProcessingDays.@each")

@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
 
-controller = Ember.ObjectProxy.extend
+object = Ember.ObjectProxy.extend
 
   # Initial attributes should be: day, catalog, order, name, type, missing
   start_xBinding:  "day"
@@ -18,5 +18,10 @@ controller = Ember.ObjectProxy.extend
   ).property("type")
 
   entryDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM-DD-YYYY") ).property("day")
+  color: Ember.computed( ->
+    uniq_name = "#{@get("catalog")}_#{@get("name")}"
+    color = @get("controller.currentUser.symptomColors").find((color) => color[0] is uniq_name)
+    if color then color[1] else "#666"
+  ).property("controller.currentUser.symptomColors", "catalog", "name")
 
-`export default controller`
+`export default object`

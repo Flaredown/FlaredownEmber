@@ -25,8 +25,8 @@ view = Ember.View.extend
   dragAmplifier: 1.2 # amplify drag a bit
 
   # Animation Settings
-  dropInDuration: 400
-  perDatumDelay: 60
+  dropInDuration: 450
+  perDatumDelay: 15
 
   symptomColors:
     [
@@ -187,7 +187,7 @@ view = Ember.View.extend
             rx: 3
             y: (d) -> d.get("end_y")
             x: (d) -> d.get("end_x")
-            fill: (d) => @get("colors")(d.get("name"))
+            fill: (d) => d.get("color")
 
     @update()
 
@@ -212,7 +212,7 @@ view = Ember.View.extend
             y: (d) -> d.get("end_y")
             width:  @get("symptomDatumDimensions").width
             height: @get("symptomDatumDimensions").height
-            fill: (d) => @get("colors")(d.get("name"))
+            fill: (d) => d.get("color")
 
 
     scorePip
@@ -225,13 +225,13 @@ view = Ember.View.extend
 
     unless @get("graphShifted") # don't do animations if the graph has shifted
       scorePip
-        .filter (d,i) -> not d.get("placed")
+        .filter (d,i) => not d.get("placed") and d.get("end_x") > 0 and d.get("end_x") < @get("width")
         .attr
-          y: -5000
+          y: -2000
         .transition()
           .ease("quad")
-          .duration (d) => if d.get("placed") then 100 else @get("dropInDuration")
-          .delay (d,i) => if d.get("placed") then i*10 else i*@get("perDatumDelay")
+          .duration (d) => @get("dropInDuration")
+          .delay (d,i) => i*@get("perDatumDelay")
           .each "end", (d) -> d.set("placed", true)
           .attr
             y: (d) -> d.get("end_y")
