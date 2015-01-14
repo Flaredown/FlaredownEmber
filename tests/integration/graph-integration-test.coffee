@@ -8,6 +8,7 @@
 `import singleGraphDayFixture from "../fixtures/single-graph-day-fixture"`
 `import entryFixture from "../fixtures/entry-fixture"`
 `import localeFixture from "../fixtures/locale-fixture"`
+`import userFixture from "../fixtures/user-fixture"`
 
 App   = null
 today = moment().utc().startOf("day").format("MMM-DD-YYYY")
@@ -17,13 +18,7 @@ module('Graph Integration', {
     Ember.$.mockjax
       url: "#{config.apiNamespace}/current_user",
       type: 'GET'
-      responseText: {
-        current_user: {
-          id: 1,
-          email: "test@test.com",
-          locale: "en"
-        }
-      }
+      responseText: userFixture
 
     Ember.$.mockjax
       url: "#{config.apiNamespace}/locales/en",

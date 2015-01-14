@@ -6,6 +6,7 @@
 `import entryFixture from "../fixtures/entry-fixture"`
 `import graphFixture from "../fixtures/graph-fixture"`
 `import localeFixture from "../fixtures/locale-fixture"`
+`import userFixture from "../fixtures/user-fixture"`
 
 App = null
 
@@ -13,13 +14,7 @@ module('Check-In Integration', {
   setup: ->
     Ember.$.mockjax
       url: "#{config.apiNamespace}/current_user",
-      responseText: {
-        current_user: {
-          id: 1,
-          email: "test@test.com",
-          locale: "en"
-        }
-      }
+      responseText: userFixture
 
     Ember.$.mockjax
       url: "#{config.apiNamespace}/locales/en",
@@ -28,7 +23,6 @@ module('Check-In Integration', {
     Ember.$.mockjax
       url: "#{config.apiNamespace}/graph",
       responseText: graphFixture()
-
 
     # For "today" tests
     today = moment().utc().format("MMM-DD-YYYY")
@@ -60,6 +54,7 @@ test "Can see the checkin", ->
 
   visit('/checkin/Aug-13-2014/1').then( ->
     assertModalPresent()
+
     ok currentURL() == "/checkin/Aug-13-2014/1"
   )
 

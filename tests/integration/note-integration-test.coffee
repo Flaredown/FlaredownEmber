@@ -6,6 +6,7 @@
 # `import entryFixture from "../fixtures/entry-fixture"`
 # `import graphFixture from "../fixtures/graph-fixture"`
 # `import localeFixture from "../fixtures/locale-fixture"`
+# `import userFixture from "../fixtures/locale-fixture"`
 #
 # App = null
 #
@@ -13,13 +14,7 @@
 #   setup: ->
 #     Ember.$.mockjax
 #       url: "#{config.apiNamespace}/current_user",
-#       responseText: {
-#         current_user: {
-#           id: 1,
-#           email: "test@test.com",
-#           locale: "en"
-#         }
-#       }
+#       responseText: userFixture
 #
 #     Ember.$.mockjax
 #       url: "#{config.apiNamespace}/locales/en",
