@@ -64,6 +64,8 @@ controller = Ember.ObjectController.extend
   .property("catalogs", "section")
 
   currentSection:           Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each")
+  isFirstSection:           Ember.computed( -> @get("sections.firstObject.number") is @get("section") ).property("section", "sections.@each")
+  isLastSection:            Ember.computed( -> @get("sections.lastObject.number") is @get("section") ).property("section", "sections.@each")
 
   categories:               Ember.computed( -> @get("sections").mapProperty("category").uniq()                ).property("sections")
   currentCategory:          Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")

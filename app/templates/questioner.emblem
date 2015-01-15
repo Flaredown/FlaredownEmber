@@ -8,6 +8,7 @@
 .checkin-content: partial currentPartial
 
 .checkin-navigate
-  a.checkin-back href="javascript:void(0);" click="previousSection" BACK
-  a.checkin-next href="javascript:void(0);" click="nextSection" NEXT
+
+  unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" BACK
+  unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" NEXT
 
