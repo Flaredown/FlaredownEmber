@@ -10,6 +10,9 @@ $symptoms: #0F3F65, #9DB9BA, #2577B2, #5EB1D7, #206D37, #B3DACC, #829D3C, #B2CD7
     .tclr-#{$i} { 
         color: $color;
     }
+    .tfill-#{$i} { 
+        fill: $color;
+    }
 }
 
 @each $color in $symptoms {
@@ -19,5 +22,8 @@ $symptoms: #0F3F65, #9DB9BA, #2577B2, #5EB1D7, #206D37, #B3DACC, #829D3C, #B2CD7
     }
     .sclr-#{$i} { 
         color: $color;
+    }
+    .sfill-#{$i} { 
+        fill: $color;
     }
 }
