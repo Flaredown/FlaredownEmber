@@ -40,50 +40,41 @@ controller = Ember.ObjectController.extend
   ).property("catalogs")
 
   ### Sections: All the pages in the checkin form ###
+  sectionsDefinition: Ember.computed ->
+    _definition = [["start",1]]
+    @get("catalogsSorted").forEach (catalog) => _definition.push [catalog,@get("catalog_definitions.#{catalog}.length")]
+    ["treatments", "notes", "finish"].forEach (section) -> _definition.push [section, 1]
+    _definition
+  .property("catalogsSorted")
+
   sections: Ember.computed ->
-    accum           = []
-    return [] unless @get("catalogs.length")
+    _sections = []
 
-    accum.addObject # Start page
-      number: 1
-      selected: accum.length+1 is @get("section")
-      category_number: 1
-      category: "start"
-      question: false
-      seen: @isSeen(1)
-      complete: @isSeen(1)
-      skipped: false
+    @get("sectionsDefinition").forEach (section,i) =>
+      [name,size] = section
+      number      = i+1
 
-    @get("catalogsSorted").forEach (catalog) =>
-      @get("catalog_definitions.#{catalog}").forEach (category,category_index) =>
-        [is_selected,is_seen,is_complete] = [(accum.length+1 is @get("section")),@isSeen(accum.length+1), @hasCompleteResponse(catalog,category_index)]
+      [0..size-1].forEach (subsection_index) =>
+        subsection    = _sections.length+1
+        question      = not ["start", "treatments", "notes", "finish"].contains(name)
+        is_selected   = (subsection is @get("section"))
+        is_seen       = @isSeen(subsection)
+        is_complete   = not question or @hasCompleteResponse(name,subsection_index)
 
-        accum.addObject {
-          number: accum.length+1
-          selected: is_selected
-          category_number: category_index+1
-          category: catalog
-          question: true
-          seen: is_seen
-          complete: is_seen and is_complete
-          skipped: is_seen and not is_complete and not is_selected
+        _sections.addObject {
+          number:           subsection
+          selected:         is_selected
+          category_number:  subsection_index+1
+          category:         name
+          question:         question
+          seen:             is_seen
+          complete:         is_seen and is_complete
+          skipped:          is_seen and not is_complete and not is_selected
         }
 
-    ["treatments", "notes", "finish"].forEach (category) =>
-      is_seen = @isSeen(accum.length+1)
-      accum.addObject
-        number: accum.length+1
-        selected: accum.length+1 is @get("section")
-        category_number: 1
-        category: category
-        question: false
-        seen: is_seen
-        complete: is_seen
-        skipped: false
+    _sections
 
-    accum
-
-  .property("catalogs", "section", "responsesData")
+  .property("sectionsDefinition", "catalogs", "section", "responsesData")
 
   ### Section Helpers ###
   isSeen: (section) -> @get("sectionsSeen").contains(section)
