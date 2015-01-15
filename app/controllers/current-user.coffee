@@ -13,6 +13,10 @@ controller = Ember.ObjectController.extend
   ### PUSHER ###
   pusherChannels: []
   modelDidLoad: (->
+    unless @get("checked_in_today")
+      @set("checked_in_today", true)
+      Ember.run.next => @transitionToRoute("graph.checkin", "today", 1)
+
     if @get("pusher.enabled")
       @get("pusherChannels").addArrayObserver(@,
         didChange: (channels, offset, removeAmt, addAmt) =>
