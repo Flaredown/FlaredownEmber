@@ -1,0 +1,23 @@
+$treatments: #DB9126, #C94397, #ED80B2, #F27071, #F7A8A8, #C01E55, #D47C87, #E55C27, #F58A5A;
+$symptoms: #0F3F65, #9DB9BA, #2577B2, #5EB1D7, #206D37, #B3DACC, #829D3C, #B2CD7F;
+
+
+@each $color in $treatments {
+    $i: index($treatments, $color);
+    .tbg-#{$i} { 
+        background-color: $color;
+    }
+    .tclr-#{$i} { 
+        color: $color;
+    }
+}
+
+@each $color in $symptoms {
+    $i: index($treatments, $color);
+    .sbg-#{$i} { 
+        background-color: $color;
+    }
+    .sclr-#{$i} { 
+        color: $color;
+    }
+}
