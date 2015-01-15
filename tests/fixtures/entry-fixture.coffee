@@ -10,7 +10,7 @@ fixture = (date) ->
       notes: "123 #abc"
       complete: true
       responses: [
-        { id: "hbi_general_wellbeing_#{id}", name: "general_wellbeing", value: 1, catalog: "hbi" }
+        # { id: "hbi_general_wellbeing_#{id}", name: "general_wellbeing", value: null, catalog: "hbi" }
         { id: "hbi_ab_pain_#{id}", name: "ab_pain", value: 1, catalog: "hbi" }
         { id: "hbi_stools_#{id}", name: "stools", value: 1, catalog: "hbi" }
         { id: "hbi_ab_mass_#{id}", name: "ab_mass", value: 1, catalog: "hbi" }

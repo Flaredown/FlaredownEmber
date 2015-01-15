@@ -3,7 +3,7 @@
   ul
     each sec in sections
       li click="setSection sec.number"
-        a.checkin-dot href="javascript:void(0);" class={sec.selected:selected sec.category}
+        a.checkin-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
 .checkin-content: partial currentPartial
 

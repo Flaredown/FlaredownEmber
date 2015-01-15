@@ -8,6 +8,7 @@
 
 App        = null
 controller = null
+fixture    = null
 
 moduleFor("controller:graph/checkin", "Check-In Controller",
   {
@@ -18,7 +19,7 @@ moduleFor("controller:graph/checkin", "Check-In Controller",
       controller  = @subject()
       fixture     = entryFixture()
 
-      controller.reopen { sectionChanged: -> }                          # stub stupid observer throwing null error on transitionToRoute. Works fine in integration.
+      controller.reopen { transitionToRoute: -> }                          # stub stupid observer throwing null error on transitionToRoute. Works fine in integration.
 
       Ember.run ->
         store.pushPayload "entry", fixture
@@ -60,6 +61,36 @@ test "Generates #sections from catalog_definitions", ->
   ok controller.get("sections")[1].category is "foo"                    , "should be alphabetical, 'foo' before 'hbi'"
   ok controller.get("sections.firstObject.selected") is true
   ok controller.get("sections.lastObject.selected") is false
+
+test "#sectionsSeen are tracked", ->
+  expect 4
+
+  deepEqual controller.get("sectionsSeen"), [1]
+
+  controller.set("section", 2)
+  deepEqual controller.get("sectionsSeen"), [1,2]
+  ok controller.get("sections")[1].seen is true, "sections in sectionsSeen are seen"
+  ok controller.get("sections")[3].seen is false, "sections not in sectionsSeen are not seen"
+
+test "#hasCompleteResponse looks up response completeness by catalog and category", ->
+  expect 5
+
+  ok controller.hasCompleteResponse("hbi",0) is false,  "select response missing so incomplete"
+  ok controller.hasCompleteResponse("hbi",1) is true,   "select response exists so is complete"
+  ok controller.hasCompleteResponse("hbi",3) is true,   "checkboxes are complete even though some responses are missing"
+
+  controller.set("sectionsSeen", [1,2,3,4])
+  ok controller.get("sections")[2].complete is false,  "hbi_general_wellbeing response missing, so incomplete"
+  ok controller.get("sections")[3].complete is true,   "hbi_ab_pain response exists, is complete"
+
+test "skipped sections are tracked", ->
+  expect 2
+
+  controller.set("sectionsSeen", [1,2,3,4])
+  controller.set("section", 5)
+
+  ok controller.get("sections")[2].skipped is true,  "hbi_general_wellbeing response missing but section seen so is 'skipped'"
+  ok controller.get("sections")[3].skipped is false,  "hbi_ab_pain response exists and seen so isn't 'skipped'"
 
 test "#currentSection is set based on section integer", ->
   expect 7

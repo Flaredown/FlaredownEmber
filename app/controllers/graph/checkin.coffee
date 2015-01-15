@@ -4,6 +4,12 @@
 
 controller = Ember.ObjectController.extend
   modalOpen: true
+  sectionsSeen: []
+
+  defaultResponseValues:
+    checkbox: 0
+    select: null
+    number: null
 
   needs: ["graph"]
 
@@ -15,14 +21,16 @@ controller = Ember.ObjectController.extend
       @set("modalOpen", true)
   .observes("modalOpen")
 
+  sectionChanged: Ember.observer ->
+    if @get("section")
+      @get("sectionsSeen").addObject @get("section")
+      @transitionToRoute("graph.checkin", @get("dateAsParam"), @get("section"))
+  .observes("section")
+
   checkinComplete: Ember.computed( ->
     return false if @get("responsesData").filterBy("value", null).length
     true
   ).property("responsesData")
-
-  sectionChanged: Ember.observer ->
-    @transitionToRoute("graph.checkin", @get("dateAsParam"), @get("section")) if @get("section")
-  .observes("section")
 
   catalogsSorted: Ember.computed(->
     catalogs = @get("catalogs")
@@ -41,26 +49,50 @@ controller = Ember.ObjectController.extend
       selected: accum.length+1 is @get("section")
       category_number: 1
       category: "start"
+      seen: @isSeen(1)
+      complete: @isSeen(1)
+      skipped: false
 
     @get("catalogsSorted").forEach (catalog) =>
-      @get("catalog_definitions.#{catalog}").forEach (category,category_number) =>
+      @get("catalog_definitions.#{catalog}").forEach (category,category_index) =>
+        [is_selected,is_seen,is_complete] = [(accum.length+1 is @get("section")),@isSeen(accum.length+1), @hasCompleteResponse(catalog,category_index)]
+
         accum.addObject {
           number: accum.length+1
-          selected: accum.length+1 is @get("section")
-          category_number: category_number+1
+          selected: is_selected
+          category_number: category_index+1
           category: catalog
+          seen: is_seen
+          complete: is_seen and is_complete
+          skipped: is_seen and not is_complete and not is_selected
         }
 
     ["treatments", "notes", "finish"].forEach (category) =>
+      is_seen = @isSeen(accum.length+1)
       accum.addObject
         number: accum.length+1
         selected: accum.length+1 is @get("section")
         category_number: 1
         category: category
+        seen: is_seen
+        complete: is_seen
+        skipped: false
 
     accum
 
-  .property("catalogs", "section")
+  .property("catalogs", "section", "responsesData")
+
+  ### Section Helpers ###
+  isSeen: (section) -> @get("sectionsSeen").contains(section)
+  hasCompleteResponse: (catalog,section_index) ->
+      section = @get("catalog_definitions.#{catalog}")[section_index]
+      return true if section.kind is "checkbox"
+
+      not section.map((question) =>
+        response = @get("responsesData").filterBy("catalog", catalog).findBy("name", question.name)
+        return false unless response
+        response.get("value") isnt null
+      ).contains(false)
 
   currentSection:           Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each")
   isFirstSection:           Ember.computed( -> @get("sections.firstObject.number") is @get("section") ).property("section", "sections.@each")
@@ -97,10 +129,6 @@ controller = Ember.ObjectController.extend
   responsesData: Ember.computed ->
     that            = @
     responses       = []
-    default_values  =
-      checkbox: 0
-      select: null
-      number: null
 
     @get("catalogsSorted").forEach (catalog) =>
       @get("catalog_definitions.#{catalog}").forEach (section) =>
@@ -108,7 +136,7 @@ controller = Ember.ObjectController.extend
 
           # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
           response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
-          value     = if response then response.get("value") else default_values[question.kind]
+          value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
 
           responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
 
