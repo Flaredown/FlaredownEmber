@@ -8,6 +8,7 @@ object = Ember.ObjectProxy.extend
   id: Ember.computed(-> "#{@get("catalog")}_#{@get("day")}_#{@get("order")}_#{@get("type")}").property("catalog", "day", "order", "type")
   classes: Ember.computed(->
     names = ["symptom"]
+    names.pushObject "sfill-#{@get("colorName")}"
     if @get("type") is "processing"
       names.pushObject "processing"
       names.pushObject "processing-#{@get("order")}"
@@ -18,10 +19,10 @@ object = Ember.ObjectProxy.extend
   ).property("type")
 
   entryDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM-DD-YYYY") ).property("day")
-  color: Ember.computed( ->
+  colorName: Ember.computed( ->
     uniq_name = "#{@get("catalog")}_#{@get("name")}"
     if symptom_colors = @get("controller.currentUser.symptomColors")
-      if color = symptom_colors.find((color) => color[0] is uniq_name) then color[1] else "#666"
+      if color = symptom_colors.find((color) => color[0] is uniq_name) then color[1] else ""
   ).property("controller.currentUser.symptomColors", "catalog", "name")
 
 `export default object`
