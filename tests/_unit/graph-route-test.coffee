@@ -6,6 +6,7 @@
 
 
 `import graphFixture from "../fixtures/graph-fixture"`
+`import userFixture from "../fixtures/user-fixture"`
 
 App         = null
 route       = null
@@ -24,7 +25,7 @@ moduleFor("route:graph", "Graph Route",
 
       Ember.run ->
         current_user = App.__container__.lookup("controller:current_user")
-        current_user.set "model", store.createRecord("user", {id: 1,email: "test@test.com"})
+        current_user.set "model", store.createRecord("user", userFixture.current_user)
         route.set("currentUser", current_user)
 
       Ember.$.mockjax
