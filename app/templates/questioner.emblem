@@ -3,11 +3,12 @@
   ul
     each sec in sections
       li click="setSection sec.number"
-        a.checkin-dot href="javascript:void(0);" class={sec.selected:selected sec.category}
+        a.checkin-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
 .checkin-content: partial currentPartial
 
 .checkin-navigate
-  a.checkin-back href="javascript:void(0);" click="previousSection" BACK
-  a.checkin-next href="javascript:void(0);" click="nextSection" NEXT
+
+  unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" BACK
+  unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" NEXT
 
