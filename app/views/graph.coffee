@@ -187,7 +187,7 @@ view = Ember.View.extend
             rx: 3
             y: (d) -> d.get("end_y")
             x: (d) -> d.get("end_x")
-            fill: (d) => d.get("color")
+            # fill: (d) => d.get("color")
 
     @update()
 
@@ -212,7 +212,7 @@ view = Ember.View.extend
             y: (d) -> d.get("end_y")
             width:  @get("symptomDatumDimensions").width
             height: @get("symptomDatumDimensions").height
-            fill: (d) => d.get("color")
+            # fill: (d) => d.get("color")
 
 
     scorePip
