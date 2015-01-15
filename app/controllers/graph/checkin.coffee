@@ -52,12 +52,11 @@ controller = Ember.ObjectController.extend
         }
 
     ["treatments", "notes", "finish"].forEach (category) =>
-      unless category is "finish" and not @get("checkinComplete")
-        accum.addObject
-          number: accum.length+1
-          selected: accum.length+1 is @get("section")
-          category_number: 1
-          category: category
+      accum.addObject
+        number: accum.length+1
+        selected: accum.length+1 is @get("section")
+        category_number: 1
+        category: category
 
     accum
 

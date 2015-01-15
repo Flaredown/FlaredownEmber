@@ -82,17 +82,15 @@ test "Can navigate through the sections (today)", ->
     ok currentURL() == "/checkin/today/2", "Clicking a prev goes back"
   )
 
-test "Limits on prev/next", ->
+test "Disable on prev/next on first/last", ->
   expect 2
 
-  visit('/checkin/today/6').then( =>
-    triggerEvent(".checkin-pagination ul li:eq(5)", "click")
-    ok currentURL() == "/checkin/today/6", "Next button limited"
+  visit('/checkin/today/11').then( =>
+    ok find(".checkin-next").length is 0, "No next button on last page"
   )
 
   visit('/checkin/today/1').then( =>
-    triggerEvent(".checkin-back", "click")
-    ok currentURL() == "/checkin/today/1", "Previous button limited"
+    ok find(".checkin-back").length is 0, "No next button on last page"
   )
 
 test "Can navigate through the sections (other date)", ->
