@@ -49,6 +49,7 @@ controller = Ember.ObjectController.extend
       selected: accum.length+1 is @get("section")
       category_number: 1
       category: "start"
+      question: false
       seen: @isSeen(1)
       complete: @isSeen(1)
       skipped: false
@@ -62,6 +63,7 @@ controller = Ember.ObjectController.extend
           selected: is_selected
           category_number: category_index+1
           category: catalog
+          question: true
           seen: is_seen
           complete: is_seen and is_complete
           skipped: is_seen and not is_complete and not is_selected
@@ -74,6 +76,7 @@ controller = Ember.ObjectController.extend
         selected: accum.length+1 is @get("section")
         category_number: 1
         category: category
+        question: false
         seen: is_seen
         complete: is_seen
         skipped: false
@@ -94,15 +97,18 @@ controller = Ember.ObjectController.extend
         response.get("value") isnt null
       ).contains(false)
 
-  currentSection:           Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each")
-  isFirstSection:           Ember.computed( -> @get("sections.firstObject.number") is @get("section") ).property("section", "sections.@each")
-  isLastSection:            Ember.computed( -> @get("sections.lastObject.number") is @get("section") ).property("section", "sections.@each")
+  currentSection:             Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each")
+  isFirstSection:             Ember.computed( -> @get("sections.firstObject.number") is @get("section") ).property("section", "sections.@each")
+  isLastSection:              Ember.computed( -> @get("sections.lastObject.number") is @get("section") ).property("section", "sections.@each")
 
-  categories:               Ember.computed( -> @get("sections").mapProperty("category").uniq()                ).property("sections")
-  currentCategory:          Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
-  currentCategorySections:  Ember.computed( -> @get("sections").filterBy("category", @get("currentCategory")) ).property("currentCategory")
+  questionSections:           Ember.computed.filterBy("sections", "question")
+  completedQuestionSections:  Ember.computed.filterBy("questionSections", "complete")
 
-  currentPartial:           Ember.computed( ->
+  categories:                 Ember.computed( -> @get("sections").mapProperty("category").uniq()                ).property("sections")
+  currentCategory:            Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
+  currentCategorySections:    Ember.computed( -> @get("sections").filterBy("category", @get("currentCategory")) ).property("currentCategory")
+
+  currentPartial:             Ember.computed( ->
     return "questioner/#{@get("currentCategory")}" if ["start", "treatments", "notes", "finish"].contains(@get("currentCategory"))
     "questioner/questions"
   ).property("currentCategory")
