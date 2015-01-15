@@ -118,6 +118,7 @@ controller = Ember.ObjectController.extend
   sectionResponses: Ember.computed( -> @get("responsesData").filterBy("catalog", @get("currentCategory")) ).property("currentCategory", "responsesData")
 
   actions:
+    closeCheckin: -> @set("modalOpen", false)
     treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
 
     setResponse: (question_name, value) ->
