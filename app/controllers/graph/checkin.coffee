@@ -17,6 +17,7 @@ controller = Ember.ObjectController.extend
   modalChanged: Ember.observer ->
     unless @get("modalOpen")
       @send("save")
+      @set("sectionsSeen", [])
       @transitionToRoute("graph")
       @set("modalOpen", true)
   .observes("modalOpen")
