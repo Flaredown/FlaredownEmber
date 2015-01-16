@@ -4,7 +4,7 @@ nav.navbar role="navigation"
 
       // Slide menu button
       button.js-menu-trigger.sliding-menu-button type="button"
-        img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/menu-white.png" alt="menu"
+        img src="assets/menu-white.png" alt="menu"
 
       // Logo
       .navbar-logo FD
@@ -16,7 +16,7 @@ nav.navbar role="navigation"
           li: link-to "insights" | STATS
           li: link-to "reports" | INVESTIGATIONS
 
-      
+
     if currentUser.loggedIn
       //Account
       .navbar-right

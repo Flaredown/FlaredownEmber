@@ -16,11 +16,11 @@ module.exports = function(environment) {
 
     contentSecurityPolicy: {
       'default-src': "'self'",
-      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' use.typekit.net",
-      'font-src': "'self' http://fonts.gstatic.com", // Allow fonts to be loaded from http://fonts.gstatic.com
-      'connect-src': "`self` ws://*.pusherapp.com http://*.pusher.com",
-      'img-src': "'none' p.typekit.net",
-      'style-src': "'self' 'unsafe-inline' use.typekit.net http://fonts.googleapis.com",
+      'script-src': "'self' http://*.pusher.com 'unsafe-inline' 'unsafe-eval'",
+      'font-src': "'self'",
+      'connect-src': "`self` http://localhost:* ws://*.pusherapp.com http://*.pusher.com",
+      'img-src': "'self'",
+      'style-src': "'self' 'unsafe-inline'",
       'frame-src': ""
     },
 

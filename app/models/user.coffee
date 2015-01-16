@@ -1,15 +1,16 @@
 `import DS from 'ember-data'`
 
 model = DS.Model.extend
-  obfuscated_id:  DS.attr "string"
-  entries:        DS.hasMany "entry"
+  obfuscated_id:        DS.attr "string"
+  entries:              DS.hasMany "entry"
 
-  locale:         DS.attr "string"
-  email:          DS.attr "string"
+  locale:               DS.attr "string"
+  email:                DS.attr "string"
+  authentication_token: DS.attr "string"
 
-  symptomColors:   DS.attr()
-  treatmentColors: DS.attr()
+  symptomColors:        DS.attr()
+  treatmentColors:      DS.attr()
 
-  checked_in_today: DS.attr "boolean"
+  checked_in_today:     DS.attr "boolean"
 
 `export default model`

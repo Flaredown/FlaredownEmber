@@ -12,11 +12,11 @@ var app = new EmberApp({
 // });
 
 var pickFiles = require('broccoli-static-compiler');
-var fonts = pickFiles('app/assets/fonts', {
-   srcDir: '/',
-   files: ['*'],
-   destDir: '/assets'
-});
+// var fonts = pickFiles('app/assets/fonts', {
+//    srcDir: '/',
+//    files: ['*'],
+//    destDir: '/assets'
+// });
 var images = pickFiles('app/assets/img', {
    srcDir: '/',
    files: ['*'],
