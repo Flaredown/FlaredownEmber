@@ -20,7 +20,8 @@
     "jbox": "~0.3.2",
     "bourbon": "3.2.1",
     "handlebars": "2.0.0",
-    "ember-i18n": "3.0.0-beta.3"
+    "ember-i18n": "3.0.0-beta.3",
+    "pickadate": "~3.5.4"
   },
   "devDependencies": {
     "jquery-mockjax": "~1.6.1",

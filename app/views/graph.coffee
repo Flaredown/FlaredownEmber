@@ -2,16 +2,18 @@
 
 view = Ember.View.extend
 
-  # Enable keyboard to manipulate graph, needing focus is bad though
-  # didInsertElement: ->
-  #   @$().attr({ tabindex: 1 })
-  #   @$().focus()
-  #
-  # keyDown: (e) ->
-  #   amount = if e.shiftKey then 10 else 1
-  #   switch e.keyCode
-  #     when 37 then @controller.send("shiftViewport", amount, "past")    # keyboard: left arrow
-  #     when 39 then @controller.send("shiftViewport", amount, "future")  # keyboard: right arrow
+  didInsertElement: ->
+    $('.graph-controls-startDate').pickadate()
+    $('.graph-controls-endDate').pickadate(max: @get("controller.viewportEnd").local().toDate())
+    # Enable keyboard to manipulate graph, needing focus is bad though
+    #   @$().attr({ tabindex: 1 })
+    #   @$().focus()
+    #
+    # keyDown: (e) ->
+    #   amount = if e.shiftKey then 10 else 1
+    #   switch e.keyCode
+    #     when 37 then @controller.send("shiftViewport", amount, "past")    # keyboard: left arrow
+    #     when 39 then @controller.send("shiftViewport", amount, "future")  # keyboard: right arrow
 
   ### CONFIG ###
   daysBinding:                    "controller.days"

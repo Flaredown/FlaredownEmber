@@ -15,8 +15,27 @@ controller = Ember.ObjectController.extend
   # viewportStart
   # firstEntrydate
 
-  viewportStartNice: Ember.computed(-> @get("viewportStart").format("MMM-DD-YYYY")).property("viewportStart")
+  ### DATE PICKER STUFF ###
+  datePickerWatcher: Ember.observer ->
 
+    if @get("pickerStartDate")
+      new_start_date = moment(@get("pickerStartDate")).utc().startOf("day")
+      change = @get("viewportStart").diff(new_start_date, "days")
+      @send("resizeViewport", change, "past")
+
+    if @get("pickerEndDate")
+      new_end_date = moment(@get("pickerEndDate")).utc().startOf("day")
+      change = @get("viewportEnd").diff(new_end_date, "days")
+      @send("resizeViewport", change, "future")
+
+  .observes("pickerStartDate", "pickerEndDate")
+
+  viewportDateWatcher: Ember.observer ->
+    @set("pickerStartDate", @get("viewportStart").utc().format("D MMMM, YYYY")) if @get("viewportStart")
+    @set("pickerEndDate", @get("viewportEnd").utc().format("D MMMM, YYYY")) if @get("viewportEnd")
+  .observes("viewportStart", "viewportEnd")
+
+  ### VIEWPORT SETUP ###
   changeViewport: (size_change, new_start) ->
     today     = moment().utc().startOf("day")
     new_size  = @get("viewportSize")+size_change
@@ -183,24 +202,11 @@ controller = Ember.ObjectController.extend
 
     if @get("viewportStart") and @get("loadedStartDate") and @get("loadedEndDate")
       days_in_past_buffer   = Math.abs(@get("viewportStart").diff(@get("loadedStartDate"),"days"))
-      days_in_future_buffer = Math.abs(@get("viewportEnd").diff(@get("loadedEndDate"),"days"))
+      # days_in_future_buffer = Math.abs(@get("viewportEnd").diff(@get("loadedEndDate"),"days"))
 
       if days_in_past_buffer < @get("bufferRadius")
         new_loaded_start = moment(@get("loadedStartDate")).subtract(@get("bufferRadius"),"days")
-        @loadMore(new_loaded_start, @get("viewportStart"))
-        # ajax(
-        #   url: "#{config.apiNamespace}/graph"
-        #   method: "GET"
-        #   data:
-        #     start_date: new_loaded_start.format("MMM-DD-YYYY")
-        #     end_date: @get("viewportStart").format("MMM-DD-YYYY")
-        # ).then(
-        #   (response) =>
-        #     @set "loadedStartDate",new_loaded_start
-        #     @loadMore(response)
-        #
-        #   (response) => console.log "?!?! error on getting graph"
-        # )
+        @loadMore(new_loaded_start, @get("viewportStart")) unless @get("loadingStartDate") <= new_loaded_start
 
       # TODO deal with future loading later
       # available_future_days = Math.abs(@get("loadedEndDate").diff(moment.utc().startOf("day"),"days"))
@@ -226,6 +232,7 @@ controller = Ember.ObjectController.extend
   .observes("loadedStartDate", "loadedEndDate", "viewportStart")
 
   loadMore: (start,end) ->
+    @set "loadingStartDate", start
 
     ajax(
       url: "#{config.apiNamespace}/graph"
