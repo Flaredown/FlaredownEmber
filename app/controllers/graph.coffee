@@ -19,19 +19,19 @@ controller = Ember.ObjectController.extend
   datePickerWatcher: Ember.observer ->
 
     if @get("pickerStartDate")
-      new_start_date = moment(@get("pickerStartDate")).utc().startOf("day")
+      new_start_date = moment(@get("pickerStartDate"))
       change = @get("viewportStart").diff(new_start_date, "days")
-      @send("resizeViewport", change, "past")
+      @send("resizeViewport", change, "past") unless new_start_date.isSame(@get("viewportStart"), "day")
 
     if @get("pickerEndDate")
-      new_end_date = moment(@get("pickerEndDate")).utc().startOf("day")
+      new_end_date = moment(@get("pickerEndDate"))
       change = @get("viewportEnd").diff(new_end_date, "days")
-      @send("resizeViewport", change, "future")
+      @send("resizeViewport", change, "future") unless new_end_date.isSame(@get("viewportEnd"), "day")
 
   .observes("pickerStartDate", "pickerEndDate")
 
   viewportDateWatcher: Ember.observer ->
-    Ember.run.next =>
+    Ember.run.later =>
       if @get("viewportStart")
         formatted_start = moment(@get("viewportStart")).format("D MMMM, YYYY")
         @set("pickerStartDate", formatted_start) if @get("pickerStartDate") isnt formatted_start
