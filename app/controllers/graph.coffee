@@ -31,9 +31,15 @@ controller = Ember.ObjectController.extend
   .observes("pickerStartDate", "pickerEndDate")
 
   viewportDateWatcher: Ember.observer ->
-    @set("pickerStartDate", @get("viewportStart").utc().format("D MMMM, YYYY")) if @get("viewportStart")
-    @set("pickerEndDate", @get("viewportEnd").utc().format("D MMMM, YYYY")) if @get("viewportEnd")
-  .observes("viewportStart", "viewportEnd")
+    Ember.run.next =>
+      if @get("viewportStart")
+        formatted_start = moment(@get("viewportStart")).format("D MMMM, YYYY")
+        @set("pickerStartDate", formatted_start) if @get("pickerStartDate") isnt formatted_start
+
+      if @get("viewportEnd")
+        formatted_end = moment(@get("viewportEnd")).format("D MMMM, YYYY")
+        @set("pickerEndDate", formatted_end) if @get("pickerEndDate") isnt formatted_end
+  .observes("viewportStart")
 
   ### VIEWPORT SETUP ###
   changeViewport: (size_change, new_start) ->
