@@ -11,7 +11,7 @@ var app = new EmberApp({
 //   destDir: 'assets'
 // });
 
-// var pickFiles = require('broccoli-static-compiler');
+var pickFiles = require('broccoli-static-compiler');
 // var fonts = pickFiles('app/assets/fonts', {
 //    srcDir: '/',
 //    files: ['*'],
@@ -63,5 +63,5 @@ app.import('bower_components/ember-i18n/lib/i18n.js');
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
-// module.exports = app.toTree(fonts);
+module.exports = app.toTree();
 // module.exports = app.toTree(images);
