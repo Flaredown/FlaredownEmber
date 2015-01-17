@@ -30,15 +30,6 @@ view = Ember.View.extend
   dropInDuration: 450
   perDatumDelay: 15
 
-  symptomColors:
-    [
-      "#B081D9"
-      "#F5A623"
-      "#73C1BA"
-      "#F47070"
-      "#AED584"
-    ]
-
   ### CONTROL FUNCTIONALITY ###
   draggable: 'true'
   attributeBindings: 'draggable'
@@ -157,7 +148,6 @@ view = Ember.View.extend
   .property("height", "symptomsMax")
 
   setup: ->
-    @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
     # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
     @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
@@ -189,13 +179,11 @@ view = Ember.View.extend
             rx: 3
             y: (d) -> d.get("end_y")
             x: (d) -> d.get("end_x")
-            # fill: (d) => d.get("color")
 
     @update()
 
   update: ->
     scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
-    @set "colors", d3.scale.ordinal().range(@get("symptomColors")).domain(@get("symptomsMax"))
 
     scorePip
       .enter()
@@ -214,7 +202,6 @@ view = Ember.View.extend
             y: (d) -> d.get("end_y")
             width:  @get("symptomDatumDimensions").width
             height: @get("symptomDatumDimensions").height
-            # fill: (d) => d.get("color")
 
 
     scorePip
