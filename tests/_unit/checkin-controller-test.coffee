@@ -86,11 +86,23 @@ test "#hasCompleteResponse looks up response completeness by catalog and categor
 test "skipped sections are tracked", ->
   expect 2
 
+
   controller.set("sectionsSeen", [1,2,3,4])
   controller.set("section", 5)
 
   ok controller.get("sections")[2].skipped is true,  "hbi_general_wellbeing response missing but section seen so is 'skipped'"
   ok controller.get("sections")[3].skipped is false,  "hbi_ab_pain response exists and seen so isn't 'skipped'"
+
+test "all sections are seen unless Entry is 'just_created'", ->
+  expect 4
+
+  Ember.run ->
+    controller.set("just_created", false)
+
+    ok controller.get("sections")[2].skipped is true,     "hbi_general_wellbeing response missing but section seen so is 'skipped'"
+    ok controller.get("sections")[3].skipped is false,    "hbi_ab_pain response exists and seen so isn't 'skipped'"
+    ok controller.get("sections")[2].complete is false,   "hbi_general_wellbeing response missing, so incomplete"
+    ok controller.get("sections")[3].complete is true,    "hbi_ab_pain response exists, is complete"
 
 test "#currentSection is set based on section integer", ->
   expect 7

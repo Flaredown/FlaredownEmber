@@ -78,7 +78,9 @@ controller = Ember.ObjectController.extend
   .property("sectionsDefinition", "catalogs", "section", "responsesData")
 
   ### Section Helpers ###
-  isSeen: (section) -> @get("sectionsSeen").contains(section)
+  isSeen: (section) ->
+    return true unless @get("just_created") is true
+    @get("sectionsSeen").contains(section)
   hasCompleteResponse: (catalog,section_index) ->
       section = @get("catalog_definitions.#{catalog}")[section_index]
       return true if section.kind is "checkbox"

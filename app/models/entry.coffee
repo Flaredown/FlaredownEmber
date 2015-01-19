@@ -11,6 +11,7 @@ model = DS.Model.extend
   notes:                DS.attr("string")
   treatments:           DS.hasMany("treatment")
   complete:             DS.attr("boolean")
+  just_created:         DS.attr("boolean")
 
   moment:     Ember.computed(-> moment.utc(@get("date")) ).property("date")
   unixDate:   Ember.computed(-> @get("moment").unix() ).property("moment")

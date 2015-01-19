@@ -9,6 +9,7 @@ fixture = (date) ->
       catalogs: ["hbi", "foo"],
       notes: "123 #abc"
       complete: true
+      just_created: true
       responses: [
         # { id: "hbi_general_wellbeing_#{id}", name: "general_wellbeing", value: null, catalog: "hbi" }
         { id: "hbi_ab_pain_#{id}", name: "ab_pain", value: 1, catalog: "hbi" }
