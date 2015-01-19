@@ -3,6 +3,8 @@
 model = DS.Model.extend
   obfuscated_id:        DS.attr "string"
   entries:              DS.hasMany "entry"
+  treatments:           DS.hasMany "treatment"
+  symptoms:             DS.hasMany "symptoms"
 
   locale:               DS.attr "string"
   email:                DS.attr "string"
