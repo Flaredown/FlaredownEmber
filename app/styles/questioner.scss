@@ -136,14 +136,17 @@
     @include span-columns(10);
     @include wrap-ellipsis;
     text-align: left;
-    background: $primary;
     padding: 5px 15px;
     border-radius: 999px;
     color: white;
-    &.on {
-      background: $lightgrey;
-      color: grey;
+    background: $lightgrey;
+    color: grey;
+
+    &.active {
+      color: white;
+      background: $primary;
     }
+
   }
   .checkin-treatments-edit, .checkin-treatments-remove {
     @include span-columns(1);

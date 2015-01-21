@@ -1,0 +1,21 @@
+p Now editing checkin for {{fancyDate}}
+
+h4: link-to "graph.checkin" niceDate section (query-params edit=notEditing) | Back to Checkin
+/ h4: a href="javascript: void(0);" click="stopEditing" Back to Checkin
+
+ul.edit-options
+  li
+    link-to "graph.checkin" niceDate section (query-params edit='treatments') | Treatments
+  li
+    link-to "graph.checkin" niceDate section (query-params edit='conditions') | Conditions
+  li
+    link-to "graph.checkin" niceDate section (query-params edit='symptoms') | Symptoms
+
+if editingTreatments
+  partial "edit-checkin/treatments"
+
+if editingConditions
+  partial "edit-checkin/conditions"
+
+if editingSymptoms
+  partial "edit-checkin/symptoms"

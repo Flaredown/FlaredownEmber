@@ -13,11 +13,22 @@ controller = Ember.ObjectController.extend
 
   needs: ["graph"]
 
+  ### EDIT FUNCTIONS ###
+  queryParams: ["edit"]
+
+  edit: null
+  notEditing: null
+
+  editingTreatments: Ember.computed.equal("edit", "treatments")
+  editingConditions: Ember.computed.equal("edit", "conditions")
+  editingSymptoms: Ember.computed.equal("edit", "symptoms")
+
   # Watch some user actions
   modalChanged: Ember.observer ->
     unless @get("modalOpen")
       @send("save")
       @set("sectionsSeen", [])
+      @set("edit", null)
       @transitionToRoute("graph")
       @set("modalOpen", true)
   .observes("modalOpen")
@@ -102,6 +113,8 @@ controller = Ember.ObjectController.extend
   currentCategory:            Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
   currentCategorySections:    Ember.computed( -> @get("sections").filterBy("category", @get("currentCategory")) ).property("currentCategory")
 
+  isSymptom:                  Ember.computed.equal("currentCategory", "symptoms")
+
   currentPartial:             Ember.computed( ->
     return "questioner/#{@get("currentCategory")}" if ["start", "treatments", "notes", "finish"].contains(@get("currentCategory"))
     "questioner/questions"
@@ -126,6 +139,13 @@ controller = Ember.ObjectController.extend
 
   .property("section.category", "currentSection")
 
+  inactiveTreatments: Ember.computed ->
+    actives = @get("treatments").mapBy("name")
+    @get("currentUser.treatments").filter (treatment) ->
+      not actives.contains treatment.get("name")
+
+  .property("currentUser.treatments", "treatments.@each")
+
   responsesData: Ember.computed ->
     that            = @
     responses       = []
@@ -148,6 +168,9 @@ controller = Ember.ObjectController.extend
   actions:
     closeCheckin: -> @set("modalOpen", false)
     treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
+    treatmentAdded: (treatment) ->
+      newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
+      @get("treatments").addObject newTreatment
 
     setResponse: (question_name, value) ->
       response = @get("sectionResponses").findBy("name",question_name)
@@ -164,6 +187,10 @@ controller = Ember.ObjectController.extend
       @set("section", @get("section")+1) unless @get("section") is @get("sections.lastObject.number")
     previousSection: ->
       @set("section", @get("section")-1) unless @get("section") is @get("sections.firstObject.number")
+
+    stopEditing: ->
+      Ember.run.next =>
+        @transitionToRoute("graph.checkin", @get("niceDate"), @get("section"), {queryParams: {edit: null}})
 
     save: ->
       data =

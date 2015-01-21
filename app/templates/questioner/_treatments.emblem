@@ -1,6 +1,8 @@
 .checkin-treatments
+  link-to "graph.checkin" niceDate section (query-params edit='treatments') | Edit Treatments
+
   h4 Which treatments did you take today
 
   ul: each treatment in treatments
     with treatment
-      view "treatment"
+      view "treatment" editable=false active=true

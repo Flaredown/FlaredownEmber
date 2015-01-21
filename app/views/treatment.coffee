@@ -10,8 +10,7 @@ view = Ember.View.extend
 
   actions:
     edit: -> @set("editing", true)
-    destroy: (id) ->
-      treatment = @get("controller.treatments").findBy("id", id)
+    destroy: (treatment) ->
 
       swal
         title: "Are you sure?",
@@ -21,7 +20,13 @@ view = Ember.View.extend
         # confirmButtonColor: "#DD6B55"
         # confirmButtonText: "Yes, delete it!"
         closeOnConfirm: true
-        => @get("controller.treatments").removeObject(treatment)
+        =>
+          @get("controller.treatments").removeObject treatment
+          treatment.unloadRecord()
+
+    add: (treatment) ->
+      @get("controller").send("treatmentAdded", treatment.getProperties("name", "quantity", "unit"))
+
     save: ->
       @set("editing", false)
       @get("controller").send("treatmentEdited")
