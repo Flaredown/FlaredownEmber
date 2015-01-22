@@ -2,13 +2,11 @@ h2 Editing Treatments
 
 .checkin-treatments
   ul: each treatment in treatments
-    with treatment
-      view "treatment" editable=true active=true
+    view "edit-checkin/treatment" editable=true active=true
 
   br
   ul: each treatment in inactiveTreatments
-    with treatment
-      view "treatment" editable=true active=false
+    view "edit-checkin/treatment" editable=true active=false
 
   br
   = input placeholder="Add a Treatment"

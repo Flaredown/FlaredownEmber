@@ -17,15 +17,12 @@ view = Ember.View.extend
         text: Ember.I18n.t("#{@get("controller.currentUser.locale")}.confirm_treatment_remove", treatment: treatment.get("name"))
         type: "warning"
         showCancelButton: true
-        # confirmButtonColor: "#DD6B55"
-        # confirmButtonText: "Yes, delete it!"
         closeOnConfirm: true
         =>
-          @get("controller.treatments").removeObject treatment
-          treatment.unloadRecord()
+          @get("controller").send("removeTreatment", treatment)
 
     add: (treatment) ->
-      @get("controller").send("treatmentAdded", treatment.getProperties("name", "quantity", "unit"))
+      @get("controller").send("addTreatment", treatment.getProperties("name", "quantity", "unit"))
 
     save: ->
       @set("editing", false)

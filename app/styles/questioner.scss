@@ -132,7 +132,7 @@
       align-items: center;
     }
   }
-  .checkin-treatments-name {
+  .checkin-treatment-name {
     @include span-columns(10);
     @include wrap-ellipsis;
     text-align: left;
@@ -148,7 +148,41 @@
     }
 
   }
-  .checkin-treatments-edit, .checkin-treatments-remove {
+  .checkin-treatment-edit, .checkin-treatment-remove {
+    @include span-columns(1);
+    text-align: center;
+  }
+}
+
+.checkin-symptoms {
+  ul {
+    @include row;
+    width: 90%;
+    margin: 20px auto 0 auto;
+    font-size: 1.2em;
+    max-width: 20em;
+    li {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .checkin-symptom-name {
+    @include span-columns(10);
+    @include wrap-ellipsis;
+    text-align: left;
+    padding: 5px 15px;
+    border-radius: 999px;
+    color: white;
+    background: $lightgrey;
+    color: grey;
+
+    &.active {
+      color: white;
+      background: $primary;
+    }
+
+  }
+  .checkin-symptom-edit, .checkin-symptom-remove {
     @include span-columns(1);
     text-align: center;
   }

@@ -5,8 +5,6 @@ component = Ember.Component.extend
 
   layoutName: Ember.computed(-> "questioner/_#{@get("question.kind")}_input" ).property("question.kind")
 
-  isSymptom: Ember.computed.equal("category", "symptoms")
-
   inputs: Ember.computed(->
     @get("question.inputs").map (input) =>
       value: input.value,

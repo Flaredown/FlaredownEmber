@@ -1,11 +1,13 @@
 `import Ember from 'ember'`
 `import config from '../../config/environment'`
+`import TrackablesControllerMixin from '../../mixins/trackables_controller'`
 `import ajax from 'ic-ajax'`
 
-controller = Ember.ObjectController.extend
+controller = Ember.ObjectController.extend TrackablesControllerMixin,
   modalOpen: true
   sectionsSeen: []
 
+  nonQuestionSections: ["start", "treatments", "treatments-empty", "symptoms-empty", "conditions-empty", "notes", "finish"]
   defaultResponseValues:
     checkbox: 0
     select: null
@@ -35,8 +37,11 @@ controller = Ember.ObjectController.extend
 
   sectionChanged: Ember.observer ->
     if @get("section")
+
+      # Set seen sections
       @get("sectionsSeen").addObject @get("section")
       @transitionToRoute("graph.checkin", @get("dateAsParam"), @get("section"))
+
   .observes("section")
 
   checkinComplete: Ember.computed( ->
@@ -54,10 +59,15 @@ controller = Ember.ObjectController.extend
   ### Sections: All the pages in the checkin form ###
   sectionsDefinition: Ember.computed ->
     _definition = [["start",1]]
-    @get("catalogsSorted").forEach (catalog) => _definition.push [catalog,@get("catalog_definitions.#{catalog}.length")]
+    @get("catalogsSorted").forEach (catalog) =>
+      length = @get("catalog_definitions.#{catalog}.length")
+      _definition.push [catalog,length] unless length is 0
+
+    _definition.push ["symptoms-empty",0] if @get("catalog_definitions.symptoms.length") is 0
+
     ["treatments", "notes", "finish"].forEach (section) -> _definition.push [section, 1]
     _definition
-  .property("catalogsSorted")
+  .property("catalogsSorted", "catalog_definitions", "catalog_definitions.symptoms.@each")
 
   sections: Ember.computed ->
     _sections = []
@@ -67,26 +77,43 @@ controller = Ember.ObjectController.extend
       number      = i+1
 
       [0..size-1].forEach (subsection_index) =>
-        subsection    = _sections.length+1
-        question      = not ["start", "treatments", "notes", "finish"].contains(name)
-        is_selected   = (subsection is @get("section"))
-        is_seen       = @isSeen(subsection)
-        is_complete   = not question or @hasCompleteResponse(name,subsection_index)
+        if subsection_index >= 0
+          subsection    = _sections.length+1
+          question      = not @get("nonQuestionSections").contains(name)
+          is_selected   = (subsection is @get("section"))
+          is_seen       = @isSeen(subsection)
+          is_complete   = not question or (question and @hasCompleteResponse(name,subsection_index))
 
-        _sections.addObject {
-          number:           subsection
-          selected:         is_selected
-          category_number:  subsection_index+1
-          category:         name
-          question:         question
-          seen:             is_seen
-          complete:         is_seen and is_complete
-          skipped:          is_seen and not is_complete and not is_selected
-        }
+          _sections.addObject {
+            number:           subsection
+            selected:         is_selected
+            category_number:  subsection_index+1
+            category:         name
+            question:         question
+            seen:             is_seen
+            complete:         is_seen and is_complete
+            skipped:          is_seen and not is_complete and not is_selected
+          }
 
     _sections
 
   .property("sectionsDefinition", "catalogs", "section", "responsesData")
+
+  responsesData: Ember.computed ->
+    that            = @
+    responses       = []
+
+    @get("catalogsSorted").forEach (catalog) =>
+      @get("catalog_definitions.#{catalog}").forEach (section) =>
+        section.forEach (question) ->
+          # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
+          response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
+          value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
+
+          responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
+
+    responses
+  .property("catalog_definitions","catalog_definitions.symptoms.@each")
 
   ### Section Helpers ###
   isSeen: (section) ->
@@ -113,10 +140,10 @@ controller = Ember.ObjectController.extend
   currentCategory:            Ember.computed( -> @get("currentSection.category")                                ).property("currentSection")
   currentCategorySections:    Ember.computed( -> @get("sections").filterBy("category", @get("currentCategory")) ).property("currentCategory")
 
-  isSymptom:                  Ember.computed.equal("currentCategory", "symptoms")
+  isSymptomCategory:          Ember.computed.equal("currentCategory", "symptoms")
 
   currentPartial:             Ember.computed( ->
-    return "questioner/#{@get("currentCategory")}" if ["start", "treatments", "notes", "finish"].contains(@get("currentCategory"))
+    return "questioner/#{@get("currentCategory")}" if @get("nonQuestionSections").contains(@get("currentCategory"))
     "questioner/questions"
   ).property("currentCategory")
 
@@ -129,7 +156,6 @@ controller = Ember.ObjectController.extend
       Ember.I18n.t "#{@get("catalogStub")}.section_#{@get("currentSection.category_number")}_prompt"
   ).property("currentSection")
 
-
   sectionQuestions: Ember.computed ->
     section = @get("currentSection")
 
@@ -139,38 +165,10 @@ controller = Ember.ObjectController.extend
 
   .property("section.category", "currentSection")
 
-  inactiveTreatments: Ember.computed ->
-    actives = @get("treatments").mapBy("name")
-    @get("currentUser.treatments").filter (treatment) ->
-      not actives.contains treatment.get("name")
-
-  .property("currentUser.treatments", "treatments.@each")
-
-  responsesData: Ember.computed ->
-    that            = @
-    responses       = []
-
-    @get("catalogsSorted").forEach (catalog) =>
-      @get("catalog_definitions.#{catalog}").forEach (section) =>
-        section.forEach (question) ->
-
-          # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
-          response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
-          value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
-
-          responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
-
-    responses
-  .property("catalog_definitions")
-
-  sectionResponses: Ember.computed( -> @get("responsesData").filterBy("catalog", @get("currentCategory")) ).property("currentCategory", "responsesData")
+  sectionResponses: Ember.computed( -> @get("responsesData").filterBy("catalog", @get("currentCategory")) ).property("currentCategory", "responsesData.@each")
 
   actions:
     closeCheckin: -> @set("modalOpen", false)
-    treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
-    treatmentAdded: (treatment) ->
-      newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
-      @get("treatments").addObject newTreatment
 
     setResponse: (question_name, value) ->
       response = @get("sectionResponses").findBy("name",question_name)
@@ -178,8 +176,6 @@ controller = Ember.ObjectController.extend
       if Ember.isPresent(response) and value isnt null
         response.set("value", value)
         @send("nextSection") if @get("sectionQuestions.length") is 1
-
-      # TODO raise some error here if question not found?
 
     setSection: (section) ->
       @set("section", section) if @get("sections").mapBy("number").contains(section)
@@ -196,7 +192,7 @@ controller = Ember.ObjectController.extend
       data =
         entry:
           JSON.stringify({
-            responses: @get("responsesData").rejectBy("value", null) # Don't send null value responses, these are invalid
+            responses: @get("responsesData")
             notes: @get("notes")
             treatments: @get("treatments").map (treatment) -> treatment.getProperties("name", "quantity", "unit")
           })
