@@ -141,21 +141,21 @@ test "Can edit treatment", ->
   expect 2
 
   visit('/checkin/Aug-13-2014/9?edit=treatments').then( ->
-    triggerEvent $(".checkin-treatments-edit:eq(0)"), "click"
+    triggerEvent $(".checkin-treatment-edit:eq(0)"), "click"
 
     andThen ->
       ok find(".treatment-name-input")
       fillIn(".treatment-quantity-input", "200")
       triggerEvent ".save-treatment", "click"
       andThen ->
-        ok $(".checkin-treatments-quantity").text() is "200"
+        ok $(".checkin-treatment-quantity").text() is "200"
   )
 
 test "Warned of treatment removal", ->
   expect 1
 
   visit('/checkin/Aug-13-2014/9?edit=treatments').then( ->
-    triggerEvent $(".checkin-treatments-remove:eq(0)"), "click"
+    triggerEvent $(".checkin-treatment-remove:eq(0)"), "click"
 
     andThen -> window.assertAlertPresent()
   )
