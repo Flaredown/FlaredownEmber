@@ -6,7 +6,11 @@ view = Ember.View.extend
   templateName: "questioner/_treatment_input"
   classNames: ["checkin-treatment"]
 
-  bla: "lala"
+  color: Ember.computed(->
+    uniq_name = "treatment_#{@get("name")}"
+    color     = @get("controller.currentUser.treatmentColors").find((color) => color[0] is uniq_name)
+    "tbg-#{color[1]}"
+  ).property("name", "controller.currentUser.treatmentColors")
 
   editing: false
 
