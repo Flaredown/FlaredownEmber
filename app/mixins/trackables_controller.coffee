@@ -36,7 +36,7 @@ mixin = Ember.Mixin.create
 
     removeSymptom: (symptom) ->
       @get("catalog_definitions.symptoms").forEach (section,i) =>
-        if section[0].name is symptom.get("name")
+        if section[0].name is symptom.name
           @get("catalog_definitions.symptoms").removeAt(i)
 
   symptomDefinitionTemplate: (name) ->

@@ -8,10 +8,9 @@ view = Ember.View.extend
 
   actions:
     destroy: (symptom) ->
-
       swal
         title: "Are you sure?",
-        text: Ember.I18n.t("#{@get("controller.currentUser.locale")}.confirm_symptom_remove", symptom: symptom.get("name"))
+        text: Ember.I18n.t("#{@get("controller.currentUser.locale")}.confirm_symptom_remove", symptom: symptom.name)
         type: "warning"
         showCancelButton: true
         closeOnConfirm: true
@@ -20,7 +19,7 @@ view = Ember.View.extend
 
 
     add: (symptom) ->
-      @get("controller").send("addSymptom", symptom.getProperties("name"))
+      @get("controller").send("addSymptom", symptom.name)
 
     save: ->
       @set("editing", false)
