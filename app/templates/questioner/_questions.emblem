@@ -1,5 +1,7 @@
 .checkin-questions
+
   h4 = currentSectionPrompt
+  p note: you're a champ for contributing to research!
 
   each question in sectionQuestions
     = questioner-input question=question section=currentSection responses=responsesData action="setResponse"

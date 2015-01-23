@@ -7,9 +7,11 @@ view = Ember.View.extend
   classNames: ["checkin-treatment"]
 
   color: Ember.computed(->
-    uniq_name = "treatment_#{@get("name")}"
-    color     = @get("controller.currentUser.treatmentColors").find((color) => color[0] is uniq_name)
-    "tbg-#{color[1]}"
+    uniq_name     = "treatment_#{@get("name")}"
+    color         = @get("controller.currentUser.treatmentColors").find((color) => color[0] is uniq_name)
+    color_number  = if color then color[1] else 0
+
+    "tbg-#{color_number}"
   ).property("name", "controller.currentUser.treatmentColors")
 
   editing: false
