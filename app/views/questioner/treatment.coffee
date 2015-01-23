@@ -6,6 +6,8 @@ view = Ember.View.extend
   templateName: "questioner/_treatment_input"
   classNames: ["checkin-treatment"]
 
+  bla: "lala"
+
   editing: false
 
   actions:

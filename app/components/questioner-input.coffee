@@ -7,12 +7,18 @@ component = Ember.Component.extend
   symptomQuestion: Ember.computed.equal("section.category", "symptoms")
 
   inputs: Ember.computed(->
-    @get("question.inputs").map (input) =>
-      value: input.value,
-      selected: input.value is @get("value")
-      label: if input.label then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
+    uniq_name = "#{@get("section.category")}_#{@get("question.name")}"
+    color     = @get("controller.currentUser.symptomColors").find((color) => color[0] is uniq_name)
 
-  ).property("question.inputs", "value")
+    @get("question.inputs").map (input) =>
+      selected  = input.value is @get("value")
+
+      value: input.value,
+      selected: selected
+      label: if input.label then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
+      color: if selected then "sselect-#{color[1]}" else "sselect-faded-#{color[1]}"
+
+  ).property("question.inputs", "value", "controller.currentUser.symptomColors", "question.name", "section.category")
 
   value: Ember.computed( ->
     question = @get("responses").filterBy("catalog",@get("section.category")).findBy("name", @get("question.name"))

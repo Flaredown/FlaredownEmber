@@ -25,4 +25,14 @@ $symptoms: #0F3F65, #9DB9BA, #2577B2, #5EB1D7, #206D37, #B3DACC, #829D3C, #B2CD7
     .sfill-#{$i} {
         fill: $color;
     }
+    .sselect-#{$i} {
+        background-color: $color;
+    }
+    .sselect-faded-#{$i} {
+        background-color: $color + 20;
+        &:hover, &.selected {
+           background: $color - 40;
+           color: white;
+        }
+    }
 }

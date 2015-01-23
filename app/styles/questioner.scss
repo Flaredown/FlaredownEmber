@@ -67,12 +67,12 @@
     color: grey;
     font-size: 1.2em;
     margin: 1px;
-    background: $lightgrey;
+    // background: $lightgrey;
 
-    &:hover, &.selected {
-      background: $primary;
-      color: white;
-    }
+    // &:hover, &.selected {
+    //   background: $primary;
+    //   color: white;
+    // }
     // @media (min-width: $tablet) {
     //   padding: 10px 25px;
     //   width: auto;

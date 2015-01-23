@@ -8,7 +8,7 @@ li
       = input class="save-treatment" type="submit"
         |Save
   else
-    div class={:checkin-treatment-name view.active:active} = treatment.name
+    div class={:checkin-treatment-name view.active:active view.color } = treatment.name
     span.checkin-treatment-quantity= treatment.quantity
     span.checkin-treatment-unit= treatment.unit
     if view.editable

@@ -3,9 +3,8 @@
     ul: each treatment in treatments
       view "questioner/treatment" editable=true active=true
 
-    br
-    ul: each treatment in inactiveTreatments
-      view "questioner/treatment" editable=true active=false
+    / ul: each treatment in inactiveTreatments
+    /   view "questioner/treatment" editable=true active=false
   else
     h4 Bwa! No treatments being tracked!
 
