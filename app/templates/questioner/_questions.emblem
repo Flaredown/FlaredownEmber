@@ -1,6 +1,3 @@
-if isSymptomCategory
-  link-to "graph.checkin" niceDate section (query-params edit='symptoms') | Edit Symptoms
-
 .checkin-questions
   h4 = currentSectionPrompt
 

@@ -1,7 +1,7 @@
 .checkin-response
-  ul.checkin-response-select
+  ul class={ :checkin-response-select symptomQuestion:symptom-question:catalog-question}
     each input in inputs
-        if input.label
-          li class={input.selected:selected} click="sendResponse input.value" = input.label
-        else
-          li class={input.selected:selected} click="sendResponse input.value" = input.value
+      if input.label
+        li class={input.selected:selected} click="sendResponse input.value" = input.label
+      else
+        li class={input.selected:selected} click="sendResponse input.value" = input.value

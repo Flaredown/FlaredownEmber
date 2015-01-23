@@ -1,7 +1,4 @@
-li
-  div class={:checkin-symptom-name view.active:active} = symptom.name
-  if view.editable
-    if view.active
-      .checkin-symptom-remove click="destroy symptom target=view" &times;
-    else
-      .checkin-symptom-add click="add symptom target=view" +
+if view.active
+  h4 = symptom.name
+  = questioner-input question=symptom section=currentSection responses=responsesData action="setResponse"
+  .checkin-symptom-remove click="destroy symptom target=view" &times;

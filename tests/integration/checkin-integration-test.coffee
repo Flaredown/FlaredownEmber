@@ -140,7 +140,7 @@ test "closing modal goes back to index", ->
 test "Can edit treatment", ->
   expect 2
 
-  visit('/checkin/Aug-13-2014/9?edit=treatments').then( ->
+  visit('/checkin/Aug-13-2014/9').then( ->
     triggerEvent $(".checkin-treatment-edit:eq(0)"), "click"
 
     andThen ->

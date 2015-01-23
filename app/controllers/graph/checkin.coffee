@@ -7,23 +7,13 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
   modalOpen: true
   sectionsSeen: []
 
-  nonQuestionSections: ["start", "treatments", "treatments-empty", "symptoms-empty", "conditions-empty", "notes", "finish"]
+  nonQuestionSections: ["start", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
   defaultResponseValues:
     checkbox: 0
     select: null
     number: null
 
   needs: ["graph"]
-
-  ### EDIT FUNCTIONS ###
-  queryParams: ["edit"]
-
-  edit: null
-  notEditing: null
-
-  editingTreatments: Ember.computed.equal("edit", "treatments")
-  editingConditions: Ember.computed.equal("edit", "conditions")
-  editingSymptoms: Ember.computed.equal("edit", "symptoms")
 
   # Watch some user actions
   modalChanged: Ember.observer ->
@@ -61,11 +51,10 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
     _definition = [["start",1]]
     @get("catalogsSorted").forEach (catalog) =>
       length = @get("catalog_definitions.#{catalog}.length")
-      _definition.push [catalog,length] unless length is 0
+      _definition.push [catalog,length] unless length is 0 or catalog is "symptoms"
 
-    _definition.push ["symptoms-empty",0] if @get("catalog_definitions.symptoms.length") is 0
+    ["symptoms", "treatments", "notes", "finish"].forEach (section) -> _definition.push [section, 1]
 
-    ["treatments", "notes", "finish"].forEach (section) -> _definition.push [section, 1]
     _definition
   .property("catalogsSorted", "catalog_definitions", "catalog_definitions.symptoms.@each")
 
@@ -95,6 +84,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
             skipped:          is_seen and not is_complete and not is_selected
           }
 
+    console.log _sections
     _sections
 
   .property("sectionsDefinition", "catalogs", "section", "responsesData")
@@ -161,7 +151,10 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
 
     return [] unless @get("catalog_definitions") and @get("catalogs").contains(section.category)
     catalog_questions = @get("catalog_definitions.#{section.category}")
-    catalog_questions[ section.category_number-1 ]
+    if section.category is "symptoms"
+      catalog_questions.map (section) -> section[0]
+    else
+      catalog_questions[ section.category_number-1 ]
 
   .property("section.category", "currentSection")
 

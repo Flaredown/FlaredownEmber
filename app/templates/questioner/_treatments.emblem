@@ -1,10 +1,13 @@
 .checkin-treatments
-  link-to "graph.checkin" niceDate section (query-params edit='treatments') | Edit Treatments
-
   if treatments.length
-    h4 Which treatments did you take today
-
     ul: each treatment in treatments
-      view "edit-checkin/treatment" editable=false active=true
+      view "questioner/treatment" editable=true active=true
+
+    br
+    ul: each treatment in inactiveTreatments
+      view "questioner/treatment" editable=true active=false
   else
     h4 Bwa! No treatments being tracked!
+
+  br
+  = input placeholder="Add a Treatment"
