@@ -13,7 +13,7 @@ li
     span.checkin-treatment-unit= treatment.unit
     if view.editable
       if view.active
-        .checkin-treatment-edit click="edit target=view" |
+        .checkin-treatment-edit click="edit target=view" &#9662;
         .checkin-treatment-remove click="destroy treatment target=view" &times;
       else
         .checkin-treatment-add click="add treatment target=view" +
