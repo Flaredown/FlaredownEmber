@@ -19,13 +19,19 @@
   }
   .checkin-dot {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 999px;
     background: $lightgrey;
-    margin: 3px;
+    margin: 3px 5px;
     &.selected {
+      transform: scale(1.3);
+    }
+    &.complete {
       background: $primary;
+    }
+    &.skipped {
+      background: $secondary;
     }
   }
   .checkin-content {
