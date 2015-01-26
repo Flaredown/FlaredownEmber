@@ -38,7 +38,7 @@
     margin: 20px 0 0 0;
     h4 {
       max-width: 90%;
-      margin: 0 auto;
+      margin: 0 auto 20px auto;
     }
   }
   .checkin-questions {
@@ -169,36 +169,31 @@
 }
 
 .checkin-symptoms {
-  ul {
-    @include row;
+  .checkin-response-symptom {
+    display: block;
+    margin: 0 auto 20px auto;
     width: 90%;
-    margin: 20px auto 0 auto;
-    font-size: 1.2em;
-    max-width: 20em;
+    max-width: 500px;
     li {
-      display: flex;
-      align-items: center;
+      display: inline-block;
+      padding: 10px 20px;
+      &:first-of-type {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      &:last-of-type {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
     }
   }
-  .checkin-symptom-name {
-    @include span-columns(10);
-    @include wrap-ellipsis;
-    text-align: left;
-    padding: 5px 15px;
-    border-radius: 999px;
-    color: white;
-    background: $lightgrey;
-    color: grey;
-
-    &.active {
-      color: white;
-      background: $primary;
+  .checkin-symptom-remove {
+    color: $lightgrey;
+    margin-left: 5px;
+    &:hover {
+      color: black;
+      cursor: pointer;
     }
-
-  }
-  .checkin-symptom-edit, .checkin-symptom-remove {
-    @include span-columns(1);
-    text-align: center;
   }
 }
 

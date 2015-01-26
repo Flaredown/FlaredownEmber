@@ -1,7 +1,15 @@
 .checkin-response
-  ul class={ :checkin-response-select symptomQuestion:symptom-question:catalog-question}
-    each input in inputs
-      if input.label
-        li class={input.selected:selected input.value:input.color} click="sendResponse input.value" = input.label
-      else
-        li class={input.selected:selected input.color} click="sendResponse input.value" = input.value
+  if symptomQuestion
+    ul class={ :checkin-response-symptom }
+      each input in inputs
+        if input.label
+          li class={input.selected:selected input.color} click="sendResponse input.value" = input.label
+        else
+          li class={input.selected:selected input.color} click="sendResponse input.value" = input.value
+  else
+    ul class={ :checkin-response-select :catalog-question}
+      each input in inputs
+        if input.label
+          li class={input.selected:selected input.color} click="sendResponse input.value" = input.label
+        else
+          li class={input.selected:selected input.color} click="sendResponse input.value" = input.value
