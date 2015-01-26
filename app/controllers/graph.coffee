@@ -17,16 +17,16 @@ controller = Ember.ObjectController.extend
 
   ### DATE PICKER STUFF ###
   datePickerWatcher: Ember.observer ->
+    Ember.run.later =>
+      if @get("pickerStartDate")
+        new_start_date = moment(@get("pickerStartDate"))
+        change = @get("viewportStart").diff(new_start_date, "days")
+        @send("resizeViewport", change, "past") unless new_start_date.isSame(@get("viewportStart"), "day")
 
-    if @get("pickerStartDate")
-      new_start_date = moment(@get("pickerStartDate"))
-      change = @get("viewportStart").diff(new_start_date, "days")
-      @send("resizeViewport", change, "past") unless new_start_date.isSame(@get("viewportStart"), "day")
-
-    if @get("pickerEndDate")
-      new_end_date = moment(@get("pickerEndDate"))
-      change = @get("viewportEnd").diff(new_end_date, "days")
-      @send("resizeViewport", change, "future") unless new_end_date.isSame(@get("viewportEnd"), "day")
+      if @get("pickerEndDate")
+        new_end_date = moment(@get("pickerEndDate"))
+        change = @get("viewportEnd").diff(new_end_date, "days")
+        @send("resizeViewport", change, "future") unless new_end_date.isSame(@get("viewportEnd"), "day")
 
   .observes("pickerStartDate", "pickerEndDate")
 
@@ -107,6 +107,8 @@ controller = Ember.ObjectController.extend
       range
 
   ).property("loadedStartDate", "loadedEndDate")
+
+  daysAsMoments: Ember.computed(-> @get("days").map (day) -> moment(day*1000) ).property("days")
 
   ### Catalogs and Catalog Based Filters ###
   catalogs: Ember.computed( -> Object.keys(@get("rawData")).sort() ).property("rawData")
@@ -189,7 +191,7 @@ controller = Ember.ObjectController.extend
   ).property("catalogDatums", "filteredResponseNames.@each")
 
   unfilteredDatumsByDay: Ember.computed( ->
-    @get("days").map (day) => @get("unfilteredDatums").filterBy("day", day)
+    @get("days").map (day) => @get("unfilteredDatums").filterBy("day", day).sortBy("order")
   ).property("unfilteredDatums", "days")
 
   unfilteredDatumsByDayInViewport: Ember.computed(->

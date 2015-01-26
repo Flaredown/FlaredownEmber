@@ -70,6 +70,16 @@
     }
 
   }
+
+  .datestamp {
+    alignment-baseline: "middle";
+    text-anchor: "middle";
+    font-family: $proxima-light;
+    text-transform: uppercase;
+    font-size: "1rem";
+    fill: "black";
+  }
+
   .purpleForegroundStop1 {
     stop-color: darken($background, 7%);
   }

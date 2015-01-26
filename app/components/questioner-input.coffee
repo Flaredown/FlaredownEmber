@@ -12,7 +12,11 @@ component = Ember.Component.extend
     color_number  = if color then color[1] else 0
 
     @get("question.inputs").map (input) =>
-      selected  = input.value is @get("value")
+      selected = if @get("symptomQuestion")
+        Ember.isPresent(@get("value")) and input.value <= @get("value")
+      else
+        input.value is @get("value")
+
 
       value: input.value,
       selected: selected

@@ -19,6 +19,7 @@ object = Ember.ObjectProxy.extend
   ).property("type")
 
   entryDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM-DD-YYYY") ).property("day")
+  tickDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM DD") ).property("day")
   colorName: Ember.computed( ->
     uniq_name = "#{@get("catalog")}_#{@get("name")}"
     if symptom_colors = @get("controller.currentUser.symptomColors")
