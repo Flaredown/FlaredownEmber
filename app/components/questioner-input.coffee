@@ -12,12 +12,15 @@ component = Ember.Component.extend
     color_number  = if color then color[1] else 0
 
     @get("question.inputs").map (input) =>
-      selected  = input.value is @get("value")
+      selected = if @get("symptomQuestion")
+        Ember.isPresent(@get("value")) and input.value <= @get("value")
+      else
+        input.value is @get("value")
 
       value: input.value,
       selected: selected
       label: if input.label then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
-      color: if selected then "sselect-#{color_number}" else "sselect-faded-#{color_number}"
+      color: if selected then "sbg-#{color_number}" else "unselected"
 
   ).property("question.inputs", "value", "controller.currentUser.symptomColors", "question.name", "section.category")
 
