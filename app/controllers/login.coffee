@@ -14,6 +14,8 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
 
   resetFormProperties: "email password".w()
 
+  queryParams: ["user_email", "user_token"]
+
   redirectToTransition: ->
     attemptedTransition = @get("attemptedTransition")
     if attemptedTransition and attemptedTransition.targetName isnt "index"
@@ -31,7 +33,6 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
 
   actions:
     login: ->
-      that = @
       data = {}
       data["v#{config.apiVersion}_user"] = @getProperties("email", "password")
 
@@ -39,26 +40,38 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
         type: "POST"
         data: data
       ).then(
-        (response) => # @set "controllers.currentUser.model", @store.createRecord("currentUser", response)
-          @store.find("currentUser", 0).then(
-            (currentUser) =>
-              @set("currentUser.model", currentUser)
-
-              # Ask the API for the locale for the current user
-              ajax("#{config.apiNamespace}/locales/#{@get("currentUser.locale")}").then(
-                (locale) =>
-                  Ember.I18n.translations = locale
-                  @redirectToTransition()
-
-                (response) =>
-                  @errorCallback(response, @) # TODO this doesn't work
-              )
-            ,
-            -> # @errorCallback(response, @) # TODO this doesn't work
-          )
-
+        @loginCallback.bind(@)
         (response) => @errorCallback(response, @)
       )
+
+    loginWithToken: ->
+      ajax("#{config.apiNamespace}/current_user",
+        type: "GET"
+        data: @getProperties("user_email", "user_token")
+      ).then(
+        @loginCallback.bind(@)
+        (response) => @errorCallback(response, @)
+      )
+
+  loginCallback: (response) ->
+    @store.find("currentUser", 0).then(
+      (currentUser) =>
+
+        @set("currentUser.model", currentUser)
+
+        # Ask the API for the locale for the current user
+        ajax("#{config.apiNamespace}/locales/#{@get("currentUser.locale")}").then(
+          (locale) =>
+            Ember.I18n.translations = locale
+            @redirectToTransition()
+
+          (response) =>
+            @errorCallback(response, @) # TODO this doesn't work
+        )
+      ,
+      -> # @errorCallback(response, @) # TODO this doesn't work
+    )
+
 
     # logout: ->
     #   $.ajax
