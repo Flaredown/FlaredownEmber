@@ -12,15 +12,15 @@
       cursor: pointer;
       &:hover {
         .checkin-dot {
-          background: grey;
+          transform: scale(1.3);
         }
       }
     }
   }
   .checkin-dot {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 999px;
     background: $lightgrey;
     margin: 3px 5px;
