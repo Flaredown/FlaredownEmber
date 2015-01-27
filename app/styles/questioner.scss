@@ -81,6 +81,15 @@
       border-bottom-left-radius: 7px;
       border-bottom-right-radius: 7px;
     }
+    &.unselected {
+      background: $lightgrey;
+      &:hover {
+        background: darken($lightgrey, 10%);
+      }
+    }
+    &.selected {
+      color: white;
+    }
   }
   &.symptom-question li {
     width: auto;
@@ -159,6 +168,9 @@
       &.unselected {
         background: $lightgrey;
         color: grey;
+        &:hover {
+          background: darken($lightgrey, 10%);
+        }
       }
       &:first-of-type {
         border-top-left-radius: 5px;
