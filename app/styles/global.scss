@@ -3,6 +3,7 @@ $background: #F2EEE8;
 $primary: #73C1BA;
 $secondary: #F5A623;
 $lightgrey: #ddd;
+$shadow: #E1D8C8;
 
 //Breakpoints
 $tablet: 768px;
@@ -11,7 +12,7 @@ $container: 68em;
 
 // Mixins
 @mixin standard-shadow {
-  box-shadow: 0 4px 0 #E1D8C8;
+  box-shadow: 0 4px 0 $shadow;
 }
 @mixin wrap-ellipsis {
   white-space: nowrap;
