@@ -73,28 +73,6 @@
     color: grey;
     font-size: 1.2em;
     margin: 1px;
-    // background: $lightgrey;
-
-    // &:hover, &.selected {
-    //   background: $primary;
-    //   color: white;
-    // }
-    // @media (min-width: $tablet) {
-    //   padding: 10px 25px;
-    //   width: auto;
-    //   &:first-of-type {
-    //     border-radius: 0;
-    //     border-top-left-radius: 7px;
-    //     border-bottom-left-radius: 7px;
-    //   }
-    //   &:last-of-type {
-    //     border-radius: 0;
-    //     border-top-right-radius: 7px;
-    //     border-bottom-right-radius: 7px;
-    //   }
-    // }
-  }
-  &.catalog-question li {
     &:first-of-type {
       border-top-left-radius: 7px;
       border-top-right-radius: 7px;
@@ -102,6 +80,15 @@
     &:last-of-type {
       border-bottom-left-radius: 7px;
       border-bottom-right-radius: 7px;
+    }
+    &.unselected {
+      background: $lightgrey;
+      &:hover {
+        background: darken($lightgrey, 10%);
+      }
+    }
+    &.selected {
+      color: white;
     }
   }
   &.symptom-question li {
@@ -177,6 +164,14 @@
     li {
       display: inline-block;
       padding: 10px 20px;
+      margin-right: 2px;
+      &.unselected {
+        background: $lightgrey;
+        color: grey;
+        &:hover {
+          background: darken($lightgrey, 10%);
+        }
+      }
       &:first-of-type {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;

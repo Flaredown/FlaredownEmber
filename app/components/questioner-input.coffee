@@ -17,11 +17,10 @@ component = Ember.Component.extend
       else
         input.value is @get("value")
 
-
       value: input.value,
       selected: selected
       label: if input.label then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
-      color: if selected then "sselect-#{color_number}" else "sselect-faded-#{color_number}"
+      color: if selected then "sbg-#{color_number}" else "unselected"
 
   ).property("question.inputs", "value", "controller.currentUser.symptomColors", "question.name", "section.category")
 
