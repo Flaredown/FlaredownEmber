@@ -1,6 +1,8 @@
 `import Ember from 'ember'`
+`import D3DatestampsMixin from '../mixins/d3_datestamps'`
+`import D3PipsMixin from '../mixins/d3_pips'`
 
-view = Ember.View.extend
+view = Ember.View.extend D3PipsMixin, D3DatestampsMixin,
 
   didInsertElement: ->
     $('.graph-controls-startDate').pickadate()
@@ -17,11 +19,15 @@ view = Ember.View.extend
 
   ### CONFIG ###
   daysBinding:                    "controller.days"
+  daysAsMomentsBinding:           "controller.daysAsMoments"
   viewportDaysBinding:            "controller.viewportDays"
+  viewportSizeBinding:            "controller.viewportSize"
+  viewportMinSizeBinding:         "controller.viewportMinSize"
 
   datumsBinding:                  "controller.unfilteredDatums"
   datumsByDayBinding:             "controller.unfilteredDatumsByDay"
   datumsByDayInViewportBinding:   "controller.unfilteredDatumsByDayInViewport"
+
 
   streamGraphStyle: false
   dragAmplifier: 1.2 # amplify drag a bit
@@ -149,7 +155,7 @@ view = Ember.View.extend
 
   setup: ->
     # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
-    @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
+    @set "margin", {top: 0, right: 0, bottom: 50, left: 0}
     @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
     @set "height", $(".graph-container").height() - @get("margin").top - @get("margin").bottom
     @setupEndPositions()
@@ -163,105 +169,16 @@ view = Ember.View.extend
         .attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")"))
 
     @set("isSetup", true)
-    scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
-    scorePip
-      .enter()
-        .append("rect")
-          .datum( (d) =>
-            d.set "x", @get("x")(d.get("end_x"))
-            d.set "y", @get("y")(d.get("end_y"))
-            d.set "placed", true
-          )
-          .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
-          .attr
-            class: (d) -> d.get("classes")
-            ry: 3
-            rx: 3
-            y: (d) -> d.get("end_y")
-            x: (d) -> d.get("end_x")
+
+    @setupDatestamps()
+    @setupPips()
 
     @update()
 
   update: ->
-    scorePip = @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
 
-    scorePip
-      .enter()
-        .append("rect")
-          .datum( (d) =>
-            d.set "x", @get("x")(d.get("end_x"))
-            d.set "y", @get("y")(d.get("end_y"))
-            d.set "placed", false
-          )
-          .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
-          .attr
-            class: (d) -> d.get("classes")
-            ry: 3
-            rx: 3
-            x: (d) -> d.get("end_x")
-            y: (d) -> d.get("end_y")
-            width:  @get("symptomDatumDimensions").width
-            height: @get("symptomDatumDimensions").height
-
-
-    scorePip
-      .attr
-        width:  @get("symptomDatumDimensions").width
-        height: @get("symptomDatumDimensions").height
-        opacity: 100
-        y: (d) -> d.get("end_y")
-        x: (d) -> d.get("end_x")
-
-    unless @get("graphShifted") # don't do animations if the graph has shifted
-      scorePip
-        .filter (d,i) => not d.get("placed") and d.get("end_x") > 0 and d.get("end_x") < @get("width")
-        .attr
-          y: -2000
-        .transition()
-          .ease("quad")
-          .duration (d) => @get("dropInDuration")
-          .delay (d,i) => i*@get("perDatumDelay")
-          .each "end", (d) -> d.set("placed", true)
-          .attr
-            y: (d) -> d.get("end_y")
-
-    ### CPU INTENSIVE ###
-    # @get("days").forEach (day) =>
-    #
-    #   filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
-    #   dayPips = scorePip.filter(filterByDay)
-    #   dayPips
-    #
-    #     # .transition()
-    #     #   .ease("quad")
-    #     #   .duration (d) =>
-    #     #     if d.get("placed") then 100 else @get("dropInDuration")
-    #     #   .delay (d,i) =>
-    #     #     if d.get("placed") then i*10 else i*@get("perDatumDelay")
-    #     #   .each "end", (d) -> d.set("placed", true)
-    #     .attr
-    #       width:  @get("symptomDatumDimensions").width
-    #       height: @get("symptomDatumDimensions").height
-    #       opacity: 100
-    #       y: (d) -> d.get("end_y")
-    #       x: (d) -> d.get("end_x")
-
-
-    scorePip
-      .exit()
-      # .transition()
-      #   .ease("quad")
-      #   .duration(500)
-      #   .attr
-      #     y: -1000
-      #     opacity: 0
-      #     fill: "transparent"
-
-      .remove()
-
-
-      # .each "end", (d) -> d.set("placed", false)
-
+    @updatePips()
+    @updateDatestamps()
     @resetGraphShift()
 
 `export default view`
