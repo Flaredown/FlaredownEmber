@@ -11,7 +11,7 @@ view       = null
 controller = null
 fixture    = null
 
-moduleFor("controller:graph/symptom-datum", "Graph Symptom Datum",
+moduleFor("controller:graph/datum", "Graph Symptom Datum",
   {
     setup: ->
       App         = startApp()

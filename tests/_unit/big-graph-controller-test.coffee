@@ -17,7 +17,7 @@ firstEntry    = null
 
 moduleFor("controller:graph", "Graph Controller (big)",
   {
-    needs: ["controller:graph/symptom-datum"]
+    needs: ["controller:graph/datum"]
     setup: ->
       App         = startApp()
       store       = App.__container__.lookup("store:main")

@@ -50,6 +50,24 @@ fixture = (startDate) ->
       {x: daysFromStart(5), order: 3, points: 1, name: "stools", },
       {x: daysFromStart(5), order: 4, points: 1, name: "ab_mass", },
       {x: daysFromStart(5), order: 5, points: 0, name: "complications", },
+    ],
+    treatments: [
+      {"order":1,"x":daysFromStart(0),"name":"Tickles","quantity":"20",unit: "minute"},
+      {"order":1,"x":daysFromStart(1),"name":"Tickles","quantity":"20",unit: "minute"},
+      {"order":1,"x":daysFromStart(2),"name":"Tickles","quantity":"20",unit: "minute"},
+      {"order":1,"x":daysFromStart(3),"name":"Tickles","quantity":"20",unit: "minute"},
+      {"order":1,"x":daysFromStart(4),"name":"Tickles","quantity":"20",unit: "minute"},
+      {"order":1,"x":daysFromStart(5),"name":"Tickles","quantity":"20",unit: "minute"},
+
+      {"order":2,"x":daysFromStart(0),"name":"Laughing Gas","quantity":"4", unit: "hours"},
+      {"order":2,"x":daysFromStart(1),"name":"Laughing Gas","quantity":"4", unit: "hours"},
+      {"order":2,"x":daysFromStart(2),"name":"Laughing Gas","quantity":"4", unit: "hours"},
+      {"order":2,"x":daysFromStart(3),"name":"Laughing Gas","quantity":"4", unit: "hours"},
+      {"order":2,"x":daysFromStart(4),"name":"Laughing Gas","quantity":"4", unit: "hours"},
+      {"order":2,"x":daysFromStart(5),"name":"Laughing Gas","quantity":"4", unit: "hours"},
+
+      {"order":3,"x":daysFromStart(0),"name":"Toe Stubbing","quantity":"0.00005", unit: "mg"},
+      {"order":3,"x":daysFromStart(1),"name":"Toe Stubbing","quantity":"0.00005", unit: "mg"}
     ]
   }
 

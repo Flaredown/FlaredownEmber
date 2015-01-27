@@ -21,7 +21,7 @@
   color: $primary;
   margin: 30px auto 0 auto;
   width: 100%;
-  height: 400px;
+  height: 525px;
   svg {
     overflow: visible;
   }
@@ -33,7 +33,7 @@
     stroke: #cccccc;
     stroke-dasharray: 1, 3;
   }
-  rect.symptom {
+  rect.symptom, circle.treatment {
     &.missing {
       stroke-width: 2px;
       stroke: $background - 50;

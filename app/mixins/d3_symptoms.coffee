@@ -1,16 +1,46 @@
 `import Ember from 'ember'`
 
 mixin = Ember.Mixin.create
-  scorePip: ->
-    @get("svg").selectAll("rect.symptom").data(@get("datums"), (d) -> d.get("id"))
+  symptomsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.filterBy("type", "symptom").length) ).property("datumsByDayInViewport")
+
+  symptoms_y: Ember.computed ->
+    d3.scale.linear()
+      .domain([0, @get("symptomsMax")+1])
+      .range [@symptomsHeight,0]
+  .property("height", "symptomsMax")
+
+  symptomDatumDimensions: Ember.computed( ->
+    width_margin_percent  = 0.20
+    height_margin_percent = 0.10
+
+    right       = @get("pipWidth")  * width_margin_percent
+    left        = @get("pipWidth")  * width_margin_percent
+    top         = @get("pipHeight") * height_margin_percent
+    bottom      = @get("pipHeight") * height_margin_percent
+
+    {
+      width:  @get("pipWidth")-left-right
+      height: @get("pipHeight")-top-bottom
+      right_margin:  right
+      left_margin:   left
+      top_margin:    top
+      bottom_margin: bottom
+    }
+  ).property("x", "symptoms_y", "datums")
+
+  pipWidth:   Ember.computed( ->  @get("width") / @get("viewportDays.length") ).property("viewportDays.length", "width")
+  pipHeight:  Ember.computed( ->  @symptomsHeight / @get("symptomsMax") ).property("symptomsMax", "symptomsHeight")
+
+  pip: ->
+    @get("svg").selectAll("rect.symptom").data(@get("datums").filterBy("type", "symptom"), (d) -> d.get("id"))
 
   pipEnter: ->
-    @scorePip()
+    @pip()
       .enter()
         .append("rect")
           .datum( (d) =>
             d.set "x", @get("x")(d.get("end_x"))
-            d.set "y", @get("y")(d.get("end_y"))
+            d.set "y", @get("symptoms_y")(d.get("end_y"))
             d.set "placed", true
           )
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
@@ -27,7 +57,7 @@ mixin = Ember.Mixin.create
   updatePips: ->
     @pipEnter()
 
-    @scorePip()
+    @pip()
       .attr
         width:  @get("symptomDatumDimensions").width
         height: @get("symptomDatumDimensions").height
@@ -36,7 +66,7 @@ mixin = Ember.Mixin.create
         x: (d) -> d.get("end_x")
 
     # unless @get("graphShifted") # don't do animations if the graph has shifted
-    #   @scorePip()
+    #   @pip()
     #     .filter (d,i) => not d.get("placed") and d.get("end_x") > 0 and d.get("end_x") < @get("width")
     #     .attr
     #       y: -2000
@@ -52,7 +82,7 @@ mixin = Ember.Mixin.create
     # @get("days").forEach (day) =>
     #
     #   filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
-    #   dayPips = @scorePip().filter(filterByDay)
+    #   dayPips = @pip().filter(filterByDay)
     #   dayPips
     #
     #     # .transition()
@@ -70,7 +100,7 @@ mixin = Ember.Mixin.create
     #       x: (d) -> d.get("end_x")
 
 
-    @scorePip()
+    @pip()
       .exit()
       # .transition()
       #   .ease("quad")

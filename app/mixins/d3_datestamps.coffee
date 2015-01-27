@@ -2,7 +2,7 @@
 
 mixin = Ember.Mixin.create
   datestamp: ->
-    firstDatumsOfTheDay = @get("datumsByDay").mapBy("firstObject").compact()
+    firstDatumsOfTheDay = @get("datumsByDay").map( (dayDatums) -> dayDatums.filterBy("type", "symptom").get("firstObject") ).compact()
     @get("svg").selectAll("text.datestamp").data(firstDatumsOfTheDay, (d) -> d.get("id"))
 
   datestampEnter: ->
@@ -15,10 +15,9 @@ mixin = Ember.Mixin.create
           class: "datestamp"
           fill: "black"
           "data-width": => @get("symptomDatumDimensions.width")
-          y: (d) => @get("height")+20
+          y: (d) => @symptomsHeight+@datesHeight
           x: (d) -> d.get("end_x")
           dx: -> "#{($(@).attr("data-width") - @getBBox().width) / 2}px"
-
 
   setupDatestamps: -> @datestampEnter()
 

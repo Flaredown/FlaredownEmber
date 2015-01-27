@@ -1,6 +1,5 @@
 if viewportDays.length
   .graph-container
-  .meds-graph-container
 else
   .container: h1.text-center No scores in date range
 
@@ -15,12 +14,12 @@ else
         = input class="graph-controls-endDate" valueBinding="pickerEndDate"
 
       ul.graph-controls-symptoms
-        each cat in catalogs
-          li.available-catalog click="changeCatalog cat"
+        each source in filterableSources
+          li.available-catalog click="changeCatalog source"
             .graph-controls-catalog-block
-            = cat
+            = source
 
-        each filter in responseFilters
+        each filter in datapointFilters
           li click="filter filter.name" class={filter.enabled:filtered-symptom:filterable-symptom}
             .graph-controls-symptom-block
             = filter.name
