@@ -172,13 +172,14 @@ controller = Ember.ObjectController.extend
                   controller: @
 
             else # There are no datums for the day and soure... so put in a "missing" datum for that source
-              @get("_processedDatums").pushObject datum.create content:
-                day:      day
-                catalog:  catalog
-                order:    1.1
-                type:     type
-                missing:  true
-                controller: @
+              unless type is "treatment"
+                @get("_processedDatums").pushObject datum.create content:
+                  day:      day
+                  catalog:  catalog
+                  order:    1.1
+                  type:     type
+                  missing:  true
+                  controller: @
 
     @get("_processedDatums")
   .property("rawDatapoints.@each", "rawTreatments.@each", "serverProcessingDays.@each")
@@ -212,6 +213,9 @@ controller = Ember.ObjectController.extend
     in_viewport = @get("unfilteredDatums").filter((datum) => @get("viewportDays").contains(datum.get("day")))
     @get("viewportDays").map (day) => in_viewport.filterBy("day", day)
   ).property("unfilteredDatums", "viewportDays")
+
+  treatmentDatums: Ember.computed.filterBy("unfilteredDatums", "type", "treatment")
+  symptomDatums:   Ember.computed.filterBy("unfilteredDatums", "type", "symptom")
 
   ### Loading/Buffering ###
   bufferRadius: Ember.computed( ->
