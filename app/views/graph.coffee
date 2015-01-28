@@ -29,6 +29,9 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   datumsByDayBinding:             "controller.unfilteredDatumsByDay"
   datumsByDayInViewportBinding:   "controller.unfilteredDatumsByDayInViewport"
 
+  treatmentDatumsBinding:         "controller.treatmentDatums"
+  symptomDatumsBinding:           "controller.symptomDatums"
+
   streamGraphStyle: false
   dragAmplifier: 1.2 # amplify drag a bit
 

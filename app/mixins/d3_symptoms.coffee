@@ -1,6 +1,8 @@
 `import Ember from 'ember'`
 
 mixin = Ember.Mixin.create
+  symptomHighlightOpacity: 0.7
+
   symptomsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.filterBy("type", "symptom").length) ).property("datumsByDayInViewport")
 
   symptoms_y: Ember.computed ->
@@ -31,8 +33,25 @@ mixin = Ember.Mixin.create
   pipWidth:   Ember.computed( ->  @get("width") / @get("viewportDays.length") ).property("viewportDays.length", "width")
   pipHeight:  Ember.computed( ->  @symptomsHeight / @get("symptomsMax") ).property("symptomsMax", "symptomsHeight")
 
-  pip: ->
-    @get("svg").selectAll("rect.symptom").data(@get("datums").filterBy("type", "symptom"), (d) -> d.get("id"))
+  pip: (datums) ->
+    datums ?= @get("symptomDatums")
+    @get("svg").selectAll("rect.symptom").data(datums, (d) -> d.get("id"))
+  pipHighlight: Ember.observer ->
+    Ember.run.later(
+      =>
+        if name = @get("symptomHighlight")
+          @pip(@get("symptomDatums").rejectBy("name", name))
+            .attr
+              opacity: @symptomHighlightOpacity
+        else
+          @pip()
+            .attr
+              opacity: 1
+
+      200
+    )
+    @get("symptomDatums")
+  .observes("symptomHighlight")
 
   pipEnter: ->
     @pip()
@@ -44,6 +63,8 @@ mixin = Ember.Mixin.create
             d.set "placed", true
           )
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
+          .on("mouseover", (d,i) => @set("symptomHighlight", d.get("name")) )
+          .on("mouseout", (d,i) => @set("symptomHighlight", null) )
           .attr
             class: (d) -> d.get("classes")
             ry: 3
