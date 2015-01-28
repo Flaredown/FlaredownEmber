@@ -40,13 +40,10 @@ mixin = Ember.Mixin.create
     Ember.run.later(
       =>
         if name = @get("symptomHighlight")
-          @pip(@get("symptomDatums").rejectBy("name", name))
-            .attr
-              opacity: @symptomHighlightOpacity
+          @pip().attr(opacity: 1)
+          @pip(@get("symptomDatums").rejectBy("name", name)).attr(opacity: @symptomHighlightOpacity)
         else
-          @pip()
-            .attr
-              opacity: 1
+          @pip().attr(opacity: 1)
 
       200
     )
