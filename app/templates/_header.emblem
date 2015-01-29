@@ -7,13 +7,15 @@ nav.navbar role="navigation"
         img src="assets/menu-white.png" alt="menu"
 
       // Logo
-      .navbar-logo FD
+      img.navbar-logo src="assets/logo.svg"
 
       if currentUser.loggedIn
         // Sections
         ul.navbar-sections
           li: link-to "graph" | GRAPH
+          li &#47;
           li: link-to "insights" | STATS
+          li &#47;
           li: link-to "reports" | INVESTIGATIONS
 
 

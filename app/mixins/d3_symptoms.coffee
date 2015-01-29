@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 
 mixin = Ember.Mixin.create
-  symptomHighlightOpacity: 0.7
+  symptomHighlightOpacity: 0.3
 
   symptomsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.filterBy("type", "symptom").length) ).property("datumsByDayInViewport")
 

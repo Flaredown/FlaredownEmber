@@ -53,10 +53,7 @@ label {
 // Navbar
 .navbar {
   @include outer-container;
-  @include standard-shadow;
-  background: white;
   padding: 10px;
-  border-radius: 5px;
   box-sizing: border-box;
   margin-top: 10px;
   .navbar-content {
@@ -75,15 +72,23 @@ label {
   }
   .navbar-logo {
     display: inline-block;
-    margin: 0 15px;
+    width: 40px;
   }
   .navbar-sections {
     display: none;
+    a {
+      color: #705F50;
+      &:hover {
+        color: darken(#705F50, 10%);
+      }
+    }
+    li {
+      margin-left: 10px;
+    }
     @media (min-width: $tablet) {
       display: inline-block;
       li {
         display: inline-block;
-        margin-right: 15px;
       }
     }
   }
