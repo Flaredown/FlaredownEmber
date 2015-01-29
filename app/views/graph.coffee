@@ -25,7 +25,6 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   viewportSizeBinding:            "controller.viewportSize"
   viewportMinSizeBinding:         "controller.viewportMinSize"
 
-  allDatumsBinding:               "controller.datums"
   datumsBinding:                  "controller.unfilteredDatums"
   datumsByDayBinding:             "controller.unfilteredDatumsByDay"
   datumsByDayInViewportBinding:   "controller.unfilteredDatumsByDayInViewport"
@@ -45,6 +44,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   datesHeight:      25
   treatmentsHeight: 100
   height: Ember.computed(-> @symptomsHeight + @datesHeight + @treatmentsHeight)
+
 
   setupEndPositions: Ember.observer ->
     Ember.run.once =>
@@ -98,16 +98,16 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
 
     @setupPips()
-    @setupDatestamps()
     @setupTreatments()
+    @setupDatestamps()
 
     @update()
 
   update: ->
 
     @updatePips()
-    @updateDatestamps()
     @updateTreatments()
+    @updateDatestamps()
     @resetGraphShift()
 
 `export default view`

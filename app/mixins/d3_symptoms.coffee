@@ -105,8 +105,6 @@ mixin = Ember.Mixin.create
 
   updatePips: ->
 
-    @pipEnter()
-
     @pipSelection()
       .attr
         width:  @get("pipDimensions").width

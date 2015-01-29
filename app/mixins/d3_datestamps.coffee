@@ -1,44 +1,49 @@
 `import Ember from 'ember'`
 
 mixin = Ember.Mixin.create
-  datestamp: ->
-    firstDatumsOfTheDay = @get("datumsByDay").map( (dayDatums) -> dayDatums.filterBy("type", "symptom").get("firstObject") ).compact()
-    @get("svg").selectAll("text.datestamp").data(firstDatumsOfTheDay, (d) -> d.get("id"))
+  datestampSelection: ->
+    firstDatumsByDays = []
+    allSymptomDatums  = @get("controller.datums").filterBy("type", "symptom")
+
+    @get("days").map( (day) => allSymptomDatums.filterBy("day", day)).forEach (dayDatums) ->
+      firstDatumsByDays.pushObject dayDatums.sortBy("order").get("firstObject")
+
+    @get("svg").selectAll("text.datestamp").data(firstDatumsByDays, (d) -> d.get("id"))
+
+    # firstDatumsOfTheDay = @get("datumsByDay").map( (dayDatums) -> dayDatums.filterBy("type", "symptom").get("firstObject") ).compact()
+    # @get("svg").selectAll("text.datestamp").data(firstDatumsOfTheDay, (d) -> d.get("id"))
 
   datestampEnter: ->
-    @datestamp()
+    @datestampSelection()
       .enter()
       .append("text")
         .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
-        .text (d) -> d.get("tickDate")
+        .text (d) -> d.get("axisDate")
         .attr
           class: "datestamp"
           fill: "black"
           "data-width": => @get("pipDimensions.width")
           y: (d) => @symptomsHeight+@datesHeight
-          x: (d) -> d.get("end_x")
           dx: -> "#{($(@).attr("data-width") - @getBBox().width) / 2}px"
 
   setupDatestamps: -> @datestampEnter()
 
   updateDatestamps: ->
-    @datestampEnter()
-
-    @datestamp()
+    @datestampSelection()
       .attr
         opacity: 0
         "data-width": => @get("pipDimensions.width")
-        x: (d) -> d.get("end_x")
+        x: (d) => @get("x")(d.get("day"))
         dx: -> "#{($(@).attr("data-width") - @getBBox().width) / 2}px"
 
 
     modulo = Math.round(@get("viewportSize") / @get("viewportMinSize"))
-    @datestamp()
+    @datestampSelection()
       .filter (d,i) => i % modulo is 0
       .attr
         opacity: 1
 
-    @datestamp()
+    @datestampSelection()
       .exit()
       .remove()
 
