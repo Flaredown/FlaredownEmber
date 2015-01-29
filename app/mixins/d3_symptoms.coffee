@@ -2,27 +2,36 @@
 
 mixin = Ember.Mixin.create
   symptomHighlightOpacity: 0.3
+  maxPipHeight: 50
 
   symptomsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.filterBy("type", "symptom").length) ).property("datumsByDayInViewport")
 
   symptoms_y: Ember.computed ->
-    d3.scale.linear()
-      .domain([0, @get("symptomsMax")+1])
-      .range [@symptomsHeight,0]
-  .property("height", "symptomsMax")
+    max = @get("symptomsMax")
+    max = (@symptomsHeight / @maxPipHeight) if @get("pipDimensions.total_height") >= @maxPipHeight
 
-  symptomDatumDimensions: Ember.computed( ->
+    d3.scale.linear()
+      .domain([0, max+1])
+      .range [@symptomsHeight,0]
+  .property("height", "symptomsMax", "pipDimensions")
+
+  pipDimensions: Ember.computed( ->
     width_margin_percent  = 0.20
     height_margin_percent = 0.10
 
-    right       = @get("pipWidth")  * width_margin_percent
-    left        = @get("pipWidth")  * width_margin_percent
-    top         = @get("pipHeight") * height_margin_percent
-    bottom      = @get("pipHeight") * height_margin_percent
+    height      = if @get("pipHeight") > @maxPipHeight then @maxPipHeight else @get("pipHeight")
+    width       = @get("pipWidth")
+
+    right       = width * width_margin_percent
+    left        = width * width_margin_percent
+    top         = height * height_margin_percent
+    bottom      = height * height_margin_percent
 
     {
-      width:  @get("pipWidth")-left-right
-      height: @get("pipHeight")-top-bottom
+      total_height: height
+      total_width: width
+      width:  width-left-right
+      height: height-top-bottom
       right_margin:  right
       left_margin:   left
       top_margin:    top
@@ -31,7 +40,7 @@ mixin = Ember.Mixin.create
   ).property("x", "symptoms_y", "datums")
 
   pipWidth:   Ember.computed( ->  @get("width") / @get("viewportDays.length") ).property("viewportDays.length", "width")
-  pipHeight:  Ember.computed( ->  @symptomsHeight / @get("symptomsMax") ).property("symptomsMax", "symptomsHeight")
+  pipHeight:  Ember.computed( -> @symptomsHeight / @get("symptomsMax") ).property("symptomsMax", "symptomsHeight")
 
   pipSelection: (datums) ->
     datums ?= @get("symptomDatums")
@@ -100,8 +109,8 @@ mixin = Ember.Mixin.create
 
     @pipSelection()
       .attr
-        width:  @get("symptomDatumDimensions").width
-        height: @get("symptomDatumDimensions").height
+        width:  @get("pipDimensions").width
+        height: @get("pipDimensions").height
         opacity: 100
         y: (d) -> d.get("end_y")
         x: (d) -> d.get("end_x")
@@ -134,8 +143,8 @@ mixin = Ember.Mixin.create
     #     #     if d.get("placed") then i*10 else i*@get("perDatumDelay")
     #     #   .each "end", (d) -> d.set("placed", true)
     #     .attr
-    #       width:  @get("symptomDatumDimensions").width
-    #       height: @get("symptomDatumDimensions").height
+    #       width:  @get("pipDimensions").width
+    #       height: @get("pipDimensions").height
     #       opacity: 100
     #       y: (d) -> d.get("end_y")
     #       x: (d) -> d.get("end_x")

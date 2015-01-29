@@ -25,6 +25,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   viewportSizeBinding:            "controller.viewportSize"
   viewportMinSizeBinding:         "controller.viewportMinSize"
 
+  allDatumsBinding:               "controller.datums"
   datumsBinding:                  "controller.unfilteredDatums"
   datumsByDayBinding:             "controller.unfilteredDatumsByDay"
   datumsByDayInViewportBinding:   "controller.unfilteredDatumsByDayInViewport"
@@ -55,7 +56,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
         datums.filterBy("type", "treatment").sortBy("order").forEach (datum,i) =>
           if @get("x")(1) and @get("treatments_y")(1)
-            datum.set "end_x", @get("x")(datum.get("day")) + (@get("symptomDatumDimensions.width")  / 2)
+            datum.set "end_x", @get("x")(datum.get("day")) + (@get("pipDimensions.width")  / 2)
             datum.set "end_y", @get("treatments_y")(i+1)
 
     Ember.run.next => @renderGraph()
@@ -75,7 +76,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
     d3.scale.linear()
       .domain([@get("viewportDays.firstObject"), last_day])
-      .range [@get("symptomDatumDimensions.right_margin")*2, @get("width")]
+      .range [@get("pipDimensions.right_margin")*2, @get("width")]
   .property("width", "viewportDays.@each")
 
   setup: ->

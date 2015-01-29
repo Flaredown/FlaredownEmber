@@ -62,18 +62,18 @@ test "setups up #y correctly with #unfilteredDatumsByDay", ->
 test "setups up #x correctly with #viewportDays", ->
   expect 1
 
-  left_offset = view.get("symptomDatumDimensions.left_margin")*2
+  left_offset = view.get("pipDimensions.left_margin")*2
   ok view.get("x")(fixture.hbi[0].x) is left_offset, "oldest day should have the 0px x position + margin offset"
 
 test "#symptomDatumMargins yields margins object", ->
   expect 6
 
-  ok parseInt(view.get("symptomDatumDimensions.width")) < 100,        "less than 1/6th the width of 1000 (due to margins)"
-  ok parseInt(view.get("symptomDatumDimensions.height")) < 66,        "less than 1/15th the height of 1000 (due to margins)"
-  ok view.get("symptomDatumDimensions.left_margin") < 50,             "should be less than 25% of 200"
-  ok view.get("symptomDatumDimensions.right_margin") < 50,            "should be less than 25% of 200"
-  ok parseInt(view.get("symptomDatumDimensions.top_margin")) < 14,    "should be less than 20% of 66"
-  ok parseInt(view.get("symptomDatumDimensions.bottom_margin")) < 14, "should be less than 20% of 66"
+  ok parseInt(view.get("pipDimensions.width")) < 100,        "less than 1/6th the width of 1000 (due to margins)"
+  ok parseInt(view.get("pipDimensions.height")) < 66,        "less than 1/15th the height of 1000 (due to margins)"
+  ok view.get("pipDimensions.left_margin") < 50,             "should be less than 25% of 200"
+  ok view.get("pipDimensions.right_margin") < 50,            "should be less than 25% of 200"
+  ok parseInt(view.get("pipDimensions.top_margin")) < 14,    "should be less than 20% of 66"
+  ok parseInt(view.get("pipDimensions.bottom_margin")) < 14, "should be less than 20% of 66"
 
 test "#setupEndPositions determines y positioning based on unfilteredDatums and order", ->
   expect 2

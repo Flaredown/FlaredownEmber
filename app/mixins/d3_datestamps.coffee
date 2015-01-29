@@ -14,7 +14,7 @@ mixin = Ember.Mixin.create
         .attr
           class: "datestamp"
           fill: "black"
-          "data-width": => @get("symptomDatumDimensions.width")
+          "data-width": => @get("pipDimensions.width")
           y: (d) => @symptomsHeight+@datesHeight
           x: (d) -> d.get("end_x")
           dx: -> "#{($(@).attr("data-width") - @getBBox().width) / 2}px"
@@ -27,7 +27,7 @@ mixin = Ember.Mixin.create
     @datestamp()
       .attr
         opacity: 0
-        "data-width": => @get("symptomDatumDimensions.width")
+        "data-width": => @get("pipDimensions.width")
         x: (d) -> d.get("end_x")
         dx: -> "#{($(@).attr("data-width") - @getBBox().width) / 2}px"
 
