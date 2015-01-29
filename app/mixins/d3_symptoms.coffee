@@ -45,7 +45,7 @@ mixin = Ember.Mixin.create
     datums.filter (datum) -> datum.get("order") is d3.max(datums,(d) -> d.get("order"))
 
   jBoxFor: (datum, close) ->
-    @set "tooltip", new jBox("Mouse", {id: "jbox-tooltip"}) unless @get("tooltip")
+    @set "tooltip", new jBox("Mouse", {id: "jbox-tooltip", x: "right", y: "center"}) unless @get("tooltip")
     if close then @get("tooltip").close() else @get("tooltip").setContent(datum.get("name")).open()
 
   pipHighlight: Ember.observer ->
