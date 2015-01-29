@@ -56,8 +56,7 @@ test "has #viewportDatums", ->
 
 test "setups up #y correctly with #unfilteredDatumsByDay", ->
   expect 1
-
-  ok 1000-parseInt(view.get("symptoms_y")(1)) is 63, "assuming max datums of 15, we should get back about 63px (from top) with a height of 1000px"
+  ok 1000-parseInt(view.get("symptoms_y")(1)) is 48, "assuming max datums of 15, we should get back about 48px (from top) with a height of 1000px"
 
 test "setups up #x correctly with #viewportDays", ->
   expect 1
@@ -76,7 +75,6 @@ test "#symptomDatumMargins yields margins object", ->
   ok parseInt(view.get("pipDimensions.bottom_margin")) < 14, "should be less than 20% of 66"
 
 test "#setupEndPositions determines y positioning based on unfilteredDatums and order", ->
-  expect 2
+  expect 1
 
-  ok 1000 - parseInt(view.get("datums.firstObject.end_y")) is 63, "first y pos is around 63"
-  ok parseInt(view.get("datumsByDay")[2].filterBy("type", "symptom")[14].get("end_y")) is 62, "highest datum (4th day from origin, datum 15) should be 62"
+  ok 1000 - parseInt(view.get("datums.firstObject.end_y")) is 48, "first y pos is around 48"
