@@ -33,25 +33,37 @@ mixin = Ember.Mixin.create
   pipWidth:   Ember.computed( ->  @get("width") / @get("viewportDays.length") ).property("viewportDays.length", "width")
   pipHeight:  Ember.computed( ->  @symptomsHeight / @get("symptomsMax") ).property("symptomsMax", "symptomsHeight")
 
-  pip: (datums) ->
+  pipSelection: (datums) ->
     datums ?= @get("symptomDatums")
-    @get("svg").selectAll("rect.symptom").data(datums, (d) -> d.get("id"))
+    @get("svg").selectAll("rect.symptom").data(datums, (d) -> debugger if d is undefined; d.get("id"))
+
+  highestOrderPipByDayAndName: (selected_datum) ->
+    datums = @get("datums")
+      .filterBy("day", selected_datum.get("day"))
+      .filterBy("name", selected_datum.get("name"))
+
+    datums.filter (datum) -> datum.get("order") is d3.max(datums,(d) -> d.get("order"))
+
+  jBoxFor: (datum, close) ->
+    @set "tooltip", new jBox("Mouse", {id: "jbox-tooltip"}) unless @get("tooltip")
+    if close then @get("tooltip").close() else @get("tooltip").setContent(datum.get("name")).open()
+
   pipHighlight: Ember.observer ->
     Ember.run.later(
       =>
         if name = @get("symptomHighlight")
-          @pip().attr(opacity: 1)
-          @pip(@get("symptomDatums").rejectBy("name", name)).attr(opacity: @symptomHighlightOpacity)
+          @pipSelection().attr(opacity: 1)
+          @pipSelection(@get("symptomDatums").rejectBy("name", name)).attr(opacity: @symptomHighlightOpacity)
         else
-          @pip().attr(opacity: 1)
+          @pipSelection().attr(opacity: 1)
 
       200
     )
-    @get("symptomDatums")
   .observes("symptomHighlight")
 
   pipEnter: ->
-    @pip()
+    that = @
+    @pipSelection()
       .enter()
         .append("rect")
           .datum( (d) =>
@@ -60,8 +72,14 @@ mixin = Ember.Mixin.create
             d.set "placed", true
           )
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
-          .on("mouseover", (d,i) => @set("symptomHighlight", d.get("name")) )
-          .on("mouseout", (d,i) => @set("symptomHighlight", null) )
+          .on("mouseover", (d,i) =>
+            @set("symptomHighlight", d.get("name"))
+            @jBoxFor(d) if d.get("replacementType") is "actual"
+          )
+          .on("mouseout", (d,i) =>
+            @set("symptomHighlight", null)
+            @jBoxFor(d, true)
+          )
           .attr
             class: (d) -> d.get("classes")
             ry: 3
@@ -73,9 +91,10 @@ mixin = Ember.Mixin.create
     @pipEnter()
 
   updatePips: ->
+
     @pipEnter()
 
-    @pip()
+    @pipSelection()
       .attr
         width:  @get("symptomDatumDimensions").width
         height: @get("symptomDatumDimensions").height
@@ -84,7 +103,7 @@ mixin = Ember.Mixin.create
         x: (d) -> d.get("end_x")
 
     # unless @get("graphShifted") # don't do animations if the graph has shifted
-    #   @pip()
+    #   @pipSelection()
     #     .filter (d,i) => not d.get("placed") and d.get("end_x") > 0 and d.get("end_x") < @get("width")
     #     .attr
     #       y: -2000
@@ -100,7 +119,7 @@ mixin = Ember.Mixin.create
     # @get("days").forEach (day) =>
     #
     #   filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
-    #   dayPips = @pip().filter(filterByDay)
+    #   dayPips = @pipSelection().filter(filterByDay)
     #   dayPips
     #
     #     # .transition()
@@ -118,7 +137,7 @@ mixin = Ember.Mixin.create
     #       x: (d) -> d.get("end_x")
 
 
-    @pip()
+    @pipSelection()
       .exit()
       # .transition()
       #   .ease("quad")
