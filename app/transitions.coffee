@@ -1,17 +1,15 @@
 transitions = () ->
 
   @transition(
-    @childOf(".checkin-content")
-    @toModel (fromModel) -> (@number > fromModel.number)
-    @use('toLeft')
-    # @use('checkin-next')
+    @toRoute('graph.checkin'),
+    @toModel (fromSection) -> @ < fromSection
+    @use('toRight')
   );
 
   @transition(
-    @childOf(".checkin-content")
-    @toModel (fromModel) -> console.log "?!";(@number < fromModel.number)
-    @use('toRight')
-    # @use('checkin-prev')
+    @toRoute('graph.checkin'),
+    @toModel (fromSection) -> @ > fromSection
+    @use('toLeft')
   );
 
 `export default transitions`

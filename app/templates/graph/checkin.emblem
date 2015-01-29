@@ -4,7 +4,4 @@
   .modal-window
     .modal-inner
       label.modal-close for="modal-1" &times;
-      if edit
-        div: view "edit-checkin"
-      else
-        div: view "questioner"
+      div: view "questioner"
