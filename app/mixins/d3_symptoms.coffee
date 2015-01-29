@@ -61,6 +61,10 @@ mixin = Ember.Mixin.create
     )
   .observes("symptomHighlight")
 
+  dehighlightPips: ->
+    @jBoxFor(null, true)
+    @pipSelection().attr(opacity: 1)
+
   pipEnter: ->
     that = @
     @pipSelection()
