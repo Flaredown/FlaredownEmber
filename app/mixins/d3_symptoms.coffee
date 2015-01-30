@@ -2,27 +2,36 @@
 
 mixin = Ember.Mixin.create
   symptomHighlightOpacity: 0.3
+  maxPipHeight: 50
 
   symptomsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.filterBy("type", "symptom").length) ).property("datumsByDayInViewport")
 
   symptoms_y: Ember.computed ->
-    d3.scale.linear()
-      .domain([0, @get("symptomsMax")+1])
-      .range [@symptomsHeight,0]
-  .property("height", "symptomsMax")
+    max = @get("symptomsMax")
+    max = (@symptomsHeight / @maxPipHeight) if @get("pipDimensions.total_height") >= @maxPipHeight
 
-  symptomDatumDimensions: Ember.computed( ->
+    d3.scale.linear()
+      .domain([0, max+1])
+      .range [@symptomsHeight,0]
+  .property("height", "symptomsMax", "pipDimensions")
+
+  pipDimensions: Ember.computed( ->
     width_margin_percent  = 0.20
     height_margin_percent = 0.10
 
-    right       = @get("pipWidth")  * width_margin_percent
-    left        = @get("pipWidth")  * width_margin_percent
-    top         = @get("pipHeight") * height_margin_percent
-    bottom      = @get("pipHeight") * height_margin_percent
+    height      = if @get("pipHeight") > @maxPipHeight then @maxPipHeight else @get("pipHeight")
+    width       = @get("pipWidth")
+
+    right       = width * width_margin_percent
+    left        = width * width_margin_percent
+    top         = height * height_margin_percent
+    bottom      = height * height_margin_percent
 
     {
-      width:  @get("pipWidth")-left-right
-      height: @get("pipHeight")-top-bottom
+      total_height: height
+      total_width: width
+      width:  width-left-right
+      height: height-top-bottom
       right_margin:  right
       left_margin:   left
       top_margin:    top
@@ -31,27 +40,43 @@ mixin = Ember.Mixin.create
   ).property("x", "symptoms_y", "datums")
 
   pipWidth:   Ember.computed( ->  @get("width") / @get("viewportDays.length") ).property("viewportDays.length", "width")
-  pipHeight:  Ember.computed( ->  @symptomsHeight / @get("symptomsMax") ).property("symptomsMax", "symptomsHeight")
+  pipHeight:  Ember.computed( -> @symptomsHeight / @get("symptomsMax") ).property("symptomsMax", "symptomsHeight")
 
-  pip: (datums) ->
+  pipSelection: (datums) ->
     datums ?= @get("symptomDatums")
     @get("svg").selectAll("rect.symptom").data(datums, (d) -> d.get("id"))
+
+  highestOrderPipByDayAndName: (selected_datum) ->
+    datums = @get("datums")
+      .filterBy("day", selected_datum.get("day"))
+      .filterBy("name", selected_datum.get("name"))
+
+    datums.filter (datum) -> datum.get("order") is d3.max(datums,(d) -> d.get("order"))
+
+  jBoxFor: (datum, close) ->
+    @set "tooltip", new jBox("Mouse", {id: "jbox-tooltip", x: "right", y: "center"}) unless @get("tooltip")
+    if close then @get("tooltip").close() else @get("tooltip").setContent(datum.get("name")).open()
+
   pipHighlight: Ember.observer ->
     Ember.run.later(
       =>
         if name = @get("symptomHighlight")
-          @pip().attr(opacity: 1)
-          @pip(@get("symptomDatums").rejectBy("name", name)).attr(opacity: @symptomHighlightOpacity)
+          @pipSelection().attr(opacity: 1)
+          @pipSelection(@get("symptomDatums").rejectBy("name", name)).attr(opacity: @symptomHighlightOpacity)
         else
-          @pip().attr(opacity: 1)
+          @pipSelection().attr(opacity: 1)
 
       200
     )
-    @get("symptomDatums")
   .observes("symptomHighlight")
 
+  dehighlightPips: ->
+    @jBoxFor(null, true)
+    @pipSelection().attr(opacity: 1)
+
   pipEnter: ->
-    @pip()
+    that = @
+    @pipSelection()
       .enter()
         .append("rect")
           .datum( (d) =>
@@ -60,8 +85,14 @@ mixin = Ember.Mixin.create
             d.set "placed", true
           )
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
-          .on("mouseover", (d,i) => @set("symptomHighlight", d.get("name")) )
-          .on("mouseout", (d,i) => @set("symptomHighlight", null) )
+          .on("mouseover", (d,i) =>
+            @set("symptomHighlight", d.get("name"))
+            @jBoxFor(d) if d.get("replacementType") is "actual"
+          )
+          .on("mouseout", (d,i) =>
+            @set("symptomHighlight", null)
+            @jBoxFor(d, true)
+          )
           .attr
             class: (d) -> d.get("classes")
             ry: 3
@@ -73,18 +104,17 @@ mixin = Ember.Mixin.create
     @pipEnter()
 
   updatePips: ->
-    @pipEnter()
 
-    @pip()
+    @pipSelection()
       .attr
-        width:  @get("symptomDatumDimensions").width
-        height: @get("symptomDatumDimensions").height
+        width:  @get("pipDimensions").width
+        height: @get("pipDimensions").height
         opacity: 100
         y: (d) -> d.get("end_y")
         x: (d) -> d.get("end_x")
 
     # unless @get("graphShifted") # don't do animations if the graph has shifted
-    #   @pip()
+    #   @pipSelection()
     #     .filter (d,i) => not d.get("placed") and d.get("end_x") > 0 and d.get("end_x") < @get("width")
     #     .attr
     #       y: -2000
@@ -100,7 +130,7 @@ mixin = Ember.Mixin.create
     # @get("days").forEach (day) =>
     #
     #   filterByDay = ((d,i) -> @ is d.get("day")).bind(day)
-    #   dayPips = @pip().filter(filterByDay)
+    #   dayPips = @pipSelection().filter(filterByDay)
     #   dayPips
     #
     #     # .transition()
@@ -111,14 +141,14 @@ mixin = Ember.Mixin.create
     #     #     if d.get("placed") then i*10 else i*@get("perDatumDelay")
     #     #   .each "end", (d) -> d.set("placed", true)
     #     .attr
-    #       width:  @get("symptomDatumDimensions").width
-    #       height: @get("symptomDatumDimensions").height
+    #       width:  @get("pipDimensions").width
+    #       height: @get("pipDimensions").height
     #       opacity: 100
     #       y: (d) -> d.get("end_y")
     #       x: (d) -> d.get("end_x")
 
 
-    @pip()
+    @pipSelection()
       .exit()
       # .transition()
       #   .ease("quad")

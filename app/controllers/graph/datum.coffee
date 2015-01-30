@@ -8,7 +8,7 @@ object = Ember.ObjectProxy.extend
     processing: false
 
   sourceType: Ember.computed(-> if @get("catalog") then @get("catalog") else @get("type") ).property("catalog", "type")
-  replacementType: Ember.computed(-> if @get("processing") or @get("misisng") then "temporary" else "actual" ).property("processing", "missing")
+  replacementType: Ember.computed(-> if @get("processing") or @get("missing") then "temporary" else "actual" ).property("processing", "missing")
 
   # Initial attributes should be: day, catalog, order, name, type, missing
   id: Ember.computed(-> "#{@get("sourceType")}_#{@get("day")}_#{@get("order")}_#{@get("replacementType")}" ).property("sourceType", "day", "order", "replacementType")
@@ -32,7 +32,7 @@ object = Ember.ObjectProxy.extend
   ).property("type")
 
   entryDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM-DD-YYYY") ).property("day")
-  tickDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM DD") ).property("day")
+  axisDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM DD") ).property("day")
 
   colorName: Ember.computed( ->
     uniq_name = "#{@get("sourceType")}_#{@get("name")}"

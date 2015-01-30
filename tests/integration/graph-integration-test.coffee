@@ -87,28 +87,27 @@ test "Modal by clicking datum", =>
       , 100)
   )
 
-test "Switching catalogs removes old and brings in new datums", ->
-  expect 1
+# test "Switching catalogs removes old and brings in new datums", ->
+#   expect 1
+#
+#   visit('/').then( ->
+#     triggerEvent ".available-catalog:eq(1)", "click"
+#     andThen ->
+#       ok find("rect.symptom.present").length is 18, "Has 18 datums for symptoms fixture"
+#   )
 
-
-  visit('/').then( ->
-    triggerEvent ".available-catalog:eq(1)", "click"
-    andThen ->
-      ok find("rect.symptom.present").length is 18, "Has 18 datums for symptoms fixture"
-  )
-
-test "Filtering removes matching datums", ->
-  expect 2
-
-  visit('/').then( ->
-    triggerEvent ".filterable-symptom:eq(0)", "click"
-    andThen ->
-      ok find("rect.symptom.present").length < 39, "Has less than 39 datums for HBI fixture"
-      triggerEvent ".filtered-symptom:eq(0)", "click"
-
-      andThen ->
-        ok find("rect.symptom.present").length is 39, "Back to 39"
-  )
+# test "Filtering removes matching datums", ->
+#   expect 2
+#
+#   visit('/').then( ->
+#     triggerEvent ".filterable-symptom:eq(0)", "click"
+#     andThen ->
+#       ok find("rect.symptom.present").length < 39, "Has less than 39 datums for HBI fixture"
+#       triggerEvent ".filtered-symptom:eq(0)", "click"
+#
+#       andThen ->
+#         ok find("rect.symptom.present").length is 39, "Back to 39"
+#   )
 
 # test "Updating entry goes to loading state and updates entry on graph", ->
 #   expect 3
