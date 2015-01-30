@@ -142,9 +142,16 @@ controller = Ember.ObjectController.extend viewportMixin,
       [source,name] = name_array
       id            = "#{source}_#{name}"
 
+      # TODO refactor me!
+      type          = if source is "treatments" then "treatment" else "symptom"
+      colors        = @get("currentUser.#{type}Colors")
+      colorName     = (if color = colors.find((color) => color[0] is id) then color[1] else "")
+      color         = if type is "treatment" then "tbg-#{colorName}" else "sbg-#{colorName}"
+
       id:       id
       name:     name
       source:   source
+      color:    color
       filtered: filtered.contains(id)
 
   ).property("filterableNames", "filtered.@each")
