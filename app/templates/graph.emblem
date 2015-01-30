@@ -14,22 +14,19 @@ else
         = input class="graph-controls-endDate" valueBinding="pickerEndDate"
 
       ul.graph-controls-symptoms
-        each source in filterableSources
-          li.available-catalog click="changeCatalog source"
+        each catalog in catalogs
+          li click="changeCatalog catalog.name" class={:available-catalog catalog.active:active-catalog:inactive-catalog}
             .graph-controls-catalog-block
-            = source
+            = catalog.name
 
-        each filter in datapointFilters
-          li click="filter filter.name" class={filter.enabled:filtered-symptom:filterable-symptom}
+        each filterable in catalogFilterables
+          li click="filter filterable.id" class={filterable.filtered:filtered-symptom:filterable-symptom}
             .graph-controls-symptom-block
-            = filter.name
+            = filterable.name
 
       ul.graph-controls-treatments
-        li.filterable-treatment
-          .graph-controls-treatment-dot
-          | Prednisone
-        li.filterable-treatment
-          .graph-controls-treatment-dot
-          | Methotrexate
-
+        each filterable in treatmentFilterables
+          li click="filter filterable.id" class={filterable.filtered:filtered-treatment:filterable-treatment}
+            .graph-controls-treatment-dot
+            = filterable.name
   outlet

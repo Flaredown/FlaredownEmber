@@ -38,6 +38,11 @@
   .available-catalog {
     border-bottom: 1px solid $lightgrey;
   }
+  .active-catalog {}
+  .inactive-catalog { color: #999; }
+  .filtered-treatment, .filtered-symptom {
+    text-decoration: line-through;
+  }
   .graph-controls-catalog-block, .graph-controls-symptom-block, .graph-controls-treatment-dot {
     width: 12px;
     height: 12px;

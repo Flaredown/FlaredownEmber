@@ -97,9 +97,9 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     @set("isSetup", true)
 
 
-    @setupPips()
-    @setupTreatments()
-    @setupDatestamps()
+    @pipEnter()
+    @treatmentEnter()
+    @datestampEnter()
 
     @update()
 

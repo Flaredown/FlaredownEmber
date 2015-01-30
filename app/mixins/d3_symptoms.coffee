@@ -87,7 +87,7 @@ mixin = Ember.Mixin.create
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
           .on("mouseover", (d,i) =>
             @set("symptomHighlight", d.get("name"))
-            @jBoxFor(d) if d.get("replacementType") is "actual"
+            @jBoxFor(d) if d.get("status") is "actual"
           )
           .on("mouseout", (d,i) =>
             @set("symptomHighlight", null)
@@ -100,13 +100,11 @@ mixin = Ember.Mixin.create
             y: (d) -> d.get("end_y")
             x: (d) -> d.get("end_x")
 
-  setupPips: ->
-    @pipEnter()
-
   updatePips: ->
-
+    @pipEnter()
     @pipSelection()
       .attr
+        class: (d) -> d.get("classes")
         width:  @get("pipDimensions").width
         height: @get("pipDimensions").height
         opacity: 100

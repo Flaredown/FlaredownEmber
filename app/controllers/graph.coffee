@@ -1,80 +1,19 @@
 `import Ember from 'ember'`
 `import datum from './graph/datum'`
+`import viewportMixin from '../mixins/viewport_manager'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
 
-controller = Ember.ObjectController.extend
+controller = Ember.ObjectController.extend viewportMixin,
   ### Set by route ###
   # rawData, firstEntryDate, viewportStart, catalog, loadedStartDate, loadedEndDate
-  filteredNames: [] # default to no filtering
 
-  ### Timeline manipulation, viewport stuff ###
-  bufferMin:        20
-  viewportSize:     14
-  viewportMinSize:  14
-  # viewportStart
-  # firstEntrydate
-
-  ### DATE PICKER STUFF ###
-  datePickerWatcher: Ember.observer ->
-    Ember.run.later =>
-      if @get("pickerStartDate")
-        new_start_date = moment(@get("pickerStartDate"))
-        change = @get("viewportStart").diff(new_start_date, "days")
-        @send("resizeViewport", change, "past") unless new_start_date.isSame(@get("viewportStart"), "day")
-
-      if @get("pickerEndDate")
-        new_end_date = moment(@get("pickerEndDate"))
-        change = @get("viewportEnd").diff(new_end_date, "days")
-        @send("resizeViewport", change, "future") unless new_end_date.isSame(@get("viewportEnd"), "day")
-
-  .observes("pickerStartDate", "pickerEndDate")
-
-  viewportDateWatcher: Ember.observer ->
-    Ember.run.later =>
-      if @get("viewportStart")
-        formatted_start = moment(@get("viewportStart")).format("D MMMM, YYYY")
-        @set("pickerStartDate", formatted_start) if @get("pickerStartDate") isnt formatted_start
-
-      if @get("viewportEnd")
-        formatted_end = moment(@get("viewportEnd")).format("D MMMM, YYYY")
-        @set("pickerEndDate", formatted_end) if @get("pickerEndDate") isnt formatted_end
-  .observes("viewportStart")
-
-  ### VIEWPORT SETUP ###
-  changeViewport: (size_change, new_start) ->
-    today     = moment().utc().startOf("day")
-    new_size  = @get("viewportSize")+size_change
-
-    return if today.diff(new_start, "days") <= 0                                                            # Don't accept changes to invalid viewportStart
-    new_start = @get("firstEntryDate") if new_start < @get("firstEntryDate")                                # Limit based on firstEntryDate
-    new_size  = Math.abs(today.diff(new_start, "days")) if moment(new_start).add(new_size, "days") > today  # Limit based on no time travel
-    new_size  = @get("viewportMinSize") if new_size < @get("viewportMinSize")                               # Can't go below min size
-    return if moment(new_start).add(new_size, "days") > today                                               # Can't shift viewport past today
-
-    @setProperties
-      viewportSize:   new_size
-      viewportStart:  new_start
-
-  # viewportStart
-  viewportEnd: Ember.computed( -> moment(@get("viewportDays.lastObject")*1000)).property("viewportDays")
-  viewportDays: Ember.computed( ->
-    [1..@get("viewportSize")].map (i) =>
-      moment(@get("viewportStart")).add(i, "days")
-    .filter (date) =>
-      date >= @get("firstEntryDate") and date <= moment().utc().startOf("day")
-    .map (date) ->
-      date.unix()
-  ).property("viewportSize", "viewportStart")
+  filtered: [] # default to no filtering
 
   # Some timeline preference helpers
   isTwoWeeks:   Ember.computed.equal("viewportDays.length", 14)
   isTwoMonths:  Ember.computed.equal("viewportDays.length", 60)
   isOneYear:    Ember.computed.equal("viewportDays.length", 365)
-
-  ### Catalogs and Catalog Based Filters ###
-  sources: Ember.computed( -> Object.keys(@get("rawData")).sort() ).property("rawData")
-  filterableSources: Ember.computed( -> @get("sources").reject( (source) -> source is "treatments") ).property("sources")
 
   ### Datapoints, made a bit more friendly to our purposes ###
   rawDatapoints: Ember.computed(->
@@ -182,80 +121,61 @@ controller = Ember.ObjectController.extend
                   controller: @
 
     @get("_processedDatums")
-  .property("rawDatapoints.@each", "rawTreatments.@each", "serverProcessingDays.@each")
+  .property("rawDatapoints.@each", "serverProcessingDays.@each")
 
-  ### Filter Controls ###
-  datapointNames:       Ember.computed( -> @get("rawDatapoints").mapBy("name").uniq() ).property("rawDatapoints")
-  catalogFilters:       Ember.computed( -> @get("rawDatapoints").filterBy("source", @get("catalog")).mapBy("name").uniq() ).property("rawDatapoints", "catalog")
-  filteredSourceNames:  Ember.computed( -> @get("datapointNames").filter( (name) => @get("filteredNames").contains(name) ).compact() ).property("datapointNames", "filteredNames.@each")
-  datapointFilters: Ember.computed( ->
-    filters = []
-    @get("filteredSourceNames").forEach (name) -> filters.addObject({name: name, enabled:true})
-    @get("catalogFilters").forEach (name) => filters.addObject({name: name, enabled:false}) unless @get("filteredSourceNames").contains(name)
-    filters
-  ).property("sourceNames.@each", "filteredSourceNames.@each")
+  ### Catalogs and Filters ###
+  sources: Ember.computed( -> Object.keys(@get("rawData")).sort() ).property("rawData")
+  catalogs: Ember.computed( ->
+    @get("sources").reject((name) -> name is "treatments").map (catalog) => {name: catalog, active: @get("catalog") is catalog}
+  ).property("sources", "catalog")
+
+  filterableNames: Ember.computed( ->
+    _names = []
+    @get("sources").forEach (source) =>
+      @get("rawData.#{source}").mapBy("name").uniq().forEach (name) -> _names.pushObject([source,name])
+    _names
+  ).property("rawData")
+
+  filterables: Ember.computed( ->
+    filtered = @get("filtered")
+    @get("filterableNames").map (name_array) =>
+      [source,name] = name_array
+      id            = "#{source}_#{name}"
+
+      id:       id
+      name:     name
+      source:   source
+      filtered: filtered.contains(id)
+
+  ).property("filterableNames", "filtered.@each")
+
+  activeFilterables:      Ember.computed.filterBy("filterables", "filtered", true)
+  inactiveFilterables:    Ember.computed.filterBy("filterables", "filtered", false)
+  catalogFilterables:     Ember.computed(-> @get("filterables").filterBy("source", @get("catalog")) ).property("filterables", "catalog")
+  treatmentFilterables:   Ember.computed.filterBy("filterables", "source", "treatments")
 
   ### Collection Sorting/Filtering ###
   viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums.@each", "viewportDays")
+  treatmentDatums: Ember.computed.filterBy("unfilteredDatums", "type", "treatment")
+  symptomDatums:   Ember.computed.filterBy("unfilteredDatums", "type", "symptom")
 
   ### catalogDatums -> unfilteredDatums -> unfilteredDatumsByDay -> unfilteredDatumsByDayInViewport ###
   catalogDatums: Ember.computed(-> @get("datums").filter( (datum) => datum.get("catalog") is @get("catalog") or Em.isEmpty(datum.get("catalog")) ) ).property("datums.@each", "catalog")
+
+  # Reject filtered datums with ids in filtered
   unfilteredDatums: Ember.computed(->
-    if Ember.isEmpty(@get("filteredNames")) then return @get("catalogDatums")
-    @get("catalogDatums").reject (datapoint) => @get("filteredNames").contains datapoint.get("name")
-  ).property("catalogDatums", "filteredNames.@each")
+    if Ember.isEmpty(@get("filtered")) then return @get("catalogDatums")
+    @get("catalogDatums").reject (datapoint) => @get("filtered").contains datapoint.get("sourced_name")
+  ).property("catalogDatums", "filtered.@each")
 
-  unfilteredDatumsByDay: Ember.computed( ->
-    @get("days").map (day) => @get("unfilteredDatums").filterBy("day", day).sortBy("order")
-  ).property("unfilteredDatums", "days")
+  # Group by day
+  unfilteredDatumsByDay: Ember.computed( -> @get("days").map (day) => @get("unfilteredDatums").filterBy("day", day).sortBy("order") ).property("unfilteredDatums", "days")
 
+  # Filter by viewport days only
   unfilteredDatumsByDayInViewport: Ember.computed(->
     in_viewport = @get("unfilteredDatums").filter((datum) => @get("viewportDays").contains(datum.get("day")))
     @get("viewportDays").map (day) => in_viewport.filterBy("day", day)
   ).property("unfilteredDatums", "viewportDays")
-
-  treatmentDatums: Ember.computed.filterBy("unfilteredDatums", "type", "treatment")
-  symptomDatums:   Ember.computed.filterBy("unfilteredDatums", "type", "symptom")
-
-  ### Loading/Buffering ###
-  bufferRadius: Ember.computed( ->
-    # radius = Math.floor(@get("viewportSize") / 2)
-    radius = @get("viewportSize")
-    if radius < @get("bufferMin") then @get("bufferMin") else radius
-  ).property("viewportSize")
-
-  bufferWatcher: Ember.observer ->
-
-    if @get("viewportStart") and @get("loadedStartDate") and @get("loadedEndDate")
-      days_in_past_buffer   = Math.abs(@get("viewportStart").diff(@get("loadedStartDate"),"days"))
-      # days_in_future_buffer = Math.abs(@get("viewportEnd").diff(@get("loadedEndDate"),"days"))
-
-      if days_in_past_buffer < @get("bufferRadius")
-        new_loaded_start = moment(@get("loadedStartDate")).subtract(@get("bufferRadius"),"days")
-        @loadMore(new_loaded_start, @get("viewportStart")) unless @get("loadingStartDate") <= new_loaded_start
-
-      # TODO deal with future loading later
-      # available_future_days = Math.abs(@get("loadedEndDate").diff(moment.utc().startOf("day"),"days"))
-      # days_to_load          = if days_in_future_buffer > available_future_days then available_future_days else @get("bufferRadius")
-      # days_to_load          = if @get("bufferRadius") > days_to_load then @get("bufferRadius") else days_to_load
-      # if days_to_load and available_future_days
-      #   console.log "?!!?! #{available_future_days} #{days_in_future_buffer}"
-      #   new_loaded_end = moment(@get("loadedEndDate")).add(days_to_load,"days")
-      #   ajax(
-      #     url: "#{config.apiNamespace}/graph"
-      #     method: "GET"
-      #     data:
-      #       start_date: @get("loadedEndDate").format("MMM-DD-YYYY")
-      #       end_date: new_loaded_end.format("MMM-DD-YYYY")
-      #   ).then(
-      #     (response) =>
-      #       @set "loadedEndDate", new_loaded_end
-      #       @set "rawData", response
-      #       @processRawData()
-      #
-      #     (response) => console.log "?!?! error on getting graph"
-      #   )
-  .observes("loadedStartDate", "loadedEndDate", "viewportStart")
 
   loadMore: (start,end) ->
     @set "loadingStartDate", start
@@ -273,6 +193,7 @@ controller = Ember.ObjectController.extend
 
       (response) => console.log "?!?! error on getting graph"
     )
+
   loadMoreRaw: (raw) ->
     newRaw  = @get("rawData")
     days    = []
@@ -301,28 +222,15 @@ controller = Ember.ObjectController.extend
 
       Ember.run.next => @loadMore(date, date)
 
-    resizeViewport: (days, direction) ->
-      if typeof(direction) is "undefined" # default direction is both ("pinch")
-        @changeViewport (days*2), moment(@get("viewportStart")).subtract(days,"days")
-      else
-        if direction is "past"
-          @changeViewport days, moment(@get("viewportStart")).subtract(days,"days")
-        else
-          @changeViewport days, moment(@get("viewportStart"))
-
-    shiftViewport: (days, direction) ->
-      if direction is "past"
-        @changeViewport 0, moment(@get("viewportStart")).subtract(days,"days")
-      else # "future"
-        @changeViewport 0, moment(@get("viewportStart")).add(days,"days")
-
-    filter: (symptom) ->
-      filtered = @get("filteredNames")
-      if filtered.contains symptom
-        filtered.removeObject symptom
-      else
-        filtered.pushObject symptom
-
     changeCatalog: (catalog) -> @set("catalog", catalog)
+
+    filter: (filterable_id) ->
+      filtered = @get("filtered")
+      if filtered.contains filterable_id
+        filtered.removeObject filterable_id
+      else
+        filtered.pushObject filterable_id
+
+      @propertyDidChange("filtered")
 
 `export default controller`
