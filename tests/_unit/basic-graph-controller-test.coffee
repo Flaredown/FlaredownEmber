@@ -5,6 +5,7 @@
 `import startApp from "../helpers/start-app"`
 
 `import graphFixture from "../fixtures/graph-fixture"`
+`import userFixture from "../fixtures/user-fixture"`
 
 App         = null
 controller  = null
@@ -12,7 +13,7 @@ fixture     = null
 
 moduleFor("controller:graph", "Graph Controller (basic)",
   {
-    needs: ["controller:graph/datum"]
+    needs: ["controller:graph/datum", "controller:current-user", "model:user"]
     setup: ->
       App         = startApp()
       store       = App.__container__.lookup("store:main")
@@ -33,6 +34,13 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "firstEntryDate",  moment(startDay)
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment().utc().startOf("day")
+
+        # HACK!
+        current_user = App.__container__.lookup("controller:current_user")
+        current_user.set "model", store.createRecord("user", userFixture.current_user)
+        controller.set "currentUser", current_user
+        controller.set "currentUser.symptomColors", userFixture.current_user.symptom_colors
+        controller.set "currentUser.treatmentColors", userFixture.current_user.treatment_colors
 
         # Not reset properly by App.destroy
         controller.set "_processedDatumDays",   []
