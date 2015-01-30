@@ -24,6 +24,8 @@ mixin = Ember.Mixin.create
             d.set "placed", true
           )
           .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
+          .on("mouseover", (d,i) => @jBoxFor(d) if d.get("status") is "actual" )
+          .on("mouseout", (d,i) => @jBoxFor(d, true) )
           .attr
             class: (d) -> d.get("classes")
             r: @get("treatmentRadius")
