@@ -38,6 +38,7 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "_processedDatumDays",   []
         controller.set "_processedDatums",      []
         controller.set "serverProcessingDays",  []
+        controller.set "filtered",              []
 
     teardown: ->
       Ember.run(App, App.destroy);
@@ -52,20 +53,35 @@ test "#rawDatapoints is a flattened array of responses from rawData", ->
   ok Ember.typeOf(controller.get("rawDatapoints")) is "array",                 "is an array"
   ok controller.get("rawDatapoints.length") is 34+14,                          "has expected length from fixtures"
 
-### Responses ###
-# test "#datapointNames lists all possible symptom/treatment names", ->
-#   expect 3
-#
-#   ok Ember.typeOf(controller.get("datapointNames")) is "array",                    "is an array"
-#   ok controller.get("datapointNames").contains("fat toes") is true,                "contains an expected symptom name"
-#   ok controller.get("datapointNames").contains("Tickles") is true,                 "contains an expected treatment name"
-#   ok controller.get("datapointNames").length is 11,                                 "is the expected length based on fixtures"
+### Filters ###
+test "#filterables contains filterable objects and their status", ->
+  expect 8
 
-# test "#filteredSourceNames gets the difference of #sourceNames and #filteredNames", ->
-#   expect 1
-#
-#   controller.set("filteredNames", ["general_wellbeing", "ab_pain", "droopy lips"])
-#   deepEqual controller.get("filteredSourceNames").sort(), ["general_wellbeing", "ab_pain"].sort(), "only gives back filtered responses belonging to the catalog"
+  ok Ember.typeOf(controller.get("filterables")) is "array",    "is an array"
+  ok controller.get("filterables").length is 11,                "is the expected length based on fixtures"
+
+  first = controller.get("filterables.firstObject")
+  ok Ember.typeOf(first) is "object",                            "made up of objects"
+  ok first.id is "hbi_general_wellbeing",                        "has a uniq name for an ID"
+  ok first.name is "general_wellbeing",                          "has a sensible name"
+  ok first.source is "hbi",                                      "comes from a source"
+  ok first.filtered is false,                                    "initially unfiltered"
+
+  controller.get("filtered").pushObject "hbi_general_wellbeing"
+  ok controller.get("filterables.firstObject.filtered") is true, "now filtered"
+
+test "#catalogFilterables gets filterables for current catalog", ->
+  expect 2
+
+  ok controller.get("catalogFilterables.firstObject.name") is "general_wellbeing"
+
+  controller.set "catalog", "symptoms"
+  ok controller.get("catalogFilterables.firstObject.name") is "fat toes"
+
+test "#treatmentFilterables gets treatment filterables", ->
+  expect 1
+
+  ok controller.get("treatmentFilterables.firstObject.name") is "Tickles"
 
 ### Datums ###
 test "#datums is an array of SymptomDatums generated from rawData", ->
@@ -82,18 +98,6 @@ test "#viewportDatums: all datums that fit in the viewport", ->
 test "#catalogDatums: all datums that fit in the viewport and catalog and treatments", ->
   expect 1
   ok controller.get("catalogDatums.length") is 39+1+14,                               "has expected length from fixtures (all datums in current catalog) + treatments + 1 missing day"
-
-# test "#unfilteredDatums returns datums not being filtered based on their name, for the current catalog", ->
-#   expect 3
-#
-#   controller.set("filteredNames", []) # default
-#   deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().compact().sort(), ["general_wellbeing", "ab_pain", "stools", "ab_mass", "complications"].sort(), "no filtered names means all are visible"
-#
-#   controller.set("filteredNames", ["general_wellbeing", "ab_pain", "stools", "ab_mass"])
-#   deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().compact().sort(), ["complications"], "only matching datums"
-#
-#   controller.set("filteredNames", ["ab_pain", "droopy lips"])
-#   deepEqual controller.get("unfilteredDatums").mapBy("name").uniq().compact().sort(), ["general_wellbeing", "complications", "stools", "ab_mass"].sort(), "doesn't care about filters from other catalogs"
 
 test "#unfilteredDatumsByDay is an array of arrays containing datums for each day in #days", ->
   expect 3

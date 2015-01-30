@@ -26,9 +26,8 @@ mixin = Ember.Mixin.create
           y: (d) => @symptomsHeight+@datesHeight
           dx: -> "#{($(@).attr("data-width") - @getBBox().width) / 2}px"
 
-  setupDatestamps: -> @datestampEnter()
-
   updateDatestamps: ->
+    @datestampEnter()
     @datestampSelection()
       .attr
         opacity: 0

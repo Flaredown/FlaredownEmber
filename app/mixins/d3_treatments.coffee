@@ -37,9 +37,8 @@ mixin = Ember.Mixin.create
   #
   # .property("datums")
 
-  setupTreatments: -> @treatmentEnter()
-
   updateTreatments: ->
+    @treatmentEnter()
     @treatmentSelection()
       .attr
         cy: (d) -> d.get("end_y")
