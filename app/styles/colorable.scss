@@ -4,7 +4,7 @@ $treatments: #113F63, #9EB9BA, #256DA0, #61B2D5, #28A178, #A9D0C3, #829C42, #B3C
 @each $color in $treatments {
     $i: index($treatments, $color);
     .tbg-#{$i} {
-        background-color: $color;
+        background-color: $color !important;
     }
     .tclr-#{$i} {
         color: $color;
@@ -17,7 +17,7 @@ $treatments: #113F63, #9EB9BA, #256DA0, #61B2D5, #28A178, #A9D0C3, #829C42, #B3C
 @each $color in $symptoms {
     $i: index($symptoms, $color);
     .sbg-#{$i} {
-        background-color: $color;
+        background-color: $color !important;
     }
     .sclr-#{$i} {
         color: $color;

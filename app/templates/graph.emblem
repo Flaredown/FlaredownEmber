@@ -21,12 +21,12 @@ else
 
         each filterable in catalogFilterables
           li click="filter filterable.id" class={filterable.filtered:filtered-symptom:filterable-symptom}
-            .graph-controls-symptom-block
+            div class={:graph-controls-symptom-block filterable.color}
             = filterable.name
 
       ul.graph-controls-treatments
         each filterable in treatmentFilterables
           li click="filter filterable.id" class={filterable.filtered:filtered-treatment:filterable-treatment}
-            .graph-controls-treatment-dot
+            div class={:graph-controls-treatment-dot filterable.color}
             = filterable.name
   outlet
