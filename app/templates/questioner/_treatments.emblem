@@ -1,7 +1,7 @@
 .checkin-treatments
   if treatments.length
     ul: each treatment in treatments
-      view "questioner/treatment" editable=true active=true name=treatment.name
+      view "questioner/treatment" editable=true active=false name=treatment.name
 
     / ul: each treatment in inactiveTreatments
     /   view "questioner/treatment" editable=true active=false
@@ -9,4 +9,4 @@
     h4 Bwa! No treatments being tracked!
 
   br
-  = input placeholder="Add a Treatment"
+  = input class="add-treatment-input" placeholder="Add a Treatment"

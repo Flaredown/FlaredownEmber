@@ -143,18 +143,20 @@
     padding: 5px 15px;
     border-radius: 999px;
     color: white;
-    // background: $lightgrey;
+    background: $lightgrey;
     color: grey;
 
     &.active {
       color: white;
-      // background: $primary;
+      background: $primary;
     }
 
   }
   .checkin-treatment-edit, .checkin-treatment-remove {
     @include span-columns(1);
     text-align: center;
+  }
+  .add-treatment-input {
   }
 }
 
