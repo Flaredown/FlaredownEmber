@@ -142,6 +142,7 @@ test "Can edit treatment", ->
   expect 2
 
   visit('/checkin/Aug-13-2014/9').then( ->
+    triggerEvent ".checkin-treatment-name", "click"
     triggerEvent $(".checkin-treatment-edit:eq(0)"), "click"
 
     andThen ->
