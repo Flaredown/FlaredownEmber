@@ -2,7 +2,7 @@
 $background: #F2EEE8;
 $primary: #73C1BA;
 $secondary: #F5A623;
-$lightgrey: #ddd;
+$lightgrey: #EDEDED;
 $shadow: #E1D8C8;
 
 //Breakpoints
@@ -48,6 +48,11 @@ label {
 }
 .container {
   @include outer-container;
+}
+
+// Progress bar
+#progress {
+  background: $primary !important;
 }
 
 // Navbar
