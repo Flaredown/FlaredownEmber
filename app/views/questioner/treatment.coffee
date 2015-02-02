@@ -1,18 +1,13 @@
 `import Ember from 'ember'`
+`import colorableMixin from '../../mixins/colorable'`
 
-view = Ember.View.extend
+view = Ember.View.extend colorableMixin,
 
   tagName: "div"
   templateName: "questioner/_treatment_input"
   classNames: ["checkin-treatment"]
 
-  color: Ember.computed(->
-    uniq_name     = "treatments_#{@get("name")}"
-    color         = @get("controller.currentUser.treatmentColors").find((color) => color[0] is uniq_name)
-    color_number  = if color then color[1] else 0
-
-    "tbg-#{color_number}"
-  ).property("name", "controller.currentUser.treatmentColors")
+  colorClass: Ember.computed(-> @colorClasses("treatments_#{@get("name")}", "treatment").bg ).property("name")
 
   editing: false
 

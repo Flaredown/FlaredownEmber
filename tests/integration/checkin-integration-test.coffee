@@ -52,6 +52,8 @@ module('Check-In Integration', {
 test "Can see the checkin", ->
   expect 2
 
+  debugger
+
   visit('/checkin/Aug-13-2014/1').then( ->
     assertModalPresent()
 

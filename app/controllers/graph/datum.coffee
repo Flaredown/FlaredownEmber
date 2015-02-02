@@ -1,6 +1,9 @@
 `import Ember from 'ember'`
+`import colorableMixin from '../../mixins/colorable'`
 
-object = Ember.ObjectProxy.extend
+object = Ember.ObjectProxy.extend colorableMixin,
+
+  currentUserBinding: "controller.currentUser"
 
   content:
     catalog:    undefined
@@ -14,15 +17,16 @@ object = Ember.ObjectProxy.extend
 
   # Initial attributes should be: day, catalog, order, name, type, missing
   id: Ember.computed(-> "#{@get("sourceType")}_#{@get("day")}_#{@get("order")}_#{@get("status")}" ).property("sourceType", "day", "order", "status")
+  uniqName: Ember.computed(-> "#{@get("source")}_#{@get("name")}").property("name", "source")
 
   classes: Ember.computed(->
     names = [@get("type")]
 
     if not @get("missing") and not @get("processing")
       if @get("sourceType") is "treatment"
-        names.pushObject "tfill-#{@get("colorName")}"
+        names.pushObject @colorClasses(@get("uniqName"), @get("type")).fill
       else
-        names.pushObject "sfill-#{@get("colorName")}"
+        names.pushObject @colorClasses(@get("uniqName"), @get("type")).fill
 
     if @get("processing")
       names.pushObject "processing"
@@ -35,11 +39,5 @@ object = Ember.ObjectProxy.extend
 
   entryDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM-DD-YYYY") ).property("day")
   axisDate: Ember.computed( -> moment.utc(@get("day")*1000).format("MMM DD") ).property("day")
-
-  colorName: Ember.computed( ->
-    uniq_name = "#{@get("source")}_#{@get("name")}"
-    if colors = @get("controller.currentUser.#{@get("type")}Colors")
-      if color = colors.find((color) => color[0] is uniq_name) then color[1] else ""
-  ).property("controller.currentUser.symptomColors", "controller.currentUser.treatmentColors", "sourceType", "name")
 
 `export default object`
