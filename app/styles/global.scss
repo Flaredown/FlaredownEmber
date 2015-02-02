@@ -2,7 +2,7 @@
 $background: #F2EEE8;
 $primary: #73C1BA;
 $secondary: #F5A623;
-$lightgrey: #ddd;
+$lightgrey: #EDEDED;
 $shadow: #E1D8C8;
 
 //Breakpoints
@@ -50,6 +50,11 @@ label {
   @include outer-container;
 }
 
+// Progress bar
+#progress {
+  background: $primary !important;
+}
+
 // Navbar
 .navbar {
   @include outer-container;
@@ -73,13 +78,14 @@ label {
   .navbar-logo {
     display: inline-block;
     width: 40px;
+    margin-right: 10px;
   }
   .navbar-sections {
     display: none;
     a {
-      color: #705F50;
+      color: black;
       &:hover {
-        color: darken(#705F50, 10%);
+        color: lighten(black, 20%);
       }
     }
     li {
