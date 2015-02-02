@@ -78,13 +78,14 @@ label {
   .navbar-logo {
     display: inline-block;
     width: 40px;
+    margin-right: 10px;
   }
   .navbar-sections {
     display: none;
     a {
-      color: #705F50;
+      color: black;
       &:hover {
-        color: darken(#705F50, 10%);
+        color: lighten(black, 20%);
       }
     }
     li {
