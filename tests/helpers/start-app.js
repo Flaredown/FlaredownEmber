@@ -6,7 +6,7 @@ import helpers from '../helpers/helper-functions';
 
 export default function startApp(attrs) {
   var application;
-  // helpers(); // slap those suckers on the global namespace
+  helpers(); // slap those suckers on the global namespace
 
   var attributes = Ember.merge({}, config.APP);
   attributes = Ember.merge(attributes, attrs); // use defaults, but you can override;

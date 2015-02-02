@@ -42,6 +42,7 @@ module('Check-In Integration', {
       responseText: entryFixture("Aug-13-2014")
 
     App = startApp()
+    null
 
   teardown: ->
     Ember.run(App, App.destroy)
