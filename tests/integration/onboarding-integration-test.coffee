@@ -7,7 +7,9 @@
 App = null
 
 module('Onboarding Integration Tests', {
-  setup: -> App = startApp()
+  setup: ->
+    App = startApp()
+    null
   teardown: ->
     Ember.run(App, App.destroy);
     $.mockjax.clear();

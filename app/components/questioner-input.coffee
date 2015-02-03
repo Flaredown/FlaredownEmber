@@ -21,7 +21,7 @@ component = Ember.Component.extend colorableMixin,
       label: if input.label then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
       color: if selected then @colorClasses(uniq_name, "symptom").bg else "unselected"
 
-  ).property("question.inputs", "value", "controller.currentUser.symptomColors", "question.name", "section.category")
+  ).property("question.inputs", "value", "question.name", "section.category")
 
   value: Ember.computed( ->
     question = @get("responses").filterBy("catalog",@get("section.category")).findBy("name", @get("question.name"))

@@ -23,6 +23,8 @@ initializer = {
     container.lookup("store:main").find("currentUser", 0).then(
       (currentUser) =>
         currentUserController.set "content", currentUser
+        window.treatmentColors  = currentUserController.get("treatmentColors")
+        window.symptomColors    = currentUserController.get("symptomColors")
 
         if currentUserController.get("loggedIn")
 

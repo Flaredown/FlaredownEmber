@@ -35,12 +35,8 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment().utc().startOf("day")
 
-        # HACK!
-        current_user = App.__container__.lookup("controller:current_user")
-        current_user.set "model", store.createRecord("user", userFixture.current_user)
-        controller.set "currentUser", current_user
-        controller.set "currentUser.symptomColors", userFixture.current_user.symptom_colors
-        controller.set "currentUser.treatmentColors", userFixture.current_user.treatment_colors
+        window.symptomColors    = userFixture.current_user.symptom_colors
+        window.treatmentColors  = userFixture.current_user.treatment_colors
 
         # Not reset properly by App.destroy
         controller.set "_processedDatumDays",   []

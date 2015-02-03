@@ -42,6 +42,7 @@ module('Check-In Integration', {
       responseText: entryFixture("Aug-13-2014")
 
     App = startApp()
+    null
 
   teardown: ->
     Ember.run(App, App.destroy)
@@ -52,11 +53,8 @@ module('Check-In Integration', {
 test "Can see the checkin", ->
   expect 2
 
-  debugger
-
   visit('/checkin/Aug-13-2014/1').then( ->
     assertModalPresent()
-
     ok currentURL() == "/checkin/Aug-13-2014/1"
   )
 
@@ -72,7 +70,6 @@ test "Can navigate through the sections (today)", ->
   expect 3
 
   visit('/checkin/today/1').then( =>
-
 
     triggerEvent(".checkin-pagination ul li:eq(1)", "click")
     ok currentURL() == "/checkin/today/2", "Clicking a number goes to that section"
