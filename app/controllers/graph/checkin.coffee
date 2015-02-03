@@ -7,7 +7,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
   modalOpen: true
   sectionsSeen: []
 
-  nonQuestionSections: ["start", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
+  nonResearchSections: ["start", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
   defaultResponseValues:
     checkbox: 0
     select: null
@@ -46,6 +46,22 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
     catalogs.addObject("symptoms")
   ).property("catalogs")
 
+  responsesData: Ember.computed ->
+    that            = @
+    responses       = []
+
+    @get("catalogsSorted").forEach (catalog) =>
+      @get("catalog_definitions.#{catalog}").forEach (section) =>
+        section.forEach (question) ->
+          # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
+          response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
+          value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
+
+          responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
+
+    responses
+  .property("catalog_definitions","catalog_definitions.symptoms.@each")
+
   ### Sections: All the pages in the checkin form ###
   sectionsDefinition: Ember.computed ->
     _definition = [["start",1]]
@@ -68,17 +84,18 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
       [0..size-1].forEach (subsection_index) =>
         if subsection_index >= 0
           subsection    = _sections.length+1
-          question      = not @get("nonQuestionSections").contains(name)
+          research      = not @get("nonResearchSections").contains(name)
+          completable   = research or (name is "symptoms")
           is_selected   = (subsection is @get("section"))
           is_seen       = @isSeen(subsection)
-          is_complete   = not question or (question and @hasCompleteResponse(name,subsection_index))
+          is_complete   = completable and @hasCompleteResponse(name,subsection_index)
 
           _sections.addObject {
             number:           subsection
             selected:         is_selected
             category_number:  subsection_index+1
             category:         name
-            question:         question
+            research:         research
             seen:             is_seen
             complete:         is_seen and is_complete
             skipped:          is_seen and not is_complete and not is_selected
@@ -86,33 +103,23 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
 
     _sections
 
-  .property("sectionsDefinition", "catalogs", "section", "responsesData")
-
-  responsesData: Ember.computed ->
-    that            = @
-    responses       = []
-
-    @get("catalogsSorted").forEach (catalog) =>
-      @get("catalog_definitions.#{catalog}").forEach (section) =>
-        section.forEach (question) ->
-          # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
-          response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
-          value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
-
-          responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
-
-    responses
-  .property("catalog_definitions","catalog_definitions.symptoms.@each")
+  .property("sectionsDefinition", "catalogs", "section", "responsesData.@each.value")
 
   ### Section Helpers ###
   isSeen: (section) ->
     return true unless @get("just_created") is true
     @get("sectionsSeen").contains(section)
-  hasCompleteResponse: (catalog,section_index) ->
-      section = @get("catalog_definitions.#{catalog}")[section_index]
-      return true if section.kind is "checkbox"
 
-      not section.map((question) =>
+  hasCompleteResponse: (catalog,section_index) ->
+      questions = []
+      if catalog is "symptoms"
+        questions = @get("catalog_definitions.symptoms").mapBy("firstObject")
+      else
+        questions = @get("catalog_definitions.#{catalog}")[section_index]
+
+      not questions.map((question) =>
+        return true if question.kind is "checkbox"
+
         response = @get("responsesData").filterBy("catalog", catalog).findBy("name", question.name)
         return false unless response
         response.get("value") isnt null
@@ -132,7 +139,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
   isSymptomCategory:          Ember.computed.equal("currentCategory", "symptoms")
 
   currentPartial:             Ember.computed( ->
-    return "questioner/#{@get("currentCategory")}" if @get("nonQuestionSections").contains(@get("currentCategory"))
+    return "questioner/#{@get("currentCategory")}" if @get("nonResearchSections").contains(@get("currentCategory"))
     "questioner/questions"
   ).property("currentCategory")
 

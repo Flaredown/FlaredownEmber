@@ -93,6 +93,24 @@ fixture = (date) ->
                 { value: 2, meta_label: "", helper: null },
                 { value: 3, meta_label: "", helper: null },
               ]
+          }],
+          [{
+              name: "fat toes", kind: "select",
+              inputs: [
+                { value: 0, meta_label: "", helper: null},
+                { value: 1, meta_label: "", helper: null},
+                { value: 2, meta_label: "", helper: null },
+                { value: 3, meta_label: "", helper: null },
+              ]
+          }],
+          [{
+              name: "slippery tongue", kind: "select",
+              inputs: [
+                { value: 0, meta_label: "", helper: null},
+                { value: 1, meta_label: "", helper: null},
+                { value: 2, meta_label: "", helper: null },
+                { value: 3, meta_label: "", helper: null },
+              ]
           }]
         ]
       }

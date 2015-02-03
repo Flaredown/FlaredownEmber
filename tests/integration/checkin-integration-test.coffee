@@ -160,3 +160,27 @@ test "Warned of treatment removal", ->
 
     andThen -> window.assertAlertPresent()
   )
+
+# Completeness
+test "Setting a response on a normal select marks that section as 'complete'", ->
+  expect 1
+
+  # Page 3, HBI general wellbeing, incomplete
+  visit('/checkin/Aug-13-2014/3').then( ->
+    current_complete_count = $(".checkin-pagination a.complete").length
+    triggerEvent ".checkin-response-select li:eq(0)", "click"
+    ok current_complete_count is $(".checkin-pagination a.complete").length - 1
+  )
+
+test "Null values on symptom responses do not count as complete", ->
+  expect 2
+
+  visit('/checkin/Aug-13-2014/8').then( ->
+    triggerEvent ".checkin-response-symptom:eq(0) li:eq(1)", "click"
+    triggerEvent ".checkin-response-symptom:eq(1) li:eq(1)", "click"
+    ok Em.isEmpty(find(".checkin-pagination a.symptoms.complete")), "2/3... not complete yet"
+
+    triggerEvent ".checkin-response-symptom:eq(2) li:eq(1)", "click"
+    andThen ->
+      ok Em.isPresent(find(".checkin-pagination a.symptoms.complete")), "All symptoms filled, now complete"
+  )
