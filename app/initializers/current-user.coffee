@@ -17,11 +17,14 @@ initializer = {
     container.injection('route', 'currentUser', 'current-user:current')
     container.injection('controller', 'currentUser', 'current-user:current')
     container.injection('component', 'currentUser', 'current-user:current')
+    container.injection('view', 'currentUser', 'current-user:current')
 
     application.deferReadiness()
     container.lookup("store:main").find("currentUser", 0).then(
       (currentUser) =>
         currentUserController.set "content", currentUser
+        window.treatmentColors  = currentUserController.get("treatmentColors")
+        window.symptomColors    = currentUserController.get("symptomColors")
 
         if currentUserController.get("loggedIn")
 

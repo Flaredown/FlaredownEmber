@@ -1,10 +1,11 @@
 `import Ember from 'ember'`
 `import datum from './graph/datum'`
 `import viewportMixin from '../mixins/viewport_manager'`
+`import colorableMixin from '../mixins/colorable'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
 
-controller = Ember.ObjectController.extend viewportMixin,
+controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
   ### Set by route ###
   # rawData, firstEntryDate, viewportStart, catalog, loadedStartDate, loadedEndDate
 
@@ -141,17 +142,12 @@ controller = Ember.ObjectController.extend viewportMixin,
     @get("filterableNames").map (name_array) =>
       [source,name] = name_array
       id            = "#{source}_#{name}"
-
-      # TODO refactor me!
       type          = if source is "treatments" then "treatment" else "symptom"
-      colors        = @get("currentUser.#{type}Colors")
-      colorName     = (if color = colors.find((color) => color[0] is id) then color[1] else "")
-      color         = if type is "treatment" then "tbg-#{colorName}" else "sbg-#{colorName}"
 
       id:       id
       name:     name
       source:   source
-      color:    color
+      color:    @colorClasses(id,type).bg
       filtered: filtered.contains(id)
 
   ).property("filterableNames", "filtered.@each")

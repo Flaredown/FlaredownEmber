@@ -42,6 +42,7 @@ module('Graph Integration', {
       responseText: entryFixture(today)
 
     App = startApp()
+    null
   teardown: ->
     Ember.run(App, App.destroy);
     $.mockjax.clear();

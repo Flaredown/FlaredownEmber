@@ -1,15 +1,14 @@
 `import Ember from 'ember'`
+`import colorableMixin from '../mixins/colorable'`
 
-component = Ember.Component.extend
+component = Ember.Component.extend colorableMixin,
   questionName: Ember.computed(-> "#{@get("currentUser.locale")}.catalogs.#{@get("section.category")}.#{@get("question.name")}").property("question.name", "section.category")
 
   layoutName: Ember.computed(-> "questioner/_#{@get("question.kind")}_input" ).property("question.kind")
   symptomQuestion: Ember.computed.equal("section.category", "symptoms")
 
   inputs: Ember.computed(->
-    uniq_name     = "#{@get("section.category")}_#{@get("question.name")}"
-    color         = @get("controller.currentUser.symptomColors").find((color) => color[0] is uniq_name)
-    color_number  = if color then color[1] else 0
+    uniq_name = "#{@get("section.category")}_#{@get("question.name")}"
 
     @get("question.inputs").map (input) =>
       selected = if @get("symptomQuestion")
@@ -20,9 +19,9 @@ component = Ember.Component.extend
       value: input.value,
       selected: selected
       label: if input.label then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
-      color: if selected then "sbg-#{color_number}" else "unselected"
+      color: if selected then @colorClasses(uniq_name, "symptom").bg else "unselected"
 
-  ).property("question.inputs", "value", "controller.currentUser.symptomColors", "question.name", "section.category")
+  ).property("question.inputs", "value", "question.name", "section.category")
 
   value: Ember.computed( ->
     question = @get("responses").filterBy("catalog",@get("section.category")).findBy("name", @get("question.name"))
