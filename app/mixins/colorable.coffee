@@ -3,7 +3,7 @@
 mixin = Ember.Mixin.create
 
   colorClasses: (uniq_name, type) ->
-    colors    = @get("currentUser.#{type}Colors")
+    colors    = window["#{type}Colors"]
     color     = colors.find((colorable) => colorable[0] is uniq_name)
 
     id        = if color then color[1] else ""

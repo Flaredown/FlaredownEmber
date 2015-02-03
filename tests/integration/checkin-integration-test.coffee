@@ -71,7 +71,6 @@ test "Can navigate through the sections (today)", ->
 
   visit('/checkin/today/1').then( =>
 
-
     triggerEvent(".checkin-pagination ul li:eq(1)", "click")
     ok currentURL() == "/checkin/today/2", "Clicking a number goes to that section"
 
