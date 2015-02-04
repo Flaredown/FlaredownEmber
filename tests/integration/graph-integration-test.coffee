@@ -88,63 +88,63 @@ test "Modal by clicking datum", =>
       , 100)
   )
 
-# test "Switching catalogs removes old and brings in new datums", ->
-#   expect 1
-#
-#   visit('/').then( ->
-#     triggerEvent ".available-catalog:eq(1)", "click"
-#     andThen ->
-#       ok find("rect.symptom.present").length is 18, "Has 18 datums for symptoms fixture"
-#   )
+test "Switching catalogs removes old and brings in new datums", ->
+  expect 1
 
-# test "Filtering removes matching datums", ->
-#   expect 2
-#
-#   visit('/').then( ->
-#     triggerEvent ".filterable-symptom:eq(0)", "click"
-#     andThen ->
-#       ok find("rect.symptom.present").length < 39, "Has less than 39 datums for HBI fixture"
-#       triggerEvent ".filtered-symptom:eq(0)", "click"
-#
-#       andThen ->
-#         ok find("rect.symptom.present").length is 39, "Back to 39"
-#   )
+  visit('/').then( ->
+    triggerEvent ".available-catalog:eq(1)", "click"
+    andThen ->
+      ok find("rect.symptom.present").length is 18, "Has 18 datums for symptoms fixture"
+  )
 
-# test "Updating entry goes to loading state and updates entry on graph", ->
-#   expect 3
-#
-#   controller = App.__container__.lookup("controller:graph")
-#
-#   visit('/').then( ->
-#
-#     ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
-#     $("rect.symptom.present:eq(0)").simulate("click") # should be first day (today)
-#     andThen ->
-#
-#       Ember.run.later(
-#         (->
-#           triggerEvent ".checkin-next", "click"
-#
-#           andThen ->
-#             triggerEvent ".checkin-response-select li:eq(0)", "click"
-#             triggerEvent ".modal-close", "click"
-#
-#             andThen ->
-#               ok find("rect.symptom.processing").length is 3, "Has loading datums"
-#               $.mockjax.clear();
-#               # Use the single day graph response when loading new "processed" day at the end of test
-#               Ember.$.mockjax
-#                 url: "#{config.apiNamespace}/graph",
-#                 type: 'GET'
-#                 # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
-#                 responseText: singleGraphDayFixture()
-#
-#
-#               Ember.run.next ->
-#                 controller.send("dayProcessed", today)
-#                 Ember.run.later (-> ok find("rect.symptom.present").length is 39-2, "Has 39 (original) - 2 (new day difference) datums for HBI fixture"), 500
-#         )
-#         , 200
-#       )
-#
-#   )
+test "Filtering removes matching datums", ->
+  expect 2
+
+  visit('/').then( ->
+    triggerEvent ".filterable-symptom:eq(0)", "click"
+    andThen ->
+      ok find("rect.symptom.present").length < 39, "Has less than 39 datums for HBI fixture"
+      triggerEvent ".filtered-symptom:eq(0)", "click"
+
+      andThen ->
+        ok find("rect.symptom.present").length is 39, "Back to 39"
+  )
+
+test "Updating entry goes to loading state and updates entry on graph", ->
+  expect 3
+
+  controller = App.__container__.lookup("controller:graph")
+
+  visit('/').then( ->
+
+    ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
+    $("rect.symptom.present:eq(0)").simulate("click") # should be first day (today)
+    andThen ->
+
+      Ember.run.later(
+        (->
+          triggerEvent ".checkin-next", "click"
+
+          andThen ->
+            triggerEvent ".checkin-response-select li:eq(0)", "click"
+            triggerEvent ".modal-close", "click"
+
+            andThen ->
+              ok find("rect.processing").length, "Has loading datums"
+              $.mockjax.clear();
+              # Use the single day graph response when loading new "processed" day at the end of test
+              Ember.$.mockjax
+                url: "#{config.apiNamespace}/graph",
+                type: 'GET'
+                # data: { start_date: "Oct-24-2014", end_date: "Nov-13-2014" }
+                responseText: singleGraphDayFixture()
+
+
+              Ember.run.next ->
+                controller.send("dayProcessed", today)
+                Ember.run.later (-> ok find("rect.symptom.present").length is 39-2, "Has 39 (original) - 2 (new day difference) datums for HBI fixture"), 500
+        )
+        , 200
+      )
+
+  )
