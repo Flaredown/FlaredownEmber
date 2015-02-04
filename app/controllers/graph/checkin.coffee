@@ -203,7 +203,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
       ).then(
         (
           (response) ->
-
             # if @get("checkinComplete") # only process the entry if it's complete
             # TODO unfilled question datums
             @get("controllers.graph").send("dayProcessing", @get("date"))
