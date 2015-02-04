@@ -3,10 +3,12 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
+`import userFixture from "../fixtures/user-fixture"`
+`import localeFixture from "../fixtures/locale-fixture"`
 
 App = null
 
-module('Login Errors', {
+module('Login Integration', {
   setup: ->
     App = startApp()
     null
@@ -83,6 +85,21 @@ growlErrors =->
     status: 500
     responseText: growl_response
 
+successfulLogin = ->
+  Ember.$.mockjax
+    url: "#{config.apiNamespace}/users/sign_in.json"
+    type: 'POST'
+    status: 201
+    responseText: {}
+
+  Ember.$.mockjax
+    url: "#{config.apiNamespace}/current_user",
+    responseText: userFixture
+
+  Ember.$.mockjax
+    url: "#{config.apiNamespace}/locales/en",
+    responseText: localeFixture
+
 test "Inline errors are shown on inline error response", ->
   expect 4
   inlineErrors()
@@ -116,3 +133,19 @@ test "alert is shown on growl error response", ->
       triggerEvent("#login-button", "click")
       andThen -> assertAlertPresent()
   )
+
+test "sets up colors on login", ->
+  expect 1
+
+  visit('/login').then ->
+    successfulLogin()
+    triggerEvent("#login-button", "click")
+
+    andThen -> ok Em.isPresent(window.treatmentColors), "has some treatmentColors"
+
+test "sets up colors when already logged in", ->
+  expect 1
+
+  successfulLogin()
+  visit('/').then ->
+    ok Em.isPresent(window.treatmentColors), "has some treatmentColors"

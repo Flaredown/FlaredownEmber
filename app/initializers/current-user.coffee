@@ -1,9 +1,7 @@
 `import Ember from 'ember'`
-`import ajax from 'ic-ajax'`
-`import config from '../config/environment'`
+`import UserSetupMixin from '../mixins/user_setup'`
 
-
-initializer = {
+initializer = Ember.Object.create {
   name: "currentUser"
   after: "store"
 
@@ -19,29 +17,7 @@ initializer = {
     container.injection('component', 'currentUser', 'current-user:current')
     container.injection('view', 'currentUser', 'current-user:current')
 
-    application.deferReadiness()
-    container.lookup("store:main").find("currentUser", 0).then(
-      (currentUser) =>
-        currentUserController.set "content", currentUser
-        window.treatmentColors  = currentUserController.get("treatmentColors")
-        window.symptomColors    = currentUserController.get("symptomColors")
-
-        if currentUserController.get("loggedIn")
-
-          # Ask the API for the locale for the current user
-          ajax("#{config.apiNamespace}/locales/#{currentUserController.get("locale")}").then(
-            (locale) =>
-              Ember.I18n.translations = locale
-
-            (response) =>
-              @errorCallback(response, @) # TODO this doesn't work
-          )
-
-        application.advanceReadiness()
-
-      (response) ->
-        # @errorCallback(response, @) # TODO this doesn't work
-        application.advanceReadiness()
-    )
+    UserSetupMixin.apply({}).setupUser(container)
 }
+
 `export default initializer`

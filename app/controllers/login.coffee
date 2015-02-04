@@ -2,8 +2,9 @@
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
 `import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
+`import UserSetupMixin from '../mixins/user_setup'`
 
-controller = Ember.Controller.extend GroovyResponseHandlerMixin,
+controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
   init: ->
     @_super()
     @get("setValidationsByName")
@@ -24,13 +25,6 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
     else
       @transitionToRoute(config.afterLoginRoute)
 
-  # credentialsObserver: Ember.observer ->
-  #   if Ember.isEmpty(@get("loginId"))
-  #     $.removeCookie("loginId")
-  #   else
-  #     $.cookie("loginId", @get("loginId"))
-  # .observes("loginId")
-
   actions:
     login: ->
       data = {}
@@ -40,7 +34,8 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
         type: "POST"
         data: data
       ).then(
-        @loginCallback.bind(@)
+        @setupUser(@container)
+        # @loginCallback.bind(@)
         (response) => @errorCallback(response, @)
       )
 
@@ -49,28 +44,9 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
         type: "GET"
         data: @getProperties("user_email", "user_token")
       ).then(
-        @loginCallback.bind(@)
+        @setupUser(@container)
         (response) => @errorCallback(response, @)
       )
-
-  loginCallback: (response) ->
-    @store.find("currentUser", 0).then(
-      (currentUser) =>
-
-        @set("currentUser.model", currentUser)
-
-        # Ask the API for the locale for the current user
-        ajax("#{config.apiNamespace}/locales/#{@get("currentUser.locale")}").then(
-          (locale) =>
-            Ember.I18n.translations = locale
-            @redirectToTransition()
-
-          (response) =>
-            @errorCallback(response, @) # TODO this doesn't work
-        )
-      ,
-      -> # @errorCallback(response, @) # TODO this doesn't work
-    )
 
 
     # logout: ->
