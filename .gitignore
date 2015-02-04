@@ -8,6 +8,8 @@
 /node_modules
 /bower_components
 
+.env
+
 # misc
 /.sass-cache
 /connect.lock

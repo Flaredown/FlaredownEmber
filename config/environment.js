@@ -2,6 +2,8 @@
 
 module.exports = function(environment) {
   var ENV = {
+    NOT_CI: process.env.NOT_CI,
+
     modulePrefix: "flaredown",
     environment: environment,
     baseURL: '/',

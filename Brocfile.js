@@ -2,6 +2,9 @@
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var app = new EmberApp({
+  dotEnv: {
+    clientAllowedKeys: ['NOT_CI']
+  },
   sassOptions: {
     includePaths: require('node-neat').with('app/styles/bitters')
   }
