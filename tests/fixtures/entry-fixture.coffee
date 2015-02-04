@@ -23,10 +23,16 @@ fixture = (date) ->
       ],
       treatments: [
         {
-          id: "Jelly Beans_25_beans_#{id}"
-          name: "Jelly Beans"
+          id: "Tickles_25_beans_#{id}"
+          name: "Tickles"
           quantity: 25.0
-          unit: "beans"
+          unit: "session"
+        },
+        {
+          id: "Laughing Gas_20_cc_#{id}"
+          name: "Laughing Gas"
+          quantity: 20.0
+          unit: "cc"
         }
       ],
       catalog_definitions: {

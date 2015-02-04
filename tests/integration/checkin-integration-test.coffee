@@ -141,7 +141,7 @@ test "Can edit treatment", ->
   expect 2
 
   visit('/checkin/Aug-13-2014/9').then( ->
-    triggerEvent ".checkin-treatment-name", "click"
+    triggerEvent ".checkin-treatment-name:eq(0)", "click"
     triggerEvent $(".checkin-treatment-edit:eq(0)"), "click"
 
     andThen ->
@@ -149,7 +149,7 @@ test "Can edit treatment", ->
       fillIn(".treatment-quantity-input", "200")
       triggerEvent ".save-treatment", "click"
       andThen ->
-        ok $(".checkin-treatment-quantity").text() is "200"
+        ok $(".checkin-treatment-quantity:eq(0)").text() is "200"
   )
 
 test "Warned of treatment removal", ->
@@ -175,6 +175,7 @@ test "Setting a response on a normal select marks that section as 'complete'", -
 test "Null values on symptom responses do not count as complete", ->
   expect 2
 
+  # Page 8, symptoms section
   visit('/checkin/Aug-13-2014/8').then( ->
     triggerEvent ".checkin-response-symptom:eq(0) li:eq(1)", "click"
     triggerEvent ".checkin-response-symptom:eq(1) li:eq(1)", "click"
@@ -183,4 +184,16 @@ test "Null values on symptom responses do not count as complete", ->
     triggerEvent ".checkin-response-symptom:eq(2) li:eq(1)", "click"
     andThen ->
       ok Em.isPresent(find(".checkin-pagination a.symptoms.complete")), "All symptoms filled, now complete"
+  )
+
+# Colors
+test "Treatments get uniq colors", ->
+  expect 2
+
+  # Page 8, treatments section
+  visit('/checkin/Aug-13-2014/9').then( ->
+    color_class = $(".checkin-treatment-name:eq(0)").attr("class").match(/tbg-\d/)[0]
+    ok color_class, "Has a color class"
+
+    ok color_class isnt $(".checkin-treatment-name:eq(1)").attr("class").match(/tbg-\d/)[0], "Color class is different from other treatment"
   )
