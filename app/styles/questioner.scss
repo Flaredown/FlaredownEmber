@@ -166,17 +166,25 @@
     margin: 0 auto 30px auto;
     width: 90%;
     max-width: 500px;
+    &.has-value li {
+      color: transparent;
+      &:hover {
+       color: #333;
+      }
+    }
     li {
       display: inline-block;
       padding: 10px 20px;
       margin-right: 2px;
-      &.unselected {
-        background: $lightgrey;
-        color: grey;
-        &:hover {
-          background: darken($lightgrey, 10%);
-        }
+      background: $lightgrey;
+      &:hover {
+        background: darken($lightgrey, 10%);
       }
+      &.selected {
+        color: #333;
+      }
+      // Values that are "before" the selected value
+      &.preselection {}
       &:first-of-type {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;

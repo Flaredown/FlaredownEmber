@@ -1,7 +1,8 @@
 .checkin-response
-  ul class={ symptomQuestion:checkin-response-symptom:checkin-response-select}
+  ul class={ symptomQuestion:checkin-response-symptom:checkin-response-select hasSymptomValue:has-value}
     each input in inputs
-      if input.label
-        li class={input.selected:selected input.color} click="sendResponse input.value" = input.label
-      else
-        li class={input.selected:selected input.color} click="sendResponse input.value" = input.value
+      li class={input.selected:selected input.preselection:preselection input.color} click="sendResponse input.value"
+        if input.label
+          = input.label
+        else
+          = input.value

@@ -190,10 +190,42 @@ test "Null values on symptom responses do not count as complete", ->
 test "Treatments get uniq colors", ->
   expect 2
 
-  # Page 8, treatments section
+  # Page 9, treatments section
   visit('/checkin/Aug-13-2014/9').then( ->
-    color_class = $(".checkin-treatment-name:eq(0)").attr("class").match(/tbg-\d/)[0]
+    color_class = $(".checkin-treatment-name:eq(0)").attr("class").match(/(tbg-\d+)/)[0]
     ok color_class, "Has a color class"
 
-    ok color_class isnt $(".checkin-treatment-name:eq(1)").attr("class").match(/tbg-\d/)[0], "Color class is different from other treatment"
+    ok color_class isnt $(".checkin-treatment-name:eq(1)").attr("class").match(/(tbg-\d+)/)[0], "Color class is different from other treatment"
   )
+
+test "Symptoms get uniq colors", ->
+  expect 2
+
+  # Page 8, symptoms section
+  visit('/checkin/Aug-13-2014/8').then( ->
+    # Make sure they have selection
+    triggerEvent ".checkin-response-symptom:eq(0) li:eq(1)", "click"
+    triggerEvent ".checkin-response-symptom:eq(1) li:eq(1)", "click"
+
+    andThen ->
+      color_class = $(".checkin-response-symptom:eq(0) li:eq(0)").attr("class").match(/(sbg-\d+)/)[1]
+      ok color_class, "Has a color class"
+
+      ok color_class isnt $(".checkin-response-symptom:eq(1) li:eq(0)").attr("class").match(/(sbg-\d+)/)[1], "Color class is different from other symptom"
+  )
+
+test "Symptoms select bar only highlights last selected digit", ->
+  expect 3
+
+  # Page 8, symptoms section
+  visit('/checkin/Aug-13-2014/8').then( ->
+    # Make sure they have selection
+    triggerEvent ".checkin-response-symptom:eq(0) li:eq(3)", "click"
+
+    andThen ->
+      ok $(".checkin-response-symptom:eq(0)").hasClass("has-value")
+
+      ok $(".checkin-response-symptom:eq(0) li:eq(2)").hasClass("preselection")
+      ok $(".checkin-response-symptom:eq(0) li:eq(3)").hasClass("selected")
+  )
+

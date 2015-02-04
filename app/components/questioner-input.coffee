@@ -6,20 +6,20 @@ component = Ember.Component.extend colorableMixin,
 
   layoutName: Ember.computed(-> "questioner/_#{@get("question.kind")}_input" ).property("question.kind")
   symptomQuestion: Ember.computed.equal("section.category", "symptoms")
+  hasSymptomValue: Ember.computed(-> typeof(@get("value")) is "number" )
 
   inputs: Ember.computed(->
     uniq_name = "#{@get("section.category")}_#{@get("question.name")}"
 
-    @get("question.inputs").map (input) =>
-      selected = if @get("symptomQuestion")
-        Ember.isPresent(@get("value")) and input.value <= @get("value")
-      else
-        input.value is @get("value")
 
-      value: input.value,
-      selected: selected
+    @get("question.inputs").map (input) =>
+      preselected = @get("hasSymptomValue") and input.value < @get("value")
+
+      value: input.value
+      preselection: preselected
+      selected: input.value is @get("value")
       label: if input.label then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
-      color: if selected then @colorClasses(uniq_name, "symptom").bg else "unselected"
+      color: if preselected then @colorClasses(uniq_name, "symptom").bg
 
   ).property("question.inputs", "value", "question.name", "section.category")
 
