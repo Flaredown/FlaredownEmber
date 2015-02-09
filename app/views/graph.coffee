@@ -64,7 +64,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
     Ember.run.next => @renderGraph()
 
-  .observes("datumsByDay", "viewportSize")
+  .observes("datumsByDay", "viewportSize", "controller.viewportStart")
 
   watchViewportSize: Ember.observer ->
     @updateDatestamps() if @get("isSetup")
