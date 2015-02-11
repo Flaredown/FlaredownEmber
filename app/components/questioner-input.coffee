@@ -13,7 +13,7 @@ component = Ember.Component.extend colorableMixin,
 
 
     @get("question.inputs").map (input) =>
-      preselected = @get("hasSymptomValue") and input.value < @get("value")
+      preselected = @get("hasSymptomValue") and input.value <= @get("value")
 
       value: input.value
       preselection: preselected

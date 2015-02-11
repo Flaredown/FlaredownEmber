@@ -50,11 +50,6 @@ label {
   @include outer-container;
 }
 
-// Progress bar
-#progress {
-  background: $primary !important;
-}
-
 // Navbar
 .navbar {
   @include outer-container;
