@@ -19,17 +19,6 @@
     @include span-columns(12);
     li {
       padding: 5px 0;
-      display: flex;
-      align-items: center;
-      @media (min-width: $tablet) {
-        &:hover {
-          .graph-controls-catalog-block, .graph-controls-symptom-block, .graph-controls-treatment-dot {
-            height: 2px;
-            background: $lightgrey;
-            transition: all .15s;
-          }
-        }
-      }
     }
     @media (min-width: $tablet) {
       @include span-columns(4);
