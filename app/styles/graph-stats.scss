@@ -29,8 +29,19 @@
   }
   .active-catalog {}
   .inactive-catalog { color: #999; }
+  .filterable-symptom, .filterable-treatment {
+    &:hover {
+      color: grey;
+    }
+  }
   .filtered-treatment, .filtered-symptom {
-    text-decoration: line-through;
+    color: #ABABAB;
+    &:hover {
+      color: grey;
+    }
+    .graph-controls-catalog-block, .graph-controls-symptom-block, .graph-controls-treatment-dot {
+      background: $lightgrey !important;
+    }
   }
   .graph-controls-catalog-block, .graph-controls-symptom-block, .graph-controls-treatment-dot {
     width: 12px;

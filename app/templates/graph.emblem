@@ -16,7 +16,6 @@ else
       ul.graph-controls-symptoms
         each catalog in catalogs
           li click="changeCatalog catalog.name" class={:available-catalog catalog.active:active-catalog:inactive-catalog}
-            .graph-controls-catalog-block
             = catalog.name
 
         each filterable in catalogFilterables
@@ -25,6 +24,7 @@ else
             = filterable.name
 
       ul.graph-controls-treatments
+        p Date range
         each filterable in treatmentFilterables
           li click="filter filterable.id" class={filterable.filtered:filtered-treatment:filterable-treatment}
             div class={:graph-controls-treatment-dot filterable.color}
