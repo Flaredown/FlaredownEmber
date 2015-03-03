@@ -85,7 +85,7 @@ test "Can navigate through the sections (today)", ->
 test "Disable on prev/next on first/last", ->
   expect 2
 
-  visit('/checkin/today/11').then( =>
+  visit('/checkin/today/12').then( =>
     ok find(".checkin-next").length is 0, "No next button on last page"
   )
 
@@ -140,7 +140,7 @@ test "closing modal goes back to index", ->
 test "Can edit treatment", ->
   expect 2
 
-  visit('/checkin/Aug-13-2014/9').then( ->
+  visit('/checkin/Aug-13-2014/10').then( ->
     triggerEvent ".checkin-treatment-name:eq(0)", "click"
     triggerEvent $(".checkin-treatment-edit:eq(0)"), "click"
 
@@ -155,7 +155,7 @@ test "Can edit treatment", ->
 test "Warned of treatment removal", ->
   expect 1
 
-  visit('/checkin/Aug-13-2014/9?edit=treatments').then( ->
+  visit('/checkin/Aug-13-2014/10?edit=treatments').then( ->
     triggerEvent $(".checkin-treatment-remove:eq(0)"), "click"
 
     andThen -> window.assertAlertPresent()
@@ -175,13 +175,13 @@ test "Setting a response on a normal select marks that section as 'complete'", -
 test "Null values on symptom responses do not count as complete", ->
   expect 2
 
-  # Page 8, symptoms section
-  visit('/checkin/Aug-13-2014/8').then( ->
-    triggerEvent ".checkin-response-symptom:eq(0) li:eq(1)", "click"
-    triggerEvent ".checkin-response-symptom:eq(1) li:eq(1)", "click"
+  # Page 9, symptoms section
+  visit('/checkin/Aug-13-2014/9').then( ->
+    triggerEvent ".simple-checkin-response:eq(0) li:eq(1)", "click"
+    triggerEvent ".simple-checkin-response:eq(1) li:eq(1)", "click"
     ok Em.isEmpty(find(".checkin-pagination a.symptoms.complete")), "2/3... not complete yet"
 
-    triggerEvent ".checkin-response-symptom:eq(2) li:eq(1)", "click"
+    triggerEvent ".simple-checkin-response:eq(2) li:eq(1)", "click"
     andThen ->
       ok Em.isPresent(find(".checkin-pagination a.symptoms.complete")), "All symptoms filled, now complete"
   )
@@ -190,8 +190,8 @@ test "Null values on symptom responses do not count as complete", ->
 test "Treatments get uniq colors", ->
   expect 2
 
-  # Page 9, treatments section
-  visit('/checkin/Aug-13-2014/9').then( ->
+  # Page 10, treatments section
+  visit('/checkin/Aug-13-2014/10').then( ->
     color_class = $(".checkin-treatment-name:eq(0)").attr("class").match(/(tbg-\d+)/)[0]
     ok color_class, "Has a color class"
 
@@ -201,31 +201,31 @@ test "Treatments get uniq colors", ->
 test "Symptoms get uniq colors", ->
   expect 2
 
-  # Page 8, symptoms section
-  visit('/checkin/Aug-13-2014/8').then( ->
+  # Page 9, symptoms section
+  visit('/checkin/Aug-13-2014/9').then( ->
     # Make sure they have selection
-    triggerEvent ".checkin-response-symptom:eq(0) li:eq(1)", "click"
-    triggerEvent ".checkin-response-symptom:eq(1) li:eq(1)", "click"
+    triggerEvent ".simple-checkin-response:eq(0) li:eq(1)", "click"
+    triggerEvent ".simple-checkin-response:eq(1) li:eq(1)", "click"
 
     andThen ->
-      color_class = $(".checkin-response-symptom:eq(0) li:eq(0)").attr("class").match(/(sbg-\d+)/)[1]
+      color_class = $(".simple-checkin-response:eq(0) li:eq(0)").attr("class").match(/(sbg-\d+)/)[1]
       ok color_class, "Has a color class"
 
-      ok color_class isnt $(".checkin-response-symptom:eq(1) li:eq(0)").attr("class").match(/(sbg-\d+)/)[1], "Color class is different from other symptom"
+      ok color_class isnt $(".simple-checkin-response:eq(1) li:eq(0)").attr("class").match(/(sbg-\d+)/)[1], "Color class is different from other symptom"
   )
 
 test "Symptoms select bar only highlights last selected digit", ->
   expect 3
 
-  # Page 8, symptoms section
-  visit('/checkin/Aug-13-2014/8').then( ->
+  # Page 9, symptoms section
+  visit('/checkin/Aug-13-2014/9').then( ->
     # Make sure they have selection
-    triggerEvent ".checkin-response-symptom:eq(0) li:eq(3)", "click"
+    triggerEvent ".simple-checkin-response:eq(0) li:eq(3)", "click"
 
     andThen ->
-      ok $(".checkin-response-symptom:eq(0)").hasClass("has-value")
+      ok $(".simple-checkin-response:eq(0)").hasClass("has-value")
 
-      ok $(".checkin-response-symptom:eq(0) li:eq(2)").hasClass("preselection")
-      ok $(".checkin-response-symptom:eq(0) li:eq(3)").hasClass("selected")
+      ok $(".simple-checkin-response:eq(0) li:eq(2)").hasClass("preselection")
+      ok $(".simple-checkin-response:eq(0) li:eq(3)").hasClass("selected")
   )
 

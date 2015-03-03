@@ -32,14 +32,23 @@ mixin = Ember.Mixin.create
 
     ### SYMPTOMS ###
     addSymptom: (symptom) ->
-      @get("catalog_definitions.symptoms").addObject(@symptomDefinitionTemplate(symptom.name))
+      @get("catalog_definitions.symptoms").addObject(@simpleQuestionTemplate(symptom.name))
 
     removeSymptom: (symptom) ->
       @get("catalog_definitions.symptoms").forEach (section,i) =>
         if section[0].name is symptom.name
           @get("catalog_definitions.symptoms").removeAt(i)
 
-  symptomDefinitionTemplate: (name) ->
+    ### CONDITIONS ###
+    addCondition: (condition) ->
+      @get("catalog_definitions.condition").addObject(@simpleQuestionTemplate(condition.name))
+
+    removeCondition: (condition) ->
+      @get("catalog_definitions.conditions").forEach (section,i) =>
+        if section[0].name is condition.name
+          @get("catalog_definitions.conditions").removeAt(i)
+
+  simpleQuestionTemplate: (name) ->
     [{
       name: name,
       kind: "select"

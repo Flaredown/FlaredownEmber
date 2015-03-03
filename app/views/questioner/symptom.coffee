@@ -23,7 +23,7 @@ view = Ember.View.extend
 
     save: ->
       @set("editing", false)
-      @get("controller").send("symptomEdited")
+      # @get("controller").send("symptomEdited")
 
 
 `export default view`

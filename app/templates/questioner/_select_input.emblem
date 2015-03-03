@@ -1,5 +1,5 @@
 .checkin-response
-  ul class={ symptomQuestion:checkin-response-symptom:checkin-response-select hasSymptomValue:has-value}
+  ul class={ simplifiedQuestion:simple-checkin-response:checkin-response-select hasValue:has-value}
     each input in inputs
       li class={input.selected:selected input.preselection:preselection input.color} click="sendResponse input.value"
         if input.label
