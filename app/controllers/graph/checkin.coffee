@@ -101,7 +101,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
             complete:         is_seen and is_complete
             skipped:          is_seen and not is_complete and not is_selected
           }
-    console.log _sections
+
     _sections
 
   .property("sectionsDefinition", "catalogs", "section", "responsesData.@each.value")
