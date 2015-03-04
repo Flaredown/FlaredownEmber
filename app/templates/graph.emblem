@@ -15,18 +15,18 @@ else
 
       ul.graph-controls-symptoms
         each catalog in catalogs
-          li click="changeCatalog catalog.name" class={:available-catalog catalog.active:active-catalog:inactive-catalog}
+          li click="'changeCatalog' catalog.name" class={:available-catalog catalog.active:active-catalog:inactive-catalog}
             .graph-controls-catalog-block
             = catalog.name
 
         each filterable in catalogFilterables
-          li click="filter filterable.id" class={filterable.filtered:filtered-symptom:filterable-symptom}
+          li click="'filter' filterable.id" class={filterable.filtered:filtered-symptom:filterable-symptom}
             div class={:graph-controls-symptom-block filterable.color}
             = filterable.name
 
       ul.graph-controls-treatments
         each filterable in treatmentFilterables
-          li click="filter filterable.id" class={filterable.filtered:filtered-treatment:filterable-treatment}
+          li click="'filter' filterable.id" class={filterable.filtered:filtered-treatment:filterable-treatment}
             div class={:graph-controls-treatment-dot filterable.color}
             = filterable.name
   outlet
