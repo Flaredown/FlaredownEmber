@@ -1,9 +1,9 @@
 // Bourbon
-@import "bourbon";
-@import "neat-helpers";
-@import "neat";
-@import "bitters/grid-settings";
-@import "bitters/base";
+
+@import "bourbon/bourbon";
+@import "base/grid-settings";
+@import "neat/neat";
+@import "base/base";
 
 //Internal styles
 @import "fonts";

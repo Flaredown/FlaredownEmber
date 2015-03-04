@@ -4,33 +4,8 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 var app = new EmberApp({
   dotEnv: {
     clientAllowedKeys: ['NOT_CI']
-  },
-  sassOptions: {
-    includePaths: require('node-neat').with('app/styles/bitters')
   }
 });
-
-// app.import('assets/fonts/*', {
-//   destDir: 'assets'
-// });
-
-var pickFiles = require('broccoli-static-compiler');
-// var fonts = pickFiles('app/assets/fonts', {
-//    srcDir: '/',
-//    files: ['*'],
-//    destDir: '/assets'
-// });
-// var images = pickFiles('app/assets/img', {
-//    srcDir: '/',
-//    files: ['*'],
-//    destDir: '/assets'
-// });
-
-// var d3 = pickFiles("bower_components/d3", {
-//   srcDir: '/',
-//   files: ['d3.js'],
-//   destDir: '/assets'
-// })
 
 app.import('bower_components/pusher/dist/pusher.js');
 app.import('bower_components/moment/moment.js');
