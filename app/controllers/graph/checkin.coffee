@@ -7,7 +7,8 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
   modalOpen: true
   sectionsSeen: []
 
-  nonResearchSections: ["start", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
+  nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
+  userQuestionSections: ["conditions","symptoms"]
   defaultResponseValues:
     checkbox: 0
     select: null
@@ -41,9 +42,9 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
 
   catalogsSorted: Ember.computed(->
     catalogs = @get("catalogs")
-    catalogs.removeObject("symptoms")
+    catalogs.removeObjects(["symptoms", "conditions"])
     catalogs.sort()
-    catalogs.addObject("symptoms")
+    catalogs.addObjects(["symptoms", "conditions"])
   ).property("catalogs")
 
   responsesData: Ember.computed ->
@@ -67,9 +68,9 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
     _definition = [["start",1]]
     @get("catalogsSorted").forEach (catalog) =>
       length = @get("catalog_definitions.#{catalog}.length")
-      _definition.push [catalog,length] unless length is 0 or catalog is "symptoms"
+      _definition.push [catalog,length] unless length is 0 or @get("userQuestionSections").contains(catalog)
 
-    ["symptoms", "treatments", "notes", "finish"].forEach (section) -> _definition.push [section, 1]
+    ["conditions", "symptoms", "treatments", "notes", "finish"].forEach (section) -> _definition.push [section, 1]
 
     _definition
   .property("catalogsSorted", "catalog_definitions", "catalog_definitions.symptoms.@each")
@@ -85,7 +86,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
         if subsection_index >= 0
           subsection    = _sections.length+1
           research      = not @get("nonResearchSections").contains(name)
-          completable   = research or (name is "symptoms")
+          completable   = research or @get("userQuestionSections").contains(name)
           is_selected   = (subsection is @get("section"))
           is_seen       = @isSeen(subsection)
           is_complete   = completable and @hasCompleteResponse(name,subsection_index)
@@ -112,8 +113,8 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
 
   hasCompleteResponse: (catalog,section_index) ->
       questions = []
-      if catalog is "symptoms"
-        questions = @get("catalog_definitions.symptoms").mapBy("firstObject")
+      if @get("userQuestionSections").contains(catalog)
+        questions = @get("catalog_definitions.#{catalog}").mapBy("firstObject")
       else
         questions = @get("catalog_definitions.#{catalog}")[section_index]
 
@@ -148,6 +149,8 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
   currentSectionPrompt: Ember.computed( ->
     if @get("currentSection.category") is "symptoms"
       Ember.I18n.t "#{@get("currentUser.locale")}.symptom_question_prompt", name: @get("sectionQuestions.firstObject.name").capitalize()
+    else if @get("currentSection.category") is "conditions"
+      Ember.I18n.t "#{@get("currentUser.locale")}.conditions_question_prompt", name: @get("sectionQuestions.firstObject.name").capitalize()
     else
       Ember.I18n.t "#{@get("catalogStub")}.section_#{@get("currentSection.category_number")}_prompt"
   ).property("currentSection")
@@ -157,7 +160,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
 
     return [] unless @get("catalog_definitions") and @get("catalogs").contains(section.category)
     catalog_questions = @get("catalog_definitions.#{section.category}")
-    if section.category is "symptoms"
+    if @get("userQuestionSections").contains(section.category)
       catalog_questions.map (section) -> section[0]
     else
       catalog_questions[ section.category_number-1 ]

@@ -46,12 +46,12 @@ module('Graph Integration', {
     $.mockjax.clear();
 })
 
-test "Datums show up", ->
-  expect 1
-
-  visit('/').then( ->
-    ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
-  )
+# test "Datums show up", ->
+#   expect 1
+#
+#   visit('/').then( ->
+#     ok find("rect.symptom.present").length is 39, "Has 39 datums for HBI fixture"
+#   )
 
 # test "Datums disappear when shifted out of viewport", ->
 #   expect 2
@@ -71,20 +71,20 @@ test "Datums show up", ->
 #
 #   )
 
-test "Modal by clicking datum", =>
-  expect 1
-
-  visit('/').then(
-    ->
-      stop()
-      $("rect.symptom.present:eq(0)").simulate("click")
-
-      setTimeout(
-        ->
-          assertModalPresent()
-          start()
-      , 100)
-  )
+# test "Modal by clicking datum", =>
+#   expect 1
+#
+#   visit('/').then(
+#     ->
+#       stop()
+#       $("rect.symptom.present:eq(0)").simulate("click")
+#
+#       setTimeout(
+#         ->
+#           assertModalPresent()
+#           start()
+#       , 100)
+#   )
 
 test "Switching catalogs removes old and brings in new datums", ->
   expect 1

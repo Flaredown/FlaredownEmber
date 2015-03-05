@@ -90,6 +90,18 @@ fixture = (date) ->
               ]
           }]
         ],
+        conditions: [
+          [{
+              name: "Crohn's Disease", kind: "select",
+              inputs: [
+                { value: 0, meta_label: "", helper: null},
+                { value: 1, meta_label: "", helper: null},
+                { value: 2, meta_label: "", helper: null },
+                { value: 3, meta_label: "", helper: null },
+                { value: 4, meta_label: "", helper: null },
+              ]
+          }]
+        ],
         symptoms: [
           [{
               name: "droopy lips", kind: "select",

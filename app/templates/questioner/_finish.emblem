@@ -2,4 +2,4 @@ h1 Checkin complete!
 
 p {{completedQuestionSections.length}} of {{questionSections.length}} sections completed
 
-h2: a href="javascript:void(0)" click="closeCheckin" Close me!
+h2: a href="javascript:void(0)" click="'closeCheckin'" Close me!

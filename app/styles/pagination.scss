@@ -17,7 +17,7 @@
 
     ul li {
       display: none;
-      
+
       &:nth-child(1),
       &:nth-child(2),
       &:nth-child(3) {
@@ -40,7 +40,7 @@
       &:hover,
       &:focus {
         background: $pagination-hover-background;
-        color: $base-link-color;
+//        color: $base-link-color;
       }
 
       &:active {

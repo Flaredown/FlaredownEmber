@@ -40,7 +40,7 @@ if config.NOT_CI
   test "Shows up", ->
     expect 1
 
-    visit("/checkin/Aug-13-2014/10").then ->
+    visit("/checkin/Aug-13-2014/11").then ->
       ok Ember.isPresent find(".checkin-note h4")
 
 # test "Clears placeholder on focus", ->

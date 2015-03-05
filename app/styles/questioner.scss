@@ -160,8 +160,8 @@
   }
 }
 
-.checkin-symptoms {
-  .checkin-response-symptom {
+.checkin-symptoms, .checkin-conditions {
+  .simple-checkin-response {
     display: block;
     margin: 0 auto 30px auto;
     width: 90%;
@@ -195,7 +195,7 @@
       }
     }
   }
-  .checkin-symptom-remove {
+  .checkin-symptom-remove, .checkin-condition-remove {
     color: $lightgrey;
     margin-left: 5px;
     &:hover {
