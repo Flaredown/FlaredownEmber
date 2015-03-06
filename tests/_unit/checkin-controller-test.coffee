@@ -99,10 +99,10 @@ test "all sections are seen unless Entry is 'just_created'", ->
   Ember.run ->
     controller.set("just_created", false)
 
-    ok controller.get("sections")[2].skipped is true,     "hbi_general_wellbeing response missing but section seen so is 'skipped'"
-    ok controller.get("sections")[3].skipped is false,    "hbi_ab_pain response exists and seen so isn't 'skipped'"
-    ok controller.get("sections")[2].complete is false,   "hbi_general_wellbeing response missing, so incomplete"
-    ok controller.get("sections")[3].complete is true,    "hbi_ab_pain response exists, is complete"
+    ok controller.get("sections")[1].skipped is true,     "hbi_general_wellbeing response missing but section seen so is 'skipped'"
+    ok controller.get("sections")[2].skipped is false,    "hbi_ab_pain response exists and seen so isn't 'skipped'"
+    ok controller.get("sections")[1].complete is false,   "hbi_general_wellbeing response missing, so incomplete"
+    ok controller.get("sections")[2].complete is true,    "hbi_ab_pain response exists, is complete"
 
 test "#currentSection is set based on section integer", ->
   expect 7
