@@ -65,7 +65,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
 
   ### Sections: All the pages in the checkin form ###
   sectionsDefinition: Ember.computed ->
-    _definition = [["start",1]]
+    _definition = if @get("just_created") then [["start",1]] else []
     @get("catalogsSorted").forEach (catalog) =>
       length = @get("catalog_definitions.#{catalog}.length")
       _definition.push [catalog,length] unless length is 0 or @get("userQuestionSections").contains(catalog)
