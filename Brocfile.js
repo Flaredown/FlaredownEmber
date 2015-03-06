@@ -8,16 +8,24 @@ var app = new EmberApp({
 });
 
 app.import('bower_components/pusher/dist/pusher.js');
+
 app.import('bower_components/moment/moment.js');
+
 app.import('bower_components/d3/d3.js');
+
 app.import('bower_components/sweetalert/lib/sweet-alert.js');
 app.import('bower_components/sweetalert/lib/sweet-alert.css');
+
 app.import('bower_components/jbox/Source/jBox.js');
 app.import('bower_components/jbox/Source/jBox.css');
+
 app.import('bower_components/pickadate/lib/picker.js');
 app.import('bower_components/pickadate/lib/picker.date.js');
 app.import('bower_components/pickadate/lib/themes/default.css');
 app.import('bower_components/pickadate/lib/themes/default.date.css');
+
+app.import('bower_components/select2/select2.js');
+app.import('bower_components/select2/select2.css');
 
 app.import({development: 'bower_components/jquery-mockjax/jquery.mockjax.js'});
 app.import({development: 'bower_components/jquery-simulate/jquery.simulate.js'});

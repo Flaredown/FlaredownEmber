@@ -9,4 +9,4 @@
     h4 Bwa! No treatments being tracked!
 
   br
-  = input class="add-treatment-input" placeholder="Add a Treatment"
+  view "trackable-search" class="form-condition-search selectpicker" trackableType="treatment"

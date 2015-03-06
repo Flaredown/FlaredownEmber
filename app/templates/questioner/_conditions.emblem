@@ -5,7 +5,7 @@
     view "questioner/condition" active=true
 
   br
-  = input placeholder="Add a Condition"
+  view "trackable-search" class="form-condition-search selectpicker" trackableType="condition"
 
 / else
 /   h4 Bwa! No conditions being tracked!
