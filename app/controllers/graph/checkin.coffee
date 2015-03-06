@@ -99,7 +99,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
             research:         research
             seen:             is_seen
             complete:         is_seen and is_complete
-            skipped:          is_seen and not is_complete and not is_selected
+            skipped:          is_seen and not is_complete # and not is_selected -- still skipped even if selected
           }
 
     _sections
