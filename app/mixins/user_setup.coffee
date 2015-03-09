@@ -23,6 +23,7 @@ mixin = Ember.Mixin.create
           ajax("#{config.apiNamespace}/locales/#{controller.get("locale")}").then(
             (locale) =>
               Ember.I18n.translations = locale
+              controller.get("controllers.login").redirectToTransition()
 
             (response) =>
               @errorCallback(response, @) # TODO this doesn't work

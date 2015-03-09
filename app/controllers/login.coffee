@@ -23,7 +23,7 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
       attemptedTransition.retry()
       @set("attemptedTransition", null)
     else
-      @transitionToRoute(config.afterLoginRoute)
+      @transitionToRoute(config.afterLoginRoute) if window.location.pathname is "/login"
 
   actions:
     login: ->
@@ -48,15 +48,14 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
         (response) => @errorCallback(response, @)
       )
 
-
-    # logout: ->
-    #   $.ajax
-    #     url: "#{config.apiNamespace}/users/sign_out.json"
-    #     type: "DELETE"
-    #     context: @
-    #     success: (response) ->
-    #       @get("currentUser.pusherChannels").clear()
-    #       @transitionToRoute("login")
-    #     error: (response) -> @transitionToRoute("login")
+    logout: ->
+      ajax(
+        url: "#{config.apiNamespace}/users/sign_out.json"
+        type: "GET"
+        context: @
+      ).then(
+        (response) -> window.location = "/login"
+        (response) => @transitionToRoute("login")
+      )
 
 `export default controller`

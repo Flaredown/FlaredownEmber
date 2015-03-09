@@ -28,5 +28,5 @@ nav.navbar role="navigation"
             li Account
             li Edit check-in
             li Print report
-            a href="/v1/users/sign_out" id="logout"
+            a click="logout" id="logout"
               li Logout
