@@ -5,10 +5,11 @@
 view = Select2View.extend
   placeholder: Ember.computed( -> "Search a #{@get("trackableType").capitalize()}" ).property("trackableType")
   formatted: (trackable) ->
-    if trackable.count
+    if trackable.count isnt null
       "<span class='name'>#{trackable.text}</span><div class='count'>#{trackable.count} users</div>"
     else
-      "<span class='name'>#{trackable.text}</span>"
+      prompt = Ember.I18n.t("#{@get("currentUser.locale")}.add_trackable_prompt",kind: @get("trackableType"))
+      "<span class='name'>#{trackable.text}</span><div class='count'>#{prompt}</div>"
 
   # classNames: ['input-xlarge']
 
@@ -16,7 +17,7 @@ view = Select2View.extend
     {
       minimumInputLength: 3
       placeholder: @get("placeholder")
-      formatResult: @get("formatted")
+      formatResult: @get("formatted").bind(@)
       formatInputTooShort: -> "Keep typing..."
       ajax:
         url: (query) => "#{config.apiNamespace}/#{@get("trackableType")}s/search/#{query}"

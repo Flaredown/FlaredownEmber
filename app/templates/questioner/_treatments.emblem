@@ -9,4 +9,4 @@
     h4 Bwa! No treatments being tracked!
 
   br
-  view "trackable-search" class="form-condition-search selectpicker" trackableType="treatment"
+  view "trackable-search" class="form-treatment-search selectpicker" trackableType="treatment"
