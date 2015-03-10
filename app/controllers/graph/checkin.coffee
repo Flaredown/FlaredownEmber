@@ -7,8 +7,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
   modalOpen: true
   sectionsSeen: []
 
-  seedConditions: ["bla", "la", "ergle"]
-
   nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
   userQuestionSections: ["conditions","symptoms"]
   defaultResponseValues:

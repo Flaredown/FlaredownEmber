@@ -5,21 +5,29 @@
 view = Select2View.extend
   placeholder: Ember.computed( -> "Search a #{@get("trackableType").capitalize()}" ).property("trackableType")
   formatted: (trackable) ->
-    "#{trackable.text} -- #{trackable.count}"
+    if trackable.count
+      "<span class='name'>#{trackable.text}</span><div class='count'>#{trackable.count} users</div>"
+    else
+      "<span class='name'>#{trackable.text}</span>"
+
   # classNames: ['input-xlarge']
 
   config: Ember.computed( ->
     {
-      minimumInputLength: 2
+      minimumInputLength: 3
       placeholder: @get("placeholder")
       formatResult: @get("formatted")
+      formatInputTooShort: -> "Keep typing..."
       ajax:
         url: (query) => "#{config.apiNamespace}/#{@get("trackableType")}s/search/#{query}"
         dataType: 'json'
         delay: 300
-        results: (response) -> {
-          results: response.map (item,i) -> {id: i, text: item.name, count: item.count}
-        }
+        results: (response, _, original) ->
+          formatted_results = [{id: 0, text: original.term, count: null}]
+          formatted_results.addObjects response.map (item,i) -> {id: i+1, text: item.name, count: item.count}
+          {
+            results: formatted_results
+          }
         cache: true
     }
   ).property("trackableType")
