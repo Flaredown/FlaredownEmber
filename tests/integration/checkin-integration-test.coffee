@@ -235,7 +235,7 @@ test "Symptoms select bar only highlights last selected digit", ->
 
 # TRACKABLE search/addition
 test "Can search for symptoms (any trackable)", ->
-  expect 2
+  expect 3
 
   # Page 9, symptoms section
   visit('/checkin/Aug-13-2014/9').then( ->
@@ -247,6 +247,7 @@ test "Can search for symptoms (any trackable)", ->
       Ember.run.later ->
         ok $(".select2-results li:eq(0) span").text() is "\"sli\"", "first result is search term + quotations"
         ok $(".select2-results li").length is 3, "sli, slippery tongue and sneezing"
+        ok $(".select2-results li:eq(1)").hasClass("select2-disabled"), "slippery tongue exists so is disbaled for selection"
       , 500
   )
 
