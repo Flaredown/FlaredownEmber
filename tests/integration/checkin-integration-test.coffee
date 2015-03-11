@@ -7,6 +7,7 @@
 `import graphFixture from "../fixtures/graph-fixture"`
 `import localeFixture from "../fixtures/locale-fixture"`
 `import userFixture from "../fixtures/user-fixture"`
+`import symptomSearchFixture from "../fixtures/symptom-search-fixture"`
 
 App = null
 
@@ -40,6 +41,10 @@ module('Check-In Integration', {
       # data:
       #   date: "Aug-13-2014"
       responseText: entryFixture("Aug-13-2014")
+
+    Ember.$.mockjax
+      url: "#{config.apiNamespace}/symptoms/search/*",
+      responseText: symptomSearchFixture
 
     App = startApp()
     null
@@ -121,7 +126,6 @@ test "go to the next section when submitting a response", ->
 
   visit('/checkin/Aug-13-2014/2').then( ->
     ok currentURL() == "/checkin/Aug-13-2014/2"
-    debugger
     triggerEvent ".checkin-response-select li:eq(0)", "click"
     ok currentURL() == "/checkin/Aug-13-2014/3", "Went to the next section"
   )
@@ -229,3 +233,19 @@ test "Symptoms select bar only highlights last selected digit", ->
       ok $(".simple-checkin-response:eq(0) li:eq(3)").hasClass("selected")
   )
 
+# TRACKABLE search/addition
+test "Can search for symptoms (any trackable)", ->
+  expect 2
+
+  # Page 9, symptoms section
+  visit('/checkin/Aug-13-2014/9').then( ->
+
+    andThen ->
+      $("input.form-symptom-search").select2("search", "sli")
+
+      # stop()
+      Ember.run.later ->
+        ok $(".select2-results li:eq(0) span").text() is "\"sli\"", "first result is search term + quotations"
+        ok $(".select2-results li").length is 3, "sli, slippery tongue and sneezing"
+      , 500
+  )

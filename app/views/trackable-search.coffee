@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import Select2View from './select2'`
 `import config from '../config/environment'`
+`import ajax from 'ic-ajax'`
 
 view = Select2View.extend
   placeholder: Ember.computed( -> "Search a #{@get("trackableType").capitalize()}" ).property("trackableType")
@@ -20,8 +21,11 @@ view = Select2View.extend
       {name: event.choice.text}
 
     @get("controller").send("add#{@get("trackableType").capitalize()}", trackable)
-    @$().select2("destroy")
-    @processChildElements()
+    # @$().select2("search", "")
+
+    # Ember.run.next =>
+    #   @processChildElements()
+    #   @$().select2("val", "bla")
 
   config: Ember.computed( ->
     {
@@ -30,6 +34,7 @@ view = Select2View.extend
       formatResult: @get("formatted").bind(@)
       formatInputTooShort: -> "Keep typing..."
       ajax:
+        transport: Ember.$.ajax
         url: (query) => "#{config.apiNamespace}/#{@get("trackableType")}s/search/#{query}"
         dataType: 'json'
         delay: 300
