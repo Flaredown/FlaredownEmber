@@ -249,3 +249,40 @@ test "Can search for symptoms (any trackable)", ->
         ok $(".select2-results li").length is 3, "sli, slippery tongue and sneezing"
       , 500
   )
+
+# !!! TODO Cannot find a way to programmatically select search result
+# test "Can add new symptoms", ->
+
+#   expect 2
+#
+#   # Page 9, symptoms section
+#   visit('/checkin/Aug-13-2014/9').then( ->
+#
+#     andThen ->
+#       $("input.form-symptom-search").select2("search", "sli")
+#
+#       Ember.run.later ->
+#
+#         ok $(".select2-results li").length is 3, "sli, slippery tongue and sneezing"
+#         triggerEvent(".select2-results li:eq(2)", "keypress", {keyCode: 13}) # click on "sneezing"
+#         # $(".select2-results li:eq(2)").simulate("click") # click on "sneezing"
+#         stop()
+#         ok $(".checkin-symptom:eq(3) h6").text() is "sneezing", "selected sneezing and it was added to symptoms"
+#       , 500
+#   )
+
+# test "Can add new symptoms freeform", ->
+#   expect 2
+#
+#   # Page 9, symptoms section
+#   visit('/checkin/Aug-13-2014/9').then( ->
+#
+#     andThen ->
+#       stop()
+#       $("input.form-symptom-search").select2("search", "flibbertigibbet")
+#
+#       stop()
+#       Ember.run.later ->
+#         ok $(".select2-results li").length is 3, "sli, slippery tongue and sneezing"
+#       , 500
+#   )
