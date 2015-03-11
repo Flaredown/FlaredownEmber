@@ -92,7 +92,7 @@ fixture = (date) ->
         ],
         conditions: [
           [{
-              name: "Crohn's Disease", kind: "select",
+              name: "Crohn's disease", kind: "select",
               inputs: [
                 { value: 0, meta_label: "", helper: null},
                 { value: 1, meta_label: "", helper: null},
