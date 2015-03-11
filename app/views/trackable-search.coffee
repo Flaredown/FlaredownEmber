@@ -21,12 +21,9 @@ view = Select2View.extend
       {name: event.choice.text}
 
     @get("controller").send("add#{@get("trackableType").capitalize()}", trackable)
-    # @$().select2("search", "")
 
-    # Ember.run.next =>
-    #   @processChildElements()
-    #   @$().select2("val", "bla")
 
+  existingTrackables: Ember.computed( -> @get("controller.#{@get("trackableType")}s").mapBy("name") ).property("trackableType", "controller")
   config: Ember.computed( ->
     {
       minimumInputLength: 3
@@ -34,19 +31,25 @@ view = Select2View.extend
       formatResult: @get("formatted").bind(@)
       formatInputTooShort: -> "Keep typing..."
       ajax:
+        existingTrackables: @get("existingTrackables")
         transport: Ember.$.ajax
         url: (query) => "#{config.apiNamespace}/#{@get("trackableType")}s/search/#{query}"
         dataType: 'json'
         delay: 300
         results: (response, _, original) ->
+
           formatted_results = [{id: 0, text: original.term, count: null}]
-          formatted_results.addObjects response.map (item,i) -> {id: i+1, text: item.name, count: item.count}
+
+          formatted_results.addObjects response.map (item,i) ->
+            {id: i+1, text: item.name, count: item.count, disabled: @existingTrackables.contains(item.name)}
+          , @
+
           {
             results: formatted_results
           }
         cache: true
     }
-  ).property("trackableType")
+  ).property("trackableType", "existingTrackables")
 
   valueChanged: (->
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements') if $(@).state is "inDOM" and Em.isPresent(@get("value"))

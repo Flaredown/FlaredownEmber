@@ -13,6 +13,10 @@ mixin = Ember.Mixin.create
     @get("responsesData").filterBy("catalog", "symptoms")
   .property("responsesData.@each.symptoms.@each")
 
+  conditions: Ember.computed ->
+    @get("responsesData").filterBy("catalog", "conditions")
+  .property("responsesData.@each.conditions.@each")
+
   inactiveSymptoms: Ember.computed ->
     actives = @get("symptoms").mapBy("name")
     @get("currentUser.symptoms").filter (symptom) ->
