@@ -5,8 +5,9 @@ li
       /= input class="treatment-name-input"      type="text" valueBinding="name"
       = input class="treatment-quantity-input"  type="number" step="0.01" min="0" valueBinding="treatment.quantity"
       = input class="treatment-unit-input"      type="text" valueBinding="treatment.unit"
-      = input class="save-treatment" type="submit"
-        |Save
+      a class="save-treatment" click="'save' target=view" Save
+      |&nbsp;
+      a class="cancel-save-treatment" click="'cancel' target=view" Cancel
   else
     div click="'toggleActive' target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
     span.checkin-treatment-quantity= treatment.quantity
@@ -14,9 +15,5 @@ li
     if view.editable
       if view.active
         .checkin-treatment-edit click="'edit' target=view" &#9662;
-        / .checkin-treatment-remove click="destroy treatment target=view" &times;
 
       .checkin-treatment-remove click="'destroy' treatment target=view" &times;
-
-      / else
-      /   .checkin-treatment-add click="add treatment target=view" +

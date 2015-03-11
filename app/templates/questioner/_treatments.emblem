@@ -1,7 +1,7 @@
 .checkin-treatments
   if treatments.length
     ul: each treatment in treatments
-      view "questioner/treatment" editable=true active=false name=treatment.name
+      view "questioner/treatment" editable=true active=false editing=treatment.added name=treatment.name
 
     / ul: each treatment in inactiveTreatments
     /   view "questioner/treatment" editable=true active=false

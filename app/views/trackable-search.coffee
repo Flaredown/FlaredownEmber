@@ -13,6 +13,16 @@ view = Select2View.extend
 
   # classNames: ['input-xlarge']
 
+  selected: (event) ->
+    trackable = if @get("trackableType") is "treatment"
+      {name: event.choice.text, quantity: null, unit: null, added: true}
+    else
+      {name: event.choice.text}
+
+    @get("controller").send("add#{@get("trackableType").capitalize()}", trackable)
+    @$().select2("destroy")
+    @processChildElements()
+
   config: Ember.computed( ->
     {
       minimumInputLength: 3
@@ -37,7 +47,11 @@ view = Select2View.extend
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements') if $(@).state is "inDOM" and Em.isPresent(@get("value"))
   ).observes("value")
 
-  didInsertElement:     -> Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
+  didInsertElement:     ->
+    Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
+    @$().on("select2-selecting", @selected.bind(@))
+
+
   processChildElements: -> @$().select2(@get("config"))
   willDestroyElement:   -> @$().select2("destroy")
 

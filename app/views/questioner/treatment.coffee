@@ -14,8 +14,8 @@ view = Ember.View.extend colorableMixin,
   actions:
     toggleActive: -> @toggleProperty("active")
     edit: -> @set("editing", true)
+    cancel: -> @set("editing", false)
     destroy: (treatment) ->
-
       swal
         title: "Are you sure?",
         text: Ember.I18n.t("#{@get("controller.currentUser.locale")}.confirm_treatment_remove", treatment: treatment.get("name"))
@@ -29,6 +29,7 @@ view = Ember.View.extend colorableMixin,
       @get("controller").send("addTreatment", treatment.getProperties("name", "quantity", "unit"))
 
     save: ->
+      @set("active", true)
       @set("editing", false)
       @get("controller").send("treatmentEdited")
 
