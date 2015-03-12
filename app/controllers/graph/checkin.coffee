@@ -165,7 +165,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
     else
       catalog_questions[ section.category_number-1 ]
 
-  .property("section.category", "currentSection")
+  .property("section.category", "currentSection", "catalog_definitions.conditions.@each", "catalog_definitions.symptoms.@each", "catalog_definitions.treatments.@each")
 
   sectionResponses: Ember.computed( -> @get("responsesData").filterBy("catalog", @get("currentCategory")) ).property("currentCategory", "responsesData.@each")
 
