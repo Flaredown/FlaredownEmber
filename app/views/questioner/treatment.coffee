@@ -12,7 +12,8 @@ view = Ember.View.extend colorableMixin,
   editing: false
 
   actions:
-    toggleActive: -> @toggleProperty("active")
+    toggleActive: (treatment) -> treatment.toggleProperty("active")
+
     edit: -> @set("editing", true)
     cancel: -> @set("editing", false)
     destroy: (treatment) ->

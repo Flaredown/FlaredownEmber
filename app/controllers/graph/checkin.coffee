@@ -196,7 +196,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
           JSON.stringify({
             responses: @get("responsesData")
             notes: @get("notes")
-            treatments: @get("treatments").map (treatment) -> treatment.getProperties("name", "quantity", "unit")
+            treatments: @get("treatments").map((treatment) -> treatment.getProperties("name", "quantity", "unit") if treatment.get("active")).compact()
           })
 
       ajax(
