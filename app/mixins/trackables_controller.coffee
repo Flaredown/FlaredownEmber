@@ -1,4 +1,6 @@
 `import Ember from 'ember'`
+`import config from '../config/environment'`
+`import ajax from 'ic-ajax'`
 
 mixin = Ember.Mixin.create
 
@@ -27,8 +29,16 @@ mixin = Ember.Mixin.create
     ### TREATMENTS ###
     treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
     addTreatment: (treatment) ->
-      newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
-      @get("treatments").addObject newTreatment
+      ajax("#{config.apiNamespace}/treatments",
+        type: "POST"
+        data: {name: treatment.name}
+      ).then(
+        (response) =>
+          newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
+          @get("treatments").addObject newTreatment
+
+        (response) => @errorCallback(response, @)
+      )
 
     removeTreatment: (treatment) ->
       @get("treatments").removeObject treatment
@@ -36,7 +46,13 @@ mixin = Ember.Mixin.create
 
     ### SYMPTOMS ###
     addSymptom: (symptom) ->
-      @get("catalog_definitions.symptoms").addObject(@simpleQuestionTemplate(symptom.name))
+      ajax("#{config.apiNamespace}/symptoms",
+        type: "POST"
+        data: {name: symptom.name}
+      ).then(
+        (response) => @get("catalog_definitions.symptoms").addObject(@simpleQuestionTemplate(symptom.name))
+        (response) => @errorCallback(response, @)
+      )
 
     removeSymptom: (symptom) ->
       @get("catalog_definitions.symptoms").forEach (section,i) =>
@@ -45,7 +61,13 @@ mixin = Ember.Mixin.create
 
     ### CONDITIONS ###
     addCondition: (condition) ->
-      @get("catalog_definitions.conditions").addObject(@simpleQuestionTemplate(condition.name))
+      ajax("#{config.apiNamespace}/conditions",
+        type: "POST"
+        data: {name: condition.name}
+      ).then(
+        (response) => @get("catalog_definitions.conditions").addObject(@simpleQuestionTemplate(condition.name))
+        (response) => @errorCallback(response, @)
+      )
 
     removeCondition: (condition) ->
       @get("catalog_definitions.conditions").forEach (section,i) =>
