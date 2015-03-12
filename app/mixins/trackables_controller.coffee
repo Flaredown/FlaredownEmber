@@ -10,7 +10,6 @@ mixin = Ember.Mixin.create
       not actives.contains treatment.get("name")
   ).property("currentUser.treatments", "treatments.@each")
 
-
   symptoms: Ember.computed ->
     @get("responsesData").filterBy("catalog", "symptoms")
   .property("responsesData.@each.symptoms.@each")
@@ -79,11 +78,11 @@ mixin = Ember.Mixin.create
       name: name,
       kind: "select"
       inputs: [
-        {value: 0, helper: null, label: "",meta_label: ""}
-        {value: 1, helper: null, label: "",meta_label: ""}
-        {value: 2, helper: null, label: "",meta_label: ""}
-        {value: 3, helper: null, label: "",meta_label: ""}
-        {value: 4, helper: null, label: "",meta_label: ""}
+        {value: 0, helper: "basic_0", meta_label: "smiley"}
+        {value: 1, helper: "basic_1", meta_label: ""}
+        {value: 2, helper: "basic_2", meta_label: ""}
+        {value: 3, helper: "basic_3", meta_label: ""}
+        {value: 4, helper: "basic_4", meta_label: ""}
       ]
     }]
 

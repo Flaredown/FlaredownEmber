@@ -177,6 +177,11 @@
       padding: 10px 20px;
       margin-right: 2px;
       background: $lightgrey;
+
+      // Special smiley input
+      &.smiley {
+        color: transparent;
+      }
       &:hover {
         background: darken($lightgrey, 10%);
       }
@@ -184,7 +189,7 @@
         color: #333;
       }
       // Values that are "before" the selected value
-      &.preselection {}
+      &.highlight {}
       &:first-of-type {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;

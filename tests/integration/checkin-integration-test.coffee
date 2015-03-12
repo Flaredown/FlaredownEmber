@@ -229,7 +229,7 @@ test "Symptoms select bar only highlights last selected digit", ->
     andThen ->
       ok $(".simple-checkin-response:eq(0)").hasClass("has-value")
 
-      ok $(".simple-checkin-response:eq(0) li:eq(2)").hasClass("preselection")
+      ok $(".simple-checkin-response:eq(0) li:eq(2)").hasClass("highlight")
       ok $(".simple-checkin-response:eq(0) li:eq(3)").hasClass("selected")
   )
 

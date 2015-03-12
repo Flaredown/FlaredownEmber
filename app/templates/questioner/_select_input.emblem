@@ -1,8 +1,4 @@
 .checkin-response
   ul class={ simplifiedQuestion:simple-checkin-response:checkin-response-select hasValue:has-value}
     each input in inputs
-      li class={input.selected:selected input.preselection:preselection input.color} click="'sendResponse' input.value"
-        if input.label
-          = input.label
-        else
-          = input.value
+      view "questioner/select-li" input=input

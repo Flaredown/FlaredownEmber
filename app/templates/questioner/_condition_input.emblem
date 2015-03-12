@@ -2,4 +2,4 @@ if view.active
   h6
   	= condition.name
   	span.checkin-condition-remove click="'destroy' condition target=view" &times;
-  = questioner-input question=condition section=currentSection responses=responsesData action="setResponse"
+  = questioner-input type="basic" question=condition section=currentSection responses=responsesData action="setResponse"
