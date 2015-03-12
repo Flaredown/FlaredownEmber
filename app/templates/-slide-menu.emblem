@@ -6,9 +6,6 @@ if currentUser.loggedIn
       li: link-to "reports" | INVESTIGATIONS
       li.navbar-slide-account #{currentUser.email}
       li Account
-      li Conditions
-      li Symptoms
-      li Treatments
       li Print
       li Logout
   .js-menu-screen.menu-screen

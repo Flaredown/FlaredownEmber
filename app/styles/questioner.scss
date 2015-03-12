@@ -39,7 +39,7 @@
   }
   .checkin-content {
     margin: 20px 0 0 0;
-    h4 {
+    h3 {
       max-width: 90%;
       margin: 0 auto 20px auto;
     }
@@ -201,7 +201,7 @@
     }
   }
   .checkin-symptom-remove, .checkin-condition-remove {
-    color: $lightgrey;
+    color: grey;
     margin-left: 5px;
     &:hover {
       color: black;

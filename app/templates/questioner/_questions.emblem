@@ -1,6 +1,6 @@
 .checkin-questions
 
-  h4 = currentSectionPrompt
+  h3 = currentSectionPrompt
   p note: you're a champ for contributing to research!
 
   each question in sectionQuestions
