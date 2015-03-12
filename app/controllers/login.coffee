@@ -9,9 +9,7 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
     @_super()
     @get("setValidationsByName")
 
-  isAuthenticated: Ember.computed ->
-    @get("currentUser.model.id")
-  .property("currentUser.model")
+  isAuthenticated: Ember.computed(-> @get("currentUser.model.id") ).property("currentUser.model")
 
   resetFormProperties: "email password".w()
 
@@ -34,8 +32,7 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
         type: "POST"
         data: data
       ).then(
-        @setupUser(@container)
-        # @loginCallback.bind(@)
+        (response) => @setupUser(@container)
         (response) => @errorCallback(response, @)
       )
 
@@ -44,7 +41,7 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
         type: "GET"
         data: @getProperties("user_email", "user_token")
       ).then(
-        @setupUser(@container)
+        (response) => @setupUser(@container)
         (response) => @errorCallback(response, @)
       )
 
