@@ -45,7 +45,7 @@ mixin = Ember.Mixin.create
 
     ### CONDITIONS ###
     addCondition: (condition) ->
-      @get("catalog_definitions.condition").addObject(@simpleQuestionTemplate(condition.name))
+      @get("catalog_definitions.conditions").addObject(@simpleQuestionTemplate(condition.name))
 
     removeCondition: (condition) ->
       @get("catalog_definitions.conditions").forEach (section,i) =>
