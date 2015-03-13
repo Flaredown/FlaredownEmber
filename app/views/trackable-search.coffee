@@ -4,7 +4,7 @@
 `import ajax from 'ic-ajax'`
 
 view = Select2View.extend
-  placeholder: Ember.computed( -> "Search a #{@get("trackableType").capitalize()}" ).property("trackableType")
+  placeholder: Ember.computed( -> "Add a #{@get("trackableType")}" ).property("trackableType")
   formatted: (trackable) ->
     if trackable.count isnt null
       "<span class='name'>#{trackable.text}</span><div class='count'>#{trackable.count} users</div>"
