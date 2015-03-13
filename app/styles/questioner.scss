@@ -210,14 +210,8 @@
 }
 .symptom-tooltip {
   .jBox-container {
-    position: relative;
-    top: -1px;
     background: black;
     color: white;
-  }
-  .jBox-pointer {
-    position: relative;
-    top: -1px;
   }
   .jBox-pointer:after {
     background: black;
