@@ -20,7 +20,7 @@ component = Ember.Component.extend colorableMixin,
       highlight           = (@get("hasValue") or @get("hovering")) and (input.value <= highlight_threshold)
 
       value: input.value
-      highlight: highlight
+      highlight: if @get("type") is "basic" then highlight else false
       selected: input.value is @get("value")
       label: if input.label and @get("type") isnt "basic" then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
       meta_label: input.meta_label
