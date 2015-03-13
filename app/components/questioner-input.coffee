@@ -49,13 +49,27 @@ component = Ember.Component.extend colorableMixin,
 
   checked: Ember.computed( -> @get("value") > 0.0 ).property("value")
 
-  didInsertElement: ->   @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", addClass: "symptom-tooltip", x: "center", y: "center", ignoreDelay: true})
+  didInsertElement: ->   @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", x: "center", y: "center", ignoreDelay: true, fade: false})
   willDestroyElement: -> @get("jBox").destroy()
 
-  mouseLeave: -> @set("hoverValue", null)
+  mouseEnter: -> @set("mouseOff", false)
+  mouseLeave: ->
+    @get("jBox").close()
+    @set("hoverValue", null)
+    @set("mouseOff", true)
 
   actions:
-    setHover: (value) -> @set("hoverValue", value)
+    setHover: (value) ->
+      Ember.run.later(
+        => @set("hoverValue", value) unless @get("mouseOff")
+      , 50
+      )
+
+      if @get("hovering")
+        input = @get("inputs").findBy("value", @get("hoverValue"))
+        index = @get("inputs").indexOf(input)
+        @get("jBox").setContent(input.helper).position({ target: @$("li:eq(#{index})") }).open()
+
     toggleBoolean: (value) ->
       @set "value", if value is 0 then 1.0 else 0.0
       @sendAction "action", @get("question.name"), @get("value")
