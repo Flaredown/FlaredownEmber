@@ -49,7 +49,11 @@ mixin = Ember.Mixin.create
         type: "POST"
         data: {name: symptom.name}
       ).then(
-        (response) => @get("catalog_definitions.symptoms").addObject(@simpleQuestionTemplate(symptom.name))
+        (response) =>
+          @get("catalog_definitions.symptoms").addObject(@simpleQuestionTemplate(symptom.name))
+          newResponse = @store.createRecord "response", {id: "symptoms_#{symptom.name}_#{@get("id")}", value: null, name: symptom.name, catalog: "symptoms"}
+          @get("responses").addObject newResponse
+
         (response) => @errorCallback(response, @)
       )
 
@@ -64,7 +68,10 @@ mixin = Ember.Mixin.create
         type: "POST"
         data: {name: condition.name}
       ).then(
-        (response) => @get("catalog_definitions.conditions").addObject(@simpleQuestionTemplate(condition.name))
+        (response) =>
+          @get("catalog_definitions.conditions").addObject(@simpleQuestionTemplate(condition.name))
+          newResponse = @store.createRecord "response", {id: "conditions_#{condition.name}_#{@get("id")}", value: null, name: condition.name, catalog: "conditions"}
+          @get("responses").addObject newResponse
         (response) => @errorCallback(response, @)
       )
 

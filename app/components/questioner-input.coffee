@@ -68,7 +68,7 @@ component = Ember.Component.extend colorableMixin,
       if @get("hovering")
         input = @get("inputs").findBy("value", @get("hoverValue"))
         index = @get("inputs").indexOf(input)
-        @get("jBox").setContent(input.helper).position({ target: @$("li:eq(#{index})") }).open()
+        @get("jBox").setContent(input.helper).position({ target: @$("li:eq(#{index})") }).open() if input.helper
 
     toggleBoolean: (value) ->
       @set "value", if value is 0 then 1.0 else 0.0

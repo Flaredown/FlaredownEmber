@@ -61,7 +61,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
           responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
 
     responses
-  .property()
+  .property("catalog_definitions")
 
   ### Sections: All the pages in the checkin form ###
   sectionsDefinition: Ember.computed ->
@@ -173,10 +173,12 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
     closeCheckin: -> @set("modalOpen", false)
 
     setResponse: (question_name, value) ->
-      response = @get("sectionResponses").findBy("name",question_name)
+      response = @get("responses").findBy("id", "#{@get("currentCategory")}_#{question_name}_#{@get("model.id")}")
 
       if Ember.isPresent(response) and value isnt null
         response.set("value", value)
+        debugger
+        @propertyDidChange("catalog_definitions")
         @send("nextSection") if @get("sectionQuestions.length") is 1
 
     setSection: (section) ->
