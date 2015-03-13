@@ -168,28 +168,27 @@
     max-width: 500px;
     &.has-value li {
       color: transparent;
-      &:hover {
-       color: #333;
-      }
     }
     li {
       display: inline-block;
       padding: 10px 20px;
       margin-right: 2px;
-      background: $lightgrey;
+
+      &.bg-default { background-color: $primary; }
+
+      // the selected option
+      &.selected { color: #333; }
+      &.not-selected {}
+      &.not-selected:hover { color: #333; }
+
+      // Values that are, or are to be filled in given current selection/hover
+      &.highlight { }
+      &.no-highlight { background-color: $lightgrey; }
 
       // Special smiley input
-      &.smiley {
-        color: transparent;
-      }
-      &:hover {
-        background: darken($lightgrey, 10%);
-      }
-      &.selected {
-        color: #333;
-      }
-      // Values that are "before" the selected value
-      &.highlight {}
+      &.smiley { color: transparent !important; }
+      &.smiley.hide-color { background-color: $lightgrey; }
+
       &:first-of-type {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;

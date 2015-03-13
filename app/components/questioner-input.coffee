@@ -13,23 +13,32 @@ component = Ember.Component.extend colorableMixin,
 
   hoverValue: null
   hovering: Ember.computed(-> Em.isPresent(@get("hoverValue"))).property("hoverValue")
-  jBox: new jBox("Tooltip", {id: "jbox-tooltip", x: "center", y: "center",ignoreDelay: true})
 
   inputs: Ember.computed(->
     uniq_name = "#{@get("section.category")}_#{@get("question.name")}"
 
     @get("question.inputs").map (input) =>
       current_value       = if @get("hasValue") then @get("value") else Infinity
+
       highlight_threshold = if @get("hovering") then @get("hoverValue") else current_value
       highlight           = (@get("hasValue") or @get("hovering")) and (input.value <= highlight_threshold)
       highlight           = if @get("isBasic") then highlight else false
 
-      value: input.value
-      selected: input.value is @get("value")
-      label: if input.label and not @get("isBasic") then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
+      hovered             = @get("hoverValue") is input.value
+      selected            = input.value is @get("value")
+      special_first       = @get("isBasic") and input.value is 0
+
+      value:      input.value
+      selected:   selected
+      highlight:  if (highlight or hovered) then true else false
+      color:      if @get("section.category") is "conditions" then "bg-default" else @colorClasses(uniq_name, "symptom").bg
+
+      label:      if input.label and not @get("isBasic") then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
       meta_label: input.meta_label
-      helper: if input.helper then Ember.I18n.t("#{@get("currentUser.locale")}.helpers.#{input.helper}") else false
-      color: if (highlight or input.value is @get("hoverValue")) then @colorClasses(uniq_name, "symptom").bg
+      helper:     if input.helper then Ember.I18n.t("#{@get("currentUser.locale")}.helpers.#{input.helper}") else false
+      type:       @get("type")
+
+      hide_color: special_first and (not hovered and not selected) or (not hovered and @get("hovering") and selected)
 
   ).property("question.inputs", "value", "question.name", "section.category", "hoverValue")
 
@@ -40,7 +49,10 @@ component = Ember.Component.extend colorableMixin,
 
   checked: Ember.computed( -> @get("value") > 0.0 ).property("value")
 
+  didInsertElement: ->   @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", x: "center", y: "center", ignoreDelay: true})
   willDestroyElement: -> @get("jBox").destroy()
+
+  mouseLeave: -> @set("hoverValue", null)
 
   actions:
     setHover: (value) -> @set("hoverValue", value)
