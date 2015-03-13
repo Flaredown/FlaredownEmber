@@ -146,6 +146,8 @@
     background: $lightgrey;
     color: grey;
 
+    &.tbg- { background-color: $primary; }
+
     &.active {
       color: white;
       background: $primary;
@@ -183,7 +185,7 @@
         background-position: center;
       }
 
-      &.bg-default { background-color: $primary; }
+      &.bg-default, &.sbg- { background-color: $primary; }
 
       // the selected option
       &.selected {}

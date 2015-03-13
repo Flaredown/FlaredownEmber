@@ -61,7 +61,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
           responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
 
     responses
-  .property("catalog_definitions","catalog_definitions.symptoms.@each")
+  .property()
 
   ### Sections: All the pages in the checkin form ###
   sectionsDefinition: Ember.computed ->
