@@ -18,4 +18,7 @@ view = Ember.View.extend
   mouseLeave: -> @get("parentView").send("setHover", null)
   click: ->      @get("parentView").send("sendResponse", @get("input.value"))
 
+  willDestroyElement: ->
+    @$().jBox().destroy()
+
 `export default view`
