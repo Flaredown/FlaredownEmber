@@ -173,13 +173,18 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
     closeCheckin: -> @set("modalOpen", false)
 
     setResponse: (question_name, value) ->
-      response = @get("responses").findBy("id", "#{@get("currentCategory")}_#{question_name}_#{@get("model.id")}")
+      id = "#{@get("currentCategory")}_#{question_name}_#{@get("model.id")}"
+      response = @get("responses").findBy("id", id)
 
       if Ember.isPresent(response) and value isnt null
         response.set("value", value)
-        debugger
-        @propertyDidChange("catalog_definitions")
-        @send("nextSection") if @get("sectionQuestions.length") is 1
+      else
+        newResponse = @store.createRecord "response", {id: id, value: value, name: question_name, catalog: @get("currentCategory")}
+        @get("responses").addObject newResponse
+
+      @propertyDidChange("responsesData")
+      @send("nextSection") if @get("sectionQuestions.length") is 1
+
 
     setSection: (section) ->
       @set("section", section) if @get("sections").mapBy("number").contains(section)

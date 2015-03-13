@@ -172,7 +172,8 @@ test "action#setResponse sets a value for a response given the current context",
   Ember.run -> controller.set("section", 6) # hbi complications section
 
   # Ambiguous with multiple section questions... using as test case
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is 0, "should start 0"
+  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_uveitis").get("value") is 1, "should start 0"
 
-  controller.send("setResponse", "complication_abscess", 1)
-  ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_abscess").get("value") is 1, "sets to 1 (true)"
+  Ember.run ->
+    controller.send("setResponse", "complication_uveitis", 2)
+    ok controller.get("responsesData").filterBy("catalog", "hbi").findBy("name", "complication_uveitis").get("value") is 2, "sets to 1 (true)"

@@ -41,7 +41,7 @@ if config.NOT_CI
     expect 1
 
     visit("/checkin/Aug-13-2014/11").then ->
-      ok Ember.isPresent find(".checkin-note h4")
+      ok Ember.isPresent find(".checkin-note h3")
 
 # test "Clears placeholder on focus", ->
 #   expect 2
