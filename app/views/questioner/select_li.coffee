@@ -11,14 +11,14 @@ view = Ember.View.extend
 
   text: Em.computed(-> if @get("input.label") then @get("input.label") else @get("input.value")).property("input")
 
-  didInsertElement: ->
-    if @get("input.helper")
-      @$().jBox("Tooltip", {id: "jbox-tooltip", x: "center", y: "center", content: @get("input.helper") })
-  mouseEnter: -> @get("parentView").send("setHover", @get("input.value"))
-  mouseLeave: -> @get("parentView").send("setHover", null)
-  click: ->      @get("parentView").send("sendResponse", @get("input.value"))
+  mouseEnter: ->
+    @get("parentView").send("setHover", @get("input.value"))
+    @get("parentView.jBox").setContent(@get("input.helper")).position({target: @$()}).open() if @get("input.helper")
 
-  willDestroyElement: ->
-    @$().jBox().destroy()
+  mouseLeave: ->
+    @get("parentView").send("setHover", null)
+    @get("parentView.jBox").close() if @get("input.helper")
+
+  click: -> @get("parentView").send("sendResponse", @get("input.value"))
 
 `export default view`
