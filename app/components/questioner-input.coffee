@@ -49,7 +49,7 @@ component = Ember.Component.extend colorableMixin,
 
   checked: Ember.computed( -> @get("value") > 0.0 ).property("value")
 
-  didInsertElement: ->   @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", x: "center", y: "center", ignoreDelay: true})
+  didInsertElement: ->   @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", addClass: "symptom-tooltip", x: "center", y: "center", ignoreDelay: true})
   willDestroyElement: -> @get("jBox").destroy()
 
   mouseLeave: -> @set("hoverValue", null)

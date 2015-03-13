@@ -166,37 +166,37 @@
     margin: 0 auto 30px auto;
     width: 90%;
     max-width: 500px;
-    &.has-value li {
-      color: transparent;
-    }
     li {
       display: inline-block;
-      padding: 10px 20px;
-      margin-right: 2px;
+      margin-right: 4px;
+      border-radius: 5px;
+      width: 50px;
+      height: 40px;
+      color: transparent;
+
+      &:first-of-type {
+        width: 40px;
+        border-radius: 999px;
+        background-image: url(face.svg);
+        background-repeat: no-repeat;
+        background-size: 25px 25px;
+        background-position: center;
+      }
 
       &.bg-default { background-color: $primary; }
 
       // the selected option
-      &.selected { color: #333; }
+      &.selected {}
       &.not-selected {}
-      &.not-selected:hover { color: #333; }
+      &.not-selected:hover {}
 
       // Values that are, or are to be filled in given current selection/hover
-      &.highlight { }
+      &.highlight {}
       &.no-highlight { background-color: $lightgrey; }
 
       // Special smiley input
       &.smiley { color: transparent !important; }
       &.smiley.hide-color { background-color: $lightgrey; }
-
-      &:first-of-type {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-      }
-      &:last-of-type {
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-      }
     }
   }
   .checkin-symptom-remove, .checkin-condition-remove {
@@ -206,6 +206,21 @@
       color: black;
       cursor: pointer;
     }
+  }
+}
+.symptom-tooltip {
+  .jBox-container {
+    position: relative;
+    top: -1px;
+    background: black;
+    color: white;
+  }
+  .jBox-pointer {
+    position: relative;
+    top: -1px;
+  }
+  .jBox-pointer:after {
+    background: black;
   }
 }
 
