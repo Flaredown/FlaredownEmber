@@ -21,7 +21,7 @@ view = Select2View.extend
       {name: event.choice.text}
 
     @get("controller").send("add#{@get("trackableType").capitalize()}", trackable)
-
+    @rerender() # start from scratch with blank search
 
   existingTrackables: Ember.computed( -> @get("controller.#{@get("trackableType")}s").mapBy("name") ).property("trackableType", "controller")
   config: Ember.computed( ->
@@ -58,7 +58,6 @@ view = Select2View.extend
   didInsertElement:     ->
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
     @$().on("select2-selecting", @selected.bind(@))
-
 
   processChildElements: -> @$().select2(@get("config"))
   willDestroyElement:   -> @$().select2("destroy")
