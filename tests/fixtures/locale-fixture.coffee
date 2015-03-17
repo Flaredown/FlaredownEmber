@@ -20,7 +20,13 @@ fixture = {
         "complication_fistula":"Fistula",
         "complication_abscess":"Abscess"
       }
-    }
+    },
+    treatment_units: [
+      "pill",
+      "patch",
+      "syringe"
+    ]
+
   }
 }
 
