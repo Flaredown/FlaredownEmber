@@ -3,10 +3,9 @@ li
     form submit="'save' target=view"
       h4 = treatment.name
       = input class="treatment-quantity-input"  type="number" step="0.01" min="0" valueBinding="treatment.quantity"
-      = input class="treatment-unit-input"      type="text" valueBinding="treatment.unit"
-      a class="save-treatment" click="'save' target=view" Save
-      |&nbsp;
-      a class="cancel-save-treatment" click="'cancel' target=view" Cancel
+      view "questioner/treatment-unit" value=treatment.unit
+
+      a class="save-treatment" click="'save' target=view" Done
   else
     div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
     span.checkin-treatment-quantity= treatment.quantity

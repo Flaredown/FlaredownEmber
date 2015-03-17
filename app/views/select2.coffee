@@ -1,29 +1,23 @@
 `import Ember from 'ember'`
 
-view = Select2View = Ember.View.extend
+view = Ember.View.extend
   # prompt: 'Please select...'
   # classNames: ['input-xlarge']
   tagName: "input"
 
-  config: {}
+  config: Ember.computed( ->
+    {
+      data: @get("content")
+    }
+  ).property("content")
 
-  valueChanged: (->
-    Ember.run.scheduleOnce('afterRender', @, 'processChildElements') if $(@).state is "inDOM"
-  ).observes("value")
+  selected: (event) -> @set("value", event.choice.text)
 
   didInsertElement: ->
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
+    @$().on("select2-selecting", @selected.bind(@))
 
-  processChildElements: ->
-    if @get("noSearch")
-      @$().select2
-        minimumResultsForSearch: -1
-    else
-      @$().select2(@get("config"))
-        # do here any configuration of the
-        # select2 component
-
-  willDestroyElement: ->
-    @$().select2("destroy")
+  processChildElements: -> @$().select2(@get("config"))
+  willDestroyElement: -> @$().select2("destroy")
 
 `export default view`

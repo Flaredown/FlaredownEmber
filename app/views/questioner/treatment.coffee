@@ -15,7 +15,6 @@ view = Ember.View.extend colorableMixin,
     toggleActive: (treatment) -> treatment.toggleProperty("active")
 
     edit: -> @set("editing", true)
-    cancel: -> @set("editing", false)
     destroy: (treatment) ->
       swal
         title: "Are you sure?",
