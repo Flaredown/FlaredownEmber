@@ -1,3 +1,5 @@
 .checkin-note
-	h3 What else happened today?
-	view "note"
+  h3 What else happened today?
+
+  view "questioner/note"
+  view "questioner/tag-search"
