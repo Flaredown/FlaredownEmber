@@ -12,8 +12,7 @@ view = Select2View.extend
       prompt = Ember.I18n.t("#{@get("currentUser.locale")}.add_tag_prompt")
       "<span class='name'>\"#{trackable.text}\"</span><div class='count'>#{prompt}</div>"
 
-  classNames: ['tag-search']
-  elementId: "note-tag-search"
+  classNames: ['tag-search', "note-tag-search"]
 
   reset: -> @rerender() # start from scratch with blank search
   selected: (event) -> @reset()
@@ -21,7 +20,7 @@ view = Select2View.extend
 
   config: Ember.computed( ->
     {
-      minimumInputLength: 2
+      minimumResultsForSearch: 1
       placeholder: @get("placeholder")
       formatResult: @get("formatted").bind(@)
       # formatInputTooShort: -> "Keep typing..."
@@ -35,16 +34,16 @@ view = Select2View.extend
         dataType: 'json'
         delay: 0
         results: (response, _, original) ->
-
-          formatted_results = [{id: 0, text: original.term, count: null}]
-
-          formatted_results.addObjects response.map (item,i) ->
+          formatted_results = response.map (item,i) ->
             {id: i+1, text: item.name, count: item.count }
           , @
 
-          {
-            results: formatted_results
-          }
+          if Ember.isPresent(formatted_results)
+            original.element.addClass("has-results")
+            { results: formatted_results }
+          else
+            original.element.select2("close")
+            original.element.removeClass("has-results")
         cache: true
     }
   ).property()
