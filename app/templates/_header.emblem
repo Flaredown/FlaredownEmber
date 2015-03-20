@@ -12,11 +12,11 @@ nav.navbar role="navigation"
       if currentUser.loggedIn
         // Sections
         ul.navbar-sections
-          li: link-to "graph" | GRAPH
+          li: link-to "graph" | {{ t "en.menu_item_graph" }}
           li &#47;
-          li: link-to "insights" | STATS
+          li: link-to "insights" | {{ t "en.menu_item_stats" }}
           li &#47;
-          li: link-to "reports" | INVESTIGATIONS
+          li: link-to "reports" | {{ t "en.menu_item_investigations" }}
 
 
     if currentUser.loggedIn
@@ -25,8 +25,8 @@ nav.navbar role="navigation"
         .dropdown
           .dropdown-button #{currentUser.email} &#9662;
           ul.menu
-            li Account
-            li Edit check-in
-            li Print report
+            li =  t "en.menu_item_account"
+            li = t "en.menu_item_print_report"
+            li = t "en.menu_item_edit_checkin"
             a click="logout" id="logout"
-              li Logout
+              li = t "en.menu_item_logout"

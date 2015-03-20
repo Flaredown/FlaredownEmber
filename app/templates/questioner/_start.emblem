@@ -1,5 +1,5 @@
 span &nbsp;
 
-h1 You haven't checked in yet today
+h1 = t "en.you_havent_checked_in_yet"
 
-p Tap <b>next</b> to get started!
+p = t "en.tap_next_to_start"

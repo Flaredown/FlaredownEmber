@@ -1,16 +1,16 @@
 .edit-checkin
-  p Now editing checkin for {{fancyDate}}
+  p {{ t "en.now_editing_checkin_date" date=fancyDate }}
 
-  h4: link-to "graph.checkin" niceDate section (query-params edit=notEditing) | Back to Checkin
+  h4: link-to "graph.checkin" niceDate section (query-params edit=notEditing) | {{ t "en.back_to_checkin" }}
   / h4: a href="javascript: void(0);" click="stopEditing" Back to Checkin
 
   ul.edit-options
     li
-      link-to "graph.checkin" niceDate section (query-params edit='treatments') | Treatments
+      link-to "graph.checkin" niceDate section (query-params edit='treatments') | {{ t "en.edit_checkin_treatments" }}
     li
-      link-to "graph.checkin" niceDate section (query-params edit='conditions') | Conditions
+      link-to "graph.checkin" niceDate section (query-params edit='conditions') | {{ t "en.edit_checkin_conditions" }}
     li
-      link-to "graph.checkin" niceDate section (query-params edit='symptoms') | Symptoms
+      link-to "graph.checkin" niceDate section (query-params edit='symptoms') | {{ t "en.edit_checkin_symptoms" }}
 
   if editingTreatments
     partial "edit-checkin/treatments"

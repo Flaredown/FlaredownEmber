@@ -1,31 +1,31 @@
 .stats
   .stat-box
-    h1 Remission
-    h4 for 19 days
+    h1 = t "en.graph_remission"
+    h4 = t "en.graph_for_x_days" days="18"
   .stat-box
     h1 236
-    h4 total days tracked
+    h4 = t "en.graph_total_days_tracked"
   .stat-box
     h1 119
-    h4 all-time average score
+    h4 = t "en.graph_all_time_average_score"
   .stat-box
     .c100.p36.green
       span 36%
       .slice
         .bar
         .fill
-    h4 percentage of time in remission
+    h4 = t "en.percentage_of_time_in_remission"
   .stat-box
     .c100.p42
       span 42%
       .slice
         .bar
         .fill
-    h4 percentage of time with active disease
+    h4 = t "en.percentage_of_time_with_active_disease"
   .stat-box
     .c100.p22.orange
       span 22%
       .slice
         .bar
         .fill
-    h4 percentage of time with severe disease
+    h4 = t "en.percentage_of_time_with_severe_disease"

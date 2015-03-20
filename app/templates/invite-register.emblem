@@ -1,4 +1,4 @@
-h1 This is the invite registration page
+h1 = t "en.invite_registration_title"
 
-p here is the registration form
+p = t "en.here_is_registration_form"
 partial "forms/registration"

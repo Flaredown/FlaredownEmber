@@ -1,7 +1,7 @@
 .container: .row
   .col-md-12
     if loggedIn
-      p You are already logged in!
+      p = t "en.you_are_already_logged_in"
     else
       form.form-inline submit="login"
 
@@ -14,14 +14,14 @@
 
         .row
           div class={emailError:has-error :col-md-12 :form-group}
-            label Login Email
+            label = t "en.login_email"
             = input type="email" valueBinding="email" class="form-email form-control" placeholder="your email" id="email"
             if emailError
               ul id="email-messages"
                 each message in emailMessages
                   li=message.message
           div class={passwordError:has-error :col-md-12 :form-group}
-            label Password
+            label = t "en.login_password"
             = input type="password" valueBinding="password" class="form-password form-control" placeholder="your password" id="password"
             if passwordError
               ul id="password-messages"
@@ -33,7 +33,7 @@
           .col-md-6
             button.btn.btn-success.col-md-12 id="login-button" Login
           .col-md-6
-            link-to "register" class="btn btn-default col-md-12" | Register Now
+            link-to "register" class="btn btn-default col-md-12" | {{ t "en.login_register_now" }}
   
   if modalOpen
     .modal    

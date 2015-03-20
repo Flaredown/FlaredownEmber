@@ -1,15 +1,15 @@
 if viewportDays.length
   .graph-container
 else
-  .container: h1.text-center No scores in date range
+  .container: h1.text-center = t "en.no_scores_in_date_range"
 
 .container
   .graph-controls
-    .graph-controls-header Showing <b>3 of 4 symptoms</b> and <b>all treatments</b> over <b>{{viewportSize}}</b> days
+    .graph-controls-header {{ t "en.showing_symptoms_and_treatments_over_days" noOfDays=viewportSize }}
     .graph-controls-body
       hr
       ul.graph-controls-time
-        p Date range
+        p = t "en.graph_date_range_label"
         = input class="graph-controls-startDate" valueBinding="pickerStartDate"
         = input class="graph-controls-endDate" valueBinding="pickerEndDate"
 
@@ -25,7 +25,7 @@ else
             = filterable.name
 
       ul.graph-controls-treatments
-        p Date range
+        p = t "en.graph_date_range_label"
         each filterable in treatmentFilterables
           li click="'filter' filterable.id" class={filterable.filtered:filtered-treatment:filterable-treatment}
             div class={:graph-controls-treatment-dot filterable.color}

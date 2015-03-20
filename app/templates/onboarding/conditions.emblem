@@ -1,6 +1,6 @@
 .container: .row
   .col-md-12
-    h1 Which conditions will you track?
+    h1 t = "en.what_will_you_track"
 
     form.form-inline submit="addCondition"
 

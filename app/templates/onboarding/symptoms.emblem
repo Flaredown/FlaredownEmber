@@ -1,7 +1,7 @@
 .container: .row
   .col-md-12
-    h1 It's your first check-in
-    h2 Choose up to 8 symptoms to track
+    h1 = t "en.your_first_check_in"
+    h2 = t "en.choose_up_to_8_symptoms"
 
     form.form-inline submit="addSymptom"
 
@@ -14,9 +14,9 @@
 
       .row
         .col-md-12
-          label Add a Symptom
+          label = t "en.add_a_symptom_title"
           = input type="text" valueBinding="condition" class="form-symptom" placeholder="Droopy Lips" id="symptom"
       .row
         .col-md-6
-          a class="btn btn-default col-md-12" Add Symptom
+          a class="btn btn-default col-md-12" = t "en.add_symptom_action"
 
