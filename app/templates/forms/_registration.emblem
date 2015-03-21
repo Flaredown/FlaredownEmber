@@ -2,7 +2,7 @@ form.form-inline submit="register"
   fieldset
     .row
       div class={errors.email:has-error :col-md-6 :form-group}
-        label Email
+        label = t "en.register_email"
         if isInvite
           = input valueBinding="email" class="form-email" disabled="true"
         else
@@ -11,7 +11,7 @@ form.form-inline submit="register"
             small= errors.email
 
       div class={errors.password:has-error errors.password_confirmation:has-error :col-md-6 :form-group}
-        label Password
+        label = t "en.register_password"
         = input type="password" valueBinding="password" placeholder="Desired password" class="form-password form-control" id="password"
         if errors.password
           small= errors.password
@@ -20,7 +20,7 @@ form.form-inline submit="register"
           small= errors.password_confirmation
 
       div class={errors.weight:has-error :col-md-6 :form-group}
-        label Weight
+        label = t "en.register_weight"
         = input valueBinding="weight" class="form-weight form-control" id="weight"
         if errors.weight
           small= errors.weight
@@ -36,9 +36,9 @@ form.form-inline submit="register"
     br
     .row
       .col-md-6
-        link-to "login" class="btn btn-default col-md-12" | Back to Login
+        link-to "login" class="btn btn-default col-md-12" | = {{ t "en.back_to_login" }}
       .col-md-6
         if isInvite
-          button#accept-invitation-button.btn.btn-success.col-md-12 Enable Early Access / Choose Your Own Adventure Bonanza!
+          button#accept-invitation-button.btn.btn-success.col-md-12 = t "en.entable_early_access"
         else
-          button#register-button.btn.btn-success.col-md-12 Register
+          button#register-button.btn.btn-success.col-md-12 = t "en.register"

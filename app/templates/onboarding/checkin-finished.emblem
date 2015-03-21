@@ -1,5 +1,5 @@
 img src="http://www.comicsandmemes.com/wp-content/uploads/2013/04/Success-baby.jpg"
 
-h1 Awesome, you finished your first check-in
+h1 = t "en.first_checkin_completed"
 
 p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud

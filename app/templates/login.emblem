@@ -31,7 +31,7 @@
           br
         .row
           .col-md-6
-            button.btn.btn-success.col-md-12 id="login-button" Login
+            button.btn.btn-success.col-md-12 id="login-button" = t "en.login_button"
           .col-md-6
             link-to "register" class="btn btn-default col-md-12" | {{ t "en.login_register_now" }}
   
