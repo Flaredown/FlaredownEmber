@@ -36,7 +36,7 @@ form.form-inline submit="register"
     br
     .row
       .col-md-6
-        link-to "login" class="btn btn-default col-md-12" | = {{ t "en.back_to_login" }}
+        link-to "login" class="btn btn-default col-md-12" | {{ t "en.back_to_login" }}
       .col-md-6
         if isInvite
           button#accept-invitation-button.btn.btn-success.col-md-12 = t "en.entable_early_access"
