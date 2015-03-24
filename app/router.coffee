@@ -19,10 +19,13 @@ Router.map ->
 
   @resource "reports", path: "reports"
 
-  @route "onboarding", path: "onboarding", ->
-    @route "conditions", path: "/conditions"
-    @route "symptoms", path: "/symptoms"
-    @route "catalogs", path: "/catalogs"
-    @route "checkin-finished", path: "/checkin-finished"
+  @resource "onboarding", path: "onboarding", ->
+    @route "account",     path: "/account", ->
+    @route "research",    path: "/research-questions", ->
+    @route "conditions",  path: "/conditions"
+    @route "catalogs",    path: "/condition-questions"
+    @route "symptoms",    path: "/symptoms"
+    @route "treatments",  path: "/treatments"
+    @route "complete",    path: "/complete"
 
 `export default Router`

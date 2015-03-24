@@ -1,8 +1,8 @@
-h2 = t "onboarding.symptoms_to_track"
+h2 = t "onboarding.treatments_to_track"
 
 form.form-inline submit="save"
 
-  |symptoms magic here
+  |treatments magic here
 
   br
   br

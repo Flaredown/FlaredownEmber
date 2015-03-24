@@ -1,0 +1,21 @@
+h2 = t "onboarding.optional_research"
+
+form.form-inline submit="save"
+  div class={errors.ethnicity:has-error}
+    label
+      = t "onboarding.ethnicity"
+      = input valueBinding="ethnicity" class="form-ethnicity"
+      if errors.ethnicity
+        small= errors.ethnicity
+
+  div class={errors.weight:has-error}
+    label
+      = t "onboarding.weight"
+      = input valueBinding="weight" class="form-weight"
+      if errors.weight
+        small= errors.weight
+
+
+  br
+  br
+  button#continue-button.btn click="save" = t "continue"

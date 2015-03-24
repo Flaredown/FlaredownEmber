@@ -1,21 +1,9 @@
-.container: .row
-  .col-md-12
-    h1 Which conditions will you track?
+h2 = t "onboarding.conditions_to_track"
 
-    form.form-inline submit="addCondition"
+form.form-inline submit="save"
 
-      if errorMessage
-        .row
-          .col-md-12.has-error style="text-align:center"
-            = errorMessage
-            br
-            br
+  |conditions magic here
 
-      .row
-        .col-md-12
-          label Add a Condition
-          = input type="text" valueBinding="condition" class="form-condition" placeholder="Crohn's disease" id="condition"
-      .row
-        .col-md-6
-          a class="btn btn-default col-md-12" Add Condition
-
+  br
+  br
+  button#continue-button.btn click="save" = t "continue"

@@ -1,0 +1,35 @@
+h2 = t "onboarding.get_started"
+
+form.form-inline submit="save"
+  div class={errors.location:has-error}
+    label
+      = t "onboarding.location"
+      = input valueBinding="location" class="form-location"
+      if errors.location
+        small= errors.location
+
+  div class={errors.bday:has-error}
+    label
+      = t "onboarding.bday"
+      = input valueBinding="bday" class="form-bday"
+      if errors.bday
+        small= errors.bday
+
+  div class={errors.sex:has-error}
+    label
+      = t "onboarding.sex"
+      = input valueBinding="sex" class="form-sex"
+      if errors.sex
+        small= errors.sex
+
+  div class={errors.gender:has-error}
+    label
+      = t "onboarding.gender"
+      = input valueBinding="gender" class="form-gender"
+      if errors.gender
+        small= errors.gender
+
+
+  br
+  br
+  button#continue-button.btn click="save" = t "continue"
