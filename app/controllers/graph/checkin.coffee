@@ -145,12 +145,12 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
   ).property("currentCategory")
 
   ### Translation keys ###
-  catalogStub:          Ember.computed( -> "#{@get("currentUser.locale")}.catalogs.#{@get("currentCategory")}" ).property("currentCategory")
+  catalogStub:          Ember.computed( -> "catalogs.#{@get("currentCategory")}" ).property("currentCategory")
   currentSectionPrompt: Ember.computed( ->
     if @get("currentSection.category") is "symptoms"
-      Ember.I18n.t "#{@get("currentUser.locale")}.symptom_question_prompt", name: @get("sectionQuestions.firstObject.name").capitalize()
+      Ember.I18n.t "symptom_question_prompt", name: @get("sectionQuestions.firstObject.name").capitalize()
     else if @get("currentSection.category") is "conditions"
-      Ember.I18n.t "#{@get("currentUser.locale")}.conditions_question_prompt", name: @get("sectionQuestions.firstObject.name").capitalize()
+      Ember.I18n.t "conditions_question_prompt", name: @get("sectionQuestions.firstObject.name").capitalize()
     else
       Ember.I18n.t "#{@get("catalogStub")}.section_#{@get("currentSection.category_number")}_prompt"
   ).property("currentSection")

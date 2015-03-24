@@ -1,11 +1,11 @@
 if currentUser.loggedIn
   nav.js-menu.sliding-menu-content
     ul
-      li: link-to "graph" | = t "en.menu_item_graph"
-      li: link-to "insights" | = t "en.menu_item_stats"
-      li: link-to "reports" | = t "en.menu_item_investigations"
+      li: link-to "graph" | = t "menu_item_graph"
+      li: link-to "insights" | = t "menu_item_stats"
+      li: link-to "reports" | = t "menu_item_investigations"
       li.navbar-slide-account #{currentUser.email}
-      li = t "en.menu_item_account"
-      li = t "en.menu_item_print"
-      li = t "en.menu_item_logout"
+      li = t "menu_item_account"
+      li = t "menu_item_print"
+      li = t "menu_item_logout"
   .js-menu-screen.menu-screen

@@ -1,4 +1,4 @@
-h1 = t "en.invite_registration_title"
+h1 = t "invite_registration_title"
 
-p = t "en.here_is_registration_form"
+p = t "here_is_registration_form"
 partial "forms/registration"

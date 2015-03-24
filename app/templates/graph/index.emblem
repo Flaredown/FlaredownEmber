@@ -1,31 +1,31 @@
 .stats
   .stat-box
-    h1 = t "en.graph_remission"
-    h4 = t "en.graph_for_x_days" days="18"
+    h1 = t "graph_remission"
+    h4 = t "graph_for_x_days" days="18"
   .stat-box
     h1 236
-    h4 = t "en.graph_total_days_tracked"
+    h4 = t "graph_total_days_tracked"
   .stat-box
     h1 119
-    h4 = t "en.graph_all_time_average_score"
+    h4 = t "graph_all_time_average_score"
   .stat-box
     .c100.p36.green
       span 36%
       .slice
         .bar
         .fill
-    h4 = t "en.percentage_of_time_in_remission"
+    h4 = t "percentage_of_time_in_remission"
   .stat-box
     .c100.p42
       span 42%
       .slice
         .bar
         .fill
-    h4 = t "en.percentage_of_time_with_active_disease"
+    h4 = t "percentage_of_time_with_active_disease"
   .stat-box
     .c100.p22.orange
       span 22%
       .slice
         .bar
         .fill
-    h4 = t "en.percentage_of_time_with_severe_disease"
+    h4 = t "percentage_of_time_with_severe_disease"

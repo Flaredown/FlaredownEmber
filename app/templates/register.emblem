@@ -1,8 +1,8 @@
 if loggedIn
-  p = t "en.you_are_already_logged_in"
+  p = t "you_are_already_logged_in"
 else    
   .row
     .col-md-12
-      h3 = t "en.your_registration_information"
+      h3 = t "your_registration_information"
 
       partial "forms/registration"

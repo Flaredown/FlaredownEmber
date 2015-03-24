@@ -22,7 +22,7 @@ mixin = Ember.Mixin.create
           # Ask the API for the locale for the current user
           ajax("#{config.apiNamespace}/locales/#{controller.get("locale")}").then(
             (locale) =>
-              Ember.I18n.translations = locale
+              Ember.I18n.translations = locale[controller.get("locale")]
               controller.get("controllers.login").redirectToTransition()
 
             (response) =>

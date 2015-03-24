@@ -16,8 +16,8 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
   queryParams: ["user_email", "user_token"]
 
   # Internationalisation placeholders
-  yourEmailTranslation: Ember.computed( -> Ember.I18n.t "#{@get("currentUser.locale")}.unathenticated.your_email_placeholder" )
-  yourPasswordTranslation: Ember.computed( -> Ember.I18n.t "#{@get("currentUser.locale")}.unathenticated.your_password_placeholder" )
+  yourEmailTranslation: Ember.computed( -> Ember.I18n.t "unathenticated.your_email_placeholder" )
+  yourPasswordTranslation: Ember.computed( -> Ember.I18n.t "unathenticated.your_password_placeholder" )
   
 
   redirectToTransition: ->

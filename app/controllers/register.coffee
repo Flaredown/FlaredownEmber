@@ -10,8 +10,8 @@ controller = Ember.Controller.extend
   ]
 
   #Internationalisation placeholders
-  desiredPasswordTranslation: Ember.computed( -> Ember.I18n.t "#{@get("currentUser.locale")}.desired_password" )
-  confirmPasswordTranslation: Ember.computed( -> Ember.I18n.t "#{@get("currentUser.locale")}.confirm_password" )
+  desiredPasswordTranslation: Ember.computed( -> Ember.I18n.t "desired_password" )
+  confirmPasswordTranslation: Ember.computed( -> Ember.I18n.t "confirm_password" )
   
   errors: {}
   
