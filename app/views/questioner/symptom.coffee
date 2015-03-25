@@ -10,7 +10,7 @@ view = Ember.View.extend
     destroy: (symptom) ->
       swal
         title: "Are you sure?",
-        text: Ember.I18n.t("#{@get("controller.currentUser.locale")}.confirm_symptom_remove", symptom: symptom.name)
+        text: Ember.I18n.t("confirm_symptom_remove", symptom: symptom.name)
         type: "warning"
         showCancelButton: true
         closeOnConfirm: true

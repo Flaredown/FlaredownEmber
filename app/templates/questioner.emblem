@@ -10,6 +10,6 @@ liquid-with section as liquidSection
 
 .checkin-navigate
 
-  unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" BACK
-  unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" NEXT
+  unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" = t "back_caps"
+  unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" = t "next_caps"
 

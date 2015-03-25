@@ -2,15 +2,15 @@ form.form-inline submit="save"
   fieldset
     .row
       div class={:col-md-6 :form-group}
-        label Name
+        label = t "form_error_name"
         Ember.TextField class="form-name"
 
       div class={:col-md-6 :form-group}
-        label Email
+        label = t "form_error_email"
         Ember.TextField class="form-email"
 
       div class={:col-md-6 :form-group}
-        label Phone
+        label = t "form_error_phone"
         Ember.TextField class="form-phone"
 
 
@@ -18,4 +18,4 @@ form.form-inline submit="save"
     br
     br
     .row
-      button#register-button.btn.btn-success.col-md-12 Save
+      button#register-button.btn.btn-success.col-md-12 = t "form_error_save_button"

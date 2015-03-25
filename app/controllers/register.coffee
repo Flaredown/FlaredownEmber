@@ -8,6 +8,10 @@ controller = Ember.Controller.extend
     { label: "Male", value: "male"},
     { label: "Female", value: "female"}
   ]
+
+  #Internationalisation placeholders
+  desiredPasswordTranslation: Ember.computed( -> Ember.I18n.t "desired_password" )
+  confirmPasswordTranslation: Ember.computed( -> Ember.I18n.t "confirm_password" )
   
   errors: {}
   

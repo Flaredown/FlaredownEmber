@@ -1,6 +1,6 @@
 .container: .row
   .col-md-12
-    h1 Which conditions will you track?
+    h1 t = what_conditions_will_you_track"
 
     form.form-inline submit="addCondition"
 
@@ -17,5 +17,5 @@
           = input type="text" valueBinding="condition" class="form-condition" placeholder="Crohn's disease" id="condition"
       .row
         .col-md-6
-          a class="btn btn-default col-md-12" Add Condition
+          a class="btn btn-default col-md-12" = t "add_condition"
 

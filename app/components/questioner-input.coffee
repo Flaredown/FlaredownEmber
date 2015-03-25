@@ -2,7 +2,7 @@
 `import colorableMixin from '../mixins/colorable'`
 
 component = Ember.Component.extend colorableMixin,
-  questionName: Ember.computed(-> "#{@get("currentUser.locale")}.catalogs.#{@get("section.category")}.#{@get("question.name")}").property("question.name", "section.category")
+  questionName: Ember.computed(-> "catalogs.#{@get("section.category")}.#{@get("question.name")}").property("question.name", "section.category")
 
   layoutName: Ember.computed(-> "questioner/_#{@get("question.kind")}_input" ).property("question.kind")
   simplifiedQuestion: Ember.computed(-> ["symptoms", "conditions"].contains(@get("section.category")) ).property("section.category")
@@ -33,9 +33,9 @@ component = Ember.Component.extend colorableMixin,
       highlight:  if (highlight or hovered) then true else false
       color:      if @get("section.category") is "conditions" then "bg-default" else @colorClasses(uniq_name, "symptom").bg
 
-      label:      if input.label and not @get("isBasic") then Ember.I18n.t("#{@get("currentUser.locale")}.labels.#{input.label}") else false
+      label:      if input.label and not @get("isBasic") then Ember.I18n.t("labels.#{input.label}") else false
       meta_label: input.meta_label
-      helper:     if input.helper then Ember.I18n.t("#{@get("currentUser.locale")}.helpers.#{input.helper}") else false
+      helper:     if input.helper then Ember.I18n.t(" helpers.#{input.helper}") else false
       type:       @get("type")
 
       hide_color: special_first and (not hovered and not selected) or (not hovered and @get("hovering") and selected)
