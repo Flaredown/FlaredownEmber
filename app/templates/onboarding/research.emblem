@@ -18,4 +18,4 @@ form.form-inline submit="save"
 
   br
   br
-  button#continue-button.btn click="save" = t "continue"
+  button#continue-button.btn click="save" = t "onboarding.continue"
