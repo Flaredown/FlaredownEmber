@@ -10,7 +10,7 @@ view = Ember.View.extend
     destroy: (condition) ->
       swal
         title: "Are you sure?",
-        text: Ember.I18n.t("#{@get("controller.currentUser.locale")}.confirm_condition_remove", condition: condition.name)
+        text: Ember.I18n.t("confirm_condition_remove", condition: condition.name)
         type: "warning"
         showCancelButton: true
         closeOnConfirm: true

@@ -18,7 +18,7 @@ view = Ember.View.extend colorableMixin,
     destroy: (treatment) ->
       swal
         title: "Are you sure?",
-        text: Ember.I18n.t("#{@get("controller.currentUser.locale")}.confirm_treatment_remove", treatment: treatment.get("name"))
+        text: Ember.I18n.t("confirm_treatment_remove", treatment: treatment.get("name"))
         type: "warning"
         showCancelButton: true
         closeOnConfirm: true

@@ -1,5 +1,5 @@
-h1 Checkin complete!
+h1 = t "checkin_complete"
 
-p {{completedQuestionSections.length}} of {{questionSections.length}} sections completed
+p = t "x_of_y_sections_completed" x=completedQuestionSections.length y=questionSections.length
 
-h2: a href="javascript:void(0)" click="'closeCheckin'" Close me!
+h2: a href="javascript:void(0)" click="'closeCheckin'" = t "close_me"

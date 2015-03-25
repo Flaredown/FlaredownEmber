@@ -9,7 +9,7 @@ view = Select2View.extend
     if trackable.count isnt null
       "<span class='name'>#{trackable.text}</span><div class='count'>#{trackable.count} users</div>"
     else
-      prompt = Ember.I18n.t("#{@get("currentUser.locale")}.add_trackable_prompt",kind: @get("trackableType"))
+      prompt = Ember.I18n.t("add_trackable_prompt",kind: @get("trackableType"))
       "<span class='name'>\"#{trackable.text}\"</span><div class='count'>#{prompt}</div>"
 
   # classNames: ['input-xlarge']
