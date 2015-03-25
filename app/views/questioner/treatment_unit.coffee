@@ -3,7 +3,7 @@
 
 view = Select2View.extend
 
-  content: Ember.computed( -> Ember.I18n.translations.en.treatment_units.map (unit,i) -> {id:i+1, text: unit} ).property("value")
+  content: Ember.computed( -> Ember.I18n.translations.treatment_units.map (unit,i) -> {id:i+1, text: unit} ).property("value")
 
   config: Ember.computed( ->
     {

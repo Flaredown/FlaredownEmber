@@ -20,8 +20,8 @@ Router.map ->
   @resource "reports", path: "reports"
 
   @resource "onboarding", path: "onboarding", ->
-    @route "account",     path: "/account", ->
-    @route "research",    path: "/research-questions", ->
+    @route "account",     path: "/account"
+    @route "research",    path: "/research-questions"
     @route "conditions",  path: "/conditions"
     @route "catalogs",    path: "/condition-questions"
     @route "symptoms",    path: "/symptoms"

@@ -51,18 +51,28 @@ test "Invalid invite token gets 404 message", ->
       assertAlertPresent()
   )
 
+## ONBOARDING FLOW ##
+# "account"     -> "/account"
+# "research"    -> "/research-questions"
+# "conditions"  -> "/conditions"
+# "catalogs"    -> "/condition-questions"
+# "symptoms"    -> "/symptoms"
+# "treatments"  -> "/treatments"
+# "complete"    -> "/complete"
+
 test "Existence of onboarding pages", ->
-  expect 8
-  visit('/onboarding/catalogs').then(
+  expect 14
+
+  visit('/onboarding/account').then(
     ->
       ok(find(".navbar").length, "Page shows up")
-      ok(currentRouteName() == "onboarding.catalogs", "Route OK")
+      ok(currentRouteName() == "onboarding.account", "Route OK")
   )
 
-  visit('/onboarding/checkin-finished').then(
+  visit('/onboarding/research-questions').then(
     ->
       ok(find(".navbar").length, "Page shows up")
-      ok(currentRouteName() == "onboarding.checkin-finished", "Route OK")
+      ok(currentRouteName() == "onboarding.research", "Route OK")
   )
 
   visit('/onboarding/conditions').then(
@@ -71,8 +81,26 @@ test "Existence of onboarding pages", ->
       ok(currentRouteName() == "onboarding.conditions", "Route OK")
   )
 
+  visit('/onboarding/condition-questions').then(
+    ->
+      ok(find(".navbar").length, "Page shows up")
+      ok(currentRouteName() == "onboarding.catalogs", "Route OK")
+  )
+
   visit('/onboarding/symptoms').then(
     ->
       ok(find(".navbar").length, "Page shows up")
       ok(currentRouteName() == "onboarding.symptoms", "Route OK")
+  )
+
+  visit('/onboarding/treatments').then(
+    ->
+      ok(find(".navbar").length, "Page shows up")
+      ok(currentRouteName() == "onboarding.treatments", "Route OK")
+  )
+
+  visit('/onboarding/complete').then(
+    ->
+      ok(find(".navbar").length, "Page shows up")
+      ok(currentRouteName() == "onboarding.complete", "Route OK")
   )
