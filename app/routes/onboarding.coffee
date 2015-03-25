@@ -1,6 +1,7 @@
+`import AuthRoute from './authenticated'`
 `import Ember from 'ember'`
 
-route = Ember.Route.extend
+route = AuthRoute.extend
   step: 0
   steps: "account research conditions catalogs symptoms treatments complete".w()
   currentStep: Ember.computed(-> @get("steps").objectAt(@get("step")) ).property("step")

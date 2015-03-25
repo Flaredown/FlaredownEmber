@@ -24,12 +24,15 @@ mixin = Ember.Mixin.create
             (locale) =>
               Ember.I18n.translations = locale[controller.get("locale")]
               controller.get("controllers.login").redirectToTransition()
+              app.advanceReadiness() unless app_is_ready
 
             (response) =>
               @errorCallback(response, @) # TODO this doesn't work
+              app.advanceReadiness() unless app_is_ready
           )
 
-        app.advanceReadiness() unless app_is_ready
+        else
+          app.advanceReadiness() unless app_is_ready
 
       (response) ->
         # @errorCallback(response, @) # TODO this doesn't work
