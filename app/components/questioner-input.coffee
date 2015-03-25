@@ -35,7 +35,7 @@ component = Ember.Component.extend colorableMixin,
 
       label:      if input.label and not @get("isBasic") then Ember.I18n.t("labels.#{input.label}") else false
       meta_label: input.meta_label
-      helper:     if input.helper then Ember.I18n.t(" helpers.#{input.helper}") else false
+      helper:     if input.helper then Ember.I18n.t("helpers.#{input.helper}") else false
       type:       @get("type")
 
       hide_color: special_first and (not hovered and not selected) or (not hovered and @get("hovering") and selected)
