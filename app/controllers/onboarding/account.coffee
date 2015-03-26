@@ -5,7 +5,6 @@ controller = Ember.Controller.extend
   translationRoot: "onboarding"
 
   dobDayValid: (->
-    console.log "?!?!"
     not Em.isEmpty(@get("dobDay")) and /^([1-2][0-9]|3[0-1]|0[1-9])$/.test(@get("dobDay"))
   ).property("dobDay")
 
