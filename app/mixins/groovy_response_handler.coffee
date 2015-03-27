@@ -7,14 +7,14 @@ mixin = Ember.Mixin.create
   error_group : null # to hold namespace of errors we are dealing with
 
   proxy : null # holds the proxy object of controller to add dynamic properties
-  
+
   modalOpen: false # modal flag to toggle modal in case of modal errors
-  
+
   ##
   # modalOpen observer
   # hides modal if it is open
   ##
-      
+
   modalChanged: Ember.observer ->
     unless @get("modalOpen")
       @set("modalOpen", false)
@@ -24,7 +24,7 @@ mixin = Ember.Mixin.create
   # acts like a sort of constructor for
   # initializing errors, inspired from eVisit's form_state_mixin
   ##
-  
+
   errorCallback : (response, controller) ->
     @resetErrors()
     @setupProxy(controller)
@@ -45,7 +45,7 @@ mixin = Ember.Mixin.create
     for field in fields
       @get("proxy").set("#{field}Error", true)
       @get("proxy").set("#{field}Messages", @errors.fields[field])
-  
+
   handleModalErrors : ->
     @proxy.set("modal_error_title", @errors.title)
     @proxy.set("modal_error_message", @errors.message)
@@ -56,16 +56,17 @@ mixin = Ember.Mixin.create
 
 
   resetErrors : () ->
+    @set("errors", null)
     if @get("proxy") isnt null
       @get("proxy").destroy()
     @set("modalOpen", false)
-  
+
   setupProxy : (controller) ->
     content = if typeof controller is "undefined" then {} else controller
-    
+
     proxy = Ember.ObjectProxy.create
       content: content
-      
+
     @set('proxy', proxy)
 
 `export default mixin`

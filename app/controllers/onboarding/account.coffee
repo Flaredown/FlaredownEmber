@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
+`import FormHandlerMixin from '../../mixins/form_handler'`
 
-controller = Ember.Controller.extend
+controller = Ember.Controller.extend FormHandlerMixin,
 
   translationRoot: "onboarding"
 
@@ -20,14 +21,20 @@ controller = Ember.Controller.extend
     @get("dobDayValid") and @get("dobMonthValid") and @get("dobYearValid")
   ).property("dobDayValid", "dobMonthValid", "dobYearValid")
 
-  errors: {}
+
+  validations:  "dobDay".w()
+  requirements: "dobDay".w()
 
   actions:
     save: ->
 
-      if @get("dobValid")
+      if @saveForm()
+        console.log "saved"
         true
       else
+        console.log @get("errors.fields")
+        console.log "couldn't save"
         false
+
 
 `export default controller`

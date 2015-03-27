@@ -3,6 +3,6 @@ label
     = view.label
 
   = input type="text" value=view.value class=view.inputClass placeholder=view.placeholder
-  if hasErrors
-    each error in errors
-      small= error
+  if errors
+    .errors: each error in view.errors
+      small.error-message= error.message

@@ -1,6 +1,9 @@
 `import Ember from 'ember'`
 
 view = Ember.View.extend
+  # Takes a "name" when instantiated
+  # Assumes the controller has validations and errors based on that name.
+
   templateName: "forms/text-input"
 
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent"]
@@ -8,16 +11,14 @@ view = Ember.View.extend
   inputClass: Ember.computed(-> "form-#{@get("name").dasherize()}")
 
   valueName: Ember.computed(-> "controller.#{@get("name")}" ).property("name")
-  value: Ember.computed(-> @get("controller.#{@get("valueName")}}") ).property("valueName")
+  value: Ember.computed(-> @get(@get("valueName")) ).property("controller","valueName")
 
-  valueObserver: Ember.observer(->
-    @set("controller.#{@get("name")}", @get("value"))
-  ).observes("value")
+  valueObserver: Ember.observer(-> @set("controller.#{@get("name")}", @get("value")) ).observes("value")
 
   present: Ember.computed(-> Ember.isPresent(@get("value")) ).property("value")
   isValid: Ember.computed(-> @get("controller.#{@get("name")}Valid")).property("value")
-  errors: Ember.computed(-> @get("controller.errors.#{@get("name")}") ).property("value")
-  hasErrors: Ember.computed(-> Ember.isPresent(@get("errors")) ).property("errors")
+  errors: Ember.computed(-> @get("controller.errors.fields.#{@get("name")}") ).property("controller.errors.@each")
+  hasErrors: Ember.computed(-> Ember.isPresent(@get("errors")) ).property("controller.errors")
 
   I18nKey: Ember.computed(->
     root = @get("translationRoot")
