@@ -21,9 +21,8 @@ controller = Ember.Controller.extend FormHandlerMixin,
     @get("dobDayValid") and @get("dobMonthValid") and @get("dobYearValid")
   ).property("dobDayValid", "dobMonthValid", "dobYearValid")
 
-
-  validations:  "dobDay".w()
-  requirements: "dobDay".w()
+  requirements: "dobDay doyMonth dobYear".w()
+  validations:  "dobDay doyMonth dobYear".w()
 
   actions:
     save: ->

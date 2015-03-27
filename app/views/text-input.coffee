@@ -4,6 +4,14 @@ view = Ember.View.extend
   # Takes a "name" when instantiated
   # Assumes the controller has validations and errors based on that name.
 
+  init: ->
+    @_super()
+
+    Em.defineProperty @, "errors", Em.computed( ->
+      @get("controller.errors.fields.#{@get("name")}")
+    ).property("controller.errors.fields.#{@get("name")}")
+
+
   templateName: "forms/text-input"
 
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent"]
@@ -17,8 +25,7 @@ view = Ember.View.extend
 
   present: Ember.computed(-> Ember.isPresent(@get("value")) ).property("value")
   isValid: Ember.computed(-> @get("controller.#{@get("name")}Valid")).property("value")
-  errors: Ember.computed(-> @get("controller.errors.fields.#{@get("name")}") ).property("controller.errors.@each")
-  hasErrors: Ember.computed(-> Ember.isPresent(@get("errors")) ).property("controller.errors")
+  hasErrors: Ember.computed(-> Ember.isPresent(@get("errors")) ).property("errors")
 
   I18nKey: Ember.computed(->
     root = @get("translationRoot")

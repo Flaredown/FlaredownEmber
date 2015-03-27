@@ -52,3 +52,15 @@ test "saving without valid inputs triggers inline validation errors", ->
     controller.send("save")
 
   ok controller.get("errors.fields.dobDay") is null       , "no more errors"
+
+test "changing a field removes any errors on it", ->
+  controller.set("requirements", ["dobDay"])
+  controller.set("validations", ["dobDay"])
+  controller.send("save")
+
+  ok controller.get("errors.fields.dobDay.length") > 0      , "has field errors"
+
+  Ember.run ->
+    controller.set("dobDay", "111superinvalid")
+
+  ok controller.get("errors.fields.dobDay.length") is 0      , "has field errors"

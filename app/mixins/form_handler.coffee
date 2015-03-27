@@ -3,6 +3,17 @@
 
 mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
+  init: ->
+    @_super()
+    @setProperties
+      saving: false
+      errors: null
+      # errorMessages: Em.A([])
+
+    # Watch all fields that can take inline errors and reset those errors upon field change
+    @get("errorables").forEach (key) =>
+      @addObserver(key, => @resetErrorsOn(key)) if Ember.typeOf(@get(key)) isnt 'function'
+
   errorResponseTemplate: -> {
     errors: {
       kind: "inline"
@@ -12,6 +23,8 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
   requirements: [] # fields that are required to have a value
   validations:  [] # validations to be checked
+
+  errorables: (-> @get("requirements").concat(@get("validations")) ).property("requirements", "validations")
 
   hasChecks: Ember.computed(-> @get("requirements").length or @get("validations").length ).property("requirements", "validations")
 
@@ -37,6 +50,9 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
     @errorCallback(response, @) unless pass
     pass
+
+  resetErrorsOn: (key) ->
+    @set("errors.fields.#{key}", []) if @get("errors.fields")
 
   saveForm: (skipSavableCheck) ->
     @resetErrors()
