@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
 
-view = Ember.View.extend
+mixin = Ember.Mixin.create
   # Takes a "name" when instantiated
   # Assumes the controller has validations and errors based on that name.
 
@@ -10,11 +10,6 @@ view = Ember.View.extend
     Em.defineProperty @, "errors", Em.computed( ->
       @get("controller.errors.fields.#{@get("name")}")
     ).property("controller.errors.fields.#{@get("name")}")
-
-
-  templateName: "forms/text-input"
-
-  classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent"]
 
   inputClass: Ember.computed(-> "form-#{@get("name").dasherize()}")
 
@@ -39,5 +34,5 @@ view = Ember.View.extend
     Ember.I18n.t(key)
   ).property("I18nKey")
 
+`export default mixin`
 
-`export default view`

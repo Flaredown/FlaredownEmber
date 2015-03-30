@@ -1,0 +1,2 @@
+input.cmn-toggle.cmn-toggle-round class={view.checked:checked:unchecked} click="'toggleBoolean' value target=view" type="checkbox" id=view.switchId
+label for=view.switchId = view.label

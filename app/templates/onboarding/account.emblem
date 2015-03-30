@@ -1,22 +1,23 @@
 h2 = t "onboarding.get_started"
 
 form.form-inline submit="save"
-  view "textInput" name="location"
+  view "forms/textInput" name="location"
 
-  view "textInput" name="dobMonth" placeholder="08"
-  view "textInput" name="dobDay" placeholder="22"
-  view "textInput" name="dobYear" placeholder="1980"
+  view "forms/textInput" name="dobMonth" placeholder="08"
+  view "forms/textInput" name="dobDay" placeholder="22"
+  view "forms/textInput" name="dobYear" placeholder="1980"
 
-  div class={errors.sex:has-error}
+  view "forms/switchInput" name="sex"
+  / div class={errors.sex:has-error}
+  /
+  /   label
+  /     = t "onboarding.sex"
+  /     = input valueBinding="sex" class="form-sex"
+  /     if errors.sex
+  /       small= errors.sex
+  /   small needs to be replaced with switch
 
-    label
-      = t "onboarding.sex"
-      = input valueBinding="sex" class="form-sex"
-      if errors.sex
-        small= errors.sex
-    small needs to be replaced with switch
-
-  view "textInput" name="gender"
+  view "forms/textInput" name="gender"
 
 
   br

@@ -45,8 +45,19 @@ textarea {
     border-color: darken($base-border-color, 10%);
   }
 
+
   &:focus {
     border-color: $action-color;
+    box-shadow: $form-box-shadow-focus;
+    outline: none;
+  }
+
+
+}
+
+.text-input {
+  &.invalid.present input {
+    border-color: $invalid-color;
     box-shadow: $form-box-shadow-focus;
     outline: none;
   }
