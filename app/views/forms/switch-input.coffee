@@ -3,6 +3,8 @@
 
 view = Ember.View.extend FormInputMixin,
 
+  didInsertElement: -> @set("value",0) unless @get("value")
+
   kind: "switch"
   templateName: "forms/switch-input"
   classNames: ["switch-input"]
@@ -12,7 +14,6 @@ view = Ember.View.extend FormInputMixin,
 
   checked: Ember.computed( -> @get("value") > 0.0 ).property("value")
   actions:
-    toggleBoolean: (value) ->
-      @set "value", if value is 0 then 1.0 else 0.0
+    toggle: -> @set "value", if parseInt(@get("value")) is 0 then 1.0 else 0.0
 
 `export default view`
