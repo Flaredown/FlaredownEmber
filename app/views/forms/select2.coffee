@@ -9,6 +9,8 @@ view = Ember.View.extend
     {
       data: @get("content")
       placeholder: @get("placeholder")
+      val: @get("value")
+      initSelection: ((el,callback) -> callback(@get("content").findBy("id",@get("value"))) ).bind(@)
     }
   ).property("content")
 
@@ -18,7 +20,7 @@ view = Ember.View.extend
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
     @$().on("select2-selecting", @selected.bind(@))
 
-  processChildElements: -> @$().select2(@get("config"))
+  processChildElements: -> @$().select2(@get("config")).select2("val", @get("value"))
   willDestroyElement: -> @$().select2("destroy")
 
 `export default view`

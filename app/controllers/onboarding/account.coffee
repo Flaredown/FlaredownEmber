@@ -23,7 +23,6 @@ controller = Ember.Controller.extend FormHandlerMixin,
         console.log "saved"
         true
       else
-        console.log @get("errors.fields")
         console.log "couldn't save"
         false
 

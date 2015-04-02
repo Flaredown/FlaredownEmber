@@ -11,7 +11,10 @@ mixin = Ember.Mixin.create
       @get("controller.errors.fields.#{@get("name")}")
     ).property("controller.errors.fields.#{@get("name")}")
 
-  inputClass: Ember.computed(-> "form-#{@get("name").dasherize()}")
+  classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent", "rootClass"]
+
+  rootClass: Ember.computed(-> "form-#{@get("name").dasherize()}")
+  inputClass: Ember.computed(-> "form-#{@get("name").dasherize()}-input")
 
   valueName: Ember.computed(-> "controller.#{@get("name")}" ).property("name")
   value: Ember.computed(-> @get(@get("valueName")) ).property("controller","valueName")

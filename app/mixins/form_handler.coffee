@@ -10,6 +10,9 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
       errors: null
       # errorMessages: Em.A([])
 
+    # Setup any default values
+    Ember.keys(@get("defaults")).forEach (key) => @set(key, @get("defaults.#{key}"))
+
     # Watch all fields that can take inline errors and reset those errors upon field change
     @get("errorables").forEach (key) =>
       @addObserver(key, => @resetErrorsOn(key)) if Ember.typeOf(@get(key)) isnt 'function'
@@ -21,6 +24,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     }
   }
 
+  defaults:     {} # default values, in key/value format
   requirements: [] # fields that are required to have a value
   validations:  [] # validations to be checked
 
@@ -48,7 +52,6 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         response.errors.fields[key] = []
         response.errors.fields[key].addObject error
 
-    console.log response
     @errorCallback(response, @) unless pass
     pass
 

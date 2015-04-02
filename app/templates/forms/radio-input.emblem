@@ -3,7 +3,7 @@ label
     = view.label
 
   each option in view.options
-    div click="'set' option.value target=view" class={:radio-option option.checked:checked:unchecked}
+    div click="'set' option.value target=view" class=option.class
       h6.option-name
         if option.checked
           |&#10003;

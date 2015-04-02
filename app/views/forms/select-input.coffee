@@ -12,10 +12,9 @@ view = Ember.View.extend FormInputMixin,
     @get("controller.#{@get("name")}Options").map (item,i) =>
       # select2 option format
       {
-        id: i+1
+        id: item
         text: Ember.I18n.t "#{@get("optionI18nKey")}.#{item}"
       }
-
   ).property("controller", "value")
 
   placeholder: Em.computed( ->
