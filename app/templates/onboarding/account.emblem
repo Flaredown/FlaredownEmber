@@ -1,22 +1,16 @@
 h2 = t "onboarding.get_started"
 
 form.form-inline submit="save"
-  view "forms/textInput" name="location"
+  view "forms/selectInput" name="location" optionsTranslationRoot=false
 
+  h4 = t "onboarding.dob"
   view "forms/textInput" name="dobMonth" placeholder="08"
   view "forms/textInput" name="dobDay" placeholder="22"
   view "forms/textInput" name="dobYear" placeholder="1980"
 
-  view "forms/switchInput" name="sex"
-  / div class={errors.sex:has-error}
-  /
-  /   label
-  /     = t "onboarding.sex"
-  /     = input valueBinding="sex" class="form-sex"
-  /     if errors.sex
-  /       small= errors.sex
-  /   small needs to be replaced with switch
+  /view "forms/switchInput" name="icecream"
 
+  view "forms/radioInput" name="sex"
   view "forms/textInput" name="gender"
 
 

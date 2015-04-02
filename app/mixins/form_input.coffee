@@ -22,17 +22,23 @@ mixin = Ember.Mixin.create
   isValid: Ember.computed(-> @get("controller.#{@get("name")}Valid")).property("value")
   hasErrors: Ember.computed(-> Ember.isPresent(@get("errors")) ).property("errors")
 
-  I18nKey: Ember.computed(->
+  i18nKey: Ember.computed(->
     root = @get("translationRoot")
     root ||= @get("controller.translationRoot")
     root
   ).property("translationRoot")
 
+  optionI18nKey: Em.computed( ->
+    name = @get("name").underscore()
+    root = if (typeof(@get("optionsTranslationRoot")) isnt "undefined") then @get("optionsTranslationRoot") else @get("i18nKey")
+    key  = if root then "#{root}.#{name}_options" else "#{name}_options"
+  ).property("name", "i18nKey")
+
   label: Ember.computed(->
     name = @get("name").underscore()
-    key = if @get("I18nKey") then "#{@get("I18nKey")}.#{name}" else name
+    key = if @get("i18nKey") then "#{@get("i18nKey")}.#{name}" else name
     Ember.I18n.t(key)
-  ).property("I18nKey")
+  ).property("i18nKey")
 
 `export default mixin`
 

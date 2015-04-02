@@ -1,0 +1,3 @@
+if view.errors.length
+  .errors: each error in view.errors
+    small.error-message= error.message

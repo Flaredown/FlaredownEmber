@@ -48,6 +48,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         response.errors.fields[key] = []
         response.errors.fields[key].addObject error
 
+    console.log response
     @errorCallback(response, @) unless pass
     pass
 

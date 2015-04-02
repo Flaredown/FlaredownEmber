@@ -8,6 +8,7 @@ view = Ember.View.extend
   config: Ember.computed( ->
     {
       data: @get("content")
+      placeholder: @get("placeholder")
     }
   ).property("content")
 

@@ -21,8 +21,11 @@ controller = Ember.Controller.extend FormHandlerMixin,
     @get("dobDayValid") and @get("dobMonthValid") and @get("dobYearValid")
   ).property("dobDayValid", "dobMonthValid", "dobYearValid")
 
-  requirements: "dobDay doyMonth dobYear".w()
-  validations:  "dobDay doyMonth dobYear".w()
+  locationOptions: Em.computed(-> Ember.keys(Ember.I18n.translations.location_options) ).property("Ember.I18n.translations")
+  sexOptions: "male female".w()
+
+  requirements: "location dobDay dobMonth dobYear sex".w()
+  validations:  "dobDay dobMonth dobYear".w()
 
   actions:
     save: ->
