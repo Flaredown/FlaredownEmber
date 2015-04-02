@@ -25,7 +25,10 @@ fixture = {
       "pill",
       "patch",
       "syringe"
-    ]
+    ],
+    location_options: {
+      US: "United States"
+    }
 
   }
 }
