@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import Select2View from './forms /select2'`
+`import Select2View from './forms/select2'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
 
