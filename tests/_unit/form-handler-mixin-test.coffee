@@ -20,7 +20,7 @@ moduleFor("controller:onboarding.account", "Form Handler Mixin Test",
       controller  = @subject()
 
       Ember.run ->
-        controller.set "model",           {}
+        controller.set "model",       {}
 
     teardown: ->
       Ember.run(App, App.destroy);
@@ -34,7 +34,7 @@ test "saving without valid inputs triggers inline validation errors", ->
 
   controller.set("requirements", ["dobDay"])
   controller.set("validations", ["dobDay"])
-  controller.send("save")
+  controller.saveForm()
 
   ok controller.get("errors.kind") is "inline"              , "has correct error group"
   ok controller.get("errors.fields.dobDay.length") > 0      , "has field errors"
@@ -42,25 +42,25 @@ test "saving without valid inputs triggers inline validation errors", ->
 
   Ember.run ->
     controller.set("dobDay", "111")
-    controller.send("save")
+    controller.saveForm()
 
   ok controller.get("errors.fields.dobDay.length") > 0      , "has field errors"
   ok controller.get("errors.fields.dobDay.firstObject.kind") is "invalid"
 
   Ember.run ->
     controller.set("dobDay", "11")
-    controller.send("save")
+    controller.saveForm()
 
   ok controller.get("errors.fields.dobDay") is null       , "no more errors"
 
 test "changing a field removes any errors on it", ->
   controller.set("requirements", ["dobDay"])
   controller.set("validations", ["dobDay"])
-  controller.send("save")
+  controller.saveForm()
 
-  ok controller.get("errors.fields.dobDay.length") > 0      , "has field errors"
+  ok controller.get("errors.fields.dobDay.length") is 1      , "has field errors"
 
   Ember.run ->
     controller.set("dobDay", "111superinvalid")
 
-  ok controller.get("errors.fields.dobDay.length") is 0      , "has field errors"
+  ok controller.get("errors.fields.dobDay.length") is 0      , "still has field errors"

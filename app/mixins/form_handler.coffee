@@ -6,9 +6,10 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
   init: ->
     @_super()
     @setProperties
-      saving: false
-      errors: null
-      # errorMessages: Em.A([])
+      saving:       false
+      errors:       null
+
+    @set("defaults", {}) unless @get("defaults") # default values, in key/value format
 
     # Setup any default values
     Ember.keys(@get("defaults")).forEach (key) => @set(key, @get("defaults.#{key}"))
@@ -24,7 +25,6 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     }
   }
 
-  defaults:     {} # default values, in key/value format
   fields:       [] # all fields
   requirements: [] # fields that are required to have a value
   validations:  [] # validations to be checked
@@ -56,8 +56,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     @errorCallback(response, @) unless pass
     pass
 
-  resetErrorsOn: (key) ->
-    @set("errors.fields.#{key}", []) if @get("errors.fields")
+  resetErrorsOn: (key) -> @set("errors.fields.#{key}", []) if @get("errors.fields")
 
   saveForm: (skipSavableCheck) ->
     @resetErrors()
