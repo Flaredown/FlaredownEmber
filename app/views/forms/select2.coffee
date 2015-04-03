@@ -10,7 +10,7 @@ view = Ember.View.extend
       data: @get("content")
       placeholder: @get("placeholder")
       val: @get("value")
-      initSelection: ((el,callback) -> callback(@get("content").findBy("id",@get("value"))) ).bind(@)
+      initSelection: ((el,callback) -> callback(@get("content").findBy("text",@get("value"))) ).bind(@)
     }
   ).property("content")
 

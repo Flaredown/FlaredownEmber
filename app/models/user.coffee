@@ -13,6 +13,8 @@ model = DS.Model.extend
   symptomColors:        DS.attr()
   treatmentColors:      DS.attr()
 
+  settings:             DS.attr()
+
   checked_in_today:     DS.attr "boolean"
 
 `export default model`

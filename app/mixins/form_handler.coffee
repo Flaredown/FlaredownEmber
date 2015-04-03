@@ -25,6 +25,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
   }
 
   defaults:     {} # default values, in key/value format
+  fields:       [] # all fields
   requirements: [] # fields that are required to have a value
   validations:  [] # validations to be checked
 
@@ -63,7 +64,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
     skipSavableCheck = false if typeof(skipSavableCheck) is "undefined"
     return false if @get("hasChecks") and not @checkFields()
-    return false if not skipSavableCheck and not @get("isSavable")
+    # return false if not skipSavableCheck and not @get("isSavable")
 
     @set "saving", true
     @get("saving")

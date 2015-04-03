@@ -23,7 +23,4 @@ view = Ember.View.extend FormInputMixin,
     Ember.I18n.t("#{key}_placeholder")
   ).property("i18nKey")
 
-  actions:
-    set: (value) -> @set "value", value
-
 `export default view`

@@ -1,4 +1,6 @@
 `import Ember from 'ember'`
+`import config from '../../config/environment'`
+`import ajax from 'ic-ajax'`
 `import FormHandlerMixin from '../../mixins/form_handler'`
 
 controller = Ember.Controller.extend FormHandlerMixin,
@@ -13,13 +15,22 @@ controller = Ember.Controller.extend FormHandlerMixin,
   locationOptions: Em.computed(-> Ember.keys(Ember.I18n.translations.location_options) ).property("Ember.I18n.translations")
   sexOptions: "male female".w()
 
+  defaults: Ember.computed(-> @get("currentUser.settings")).property("currentUser")
+  fields: "location dobDay dobMonth dobYear sex gender".w()
   requirements: "location dobDay dobMonth dobYear sex".w()
-  validations:  "dobDay dobMonth dobYear dob".w()
+  validations:  "dobDay dobMonth dobYear".w()
 
   actions:
     save: ->
 
       if @saveForm()
+        ajax("#{config.apiNamespace}/me.json",
+          type: "POST"
+          data: {settings: @getProperties(@get("fields"))}
+        ).then(
+          (response) => @endSave()
+          (response) => @errorCallback(response, @)
+        )
         console.log "saved"
         true
       else
