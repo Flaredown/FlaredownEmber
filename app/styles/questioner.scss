@@ -160,6 +160,13 @@
   }
   .add-treatment-input {
   }
+  .dosage-form {
+    width: 100%;
+    border: 1px solid $primary;
+    box-shadow: 0 0 3px $primary;
+    padding: 25px;
+    margin-top: 30px;
+  }
 }
 
 .checkin-symptoms, .checkin-conditions {
