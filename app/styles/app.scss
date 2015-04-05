@@ -1,5 +1,7 @@
-// Bourbon
+@import "variables";
+@import "mixins";
 
+// Bourbon
 @import "bourbon/bourbon";
 @import "base/grid-settings";
 @import "neat/neat";
@@ -13,6 +15,7 @@
 @import "graph";
 @import "graph-stats";
 @import "questioner";
+@import "onboarding";
 
 // Components
 @import "progress_bar";

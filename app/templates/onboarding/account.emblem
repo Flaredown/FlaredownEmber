@@ -3,7 +3,7 @@ h2 = t "onboarding.get_started"
 form.form-inline submit="save"
   view "forms/selectInput" name="location" optionsTranslationRoot=false
 
-  h4 = t "onboarding.dob"
+  h4.birthday = t "onboarding.dob"
   view "forms/textInput" name="dobMonth" placeholder="08"
   view "forms/textInput" name="dobDay" placeholder="22"
   view "forms/textInput" name="dobYear" placeholder="1980"
@@ -13,7 +13,4 @@ form.form-inline submit="save"
   view "forms/radioInput" name="sex"
   view "forms/textInput" name="gender"
 
-
-  br
-  br
   button#continue-button.btn click="save" = t "onboarding.continue"

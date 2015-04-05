@@ -14,7 +14,7 @@ select {
 }
 
 label {
-  font-weight: 600;
+  font-weight: normal;
   margin-bottom: $small-spacing / 2;
 
   &.required::after {
@@ -55,11 +55,62 @@ textarea {
 
 }
 
+.text-input, .radio-input, .checkbox-input, .select-input, .switch-input {
+  margin: 0 0 30px 0;
+}
+
 .text-input {
   &.invalid.present input {
-    border-color: $invalid-color;
-    box-shadow: $form-box-shadow-focus;
+    border-color: red;
     outline: none;
+  }
+  input[type="text"] {
+    font-size: 1.5em;
+    &:focus {
+      border-color: $primary;
+    }
+    // Material style??
+    // background: none;
+    // border: none;
+    // border-bottom: 2px solid lightgrey;
+    // box-shadow: none;
+    // border-radius: 0;
+    // padding: 0 0 8px 0;
+    // font-size: 2em;
+    // margin: 0;
+    // &:focus {
+    //   border-bottom-color: $primary;
+    //   box-shadow: none;
+    // }
+  }
+}
+
+.radio-input {
+  .radio-option {
+    h4 {
+      margin: 3px 0 0 0;
+      display: inline-block;
+    }
+    h4::before {
+      content: "";
+      width: 15px;
+      height: 15px;
+      border-radius: 999px;
+      border: 2px solid $primary;
+      background: none;
+      display: inline-block;
+      margin-right: 3px;
+    }
+  }
+  .radio-option.checked {
+    h4::before {
+      background: $primary;
+    }
+  }
+  &:hover {
+    .h4::before {
+      background: red;
+    }
   }
 }
 
@@ -86,4 +137,8 @@ select {
   margin-bottom: $base-spacing;
   max-width: 100%;
   width: auto;
+}
+
+.error-message {
+  color: red;
 }

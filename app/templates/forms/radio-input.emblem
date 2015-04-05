@@ -4,9 +4,7 @@ label
 
   each option in view.options
     div click="'set' option.value target=view" class=option.class
-      h6.option-name
-        if option.checked
-          |&#10003;
+      h4.option-name
         = option.name
 
   partial "forms/errors"
