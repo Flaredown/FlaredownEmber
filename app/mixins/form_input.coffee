@@ -22,7 +22,10 @@ mixin = Ember.Mixin.create
   valueObserver: Ember.observer(-> @set("controller.#{@get("name")}", @get("value")) ).observes("value")
 
   present: Ember.computed(-> Ember.isPresent(@get("value")) ).property("value")
-  isValid: Ember.computed(-> @get("controller.#{@get("name")}Valid")).property("value")
+  isValid: Ember.computed(->
+    return true unless @get("controller.validations").contains(@get("name"))
+    @get("controller.#{@get("name")}Valid")
+  ).property("value")
   hasErrors: Ember.computed(-> Ember.isPresent(@get("errors")) ).property("errors")
 
   i18nKey: Ember.computed(->
