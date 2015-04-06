@@ -15,10 +15,13 @@
     background: white !important;
     text-align: left;
     height: auto;
-    padding: 0.3em;
+    padding: 0.3em 0.5em;
     font-size: 1.2em;
-    border-color: #ddd !important;
+    border-color: #ddd;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+    &:hover {
+      border-color: #c4c4c4;
+    }
     .select2-arrow {
       display: none;
     }
