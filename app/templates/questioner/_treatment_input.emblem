@@ -7,9 +7,7 @@ li
 
       a class="save-treatment" click="'save' target=view" Done
   else
-    div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
-    span.checkin-treatment-quantity= treatment.quantity
-    span.checkin-treatment-unit= treatment.unit
+    div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } #{treatment.name} &bull; #{treatment.quantity} #{treatment.unit}
     if view.editable
       if treatment.active
         .checkin-treatment-edit click="'edit' target=view" &#9662;

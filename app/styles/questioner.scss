@@ -142,15 +142,14 @@
     text-align: left;
     padding: 5px 15px;
     border-radius: 999px;
-    color: white;
-    background: $lightgrey;
-    color: grey;
-
-    &.tbg- { background-color: $primary; }
 
     &.active {
       color: white;
-      background: $primary;
+    }
+
+    &.inactive {
+      background: $lightgrey;
+      color: grey;
     }
 
   }
