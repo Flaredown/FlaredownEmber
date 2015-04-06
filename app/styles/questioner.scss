@@ -142,7 +142,7 @@
     }
   }
   .checkin-treatment-name {
-    @include span-columns(10);
+    @include span-columns(11);
     @include wrap-ellipsis;
     text-align: left;
     padding: 5px 15px;
@@ -161,8 +161,6 @@
   .checkin-treatment-edit, .checkin-treatment-remove {
     @include span-columns(1);
     text-align: center;
-  }
-  .add-treatment-input {
   }
   .dosage-form {
     width: 100%;
