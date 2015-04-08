@@ -46,7 +46,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         response.errors.fields[key].addObject error
 
     @get("validations").forEach (key) =>
-      if response.errors.fields[key] is undefined and not @get("#{key}Valid")
+      if response.errors.fields[key] is undefined and Em.isPresent(@get(key)) and not @get("#{key}Valid")
         pass = false
 
         error = { kind: "invalid", message: "The field #{key.capitalize()} is not valid"} # TODO needs I18n with placeholder
@@ -72,6 +72,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     # reset = true if typeof(reset) is "undefined"
     # @resetForm() if reset
     @set "saving", false
+    true
 
 
 `export default mixin`

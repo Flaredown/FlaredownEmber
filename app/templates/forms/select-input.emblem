@@ -2,5 +2,5 @@ label
   unless view.noLabelText
     = view.label
 
-view "forms/select2" parent=view value=view.value content=view.options placeholder=view.placeholder
+view "forms/select2" parent=view value=view.value content=view.options placeholder=view.placeholder multiple=view.multiple
 partial "forms/errors"

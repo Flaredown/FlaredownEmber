@@ -10,15 +10,31 @@ view = Ember.View.extend
       data: @get("content")
       placeholder: @get("placeholder")
       val: @get("value")
-      initSelection: ((el,callback) -> callback(@get("content").findBy("text",@get("value"))) ).bind(@)
+      multiple: @get("multiple")
+      initSelection: ((el,callback) ->
+        initialValue = @get("content").findBy("text",@get("value"))
+        callback(initialValue) if initialValue
+      ).bind(@)
     }
   ).property("content")
 
-  selected: (event) -> @set("value", event.choice.text)
+  selected: (event) ->
+    choice = event.choice.text
+    if @get("multiple")
+      @get("value").addObject(choice)
+    else
+      @set("value", choice)
+
+  removed: (event) ->
+    choice = event.choice.text
+    @get("value").removeObject(choice) if @get("multiple")
+
 
   didInsertElement: ->
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
     @$().on("select2-selecting", @selected.bind(@))
+    @$().on("select2-removing", @removed.bind(@))
+    @set("value", []) if not @get("value") and @get("multiple") is true
 
   processChildElements: -> @$().select2(@get("config")).select2("val", @get("value"))
   willDestroyElement: -> @$().select2("destroy")
