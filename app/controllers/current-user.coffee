@@ -1,4 +1,7 @@
 `import Ember from 'ember'`
+`import ajax from 'ic-ajax'`
+`import config from '../config/environment'`
+
 
 controller = Ember.ObjectController.extend
   needs: ["login"]

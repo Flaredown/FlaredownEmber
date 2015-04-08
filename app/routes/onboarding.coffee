@@ -6,13 +6,6 @@ route = AuthRoute.extend
   steps: "account research conditions catalogs symptoms treatments complete".w()
   currentStep: Ember.computed(-> @get("steps").objectAt(@get("step")) ).property("step")
 
-  # genderOptions: [
-  #   { label: "Male", value: "male"},
-  #   { label: "Female", value: "female"}
-  # ]
-
-  errors: {}
-
   actions:
     save: ->
       @set("step", @get("step")+1)

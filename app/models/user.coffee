@@ -15,6 +15,7 @@ model = DS.Model.extend
   treatmentColors:      DS.attr()
 
   settings:             DS.attr()
+  catalogs:             DS.attr()
 
   checked_in_today:     DS.attr "boolean"
 
