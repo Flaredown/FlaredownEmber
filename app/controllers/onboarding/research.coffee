@@ -20,7 +20,6 @@ controller = Ember.Controller.extend FormHandlerMixin,
 
   actions:
     save: ->
-
       if @saveForm()
         ajax("#{config.apiNamespace}/me.json",
           type: "POST"
@@ -29,6 +28,7 @@ controller = Ember.Controller.extend FormHandlerMixin,
           (response) => @endSave()
           (response) => @errorCallback(response, @)
         )
+        true # bump to route
       else
         false
 

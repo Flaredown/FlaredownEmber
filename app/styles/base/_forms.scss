@@ -26,6 +26,35 @@ label {
   }
 }
 
+.pagination-dots {
+  li {
+    display: inline-block;
+    cursor: pointer;
+    &:hover {
+      .page-dot {
+        transform: scale(1.3);
+      }
+    }
+  }
+}
+.page-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: $lightgrey;
+  margin: 3px 5px;
+  &.selected, &.active {
+    transform: scale(1.5);
+  }
+  &.complete {
+    background: $primary;
+  }
+  &.skipped {
+    background: $secondary;
+  }
+}
+
 #{$all-text-inputs},
 select[multiple=multiple],
 textarea {
