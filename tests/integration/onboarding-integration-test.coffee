@@ -5,6 +5,7 @@
 
 `import localeFixture from "../fixtures/locale-fixture"`
 `import userFixture from "../fixtures/user-fixture"`
+`import catalogDefinitionFixture from "../fixtures/catalog-definition-fixture"`
 
 App = null
 
@@ -15,8 +16,16 @@ module('Onboarding Integration Tests', {
       responseText: userFixture
 
     Ember.$.mockjax
+      url: "#{config.apiNamespace}/current_user/1",
+      responseText: userFixture
+
+    Ember.$.mockjax
       url: "#{config.apiNamespace}/locales/en",
       responseText: localeFixture
+
+    Ember.$.mockjax
+      url: "#{config.apiNamespace}/me/catalogs",
+      responseText: catalogDefinitionFixture
 
     App = startApp()
     null

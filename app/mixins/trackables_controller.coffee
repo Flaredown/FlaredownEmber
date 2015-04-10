@@ -6,11 +6,11 @@ mixin = Ember.Mixin.create
   isEntry: Ember.computed(-> @get("model.constructor.typeKey") is "entry").property("model")
 
   treatments: Ember.computed ->
-    if @get("responsesData")
-      @get("responsesData").filterBy("catalog", "treatments")
+    if @get("isEntry")
+      @get("model.treatments")
     else
       @get("currentUser.treatments")
-  .property("responsesData.@each.treatments.@each", "currentUser.treatments.@each")
+  .property("currentUser.treatments.@each")
 
   inactiveTreatments: Ember.computed(->
     actives = @get("treatments").mapBy("name")
