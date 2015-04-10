@@ -1,0 +1,10 @@
+label
+  unless view.noLabelText
+    = view.label
+
+  each option in view.options
+    div click="'set' option.value target=view" class=option.class
+      h4.option-name
+        = option.name
+
+  partial "forms/errors"

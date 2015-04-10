@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import Select2View from './select2'`
+`import Select2View from './forms/select2'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
 
@@ -54,12 +54,5 @@ view = Select2View.extend
   valueChanged: (->
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements') if $(@).state is "inDOM" and Em.isPresent(@get("value"))
   ).observes("value")
-
-  didInsertElement:     ->
-    Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
-    @$().on("select2-selecting", @selected.bind(@))
-
-  processChildElements: -> @$().select2(@get("config"))
-  willDestroyElement:   -> @$().select2("destroy")
 
 `export default view`

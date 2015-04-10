@@ -2,12 +2,12 @@
   if treatments.length
     h3 = t "which_treatments_taken_today"
     ul: each treatment in treatments
-      view "questioner/treatment" editable=true editing=treatment.added name=treatment.name
+      view "questioner/treatment" active=treatment.added name=treatment.name
 
     / ul: each treatment in inactiveTreatments
     /   view "questioner/treatment" editable=true active=false
   else
     h3 = t "oops_no_treatments_being_tracked"
 
-  br
-  view "trackable-search" class="form-treatment-search selectpicker" trackableType="treatment"
+  .checkin-search
+    view "trackable-search" class="form-treatment-search selectpicker" trackableType="treatment"

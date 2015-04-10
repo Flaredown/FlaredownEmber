@@ -3,6 +3,4 @@ label
     = view.label
 
   = input type="text" value=view.value class=view.inputClass placeholder=view.placeholder
-  if hasErrors
-    each error in errors
-      small= error
+  partial "forms/errors"

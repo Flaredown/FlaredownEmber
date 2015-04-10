@@ -1,9 +1,13 @@
 h2 = t "onboarding.treatments_to_track"
 
-form.form-inline submit="save"
+each treatment in treatments
+  h6.treatment
+  	= treatment.name
+br
 
-  |treatments magic here
+.checkin-search
+	view "trackable-search" class="form-treatment-search selectpicker" trackableType="treatment"
 
-  br
-  br
-  button#continue-button.btn click="save" = t "onboarding.continue"
+br
+br
+button#continue-button.btn click="save" = t "onboarding.continue"

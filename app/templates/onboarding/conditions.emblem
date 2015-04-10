@@ -1,9 +1,13 @@
 h2 = t "onboarding.conditions_to_track"
 
-form.form-inline submit="save"
+each condition in conditions
+  h6.condition
+  	= condition.name
+br
 
-  |conditions magic here
+.checkin-search
+	view "trackable-search" class="form-condition-search selectpicker" trackableType="condition"
 
-  br
-  br
-  button#continue-button.btn click="save" = t "onboarding.continue"
+br
+br
+button#continue-button.btn click="save" = t "onboarding.continue"

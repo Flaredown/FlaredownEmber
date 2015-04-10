@@ -2,7 +2,11 @@ h2 = t "onboarding.research_questions_for_conditions"
 
 form.form-inline submit="save"
 
-  |catalogs magic here
+  each description in catalogDescriptions
+    h2 = description.title
+    ul: each section in description.sections
+      li = section
+
 
   br
   br

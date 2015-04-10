@@ -1,0 +1,15 @@
+// Mixins
+@mixin standard-shadow {
+  box-shadow: 0 4px 0 $shadow;
+}
+@mixin card {
+	@include standard-shadow;
+	border-radius: 5px;
+	background: white;
+	padding: 30px;
+}
+@mixin wrap-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

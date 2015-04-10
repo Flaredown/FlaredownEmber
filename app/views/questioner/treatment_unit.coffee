@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
-`import Select2View from '../select2'`
+`import Select2View from '../forms/select2'`
 
 view = Select2View.extend
 

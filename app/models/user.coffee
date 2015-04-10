@@ -4,6 +4,7 @@ model = DS.Model.extend
   obfuscated_id:        DS.attr "string"
   entries:              DS.hasMany "entry"
   treatments:           DS.hasMany "treatment"
+  conditions:           DS.hasMany "condition"
   symptoms:             DS.hasMany "symptoms"
 
   locale:               DS.attr "string"
@@ -12,6 +13,9 @@ model = DS.Model.extend
 
   symptomColors:        DS.attr()
   treatmentColors:      DS.attr()
+
+  settings:             DS.attr()
+  catalogs:             DS.attr()
 
   checked_in_today:     DS.attr "boolean"
 

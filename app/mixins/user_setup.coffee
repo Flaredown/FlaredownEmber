@@ -22,7 +22,10 @@ mixin = Ember.Mixin.create
           # Ask the API for the locale for the current user
           ajax("#{config.apiNamespace}/locales/#{controller.get("locale")}").then(
             (locale) =>
-              Ember.I18n.translations = locale[controller.get("locale")]
+              if Ember.keys(Ember.I18n.translations).length
+                Ember.I18n.translations.setProperties = locale[controller.get("locale")]
+              else
+                Ember.I18n.translations = Ember.Object.create(locale[controller.get("locale")])
               controller.get("controllers.login").redirectToTransition()
               app.advanceReadiness() unless app_is_ready
 

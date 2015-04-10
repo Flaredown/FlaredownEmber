@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="275px" height="216px" viewBox="0 0 275 216" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>checkin-success</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.0733327672 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="create-account-9" sketch:type="MSArtboardGroup" transform="translate(-150.000000, -254.000000)">
+            <g id="checkin-success" sketch:type="MSLayerGroup" transform="translate(150.000000, 254.000000)">
+                <g id="Oval-113-+-Oval-110-+-Oval-110-+-Oval-110" transform="translate(96.500000, 119.500000) scale(-1, 1) translate(-96.500000, -119.500000) translate(0.000000, 23.000000)" sketch:type="MSShapeGroup">
+                    <ellipse id="Oval-113" fill="#F6A623" cx="96.2612613" cy="96.6796396" rx="95.7908108" ry="95.7908108"></ellipse>
+                    <g id="Oval-110-+-Oval-110-+-Oval-110" transform="translate(48.117117, 52.234234)" fill="#F2EEE8">
+                        <ellipse id="Oval-110" cx="11.0649595" cy="10.4183784" rx="10.3423423" ry="10.3423423"></ellipse>
+                        <ellipse id="Oval-110" cx="84.8378378" cy="16.7607207" rx="10.3423423" ry="10.3423423"></ellipse>
+                        <path d="M3.76367506,49.415367 C5.28653663,53.7999023 7.79908786,57.9170575 11.3013288,61.4192984 C23.6948009,73.8127705 43.7885894,73.8127705 56.1820616,61.4192984 C59.7608712,57.8404888 62.3062434,53.6195835 63.8181781,49.1274129 C63.8181779,49.1274129 3.76367386,49.4153674 3.76367506,49.415367 Z" id="Oval-110" transform="translate(33.790927, 59.920908) rotate(6.000000) translate(-33.790927, -59.920908) "></path>
+                    </g>
+                </g>
+                <g id="Rectangle-23-+-Nice-job!" transform="translate(212.500000, 55.000000) scale(-1, 1) translate(-212.500000, -55.000000) translate(150.000000, 0.000000)">
+                    <path d="M0,8.99546732 C0,4.0274079 4.03661586,0 9.00707394,0 L108.260516,0 C113.234985,0 117.267589,4.03888536 117.267589,8.99546732 L117.267589,47.4796285 C117.267589,52.4476879 113.234698,56.4750958 108.259742,56.4750958 L105.690385,56.4750958 C105.690385,56.4750958 102.009847,83.9734045 124.776668,109.991781 C98.8501442,100.669911 87.7177413,56.4750958 87.7177413,56.4750958 L8.99554262,56.4750958 C4.02744162,56.4750958 0,52.4362104 0,47.4796285 L0,8.99546732 Z" id="Rectangle-23" stroke="#E8E8E8" fill="#FFFFFF" filter="url(#filter-1)" sketch:type="MSShapeGroup"></path>
+                    <text id="Nice-job!" sketch:type="MSTextLayer" transform="translate(57.127105, 26.906194) scale(-1, 1) translate(-57.127105, -26.906194) " font-family="Proxima Nova" font-size="18.1490909" font-weight="260" fill="#4A4A4A">
+                        <tspan x="20.9428948" y="33.9790414">Nice job!</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -2,21 +2,26 @@
 `import Ember from 'ember'`
 
 route = AuthRoute.extend
-  step: 0
   steps: "account research conditions catalogs symptoms treatments complete".w()
-  currentStep: Ember.computed(-> @get("steps").objectAt(@get("step")) ).property("step")
+  step: ""
 
-  # genderOptions: [
-  #   { label: "Male", value: "male"},
-  #   { label: "Female", value: "female"}
-  # ]
+  beforeModel: (transition) ->
+    @_super()
+    step = if transition.targetName is "onboarding"
+      "account"
+    else
+      transition.targetName.split(".")[1]
 
-  errors: {}
+    @set("step", step)
+
+  setupController: (controller, model) ->
+    @_super(controller, model);
+    controller.set("steps", @get("steps").map (step) -> "onboarding.#{step}")
 
   actions:
     save: ->
-      @set("step", @get("step")+1)
-      @transitionTo("onboarding.#{@get("currentStep")}")
+      @set "step", @get("steps")[@get("steps").indexOf(@get("step"))+1]
+      @transitionTo("onboarding.#{@get("step")}")
 
 `export default route`
 

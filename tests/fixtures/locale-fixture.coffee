@@ -19,13 +19,22 @@ fixture = {
         "complication_anal_fissure":"Anal Fissure",
         "complication_fistula":"Fistula",
         "complication_abscess":"Abscess"
-      }
+      },
+      "rapdi3": {}
     },
     treatment_units: [
       "pill",
       "patch",
       "syringe"
-    ]
+    ],
+    location_options: {
+      US: "United States"
+    },
+    onboarding: {
+      highest_education_options: [],
+      ethnic_origin_options: [],
+      occupation_options: []
+    }
 
   }
 }

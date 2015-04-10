@@ -1,9 +1,9 @@
 .checkin-date = fancyDate
-.checkin-pagination
+.pagination-dots
   ul
     each sec in sections
       li click="'setSection' sec.number"
-        a.checkin-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
+        a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
 liquid-with section as liquidSection
   .checkin-content: partial currentPartial
