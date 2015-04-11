@@ -1,0 +1,33 @@
+.modal
+
+  = input type="checkbox" class="modal-state" id="modal-account" checkedBinding="modalOpen"
+  .modal-window
+    .modal-inner
+      label.modal-close for="modal-account" &times;
+      div
+        if editing
+          form.form-inline submit="save"
+            view "forms/selectInput" name="location" optionsTranslationRoot=false
+
+            h4.birthday = t "onboarding.dob"
+            view "forms/textInput" name="dobMonth" placeholder="08"
+            view "forms/textInput" name="dobDay" placeholder="22"
+            view "forms/textInput" name="dobYear" placeholder="1980"
+
+            /view "forms/switchInput" name="icecream"
+
+            view "forms/radioInput" name="sex"
+            view "forms/textInput" name="gender"
+
+            button#continue-button.btn click="save" = t "save"
+
+        else
+          h5 {{dobMonth}} / {{dobDay}} / {{dobYear}}
+          h5 = location
+          h5 = sex
+          h5 = gender
+
+          br
+          br
+
+          a href="javascript:void(0);" click="edit" | {{t "edit_account"}}

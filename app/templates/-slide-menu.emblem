@@ -5,7 +5,8 @@ if currentUser.loggedIn
       li: link-to "insights" | = t "menu_item_stats"
       li: link-to "reports" | = t "menu_item_investigations"
       li.navbar-slide-account #{currentUser.email}
-      li = t "menu_item_account"
+      li
+        link-to "graph.account" | = t "menu_item_account"
       li = t "menu_item_print"
       li = t "menu_item_logout"
   .js-menu-screen.menu-screen

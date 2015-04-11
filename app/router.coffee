@@ -6,20 +6,23 @@ Router = Ember.Router.extend
   location: config.locationType
 
 Router.map ->
+  # Pre-Auth
   @resource "login", path: "login"
   @resource "register", path: "register"
   @resource "form-error", path: "form-error"
 
   @route "inviteRegister", path: "accept-invitation/:invitation_token"
 
+  # Post-Auth
   @resource "graph", path: "", ->
     @route "checkin", path: "/checkin/:date/:section"
+    @route "account", path: "/my-account"
 
-  @resource "insights", path: "insights"
+  @resource "insights", path: "/insights"
 
-  @resource "reports", path: "reports"
+  @resource "reports", path: "/reports"
 
-  @resource "onboarding", path: "onboarding", ->
+  @resource "onboarding", path: "/onboarding", ->
     @route "account",     path: "/account"
     @route "research",    path: "/research-questions"
     @route "conditions",  path: "/conditions"
