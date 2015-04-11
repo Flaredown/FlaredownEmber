@@ -1,6 +1,6 @@
 label
-  unless view.noLabelText
-    = view.label
+unless view.noLabelText
+  = view.label
 
-  = input type="text" value=view.value class=view.inputClass placeholder=view.placeholder
-  partial "forms/errors"
+= input type="text" value=view.value class=view.inputClass placeholder=view.placeholder
+partial "forms/errors"
