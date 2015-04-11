@@ -47,12 +47,12 @@ label {
   &.selected, &.active {
     transform: scale(1.5);
   }
-  &.complete {
-    background: $primary;
-  }
-  &.skipped {
-    background: $secondary;
-  }
+  // &.complete {
+  //   background: $primary;
+  // }
+  // &.skipped {
+  //   background: $secondary;
+  // }
 }
 
 #{$all-text-inputs},
