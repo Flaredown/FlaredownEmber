@@ -1,3 +1,5 @@
 .checkin-note
-	h3 = t "what_else_happened_today"
-	view "note"
+  h3 What else happened today?
+
+  view "questioner/note"
+  view "questioner/tag-search"
