@@ -23,6 +23,8 @@ view = Select2View.extend
       minimumResultsForSearch: 1
       placeholder: @get("placeholder")
       formatResult: @get("formatted").bind(@)
+      dropdownCssClass: "tag-search"
+      containerCssClass: "tag-search"
       # formatInputTooShort: -> "Keep typing..."
       opts:
         shouldFocusInput: false
