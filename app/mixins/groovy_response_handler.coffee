@@ -15,10 +15,10 @@ mixin = Ember.Mixin.create
   # hides modal if it is open
   ##
 
-  modalChanged: Ember.observer ->
-    unless @get("modalOpen")
-      @set("modalOpen", false)
-  .observes("modalOpen")
+  # modalChanged: Ember.observer ->
+  #   unless @get("modalOpen")
+  #     @set("modalOpen", false)
+  # .observes("modalOpen")
 
   ##
   # acts like a sort of constructor for
@@ -59,7 +59,7 @@ mixin = Ember.Mixin.create
     @set("errors", null)
     if @get("proxy") isnt null
       @get("proxy").destroy()
-    @set("modalOpen", false)
+    # @set("modalOpen", false)
 
   setupProxy : (controller) ->
     content = if typeof controller is "undefined" then {} else controller
