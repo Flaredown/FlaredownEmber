@@ -1,14 +1,14 @@
 li
   if treatment.active
     form.dosage-form submit="'save' target=view"
-      h4 class={:checkin-treatment-name view.active:active:inactive view.colorClass }
-        |What's your daily dose of #{treatment.name}
+      div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
+      p What's your daily dose of {{treatment.name}}
+
       label for="treatment-quantity" Quantity
       = input class="treatment-quantity-input" placeholder="30" name="treatment-quantity"  type="number" step="0.01" min="0" valueBinding="treatment.quantity"
       label Unit
       view "questioner/treatment-unit" value=treatment.unit
 
-      / a class="save-treatment" click="'save' target=view" Done
   else
     div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
     .checkin-treatment-remove click="'destroy' treatment target=view" &times;
