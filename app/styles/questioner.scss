@@ -133,11 +133,28 @@
     @include span-columns(1);
     text-align: center;
   }
-  .dosage-form {
+  form {
     width: 100%;
-    border: 1px solid $primary;
-    box-shadow: 0 0 3px $primary;
-    padding: 25px;
+  }
+  .checkin-treatment-dose-inputs {
+    text-align: left;
+    & > * {
+      font-size: .8em;
+    }
+    .treatment-quantity-input {
+      width: 25%;
+      padding: 4px;
+      display: inline-block;
+      margin: 3px 0 0 10%;
+    }
+    .select2-container {
+      width: 50%;
+      display: inline-block;
+      margin: 0 0 0 3px;
+    }
+    .select2-choice {
+      padding: 0 3px;
+    }
   }
   .save-treatment {
     margin-top: 20px;
