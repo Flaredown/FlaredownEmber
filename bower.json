@@ -21,7 +21,7 @@
     "handlebars": "2.0.0",
     "ember-i18n": "3.0.0-beta.3",
     "pickadate": "~3.5.4",
-    "select2": "git@github.com:theworkerant/select2.git#monkey-patch-3.5"
+    "select2": "https://github.com/theworkerant/select2.git#monkey-patch-3.5"
   },
   "devDependencies": {
     "jquery-mockjax": "~1.6.1",
