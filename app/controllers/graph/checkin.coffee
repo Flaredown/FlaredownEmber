@@ -185,7 +185,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
       @propertyDidChange("responsesData")
       @send("nextSection") if @get("sectionQuestions.length") is 1
 
-
     setSection: (section) ->
       @set("section", section) if @get("sections").mapBy("number").contains(section)
     nextSection: ->

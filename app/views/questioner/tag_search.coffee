@@ -15,7 +15,7 @@ view = Select2View.extend
   classNames: ['tag-search', "note-tag-search"]
 
   reset: -> @rerender() # start from scratch with blank search
-  selected: (event) -> @reset()
+  selected: (event) -> $(".checkin-note-textarea .hashtag.current").text("##{event.choice.text}")
   closed:   (event) -> @reset()
 
   config: Ember.computed( ->
@@ -47,15 +47,5 @@ view = Select2View.extend
         cache: true
     }
   ).property()
-
-  # config: Ember.computed( ->
-  #   {
-  #     minimumSearchResults: 1
-  #     initSelection: ((el,callback) -> callback({id:0, text: @get("value")}) ).bind(@)
-  #     data: @get("content")
-  #     createSearchChoice: ((term) -> {id: 0, text: term} unless @get("content").mapBy("text").contains(term) ).bind(@)
-  #   }
-  #
-  # ).property("content")
 
 `export default view`

@@ -2,4 +2,4 @@
   h3 What else happened today?
 
   view "questioner/note"
-  / view "questioner/tag-search"
+  view "questioner/tag-search"

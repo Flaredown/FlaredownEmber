@@ -33,33 +33,21 @@ view = Ember.View.extend
   isPlaceheld: Ember.computed(-> @$().text() is "Use #hashtags to mark triggers on the graph").property().volatile()
   setPlaceholder: -> @$().html(@placeholder) if Ember.isEmpty(@$().text())
 
+  tagSuggestions: Ember
+
   hashtaggedContent: ->
     replaced = @get("value").replace(@invalidTagRegex, "$1")
     replaced = replaced.replace(@brokenTagRegex, "$1</a>$3")
     replaced = replaced.replace(@joinedTagRegex, "$1$3</a>")
-    replaced = replaced.replace(@tagRegex, "<a class='hashtag'>$1</a>")
+    replaced = replaced.replace(@tagRegex, "<a class='hashtag current'>$1</a>")
     replaced = replaced.replace(@finishedTagRegex, "$1</a>$2")
     replaced
 
-  currentTag: Ember.computed( ->
-    if @get("currentTagIndex")
-      tagText = @get("textNodes")[@get("currentTagIndex")].textContent
-      @set("currentTag", tagText.substring(1,tagText.length)) # trim the #
-  ).property()
+  currentTagText: (node) ->
+    tagText = @get("textNodes")[node].textContent
+    tagText = tagText.substring(1,tagText.length) # trim the #
 
   tagMatches: -> [@$().html().match(@tagRegex), @$().html().match(@finishedTagRegex), @$().html().match(@brokenTagRegex), @$().html().match(@joinedTagRegex), @$().html().match(@invalidTagRegex)]
-
-  # tagSearchWatcher: Ember.observer ->
-  #   if @get("currentTag") and @get("currentTagIndex")
-  #
-  #     tagText = @get("textNodes")[@get("currentTagIndex")].textContent
-  #     tagText = tagText.substring(1,tagText.length) # trim the #
-  #
-  #     $(".note-tag-search").select2("search", tagText)
-  #     @setStart(@get("textNodes")[@get("currentTagIndex")], @get("textNodes")[@get("currentTagIndex")].length)
-  #   else
-  #     $(".note-tag-search").select2("close")
-  # .observes("currentTag")
 
   allTextNodes: (node) ->
     textNodes = []
@@ -123,9 +111,17 @@ view = Ember.View.extend
         unless currentTagNode
           @get("textNodes").forEach (node, index) -> currentTagNode = index if match is node.textContent
 
-        # Now set cursor
         [node,offset] = [@get("textNodes")[currentTagNode],1]
 
+        if new_match # do tag search
+          $(".note-tag-search").select2("search", @currentTagText(currentTagNode))
+          @setStart(@get("textNodes")[currentTagNode], @get("textNodes")[currentTagNode].length)
+
+        if finished_match # clear "current" class from most recent tag and close suggestions
+          @$(".hashtag").removeClass("current")
+          $(".note-tag-search").select2("close")
+
+        # Now set cursor
         if new_match and match.length is 3
           offset = node.length
         else if finished_match or broken_match
@@ -169,10 +165,28 @@ view = Ember.View.extend
     document.execCommand('insertText', false, text)
     @textAdded()
 
+  keyDown:    (event) ->
+    # Prevent enter, and up/down arrows while hashtagging
+    event.preventDefault() if [13,38,40].contains(event.keyCode) and @$(".hashtag.current").length
+
   keyUp:    (event) ->
-    if event.keyCode is 27 # keyboard: escape
-      @get("controller").set("modalOpen", false)
-    else
-      @textAdded()
+    switch event.keyCode
+      when 27 # keyboard: escape
+        @get("controller").set("modalOpen", false)
+      when 13 # keyboard: enter
+        if @$(".hashtag.current").length
+          $("input.note-tag-search").select2("selectHighlighted")
+          event.preventDefault()
+      when 38 # keyboard: up arrow
+        if @$(".hashtag.current").length
+          $("input.note-tag-search").select2("moveHighlight", -1)
+          event.preventDefault()
+      when 40 # keyboard: down arrow
+        if @$(".hashtag.current").length
+          $("input.note-tag-search").select2("moveHighlight", 1)
+          event.preventDefault()
+
+      else
+        @textAdded()
 
 `export default view`
