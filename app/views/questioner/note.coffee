@@ -6,11 +6,11 @@ view = Ember.View.extend
   templateName: "questioner/note-textarea"
   classNames: ["checkin-note-textarea"]
 
-  tagRegex: /(?!<a[^>]*?>)(\B#\w\w+)(?![^<]*?<\/a>)/gim                # Replace content with tagged content if untransformed tag text exists
-  finishedTagRegex: /(?!<[^>]+>)(\B#\w\w+)(\W+|\&nbsp;)<[^>]+>/gim     # Escape <a> if the user enters anything but word characters after the tag
-  brokenTagRegex: /(<a[^>]*?>(\B#\w+))((\W{1}|\&nbsp;{1})\w+)<\/a>/gim # Put <a> back at beginning of tag
-  joinedTagRegex: /(<a[^>]*?>(\B#\w\w+))<\/a>(\w+)/gim                 # Put <a> at the end of current tag and joined text
-  invalidTagRegex: /<a[^>]*?>(\B#\w{1}|\w.+|\B#\W{1}\w+)<\/a>/gim      # Hash symbol removed, or #+ only 1 character or hash split off
+  tagRegex: /(?!<a[^>]*?>)(\B#\w\w+)(?![^<]*?<\/a>)/gim                 # Replace content with tagged content if untransformed tag text exists
+  finishedTagRegex: /(?!<[^>]+>)(\B#\w\w+)(\W+|\&nbsp;)<[^>]+>/im       # Escape <a> if the user enters anything but word characters after the tag
+  brokenTagRegex: /(<a[^>]*?>(\B#\w+))((\W{1}|\&nbsp;{1})\w+)<\/a>/im   # Put <a> back at beginning of tag
+  joinedTagRegex: /(<a[^>]*?>(\B#\w\w+))<\/a>(\w+)/im                   # Put <a> at the end of current tag and joined text
+  invalidTagRegex: /<a[^>]*?>(\B#\w{1}|\w.+|\B#\W{1}\w+)<\/a>/im       # Hash symbol removed, or #+ only 1 character or hash split off
 
   currentTagIndex: null
 
@@ -47,7 +47,7 @@ view = Ember.View.extend
       @set("currentTag", tagText.substring(1,tagText.length)) # trim the #
   ).property()
 
-  tagMatches: -> [@$().html().match(@tagRegex), @$().html().match(@finishedTagRegex), @$().html().match(@brokenTagRegex), @$().html().match(@joinedTagRegex), @$().html().match(@invalidTagRegex)].compact()
+  tagMatches: -> [@$().html().match(@tagRegex), @$().html().match(@finishedTagRegex), @$().html().match(@brokenTagRegex), @$().html().match(@joinedTagRegex), @$().html().match(@invalidTagRegex)]
 
   # tagSearchWatcher: Ember.observer ->
   #   if @get("currentTag") and @get("currentTagIndex")
@@ -103,12 +103,13 @@ view = Ember.View.extend
       #   @$().html(@hashtaggedContent()) while @tagMatches().length
 
 
-      #bla freak #la dee #daa ergle #bla
-      if @tagMatches().length > 1
-        @$().html(@hashtaggedContent()) # pasted content, don't bother with cursor position
+      matches = @tagMatches()
+      # test string.... #bla freak #la dee #daa ergle #bla
+      if matches[0] and matches[0].length > 1
+        @$().html(@hashtaggedContent()) # pasted content, only new matches and don't bother with cursor position
 
-      else if @tagMatches().length is 1
-        [new_match, finished_match, broken_match, joined_match, invalid_match] = @tagMatches()
+      else if matches.compact().length is 1 and not @get("isPlaceheld")
+        [new_match, finished_match, broken_match, joined_match, invalid_match] = matches
 
         match = new_match[0] if new_match
         match ||= finished_match[1] if finished_match
@@ -121,8 +122,7 @@ view = Ember.View.extend
         if invalid_match or (new_match and match.length > 3)
           @get("textNodes").forEach (node, index) -> currentTagNode = index if match is node.textContent
 
-        # Content replaced
-        @$().html(@hashtaggedContent())
+        @$().html(@hashtaggedContent()) # Content replaced
 
         # Find the current node based on match
         unless currentTagNode
@@ -130,7 +130,6 @@ view = Ember.View.extend
 
         # Now set cursor
         [node,offset] = [@get("textNodes")[currentTagNode],1]
-
         if new_match and match.length is 3
           offset = node.length
         else if finished_match or broken_match
@@ -153,18 +152,21 @@ view = Ember.View.extend
     @$('font').contents().unwrap()
 
   didInsertElement: ->
+    console.log @get("value"),@get("controller.notes")
     @set "value", @get("controller.notes")
-    @setPlaceholder()
+    @$().html(@get("value"))
     @textAdded()
+    @setPlaceholder()
 
     @$().on("paste", @paste.bind(@))
     Ember.run.next => @$().focus() unless @get("isPlaceheld")
 
   # Only on modal close instead
   # willDestroyElement: ->
-  #   @get("controller").send("save")
+    # @set "value", @get("controller.notes")
+    # @get("controller").send("save")
 
-  focusIn:          -> @$().text("") if @get("isPlaceheld")
+  focusIn: -> @$().text("") if @get("isPlaceheld")
 
   paste: (event) ->
     event.preventDefault()
