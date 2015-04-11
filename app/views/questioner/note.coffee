@@ -98,11 +98,6 @@ view = Ember.View.extend
       # Then HTML is updated and the cursor position set only when the above events happen
       # this prevents needing to track cursor position in HTML soup
 
-
-      # if @tagMatches().length and @tagMatches().length > 1 # mutliple tags via pasting text
-      #   @$().html(@hashtaggedContent()) while @tagMatches().length
-
-
       matches = @tagMatches()
       # test string.... #bla freak #la dee #daa ergle #bla
       if matches[0] and matches[0].length > 1
@@ -119,7 +114,7 @@ view = Ember.View.extend
 
         currentTagNode = 0
 
-        if invalid_match or (new_match and match.length > 3)
+        if invalid_match or (new_match and match.length > 3) or joined_match
           @get("textNodes").forEach (node, index) -> currentTagNode = index if match is node.textContent
 
         @$().html(@hashtaggedContent()) # Content replaced
@@ -130,6 +125,7 @@ view = Ember.View.extend
 
         # Now set cursor
         [node,offset] = [@get("textNodes")[currentTagNode],1]
+
         if new_match and match.length is 3
           offset = node.length
         else if finished_match or broken_match
@@ -152,7 +148,6 @@ view = Ember.View.extend
     @$('font').contents().unwrap()
 
   didInsertElement: ->
-    console.log @get("value"),@get("controller.notes")
     @set "value", @get("controller.notes")
     @$().html(@get("value"))
     @textAdded()
