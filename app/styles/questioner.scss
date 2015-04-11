@@ -237,5 +237,8 @@
     .hashtag {
       color: $primary;
     }
+    &:focus {
+      outline: none;
+    }
   }
 }
