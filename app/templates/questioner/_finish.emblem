@@ -3,5 +3,3 @@ h1 = t "checkin_complete"
 p = t "x_of_y_sections_completed" x=completedQuestionSections.length y=questionSections.length
 
 img src="assets/checkin-success.svg" alt="success!"
-
-h2: a href="javascript:void(0)" click="'closeCheckin'" = t "close_me"
