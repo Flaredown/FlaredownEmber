@@ -5,15 +5,11 @@
     each symptom in sectionQuestions
       view "questioner/symptom" active=true
 
-    br
     ul: each symptom in inactiveSymptoms
       view "questioner/symptom" active=false
 
   else
     h3 = t "oops_no_symptoms_being_tracked"
 
-    p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-  br
   .checkin-search
     view "trackable-search" class="form-symptom-search selectpicker" trackableType="symptom"

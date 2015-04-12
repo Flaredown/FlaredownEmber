@@ -1,7 +1,6 @@
 .checkin-questions
 
   h3 = currentSectionPrompt
-  p = t "thanks_for_contributing"
 
   each question in sectionQuestions
     = questioner-input type="catalog" question=question section=currentSection responses=responsesData action="setResponse"

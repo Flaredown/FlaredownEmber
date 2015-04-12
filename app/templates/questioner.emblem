@@ -14,8 +14,7 @@ liquid-with section as liquidSection
 
 	if isLastSection
 		a.checkin-back href="javascript:void(0);" click="previousSection" = t "back_caps"
-		a.checkin-back href="javascript:void(0);" click="closeCheckin"
-			strong = t "done_caps"
+		a.checkin-back href="javascript:void(0);" click="closeCheckin" = t "done_caps"
 
 	unless isFirstSection
 		unless isLastSection

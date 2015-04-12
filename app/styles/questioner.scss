@@ -1,19 +1,17 @@
 ////////////// Global Questioner Styles ///////////////
-.checkin-content {
-  min-height: 150px;
-}
 #questioner {
   text-align: center;
   outline: none;
   width: 100%;
   .checkin-date {
-    padding: 40px 0 20px 0;
+    padding: 20px 0 20px 0;
+    color: grey;
   }
   .checkin-content {
     margin: 20px 0 0 0;
     h3 {
       max-width: 90%;
-      margin: 0 auto 20px auto;
+      margin: 20px auto 40px auto;
     }
   }
   .checkin-questions {
@@ -24,12 +22,11 @@
   .checkin-navigate {
     display: inline-block;
     width: 100%;
-    margin-top: 20px;
   }
   .checkin-back, .checkin-next {
     display: inline-block;
     text-align: center;
-    padding: 20px 0;
+    padding: 30px 0;
     width: 50%;
   }
   .checkin-response {
@@ -38,7 +35,7 @@
   .checkin-search {
     width: 90%;
     max-width: 350px;
-    margin: 10px auto;
+    margin: 60px auto 20px auto;
   }
 }
 
