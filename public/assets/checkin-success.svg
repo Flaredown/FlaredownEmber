@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="275px" height="216px" viewBox="0 0 275 216" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+<svg width="355px" height="216px" viewBox="0 0 355 216" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3 (11970) - http://www.bohemiancoding.com/sketch -->
     <title>checkin-success</title>
     <desc>Created with Sketch.</desc>
     <defs>
@@ -15,11 +15,11 @@
         </filter>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="create-account-9" sketch:type="MSArtboardGroup" transform="translate(-150.000000, -254.000000)">
-            <g id="checkin-success" sketch:type="MSLayerGroup" transform="translate(150.000000, 254.000000)">
+        <g id="create-account-9" sketch:type="MSArtboardGroup" transform="translate(-68.000000, -240.000000)">
+            <g id="checkin-success" sketch:type="MSLayerGroup" transform="translate(147.500000, 240.000000)">
                 <g id="Oval-113-+-Oval-110-+-Oval-110-+-Oval-110" transform="translate(96.500000, 119.500000) scale(-1, 1) translate(-96.500000, -119.500000) translate(0.000000, 23.000000)" sketch:type="MSShapeGroup">
-                    <ellipse id="Oval-113" fill="#F6A623" cx="96.2612613" cy="96.6796396" rx="95.7908108" ry="95.7908108"></ellipse>
-                    <g id="Oval-110-+-Oval-110-+-Oval-110" transform="translate(48.117117, 52.234234)" fill="#F2EEE8">
+                    <ellipse id="Oval-113" fill="#73C1BA" cx="96.2612613" cy="96.6796396" rx="95.7908108" ry="95.7908108"></ellipse>
+                    <g id="Oval-110-+-Oval-110-+-Oval-110" transform="translate(48.117117, 52.234234)" fill="#FFFFFF">
                         <ellipse id="Oval-110" cx="11.0649595" cy="10.4183784" rx="10.3423423" ry="10.3423423"></ellipse>
                         <ellipse id="Oval-110" cx="84.8378378" cy="16.7607207" rx="10.3423423" ry="10.3423423"></ellipse>
                         <path d="M3.76367506,49.415367 C5.28653663,53.7999023 7.79908786,57.9170575 11.3013288,61.4192984 C23.6948009,73.8127705 43.7885894,73.8127705 56.1820616,61.4192984 C59.7608712,57.8404888 62.3062434,53.6195835 63.8181781,49.1274129 C63.8181779,49.1274129 3.76367386,49.4153674 3.76367506,49.415367 Z" id="Oval-110" transform="translate(33.790927, 59.920908) rotate(6.000000) translate(-33.790927, -59.920908) "></path>
