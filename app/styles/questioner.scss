@@ -98,6 +98,7 @@
       align-items: center;
       margin-bottom: 15px;
     }
+    .bg-default, .tbg- { background-color: $primary; }
   }
   .checkin-treatment-name {
     @include span-columns(11);
