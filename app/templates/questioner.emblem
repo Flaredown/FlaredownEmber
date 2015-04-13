@@ -1,15 +1,18 @@
 .checkin-date = fancyDate
 .pagination-dots
-  ul
-    each sec in sections
-      li click="'setSection' sec.number"
-        a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
+	ul
+		each sec in sections
+			li click="'setSection' sec.number"
+				a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
 liquid-with section as liquidSection
-  .checkin-content: partial currentPartial
+	.checkin-content: partial currentPartial
 
 .checkin-navigate
 
-  unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" = t "back_caps"
-  unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" = t "next_caps"
+	unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" = t "back_caps"
 
+	unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" = t "next_caps"
+
+	if isLastSection
+		a.checkin-back href="javascript:void(0);" click="closeCheckin" = t "done_caps"

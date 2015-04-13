@@ -2,11 +2,8 @@
 body {
   background: $background;
   font-family: $proxima-regular;
-  margin: 0 10px;
   position: relative;
-  @media (min-width: $container) {
-    margin: 0;
-  }
+  margin: 0;
 }
 ul {
   list-style-type: none;

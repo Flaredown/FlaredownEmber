@@ -10,13 +10,15 @@
 	h4.birthday {
 		margin-top: 50px;
 	}
-	.form-dob-year {
-		margin-bottom: 50px;
-	}
 	.location-input {
 		margin-bottom: 60px;
 	}
-	#continue-button {
-		float: right;
+}
+.onboarding-dob-wrapper {
+	.text-input {
+		@include span-columns(4);
 	}
+}
+#continue-button {
+	float: right;
 }
