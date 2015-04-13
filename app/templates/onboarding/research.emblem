@@ -1,6 +1,6 @@
 h2 = t "onboarding.optional_research"
 
-form.form-inline submit="save"
+form submit="save"
   view "forms/selectInput" name="ethnicOrigin" multiple=true
   view "forms/selectInput" name="occupation"
   view "forms/selectInput" name="highestEducation"

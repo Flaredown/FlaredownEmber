@@ -46,5 +46,11 @@ mixin = Ember.Mixin.create
     Ember.I18n.t(key)
   ).property("i18nKey")
 
+  placeholderText: Ember.computed(->
+    return @get("placeholder") if @get("placeholder")
+    name = @get("name").underscore()
+    key = if @get("i18nKey") then Ember.I18n.t("#{@get("i18nKey")}.#{name}_placeholder") else ""
+  ).property("i18nKey")
+
 `export default mixin`
 

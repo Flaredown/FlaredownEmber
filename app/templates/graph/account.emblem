@@ -6,7 +6,7 @@
       label.modal-close for="modal-account" &times;
       div
         if editing
-          form.form-inline submit="save"
+          form submit="save"
             view "forms/selectInput" name="location" optionsTranslationRoot=false
 
             label = t "onboarding.dob"

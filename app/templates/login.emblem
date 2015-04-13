@@ -1,45 +1,13 @@
-.container: .row
-  .col-md-12
-    if loggedIn
-      p = t "you_are_already_logged_in"
-    else
-      form.form-inline submit="login"
+.login-form
+  if loggedIn
 
-        if errorMessage
-          .row
-            .col-md-12.has-error style="text-align:center"
-              = errorMessage
-              br
-              br
+    p = t "unauthenticated.you_are_already_logged_in"
 
-        .row
-          div class={emailError:has-error :col-md-12 :form-group}
-            label = t "unauthenticated.login_email"
-            = input type="email" valueBinding="email" class="form-email form-control" placeholder=yourEmailTranslation id="email"
-            if emailError
-              ul id="email-messages"
-                each message in emailMessages
-                  li=message.message
-          div class={passwordError:has-error :col-md-12 :form-group}
-            label = t "unauthenticated.login_password"
-            = input type="password" valueBinding="password" class="form-password form-control" placeholder=yourPasswordTranslation id="password"
-            if passwordError
-              ul id="password-messages"
-                each message in passwordMessages
-                  li=message.message
+  else
+    form submit="login"
 
-          br
-        .row
-          .col-md-6
-            button.btn.btn-success.col-md-12 id="login-button" = t "login_button"
-          .col-md-6
-            link-to "register" class="btn btn-default col-md-12" | {{ t "login_register_now" }}
+      view "forms/textInput" name="email"
+      view "forms/passwordInput" name="password"
 
-  if modalOpen
-    .modal
-      Ember.Checkbox class="modal-state" id="modal-1" checkedBinding="modalOpen"
-      .modal-window
-        .modal-inner
-          label.modal-close for="modal-1"
-          h1 = modal_title
-          p.intro = modal_message
+      button#login-button.btn click="login" = t "unauthenticated.login_button"
+      link-to "register" id="register-button" class="btn" | {{ t "unauthenticated.login_register_now" }}

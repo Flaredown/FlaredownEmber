@@ -35,10 +35,12 @@ mixin = Ember.Mixin.create
         if Ember.typeOf(Ember.I18n.translations) is "object" then Ember.I18n.translations = Ember.Object.create({})
         Ember.I18n.translations.setProperties locale[@controller.get("locale")]
 
-        # Send to proper place based on login status
-        @controller.get("controllers.login").redirectToTransition() if @controller.get("controllers.login.isAuthenticated")
+        if @app_is_ready
+          # Send to proper place based on login status
+          @controller.get("controllers.login").redirectToTransition() if @controller.get("controllers.login.isAuthenticated")
+        else
+          @app.advanceReadiness()
 
-        @app.advanceReadiness() unless @app_is_ready
 
       (response) =>
         @errorCallback(response, @) # TODO this doesn't work
