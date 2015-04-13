@@ -16,7 +16,6 @@ mixin = Ember.Mixin.create
       when "general"
         @handleGeneralErrors(response.errors.title, response.errors.description)
       when "generic"
-        console.log response
         @handleGenericErrors(response.errors.title, response.errors.description)
 
   handleInlineErrors: (errors)->
