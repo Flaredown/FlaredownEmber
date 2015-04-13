@@ -89,7 +89,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
           completable   = research or @get("userQuestionSections").contains(name)
           is_selected   = (subsection is @get("section"))
           is_seen       = @isSeen(subsection)
-          is_complete   = completable and @hasCompleteResponse(name,subsection_index)
+          is_complete   = (is_seen and not completable) or (completable and @hasCompleteResponse(name,subsection_index))
 
           _sections.addObject {
             number:           subsection
