@@ -14,14 +14,14 @@
 
         .row
           div class={emailError:has-error :col-md-12 :form-group}
-            label = t "login_email"
+            label = t "unauthenticated.login_email"
             = input type="email" valueBinding="email" class="form-email form-control" placeholder=yourEmailTranslation id="email"
             if emailError
               ul id="email-messages"
                 each message in emailMessages
                   li=message.message
           div class={passwordError:has-error :col-md-12 :form-group}
-            label = t "login_password"
+            label = t "unauthenticated.login_password"
             = input type="password" valueBinding="password" class="form-password form-control" placeholder=yourPasswordTranslation id="password"
             if passwordError
               ul id="password-messages"
@@ -34,12 +34,12 @@
             button.btn.btn-success.col-md-12 id="login-button" = t "login_button"
           .col-md-6
             link-to "register" class="btn btn-default col-md-12" | {{ t "login_register_now" }}
-  
+
   if modalOpen
-    .modal    
+    .modal
       Ember.Checkbox class="modal-state" id="modal-1" checkedBinding="modalOpen"
       .modal-window
         .modal-inner
           label.modal-close for="modal-1"
           h1 = modal_title
-          p.intro = modal_message 
+          p.intro = modal_message
