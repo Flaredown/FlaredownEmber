@@ -2,13 +2,13 @@ transitions = () ->
 
   @transition(
     @toRoute('graph.checkin'),
-    @toModel (fromSection) -> @ < fromSection
+    @toModel (toSection,fromSection) -> toSection < fromSection
     @use('toRight')
   );
 
   @transition(
     @toRoute('graph.checkin'),
-    @toModel (fromSection) -> @ > fromSection
+    @toModel (toSection, fromSection) -> toSection > fromSection
     @use('toLeft')
   );
 
