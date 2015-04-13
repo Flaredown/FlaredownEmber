@@ -1,4 +1,6 @@
-fixture = {
+`import Ember from 'ember'`
+
+fixture = Ember.Object.create({
   "en":{
     "hello":"Hello world",
     "catalogs":{
@@ -37,6 +39,6 @@ fixture = {
     }
 
   }
-}
+})
 
 `export default fixture`

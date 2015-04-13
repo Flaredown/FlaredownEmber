@@ -32,7 +32,7 @@ mixin = Ember.Mixin.create
     ajax("#{config.apiNamespace}/locales/#{@controller.get("locale")}").then(
       (locale) =>
         # Setup the translations if they aren't already
-        Ember.I18n.translations = Ember.Object.create({})
+        if Ember.typeOf(Ember.I18n.translations) is "object" then Ember.I18n.translations = Ember.Object.create({})
         Ember.I18n.translations.setProperties locale[@controller.get("locale")]
 
         # Send to proper place based on login status
