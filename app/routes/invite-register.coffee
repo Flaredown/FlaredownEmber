@@ -4,7 +4,6 @@
 `import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
 route = Ember.Route.extend GroovyResponseHandlerMixin,
-  # authedOnly: false
 
   model: (params) ->
     ajax(
@@ -13,10 +12,6 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
     ).then(
       (response) => response
       (response) => @errorCallback(response)
-        # if response.jqXHR.status is 404
-        #   @transitionTo("login")
-        #   sweetAlert("Invitation not found...", "We couldn't find that invitation, perhaps you've already used it?", "error")
-        #   # TODO @errorCallback
     )
 
   setupController: (controller,model) ->
