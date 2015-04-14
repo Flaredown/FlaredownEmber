@@ -8,9 +8,6 @@ route = Ember.Route.extend
   setupController: (controller, model) ->
     @_super(controller, model);
 
-    if controller.get("user_email") and controller.get("user_token")
-      controller.send("loginWithToken")
-
-    # controller.resetForm()
+    controller.send("loginWithToken") if controller.get("user_email") and controller.get("user_token")
 
 `export default route`

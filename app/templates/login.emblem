@@ -1,13 +1,11 @@
 .login-form
-  if loggedIn
-
-    p = t "unauthenticated.you_are_already_logged_in"
-
+  if tokenLogin
+    = t "unauthenticated.logging_you_in"
   else
     form submit="login"
 
       view "forms/textInput" name="email"
       view "forms/passwordInput" name="password"
 
-      button#login-button.btn click="login" = t "unauthenticated.login_button"
+      a#login-button.btn click="login" = t "unauthenticated.login_button"
       link-to "register" id="register-button" class="btn" | {{ t "unauthenticated.login_register_now" }}

@@ -1,44 +1,6 @@
 `import Ember from 'ember'`
-`import ajax from 'ic-ajax'`
+`import FormHandlerMixin from '../mixins/form_handler'`
+`import RegisterFormMixin from '../mixins/register_form'`
 
-controller = Ember.ObjectController.extend
-
-  errors: {}
-
-  reset: ->
-    @setProperties
-      email: ""
-      password: ""
-      password_confirmation: ""
-      country: ""
-
-  actions:
-    register: ->
-      self = @
-      data = {user: @getProperties("email", "password", "password_confirmation", "country")}
-
-      @set('errors', {})
-
-      ajax(
-        type: "POST"
-        url: "/users.json"
-        data: data
-        contentType: "application/x-www-form-urlencoded; charset=UTF-8"
-      ).then(
-        (response) ->
-            # self.set "controllers.login.loginId", response.id
-            self.set "controllers.user.content", response
-            self.reset()
-            self.transitionToRoute('graph')
-
-        (response) ->
-            errors = JSON.parse(response.responseText).errors
-
-            for k,v of errors
-              errors[k] = v[0]
-
-            self.set("errors", errors)
-      )
-
-
+controller = Ember.ObjectController.extend FormHandlerMixin, RegisterFormMixin
 `export default controller`

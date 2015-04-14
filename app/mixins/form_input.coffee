@@ -7,9 +7,15 @@ mixin = Ember.Mixin.create
   init: ->
     @_super()
 
-    Em.defineProperty @, "errors", Em.computed( ->
-      @get("controller.errors.fields.#{@get("name")}")
-    ).property("controller.errors.fields.#{@get("name")}")
+    if @get("controller.modelClass")
+      Em.defineProperty @, "errors", Em.computed( ->
+        @get("controller.errors.fields.#{@get("controller.modelClass")}.#{@get("name")}")
+      ).property("controller.errors.fields.#{@get("controller.modelClass")}.#{@get("name")}")
+    else
+      Em.defineProperty @, "errors", Em.computed( ->
+        @get("controller.errors.fields.#{@get("name")}")
+      ).property("controller.errors.fields.#{@get("name")}")
+
 
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent", "rootClass"]
 

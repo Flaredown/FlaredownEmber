@@ -46,6 +46,7 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin,
         )
 
     loginWithToken: ->
+      @set("tokenLogin", true)
       ajax("#{config.apiNamespace}/current_user",
         type: "GET"
         data: @getProperties("user_email", "user_token")

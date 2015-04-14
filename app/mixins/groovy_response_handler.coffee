@@ -10,6 +10,7 @@ mixin = Ember.Mixin.create
     if typeof response.jqXHR isnt "undefined"
       response = response.jqXHR.responseJSON
 
+    console.log response
     switch response.errors.kind
       when "inline"
         @set("errors", response.errors)
