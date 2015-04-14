@@ -1,8 +1,7 @@
 `import Ember from 'ember'`
 
 view = Ember.View.extend
-  # prompt: 'Please select...'
-  # classNames: ['input-xlarge']
+
   tagName: "input"
 
   config: Ember.computed( ->
@@ -18,6 +17,7 @@ view = Ember.View.extend
     }
   ).property("content")
 
+  opened: (event) ->
   selected: (event) ->
     choice = event.choice.text
     if @get("multiple")
@@ -34,6 +34,7 @@ view = Ember.View.extend
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
     @$().on("select2-selecting", @selected.bind(@))
     @$().on("select2-removing", @removed.bind(@))
+    @$().on("select2-open", @opened.bind(@))
     @set("value", []) if not @get("value") and @get("multiple") is true
 
   processChildElements: -> @$().select2(@get("config")).select2("val", @get("value"))

@@ -6,7 +6,7 @@ each symptom in symptoms
 br
 
 .checkin-search
-	view "trackable-search" class="form-symptom-search selectpicker" trackableType="symptom"
+	view "questioner/trackable-search" trackableType="symptom"
 
 br
 br

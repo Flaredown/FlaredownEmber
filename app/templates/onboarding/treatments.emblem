@@ -6,7 +6,7 @@ each treatment in treatments
 br
 
 .checkin-search
-	view "trackable-search" class="form-treatment-search selectpicker" trackableType="treatment"
+	view "questioner/trackable-search" trackableType="treatment"
 
 br
 br

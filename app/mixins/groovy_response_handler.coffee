@@ -12,14 +12,13 @@ mixin = Ember.Mixin.create
 
     switch response.errors.kind
       when "inline"
-        @handleInlineErrors(response.errors)
+        @set("errors", response.errors)
       when "general"
         @handleGeneralErrors(response.errors.title, response.errors.description)
       when "generic"
         @handleGenericErrors(response.errors.title, response.errors.description)
 
-  handleInlineErrors: (errors)->
-    @set("errors", errors)
+  # handleInlineErrors: (errors)->
 
   handleGeneralErrors: (title, description) -> sweetAlert(Ember.I18n.t("nice_errors.#{title}"), Ember.I18n.t("nice_errors.#{description}"), "error")
 

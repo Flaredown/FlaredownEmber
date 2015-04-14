@@ -1,9 +1,13 @@
 `import Ember from 'ember'`
-`import Select2View from './forms/select2'`
-`import config from '../config/environment'`
+`import Select2View from '../forms/select2'`
+`import config from '../../config/environment'`
 `import ajax from 'ic-ajax'`
 
 view = Select2View.extend
+
+  classNameBindings: ["formClass"]
+  formClass: Em.computed(-> "form-#{@get("trackableType")}-select")
+
   placeholder: Ember.computed( -> "Add a #{@get("trackableType")}" ).property("trackableType")
   formatted: (trackable) ->
     if trackable.count isnt null
@@ -12,8 +16,7 @@ view = Select2View.extend
       prompt = Ember.I18n.t("add_trackable_prompt",kind: @get("trackableType"))
       "<span class='name'>\"#{trackable.text}\"</span><div class='count'>#{prompt}</div>"
 
-  # classNames: ['input-xlarge']
-
+  opened: (event) -> @get("controller").resetErrorsOn(@get("trackableType"))
   selected: (event) ->
     trackable = if @get("trackableType") is "treatment"
       {name: event.choice.text, quantity: null, unit: null, added: true}
@@ -37,7 +40,6 @@ view = Select2View.extend
         dataType: 'json'
         delay: 300
         results: (response, _, original) ->
-
           formatted_results = [{id: 0, text: original.term, count: null}]
 
           formatted_results.addObjects response.map (item,i) ->

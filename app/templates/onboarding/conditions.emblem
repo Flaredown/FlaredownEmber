@@ -6,7 +6,7 @@ each condition in conditions
 br
 
 .checkin-search
-	view "trackable-search" class="form-condition-search selectpicker" trackableType="condition"
+	view "questioner/trackable-search" trackableType="condition"
 
 br
 br

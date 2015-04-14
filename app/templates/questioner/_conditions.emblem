@@ -9,4 +9,4 @@
     h4 = t "oops_no_conditions_being_tracked"
 
   .checkin-search
-  	view "trackable-search" class="form-condition-search selectpicker" trackableType="condition"
+  	view "questioner/trackable-search" trackableType="condition"
