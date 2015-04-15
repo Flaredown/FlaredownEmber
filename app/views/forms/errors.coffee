@@ -3,7 +3,7 @@
 
 view = Ember.View.extend
 
-  errorSource: "controller.errors"
+  errorsSource: "controller.errors"
   templateName: "forms/errors"
 
   errors: Em.computed( -> @get(@get("errorsSource")) ).property("errorsSource", "controller.errors")
