@@ -12,7 +12,6 @@ mixin = Ember.Mixin.create
   dobYearValid: (-> /^\d{4}$/.test(@get("dobYear")) and parseInt(@get("dobYear")) < new Date().getFullYear()+1 ).property("dobYear")
   dobValid: (-> @get("dobDayValid") and @get("dobMonthValid") and @get("dobYearValid") ).property("dobDayValid", "dobMonthValid", "dobYearValid")
 
-  locationOptions: Em.computed(-> Ember.keys(Ember.I18n.translations.location_options) ).property("Ember.I18n.translations")
-  sexOptions: "male female".w()
+  locationOptions: Em.computed.alias("Ember.I18n.translations.location_options")
 
 `export default mixin`

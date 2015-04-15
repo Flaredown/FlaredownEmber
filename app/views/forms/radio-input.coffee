@@ -9,7 +9,9 @@ view = Ember.View.extend FormInputMixin,
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent"]
 
   options: Em.computed(->
-    @get("controller.#{@get("name")}Options").map (item) =>
+    options = Ember.keys(Ember.I18n.translations.get("#{@get("optionI18nKey")}"))
+    options ||= @get("controller.#{@get("name")}Options")
+    options.map (item) =>
       checked = item is @get("value")
       {
         name: Ember.I18n.t "#{@get("optionI18nKey")}.#{item}"

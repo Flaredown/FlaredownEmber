@@ -9,7 +9,9 @@ view = Ember.View.extend FormInputMixin,
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent"]
 
   options: Em.computed(->
-    @get("controller.#{@get("name")}Options").map (item,i) =>
+    options = Ember.keys(Ember.I18n.translations.get("#{@get("optionI18nKey")}"))
+    options ||= @get("controller.#{@get("name")}Options")
+    options.map (item,i) =>
       # select2 option format
       option = {
         id: item
