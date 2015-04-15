@@ -5,7 +5,7 @@ if currentUser.loggedIn
 
         // Slide menu button
         button.js-menu-trigger.sliding-menu-button type="button"
-          img src="assets/menu-white.png" alt="menu"
+          img src="assets/menuIcon.svg" alt="menu"
 
         // Logo
         img.navbar-logo src="assets/logo.svg"
