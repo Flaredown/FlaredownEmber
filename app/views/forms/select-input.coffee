@@ -11,10 +11,13 @@ view = Ember.View.extend FormInputMixin,
   options: Em.computed(->
     @get("controller.#{@get("name")}Options").map (item,i) =>
       # select2 option format
-      {
+      option = {
         id: item
         text: Ember.I18n.t "#{@get("optionI18nKey")}.#{item}"
       }
+      option.description = Ember.I18n.translations.get("#{@get("optionI18nKey")}_descriptions")[i] if @get("descriptions")
+      option
+
   ).property("controller", "value")
 
   placeholder: Em.computed( ->

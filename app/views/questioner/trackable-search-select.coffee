@@ -32,7 +32,7 @@ view = Select2View.extend
       minimumInputLength: 3
       placeholder: @get("placeholder")
       formatResult: @get("formatted").bind(@)
-      formatInputTooShort: -> "Keep typing..."
+      formatInputTooShort: -> Em.I18n.t("forms.keep_typing")
       ajax:
         existingTrackables: @get("existingTrackables")
         transport: Ember.$.ajax

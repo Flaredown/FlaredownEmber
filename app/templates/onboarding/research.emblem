@@ -2,7 +2,7 @@ h2 = t "onboarding.optional_research"
 
 form submit="save"
   view "forms/selectInput" name="ethnicOrigin" multiple=true
-  view "forms/selectInput" name="occupation"
+  view "forms/selectInput" name="occupation" descriptions=true
   view "forms/selectInput" name="highestEducation"
   view "forms/textInput" name="activityLevel"
 

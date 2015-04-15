@@ -10,12 +10,19 @@ view = Ember.View.extend
       placeholder: @get("placeholder")
       val: @get("value")
       multiple: @get("multiple")
+      formatResult: @get("formatted").bind(@)
       initSelection: ((el,callback) ->
         initialValue = @get("content").findBy("text",@get("value"))
         callback(initialValue) if initialValue
       ).bind(@)
     }
   ).property("content")
+
+  formatted: (option) ->
+    if @get("descriptions")
+      "<span class='name'>#{option.text}</span><div class='description'>#{option.description}</div>"
+    else
+      "<span class='name'>#{option.text}</span>"
 
   opened: (event) ->
   selected: (event) ->
