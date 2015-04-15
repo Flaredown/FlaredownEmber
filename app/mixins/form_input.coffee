@@ -16,6 +16,7 @@ mixin = Ember.Mixin.create
         @get("controller.errors.fields.#{@get("name")}")
       ).property("controller.errors.fields.#{@get("name")}")
 
+  didInsertElement: -> @set("value","") if @get("kind") is "text" and @get("value") is undefined
 
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent", "rootClass"]
 
