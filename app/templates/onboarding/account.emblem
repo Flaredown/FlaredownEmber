@@ -1,15 +1,22 @@
 h2 = t "onboarding.get_started"
 
-form.form-inline submit="save"
+form submit="save"
   view "forms/selectInput" name="location" optionsTranslationRoot=false
 
   label = t "onboarding.dob"
+<<<<<<< HEAD
   .account-dob-wrapper
   	view "forms/textInput" name="dobMonth" placeholder="08" noLabelText=true
   	view "forms/textInput" name="dobDay" placeholder="22" noLabelText=true
   	view "forms/textInput" name="dobYear" placeholder="1980" noLabelText=true
 
   /view "forms/switchInput" name="icecream"
+=======
+  .onboarding-dob-wrapper
+  	view "forms/textInput" name="dobMonth" noLabelText=true
+  	view "forms/textInput" name="dobDay" noLabelText=true
+  	view "forms/textInput" name="dobYear" noLabelText=true
+>>>>>>> master
 
   view "forms/radioInput" name="sex"
   view "forms/textInput" name="gender"

@@ -1,8 +1,10 @@
 `import Ember from 'ember'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
+`import FormHandlerMixin from '../mixins/form_handler'`
 
-mixin = Ember.Mixin.create
+
+mixin = Ember.Mixin.create FormHandlerMixin,
   isEntry: Ember.computed(-> @get("model.constructor.typeKey") is "entry").property("model")
 
   treatments: Ember.computed ->

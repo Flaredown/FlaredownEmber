@@ -2,5 +2,5 @@ label
 unless view.noLabelText
   = view.label
 
-= input type="text" value=view.value class=view.inputClass placeholder=view.placeholder
+= input type=view.kind value=view.value class=view.inputClass placeholder=view.placeholderText
 partial "forms/errors"

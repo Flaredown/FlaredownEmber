@@ -12,4 +12,4 @@
     h3 = t "oops_no_symptoms_being_tracked"
 
   .checkin-search
-    view "trackable-search" class="form-symptom-search selectpicker" trackableType="symptom"
+    view "questioner/trackable-search" trackableType="symptom"

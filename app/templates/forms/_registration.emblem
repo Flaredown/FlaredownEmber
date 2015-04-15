@@ -1,44 +1,16 @@
-form.form-inline submit="register"
-  fieldset
-    .row
-      div class={errors.email:has-error :col-md-6 :form-group}
-        label = t "register_email"
-        if isInvite
-          = input valueBinding="email" class="form-email" disabled="true"
-        else
-          = input valueBinding="email" class="form-email form-control" id="email"
-          if errors.email
-            small= errors.email
+.register-form
+  form submit="register"
+    if isInvite
+      h3 This is an invitation!
 
-      div class={errors.password:has-error errors.password_confirmation:has-error :col-md-6 :form-group}
-        label = t "register_password"
-        = input type="password" valueBinding="password" placeholder=desiredPasswordTranslation class="form-password form-control" id="password"
-        if errors.password
-          small= errors.password
-        = input type="password" valueBinding="password_confirmation" placeholder=confirmPasswordTranslation class="form-password-confirmation form-control" id="password_confirmation"
-        if errors.password_confirmation
-          small= errors.password_confirmation
+    view "forms/textInput" name="email"
+    view "forms/passwordInput" name="password"
+    view "forms/passwordInput" name="password_confirmation"
 
-      div class={errors.weight:has-error :col-md-6 :form-group}
-        label = t "register_weight"
-        = input valueBinding="weight" class="form-weight form-control" id="weight"
-        if errors.weight
-          small= errors.weight
+    button.btn#register-button type="submit" click="register"
+      if isInvite
+        = t "unauthenticated.enable_early_access"
+      else
+        = t "unauthenticated.register"
 
-      / div class={errors.gender:has-error :col-md-6 :form-group}
-      /   label Gender
-      /   select content=genderOptions optionValuePath="content.value" optionLabelPath="content.label" valueBinding="gender" class="form-gender form-control" id="gender"
-      /   if errors.gender
-      /     small= errors.gender
-
-
-    br
-    br
-    .row
-      .col-md-6
-        link-to "login" class="btn btn-default col-md-12" | {{ t "back_to_login" }}
-      .col-md-6
-        if isInvite
-          button#accept-invitation-button.btn.btn-success.col-md-12 = t "entable_early_access"
-        else
-          button#register-button.btn.btn-success.col-md-12 = t "register"
+    link-to "login" class="btn btn-default col-md-12" | {{ t "unauthenticated.back_to_login" }}

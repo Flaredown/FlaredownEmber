@@ -7,9 +7,15 @@ mixin = Ember.Mixin.create
   init: ->
     @_super()
 
-    Em.defineProperty @, "errors", Em.computed( ->
-      @get("controller.errors.fields.#{@get("name")}")
-    ).property("controller.errors.fields.#{@get("name")}")
+    if @get("controller.modelClass")
+      Em.defineProperty @, "errors", Em.computed( ->
+        @get("controller.errors.fields.#{@get("controller.modelClass")}.#{@get("name")}")
+      ).property("controller.errors.fields.#{@get("controller.modelClass")}.#{@get("name")}")
+    else
+      Em.defineProperty @, "errors", Em.computed( ->
+        @get("controller.errors.fields.#{@get("name")}")
+      ).property("controller.errors.fields.#{@get("name")}")
+
 
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent", "rootClass"]
 
@@ -44,6 +50,13 @@ mixin = Ember.Mixin.create
     name = @get("name").underscore()
     key = if @get("i18nKey") then "#{@get("i18nKey")}.#{name}" else name
     Ember.I18n.t(key)
+  ).property("i18nKey")
+
+  placeholderText: Ember.computed(->
+    return @get("placeholder") if @get("placeholder")
+    name = @get("name").underscore()
+    key = "#{@get("i18nKey")}.#{name}_placeholder"
+    if Ember.I18n.translations.get(key) then Ember.I18n.t(key) else ""
   ).property("i18nKey")
 
 `export default mixin`

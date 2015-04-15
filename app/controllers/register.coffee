@@ -1,50 +1,6 @@
 `import Ember from 'ember'`
+`import FormHandlerMixin from '../mixins/form_handler'`
+`import RegisterFormMixin from '../mixins/register_form'`
 
-controller = Ember.Controller.extend
-  needs: ["login"]
-  
-  # genderOptions: ["male", "female"]
-  genderOptions: [
-    { label: "Male", value: "male"},
-    { label: "Female", value: "female"}
-  ]
-
-  #Internationalisation placeholders
-  desiredPasswordTranslation: Ember.computed( -> Ember.I18n.t "desired_password" )
-  confirmPasswordTranslation: Ember.computed( -> Ember.I18n.t "confirm_password" )
-  
-  errors: {}
-  
-  reset: ->
-    @setProperties
-      email: ""
-      password: ""
-      password_confirmation: ""
-      weight: ""
-
-  actions:
-    register: ->
-      self = @
-      data = {user: @getProperties("email", "password", "password_confirmation", "weight", "gender")}
-
-      @set('errors', {})
-
-      $.ajax
-        type: "POST"
-        url: "/users.json"
-        data: data
-        contentType: "application/x-www-form-urlencoded; charset=UTF-8"
-        success: (response) ->
-            self.set "controllers.login.loginId", response.id
-            self.set "controllers.user.content", response
-            self.reset()
-            self.transitionToRoute('graph')
-        error: (response) ->
-            errors = JSON.parse(response.responseText).errors
-        
-            for k,v of errors
-              errors[k] = v[0]
-          
-            self.set("errors", errors)
-
+controller = Ember.Controller.extend FormHandlerMixin, RegisterFormMixin
 `export default controller`

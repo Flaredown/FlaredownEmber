@@ -1,24 +1,25 @@
 `import Ember from 'ember'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
-`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
+`import FormHandlerMixin from '../mixins/form_handler'`
 `import UserSetupMixin from '../mixins/user_setup'`
 
-controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
-  init: ->
-    @_super()
-    @get("setValidationsByName")
-
-  isAuthenticated: Ember.computed(-> @get("currentUser.model.id") ).property("currentUser.model")
-
-  resetFormProperties: "email password".w()
+controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin,
+  translationRoot: "unauthenticated"
 
   queryParams: ["user_email", "user_token"]
 
-  # Internationalisation placeholders
-  yourEmailTranslation: Ember.computed( -> Ember.I18n.t "unauthenticated.your_email_placeholder" )
-  yourPasswordTranslation: Ember.computed( -> Ember.I18n.t "unauthenticated.your_password_placeholder" )
+  fields: "email password".w()
+  requirements: "email password".w()
+  validations:  "email password".w()
 
+  emailValid: Em.computed( ->
+    email_regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    email_regex.test(@get("email"))
+  ).property("email")
+  passwordValid: Em.computed( -> @get("password.length") >= 2 ).property("password")
+
+  isAuthenticated: Ember.computed(-> @get("currentUser.model.id") ).property("currentUser.model")
 
   redirectToTransition: ->
     attemptedTransition = @get("attemptedTransition")
@@ -30,18 +31,22 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin, UserSetupMixin,
 
   actions:
     login: ->
-      data = {}
-      data["v#{config.apiVersion}_user"] = @getProperties("email", "password")
+      if @saveForm()
+        data = {}
+        data["v#{config.apiVersion}_user"] = @getProperties("email", "password")
 
-      ajax("#{config.apiNamespace}/users/sign_in.json",
-        type: "POST"
-        data: data
-      ).then(
-        (response) => @setupUser(@container)
-        (response) => @errorCallback(response, @)
-      )
+        ajax("#{config.apiNamespace}/users/sign_in.json",
+          type: "POST"
+          data: data
+        ).then(
+          (response) =>
+            @endSave()
+            @setupUser(@container)
+          (response) => @errorCallback(response, @)
+        )
 
     loginWithToken: ->
+      @set("tokenLogin", true)
       ajax("#{config.apiNamespace}/current_user",
         type: "GET"
         data: @getProperties("user_email", "user_token")

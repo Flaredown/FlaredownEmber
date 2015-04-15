@@ -16,7 +16,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
     # Watch all fields that can take inline errors and reset those errors upon field change
     @get("errorables").forEach (key) =>
-      @addObserver(key, => @resetErrorsOn(key)) if Ember.typeOf(@get(key)) isnt 'function'
+      @addObserver(key, => @resetErrorsOn(key,@get("modelClass"))) if Ember.typeOf(@get(key)) isnt 'function'
 
   errorResponseTemplate: -> {
     errors: {
@@ -56,7 +56,12 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     @errorCallback(response, @) unless pass
     pass
 
-  resetErrorsOn: (key) -> @set("errors.fields.#{key}", []) if @get("errors.fields")
+  resetErrorsOn: (key,model) ->
+    if @get("errors.fields")
+      if model
+        @set("errors.fields.#{model}.#{key}", [])
+      else
+        @set("errors.fields.#{key}", [])
 
   saveForm: (skipSavableCheck) ->
     @resetErrors()

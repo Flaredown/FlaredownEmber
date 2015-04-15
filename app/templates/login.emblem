@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .login
   if loggedIn
     p = t "you_are_already_logged_in"
@@ -38,3 +39,16 @@
           label.modal-close for="modal-1"
           h1 = modal_title
           p.intro = modal_message
+=======
+.login-form
+  if tokenLogin
+    = t "unauthenticated.logging_you_in"
+  else
+    form submit="login"
+
+      view "forms/textInput" name="email"
+      view "forms/passwordInput" name="password"
+
+      a#login-button.btn click="login" = t "unauthenticated.login_button"
+      link-to "register" id="register-button" class="btn" | {{ t "unauthenticated.login_register_now" }}
+>>>>>>> master
