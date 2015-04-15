@@ -40,6 +40,9 @@ label {
 .container {
   @include outer-container;
 }
+.centered {
+  text-align: center;
+}
 
 // Navbar
 .navbar {
