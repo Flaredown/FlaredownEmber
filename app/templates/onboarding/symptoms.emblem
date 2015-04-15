@@ -10,4 +10,5 @@ br
 
 br
 br
-view "forms/saveButton" name="continue"
+form submit="save"
+  view "forms/saveButton" name="continue"

@@ -1,11 +1,6 @@
 `import Ember from 'ember'`
-`import FormInputMixin from '../../mixins/form_input'`
 
 view = Ember.View.extend
-
-  errorsSource: "controller.errors"
   templateName: "forms/errors"
-
-  errors: Em.computed( -> @get(@get("errorsSource")) ).property("errorsSource", "controller.errors")
-
+  errors: Em.computed.alias("parentView.errors")
 `export default view`

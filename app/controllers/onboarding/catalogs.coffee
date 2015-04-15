@@ -1,6 +1,8 @@
 `import Ember from 'ember'`
 
 controller = Ember.Controller.extend
+  translationRoot: "onboarding"
+
   catalogDescriptions: Ember.computed( ->
     Ember.keys(@get("model")).map (catalog) =>
       {

@@ -4,17 +4,19 @@ mixin = Ember.Mixin.create
   # Takes a "name" when instantiated
   # Assumes the controller has validations and errors based on that name.
 
+  errorsRoot: "controller.errors.fields"
+
   init: ->
     @_super()
 
     if @get("controller.modelClass")
       Em.defineProperty @, "errors", Em.computed( ->
-        @get("controller.errors.fields.#{@get("controller.modelClass")}.#{@get("name")}")
-      ).property("controller.errors.fields.#{@get("controller.modelClass")}.#{@get("name")}")
+        @get("#{@get("errorsRoot")}.#{@get("controller.modelClass")}.#{@get("name")}")
+      ).property("#{@get("errorsRoot")}.#{@get("controller.modelClass")}.#{@get("name")}.@each")
     else
       Em.defineProperty @, "errors", Em.computed( ->
-        @get("controller.errors.fields.#{@get("name")}")
-      ).property("controller.errors.fields.#{@get("name")}")
+        @get("#{@get("errorsRoot")}.#{@get("name")}")
+      ).property("#{@get("errorsRoot")}.@each")
 
   didInsertElement: -> @set("value","") if @get("kind") is "text" and @get("value") is undefined
 

@@ -6,7 +6,7 @@
 				a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
 liquid-with section as liquidSection
-  view "forms/errors" errorsSource="controller.allErrors"
+  / view "forms/errors" errors="controller.allErrors"
   .checkin-content: partial currentPartial
 
 .checkin-navigate
