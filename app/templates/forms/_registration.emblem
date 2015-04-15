@@ -1,4 +1,5 @@
 .register-form
+  h3.centered = t "your_registration_information"
   form submit="register"
     if isInvite
       h3 This is an invitation!
