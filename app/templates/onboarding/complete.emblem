@@ -2,4 +2,4 @@ h2 = t "onboarding.setup_complete"
 img src="http://www.comicsandmemes.com/wp-content/uploads/2013/04/Success-baby.jpg"
 h3 = t "onboarding.ready_for_checkin"
 
-button#continue-button.btn click="checkin" = t "onboarding.checkin"
+button#continue-button.submit-button click="checkin" = t "onboarding.checkin"

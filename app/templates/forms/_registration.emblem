@@ -7,7 +7,7 @@
     view "forms/passwordInput" name="password"
     view "forms/passwordInput" name="password_confirmation"
 
-    button.btn#register-button type="submit" click="register"
+    button#register-button.submit-button type="submit" click="register"
       if isInvite
         = t "unauthenticated.enable_early_access"
       else

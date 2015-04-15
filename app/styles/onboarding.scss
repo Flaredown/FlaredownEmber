@@ -14,11 +14,8 @@
 		margin-bottom: 60px;
 	}
 }
-.onboarding-dob-wrapper {
+.account-dob-wrapper {
 	.text-input {
 		@include span-columns(4);
 	}
-}
-#continue-button {
-	float: right;
 }

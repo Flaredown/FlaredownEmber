@@ -1,15 +1,15 @@
-nav.navbar role="navigation"
-  .navbar-content
-    .navbar-left
+if currentUser.loggedIn
+  nav.navbar role="navigation"
+    .navbar-content
+      .navbar-left
 
-      // Slide menu button
-      button.js-menu-trigger.sliding-menu-button type="button"
-        img src="assets/menu-white.png" alt="menu"
+        // Slide menu button
+        button.js-menu-trigger.sliding-menu-button type="button"
+          img src="assets/menuIcon.svg" alt="menu"
 
-      // Logo
-      img.navbar-logo src="assets/logo.svg"
+        // Logo
+        img.navbar-logo src="assets/logo.svg"
 
-      if currentUser.loggedIn
         // Sections
         ul.navbar-sections
           li: link-to "graph" | {{ t "menu_item_graph" }}
@@ -18,16 +18,18 @@ nav.navbar role="navigation"
           li &#47;
           li: link-to "reports" | {{ t "menu_item_investigations" }}
 
-
-    if currentUser.loggedIn
       //Account
       .navbar-right
         .dropdown
           .dropdown-button #{currentUser.email} &#9662;
           ul.menu
-            link-to "graph.account"
-              li =  t "menu_item_account"
-            li = t "menu_item_print_report"
-            li = t "menu_item_edit_checkin"
-            a click="logout" id="logout"
-              li = t "menu_item_logout"
+            li: link-to "graph.account"
+              = t "menu_item_account"
+            / li = t "menu_item_print_report"
+            / li = t "menu_item_edit_checkin"
+            li click="logout" = t "menu_item_logout"
+
+else
+  nav.navbar-centered
+    img.navbar-logo src="assets/logo.svg"
+    h4 Early Access

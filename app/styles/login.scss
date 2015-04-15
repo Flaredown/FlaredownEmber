@@ -1,0 +1,5 @@
+.login-form, .register-form {
+	@include outer-container;
+	@include card;
+	max-width: 600px;
+}

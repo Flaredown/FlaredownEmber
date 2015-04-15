@@ -40,6 +40,9 @@ label {
 .container {
   @include outer-container;
 }
+.centered {
+  text-align: center;
+}
 
 // Navbar
 .navbar {
@@ -97,5 +100,12 @@ label {
     .dropdown-container {
       text-align: center;
     }
+  }
+}
+.navbar-centered {
+  margin: 40px 0;
+  text-align: center;
+  img {
+    max-width: 100px;
   }
 }
