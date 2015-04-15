@@ -1,0 +1,4 @@
+if saving
+  = t "forms.saving"
+else
+  = view.text

@@ -3,14 +3,15 @@
 mixin = Ember.Mixin.create
 
   errors: null
+  saving: false
 
   errorCallback: (response, controller) ->
-    @resetErrors()
+    @set("errors", null)
+    @set("saving", false)
 
     if typeof response.jqXHR isnt "undefined"
       response = response.jqXHR.responseJSON
 
-    console.log response
     switch response.errors.kind
       when "inline"
         @set("errors", response.errors)
@@ -26,7 +27,5 @@ mixin = Ember.Mixin.create
   handleGenericErrors: (title, description) ->
     title = "#{title} Error"
     sweetAlert(title, Ember.I18n.t(description), "error")
-
-  resetErrors: -> @set("errors", null)
 
 `export default mixin`

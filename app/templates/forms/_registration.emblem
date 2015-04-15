@@ -8,10 +8,9 @@
     view "forms/passwordInput" name="password"
     view "forms/passwordInput" name="password_confirmation"
 
-    button#register-button.submit-button type="submit" click="register"
-      if isInvite
-        = t "unauthenticated.enable_early_access"
-      else
-        = t "unauthenticated.register"
+    if isInvite
+      view "forms/saveButton" name="enable_early_access" action="register"
+    else
+      view "forms/saveButton" name="register" action="register"
 
-    link-to "login" class="btn btn-default col-md-12" | {{ t "unauthenticated.back_to_login" }}
+    link-to "login" class="btn" | {{ t "unauthenticated.back_to_login" }}

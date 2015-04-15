@@ -64,7 +64,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         @set("errors.fields.#{key}", [])
 
   saveForm: (skipSavableCheck) ->
-    @resetErrors()
+    @set("errors", null)
 
     skipSavableCheck = false if typeof(skipSavableCheck) is "undefined"
     return false if @get("hasChecks") and not @checkFields()
@@ -74,11 +74,8 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     @get("saving")
 
   endSave: (reset) ->
-    # reset = true if typeof(reset) is "undefined"
-    # @resetForm() if reset
     @set "saving", false
     true
-
 
 `export default mixin`
 

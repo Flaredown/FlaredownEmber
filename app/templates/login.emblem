@@ -8,5 +8,5 @@
       view "forms/textInput" name="email"
       view "forms/passwordInput" name="password"
 
-      button#login-button.submit-button click="login" = t "unauthenticated.login_button"
+      view "forms/saveButton" name="login" action="login"
       link-to "register" id="register-button" class="btn" | {{ t "unauthenticated.login_register_now" }}

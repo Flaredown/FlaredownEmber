@@ -20,7 +20,7 @@
             view "forms/radioInput" name="sex"
             view "forms/textInput" name="gender"
 
-            button.submit-button click="save" = t "save"
+            view "forms/saveButton"
             br
 
         else

@@ -20,6 +20,6 @@ view = Ember.View.extend FormInputMixin,
   ).property("controller", "value")
 
   actions:
-    set: (value) -> @set "value", value
+    set: (value) -> @set "value", value unless @get("disabled")
 
 `export default view`

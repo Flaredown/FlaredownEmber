@@ -18,11 +18,12 @@ mixin = Ember.Mixin.create
 
   didInsertElement: -> @set("value","") if @get("kind") is "text" and @get("value") is undefined
 
+  # CSS Classes
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent", "rootClass"]
-
   rootClass: Ember.computed(-> "form-#{@get("name").dasherize()}")
   inputClass: Ember.computed(-> "form-#{@get("name").dasherize()}-input")
 
+  # Value and properties
   valueName: Ember.computed(-> "controller.#{@get("name")}" ).property("name")
   value: Ember.computed(-> @get(@get("valueName")) ).property("controller","valueName")
 
@@ -34,7 +35,10 @@ mixin = Ember.Mixin.create
     @get("controller.#{@get("name")}Valid")
   ).property("value")
   hasErrors: Ember.computed(-> Ember.isPresent(@get("errors")) ).property("errors")
+  saving: Ember.computed.alias("controller.saving")
+  disabled: Ember.computed.alias("controller.saving")
 
+  # Translations
   i18nKey: Ember.computed(->
     root = @get("translationRoot")
     root ||= @get("controller.translationRoot")
