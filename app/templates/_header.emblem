@@ -23,12 +23,11 @@ if currentUser.loggedIn
         .dropdown
           .dropdown-button #{currentUser.email} &#9662;
           ul.menu
-            link-to "graph.account"
-              li =  t "menu_item_account"
-            li = t "menu_item_print_report"
-            li = t "menu_item_edit_checkin"
-            a click="logout" id="logout"
-              li = t "menu_item_logout"
+            li: link-to "graph.account"
+              = t "menu_item_account"
+            / li = t "menu_item_print_report"
+            / li = t "menu_item_edit_checkin"
+            li click="logout" = t "menu_item_logout"
 
 else
   nav.navbar-centered
