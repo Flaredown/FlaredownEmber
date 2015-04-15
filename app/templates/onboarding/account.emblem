@@ -4,7 +4,7 @@ form.form-inline submit="save"
   view "forms/selectInput" name="location" optionsTranslationRoot=false
 
   label = t "onboarding.dob"
-  .onboarding-dob-wrapper
+  .account-dob-wrapper
   	view "forms/textInput" name="dobMonth" placeholder="08" noLabelText=true
   	view "forms/textInput" name="dobDay" placeholder="22" noLabelText=true
   	view "forms/textInput" name="dobYear" placeholder="1980" noLabelText=true
@@ -14,4 +14,4 @@ form.form-inline submit="save"
   view "forms/radioInput" name="sex"
   view "forms/textInput" name="gender"
 
-  button#continue-button.btn click="save" = t "onboarding.continue"
+  button#continue-button.submit-button click="save" = t "onboarding.continue"

@@ -1,15 +1,15 @@
-nav.navbar role="navigation"
-  .navbar-content
-    .navbar-left
+if currentUser.loggedIn
+  nav.navbar role="navigation"
+    .navbar-content
+      .navbar-left
 
-      // Slide menu button
-      button.js-menu-trigger.sliding-menu-button type="button"
-        img src="assets/menu-white.png" alt="menu"
+        // Slide menu button
+        button.js-menu-trigger.sliding-menu-button type="button"
+          img src="assets/menu-white.png" alt="menu"
 
-      // Logo
-      img.navbar-logo src="assets/logo.svg"
+        // Logo
+        img.navbar-logo src="assets/logo.svg"
 
-      if currentUser.loggedIn
         // Sections
         ul.navbar-sections
           li: link-to "graph" | {{ t "menu_item_graph" }}
@@ -18,8 +18,6 @@ nav.navbar role="navigation"
           li &#47;
           li: link-to "reports" | {{ t "menu_item_investigations" }}
 
-
-    if currentUser.loggedIn
       //Account
       .navbar-right
         .dropdown
@@ -31,3 +29,8 @@ nav.navbar role="navigation"
             li = t "menu_item_edit_checkin"
             a click="logout" id="logout"
               li = t "menu_item_logout"
+
+else
+  nav.navbar-centered
+    img.navbar-logo src="assets/logo.svg"
+    h4 Early Access
