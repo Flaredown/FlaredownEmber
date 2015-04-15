@@ -7,4 +7,4 @@ label
       h4.option-name
         = option.name
 
-  partial "forms/errors"
+  view "forms/errors"

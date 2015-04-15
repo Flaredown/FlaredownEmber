@@ -3,4 +3,4 @@ unless view.noLabelText
   = view.label
 
 = input type=view.kind value=view.value class=view.inputClass placeholder=view.placeholderText disabledBinding="view.disabled"
-partial "forms/errors"
+view "forms/errors"

@@ -1,9 +1,11 @@
 `import Ember from 'ember'`
 `import config from '../../config/environment'`
 `import TrackablesControllerMixin from '../../mixins/trackables_controller'`
+`import GroovyResponseHandlerMixin from '../../mixins/groovy_response_handler'`
+`import FormHandlerMixin from '../../mixins/form_handler'`
 `import ajax from 'ic-ajax'`
 
-controller = Ember.ObjectController.extend TrackablesControllerMixin,
+controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResponseHandlerMixin, FormHandlerMixin,
   modalOpen: true
   sectionsSeen: []
 
@@ -185,18 +187,11 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
       @propertyDidChange("responsesData")
       @send("nextSection") if @get("sectionQuestions.length") is 1
 
-    setSection: (section) ->
-      @set("section", section) if @get("sections").mapBy("number").contains(section)
-    nextSection: ->
-      @set("section", @get("section")+1) unless @get("section") is @get("sections.lastObject.number")
-    previousSection: ->
-      @set("section", @get("section")-1) unless @get("section") is @get("sections.firstObject.number")
+    setSection: (section) -> @set("section", section) if @get("sections").mapBy("number").contains(section)
+    nextSection:          -> @set("section", @get("section")+1) unless @get("section") is @get("sections.lastObject.number")
+    previousSection:      -> @set("section", @get("section")-1) unless @get("section") is @get("sections.firstObject.number")
 
-    stopEditing: ->
-      Ember.run.next =>
-        @transitionToRoute("graph.checkin", @get("niceDate"), @get("section"), {queryParams: {edit: null}})
-
-    save: ->
+    save: (close) ->
       data =
         entry:
           JSON.stringify({
@@ -210,13 +205,13 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
         type: "PUT"
         data: data
       ).then(
-        (
-          (response) ->
-            # if @get("checkinComplete") # only process the entry if it's complete
-            # TODO unfilled question datums
-            @get("controllers.graph").send("dayProcessing", @get("date"))
-        ).bind(@)
-        (response) -> console.log "error!!"
+        (response) =>
+          @set("modalOpen", false) if close
+          # if @get("checkinComplete") # only process the entry if it's complete
+          # TODO unfilled question datums
+          # TODO reenable when putting graph back in
+          # @get("controllers.graph").send("dayProcessing", @get("date"))
+        (response) => @errorCallback(response)
       )
 
 `export default controller`
