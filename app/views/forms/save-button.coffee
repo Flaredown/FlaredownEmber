@@ -6,7 +6,7 @@ view = Ember.View.extend
 
   tagName: "button"
   templateName: "forms/save-button"
-  classNames: ["submit-button", "save-button", "btn-primary"]
+  classNames: ["btn-primary", "right"]
   classNameBindings: ["buttonClass"]
   attributeBindings: ["type", "disabled"]
 
