@@ -3,7 +3,8 @@ li
     form submit="'save' target=view"
       div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
       .checkin-treatment-dose-inputs
-        = input class="treatment-quantity-input" placeholder="30" name="treatment-quantity"  type="number" step="1" min="0" valueBinding="treatment.quantity"
+        view "forms/numberInput" controller=view name="quantity" placeholder="30" noLabelText=true
+        /= input class="treatment-quantity-input" placeholder="30" name="treatment-quantity"  type="number" step="1" min="0" valueBinding="treatment.quantity"
         view "questioner/treatment-unit" value=treatment.unit
 
   else

@@ -1,15 +1,19 @@
 `import Ember from 'ember'`
 `import colorableMixin from '../../mixins/colorable'`
+`import formHandlerMixin from '../../mixins/form_handler'`
 
-view = Ember.View.extend colorableMixin,
-
-  tagName: "div"
+view = Ember.View.extend colorableMixin, formHandlerMixin,
+  editing: false
   templateName: "questioner/_treatment_input"
   classNames: ["checkin-treatment"]
 
   colorClass: Ember.computed(-> @colorClasses("treatments_#{@get("name")}", "treatment").bg ).property("name")
 
-  editing: false
+  fields: "name quantity unit".w()
+  requirements: "name quantity unit".w()
+  validations:  "quantity".w()
+
+  quantityValid: (-> /^\d+$/.test(@get("quantity")) ).property("quantity")
 
   actions:
     toggleActive: (treatment) -> treatment.toggleProperty("active")
@@ -29,9 +33,11 @@ view = Ember.View.extend colorableMixin,
       @get("controller").send("addTreatment", treatment.getProperties("name", "quantity", "unit"))
 
     save: ->
-      @set("active", true)
-      @set("editing", false)
-      @get("controller").send("treatmentEdited")
+      if @saveForm()
+        @set("active", true)
+        @set("editing", false)
+        @get("controller").send("treatmentEdited")
+        @endSave()
 
 
 `export default view`

@@ -150,7 +150,7 @@ test "Can edit treatment", ->
 
     andThen ->
       ok find(".treatment-name-input")
-      ok find(".treatment-quantity-input")
+      ok find(".checkin-treatment-dose-inputs .form-quantity-input")
       # fillIn(".treatment-quantity-input", "200")
       # triggerEvent ".save-treatment", "click"
       # andThen ->

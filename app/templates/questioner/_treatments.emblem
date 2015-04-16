@@ -2,7 +2,7 @@
   if treatments.length
     h3 = t "which_treatments_taken_today"
     ul: each treatment in treatments
-      view "questioner/treatment" active=treatment.added name=treatment.name
+      view "questioner/treatment" content=treatment active=treatment.added name=treatment.name
 
     / ul: each treatment in inactiveTreatments
     /   view "questioner/treatment" editable=true active=false

@@ -73,15 +73,11 @@ textarea {
   &:hover {
     border-color: darken($base-border-color, 10%);
   }
-
-
   &:focus {
     border-color: $action-color;
     box-shadow: $form-box-shadow-focus;
     outline: none;
   }
-
-
 }
 
 .text-input, .password-input, .radio-input, .checkbox-input, .select-input, .switch-input, .number-input {
