@@ -15,10 +15,11 @@ controller = Ember.Controller.extend FormHandlerMixin, AccountFormMixin,
           type: "POST"
           data: {settings: @getProperties(@get("fields"))}
         ).then(
-          (response) => @endSave()
+          (response) =>
+            @endSave()
+            @target.send("save") # bump to route
           (response) => @errorCallback(response, @)
         )
-        true # pass up to route
       else
         false
 

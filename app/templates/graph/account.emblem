@@ -15,12 +15,10 @@
               view "forms/textInput" name="dobDay" placeholder="22" noLabelText=true
               view "forms/textInput" name="dobYear" placeholder="1980" noLabelText=true
 
-            /view "forms/switchInput" name="icecream"
-
             view "forms/radioInput" name="sex"
             view "forms/textInput" name="gender"
 
-            view "forms/saveButton"
+            view "forms/saveButton" name="forms.save"
             br
 
         else

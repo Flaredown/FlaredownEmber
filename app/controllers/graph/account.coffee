@@ -6,7 +6,6 @@
 
 controller = Ember.Controller.extend FormHandlerMixin, AccountFormMixin,
 
-
   editing: false
   modalOpen: true
   modalChanged: Ember.observer ->
