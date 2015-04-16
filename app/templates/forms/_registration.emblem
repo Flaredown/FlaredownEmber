@@ -13,4 +13,4 @@
     else
       view "forms/saveButton" name="register" action="register"
 
-    link-to "login" class="login-button btn" | {{ t "unauthenticated.back_to_login" }}
+    link-to "login" | {{ t "unauthenticated.back_to_login" }}
