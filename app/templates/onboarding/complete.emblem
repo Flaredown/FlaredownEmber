@@ -2,5 +2,5 @@ h2 = t "onboarding.setup_complete"
 img src="http://www.comicsandmemes.com/wp-content/uploads/2013/04/Success-baby.jpg"
 h3 = t "onboarding.ready_for_checkin"
 br
-a href="javascript: void(0)" click="back" {{ t "nav.back"}}
+a.btn href="javascript: void(0)" click="back" {{ t "nav.back"}}
 link-to "graph.checkin" "today" "1" class="btn btn-primary right" | {{t "onboarding.checkin"}}
