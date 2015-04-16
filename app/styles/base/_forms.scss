@@ -84,16 +84,16 @@ textarea {
 
 }
 
-.text-input, .password-input, .radio-input, .checkbox-input, .select-input, .switch-input {
+.text-input, .password-input, .radio-input, .checkbox-input, .select-input, .switch-input, .number-input {
   margin: 0 0 30px 0;
 }
 
-.text-input, .password-input {
+.text-input, .password-input, .number-input {
   &.invalid.present input {
     border-color: red;
     outline: none;
   }
-  input[type="text"], input[type="password"] {
+  input[type="text"], input[type="password"], input[type="number"] {
     font-size: 1.2em;
     &:focus {
       border-color: $primary;
