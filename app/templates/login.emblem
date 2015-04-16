@@ -9,4 +9,4 @@
       view "forms/passwordInput" name="password"
 
       view "forms/saveButton" name="login" action="login"
-      link-to "register" class="register-button" | {{ t "unauthenticated.login_register_now" }}
+      link-to "register" class="register-button btn" | {{ t "unauthenticated.login_register_now" }}
