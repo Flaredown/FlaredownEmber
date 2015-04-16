@@ -55,6 +55,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
           (response) =>
             if @get("isEntry")
               newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
+              newTreatment.set("active", true)
               @get("model.treatments").addObject newTreatment
 
             unless @get("currentUser.treatments").findBy("id","#{response.treatment.id}")
