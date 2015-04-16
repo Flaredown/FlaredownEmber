@@ -2,10 +2,19 @@
 
 view = Ember.View.extend
 
+  init: ->
+    @_super()
+
+    # Watch the "name" field on the parent "controller"
+    Em.defineProperty @, "errors", Em.computed( ->
+      @get("controller.errors.fields.#{@get("parent.name")}")
+    ).property("controller.errors.fields.#{@get("parent.name")}")
+
   tagName: "input"
+  allowCustom: false
 
   config: Ember.computed( ->
-    {
+    _config = {
       data: @get("content")
       placeholder: @get("placeholder")
       val: @get("value")
@@ -16,6 +25,9 @@ view = Ember.View.extend
         callback(initialValue) if initialValue
       ).bind(@)
     }
+    _config.createSearchChoice = ((term) -> {id: 0, text: term} unless @get("content").mapBy("text").contains(term) ).bind(@) if @get("allowCustom")
+    _config
+
   ).property("content")
 
   formatted: (option) ->

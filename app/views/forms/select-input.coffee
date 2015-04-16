@@ -9,7 +9,7 @@ view = Ember.View.extend FormInputMixin,
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent"]
 
   options: Em.computed(->
-    options = Ember.keys(Ember.I18n.translations.get("#{@get("optionI18nKey")}"))
+    options = Ember.keys(Ember.I18n.translations.get("#{@get("optionI18nKey")}")) if Ember.I18n.translations.get("#{@get("optionI18nKey")}")
     options ||= @get("controller.#{@get("name")}Options")
     options.map (item,i) =>
       # select2 option format
@@ -23,8 +23,7 @@ view = Ember.View.extend FormInputMixin,
   ).property("controller", "value")
 
   placeholder: Em.computed( ->
-    name = @get("name").underscore()
-    key = if @get("i18nKey") then "#{@get("i18nKey")}.#{name}" else name
+    key = if @get("i18nKey") then "#{@get("i18nKey")}.#{name}" else @get("name").underscore()
     placeholder = Ember.I18n.t("#{key}_placeholder")
     if placeholder.match(/missing translation/i) then Ember.I18n.t(key) else placeholder
   ).property("i18nKey")

@@ -8,17 +8,14 @@ mixin = Ember.Mixin.create FormHandlerMixin,
   isEntry: Ember.computed(-> @get("model.constructor.typeKey") is "entry").property("model")
 
   treatments: Ember.computed ->
-    if @get("isEntry")
-      @get("model.treatments")
-    else
-      @get("currentUser.treatments")
-  .property("currentUser.treatments.@each")
+    if @get("isEntry") then @get("model.treatments") else @get("currentUser.treatments")
+  .property("currentUser.treatments.@each", "model.treatments.@each")
 
-  inactiveTreatments: Ember.computed(->
-    actives = @get("treatments").mapBy("name")
-    @get("currentUser.treatments").filter (treatment) ->
-      not actives.contains treatment.get("name")
-  ).property("currentUser.treatments", "treatments.@each")
+  # inactiveTreatments: Ember.computed(->
+  #   actives = @get("treatments").mapBy("name")
+  #   @get("currentUser.treatments").filter (treatment) ->
+  #     not actives.contains treatment.get("name")
+  # ).property("currentUser.treatments", "treatments.@each")
 
   conditions: Ember.computed ->
     if @get("responsesData")
@@ -50,19 +47,21 @@ mixin = Ember.Mixin.create FormHandlerMixin,
     ### TREATMENTS ###
     treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
     addTreatment: (treatment) ->
-      ajax("#{config.apiNamespace}/treatments",
-        type: "POST"
-        data: {name: treatment.name}
-      ).then(
-        (response) =>
-          if @get("isEntry")
-            newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
-            @get("treatments").addObject newTreatment
+      unless @get("treatments").findBy("id","#{treatment.id}")
+        ajax("#{config.apiNamespace}/treatments",
+          type: "POST"
+          data: {name: treatment.name}
+        ).then(
+          (response) =>
+            if @get("isEntry")
+              newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
+              @get("model.treatments").addObject newTreatment
 
-          @get("currentUser.symptoms").pushObject @store.createRecord "symptom", {id: response.treatment.id, name: response.treatment.name}
+            unless @get("currentUser.treatments").findBy("id","#{response.treatment.id}")
+              @get("currentUser.treatments").pushObject @store.createRecord "treatment", {id: response.treatment.id, name: response.treatment.name}
 
-        (response) => @errorCallback(response, @)
-      )
+          (response) => @errorCallback(response, @)
+        )
 
     removeTreatment: (treatment) ->
       @get("treatments").removeObject treatment

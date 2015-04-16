@@ -5,6 +5,7 @@ mixin = Ember.Mixin.create
   # Assumes the controller has validations and errors based on that name.
 
   errorsRoot: "controller.errors.fields"
+  parentForm: false # if present, validates also at specified controller
 
   init: ->
     @_super()
@@ -17,6 +18,8 @@ mixin = Ember.Mixin.create
       Em.defineProperty @, "errors", Em.computed( ->
         @get("#{@get("errorsRoot")}.#{@get("name")}")
       ).property("#{@get("errorsRoot")}.@each")
+
+    @get("parentForm.subForms").addObject(@get("controller")) if @get("parentForm")
 
   didInsertElement: -> @set("value","") if @get("kind") is "text" and @get("value") is undefined
 

@@ -187,9 +187,12 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       @propertyDidChange("responsesData")
       @send("nextSection") if @get("sectionQuestions.length") is 1
 
-    setSection: (section) -> @set("section", section) if @get("sections").mapBy("number").contains(section)
-    nextSection:          -> @set("section", @get("section")+1) unless @get("section") is @get("sections.lastObject.number")
-    previousSection:      -> @set("section", @get("section")-1) unless @get("section") is @get("sections.firstObject.number")
+    setSection: (section) ->
+      return false unless @saveForm()
+      @set("section", section) if @get("sections").mapBy("number").contains(section)
+
+    nextSection:     -> @send("setSection",(@get("section")+1)) unless @get("section") is @get("sections.lastObject.number")
+    previousSection: -> @send("setSection",(@get("section")-1)) unless @get("section") is @get("sections.firstObject.number")
 
     save: (close) ->
       data =

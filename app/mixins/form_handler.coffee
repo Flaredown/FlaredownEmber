@@ -5,6 +5,12 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
   init: ->
     @_super()
+
+    @set("fields"      , Ember.A([])) unless Em.isPresent @get("fields") # all fields
+    @set("requirements", Ember.A([])) unless Em.isPresent @get("requirements") # fields that are required to have a value
+    @set("validations" , Ember.A([])) unless Em.isPresent @get("validations") # validations to be checked
+    @set("subForms"    , Ember.A([])) unless Em.isPresent @get("subForms") # validations sent from subcomponents
+
     @setProperties
       saving:       false
       errors:       null
@@ -25,15 +31,11 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     }
   }
 
-  fields:       [] # all fields
-  requirements: [] # fields that are required to have a value
-  validations:  [] # validations to be checked
-
   errorables: (-> @get("requirements").concat(@get("validations")) ).property("requirements", "validations")
 
-  hasChecks: Ember.computed(-> @get("requirements").length or @get("validations").length ).property("requirements", "validations")
+  hasChecks: Ember.computed(-> @get("requirements").length + @get("validations").length + @get("subForms").length ).property("requirements.@each", "validations.@each", "subForms.@each")
 
-  checkFields: ->
+  checkFields: Em.computed ->
     pass      = true
     response  = @get("errorResponseTemplate")()
 
@@ -53,8 +55,16 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         response.errors.fields[key] = []
         response.errors.fields[key].addObject error
 
+    # simply check that these pass
+    @get("subForms").forEach (form) =>
+      console.log "DUPS!!!!!!!!!!!" if form is @
+      return if form is @
+      pass = false if not form.get("isDestroyed") and not form.saveForm()
+
     @errorCallback(response, @) unless pass
     pass
+
+  .property("requirements.@each", "validations.@each", "subForms.@each").volatile()
 
   allErrors: Em.computed(->
     return [] unless @get("errors")
@@ -80,9 +90,8 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
   saveForm: (skipSavableCheck) ->
     @set("errors", null)
-
     skipSavableCheck = false if typeof(skipSavableCheck) is "undefined"
-    return false if @get("hasChecks") and not @checkFields()
+    return false if @get("hasChecks") and not @get("checkFields")
     # return false if not skipSavableCheck and not @get("isSavable")
 
     @set "saving", true

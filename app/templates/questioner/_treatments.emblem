@@ -1,8 +1,8 @@
 .checkin-treatments
-  if treatments.length
+  if treatments
     h3 = t "which_treatments_taken_today"
     ul: each treatment in treatments
-      view "questioner/treatment" content=treatment active=treatment.added name=treatment.name
+      view "questioner/treatment" content=treatment active=treatment.added
 
     / ul: each treatment in inactiveTreatments
     /   view "questioner/treatment" editable=true active=false

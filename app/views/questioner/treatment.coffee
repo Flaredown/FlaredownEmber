@@ -7,18 +7,27 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
   templateName: "questioner/_treatment_input"
   classNames: ["checkin-treatment"]
 
+  unitOptions: Em.computed(-> Em.I18n.translations.treatment_units ).property()
+
   colorClass: Ember.computed(-> @colorClasses("treatments_#{@get("name")}", "treatment").bg ).property("name")
 
   fields: "name quantity unit".w()
   requirements: "name quantity unit".w()
   validations:  "quantity".w()
 
+  id: Em.computed.alias("content.id")
+  name: Em.computed.alias("content.name")
+  quantity: Em.computed.alias("content.quantity")
+  unit: Em.computed.alias("content.unit")
+  active: Em.computed.alias("content.active")
+
   quantityValid: (-> /^\d+$/.test(@get("quantity")) ).property("quantity")
 
-  actions:
-    toggleActive: (treatment) -> treatment.toggleProperty("active")
+  willDestroyElement: -> @get("controller").send("addTreatment", @getProperties("id", "name", "quantity", "unit"))
 
-    edit: -> @set("editing", true)
+  actions:
+    toggleActive: (treatment) -> @toggleProperty("active")
+
     destroy: (treatment) ->
       swal
         title: "Are you sure?",
@@ -26,18 +35,6 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
         type: "warning"
         showCancelButton: true
         closeOnConfirm: true
-        =>
-          @get("controller").send("removeTreatment", treatment)
-
-    add: (treatment) ->
-      @get("controller").send("addTreatment", treatment.getProperties("name", "quantity", "unit"))
-
-    save: ->
-      if @saveForm()
-        @set("active", true)
-        @set("editing", false)
-        @get("controller").send("treatmentEdited")
-        @endSave()
-
+        => @get("controller").send("removeTreatment", treatment)
 
 `export default view`

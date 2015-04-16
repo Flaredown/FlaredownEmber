@@ -1,12 +1,9 @@
 li
-  if treatment.active
-    form submit="'save' target=view"
-      div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
-      .checkin-treatment-dose-inputs
-        view "forms/numberInput" controller=view name="quantity" placeholder="30" noLabelText=true
-        /= input class="treatment-quantity-input" placeholder="30" name="treatment-quantity"  type="number" step="1" min="0" valueBinding="treatment.quantity"
-        view "questioner/treatment-unit" value=treatment.unit
-
-  else
+  form  submit="'save' target=view"
     div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
+    if treatment.active
+      .checkin-treatment-dose-inputs
+        view "forms/numberInput" name="quantity" controller=view parentForm=controller placeholder="30" noLabelText=true
+        view "forms/selectInput" name="unit" controller=view allowCustom=true optionI18nKey="treatment_units" noLabelText=true
+
     .checkin-treatment-remove click="'destroy' treatment target=view" &times;
