@@ -13,4 +13,4 @@
       else
         = t "unauthenticated.register"
 
-    link-to "login" class="btn btn-default col-md-12" | {{ t "unauthenticated.back_to_login" }}
+    link-to "login" | {{ t "unauthenticated.back_to_login" }}
