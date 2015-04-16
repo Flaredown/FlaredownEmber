@@ -1,5 +1,5 @@
 if currentUser.loggedIn
-  nav.js-menu.sliding-menu-content
+  nav.js-menu.sliding-panel-content
     ul
       li: link-to "graph"
         = t "menu_item_graph"
@@ -8,10 +8,11 @@ if currentUser.loggedIn
       li: link-to "reports"
         = t "menu_item_investigations"
       li.navbar-slide-account #{currentUser.email}
-      li: link-to "graph.account"
+      li.account-option: link-to "graph.account"
         = t "menu_item_account"
       / li = t "menu_item_print"
-      li click="logout"
+      li.account-option click="logout"
         a href="#"
           = t "menu_item_logout"
-  .js-menu-screen.menu-screen
+
+  .js-menu-screen.sliding-panel-fade-screen

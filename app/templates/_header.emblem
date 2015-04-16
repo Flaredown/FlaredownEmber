@@ -4,7 +4,7 @@ if currentUser.loggedIn
       .navbar-left
 
         // Slide menu button
-        button.js-menu-trigger.sliding-menu-button type="button"
+        button.js-menu-trigger.sliding-panel-button type="button"
           img src="assets/menuIcon.svg" alt="menu"
 
         // Logo
