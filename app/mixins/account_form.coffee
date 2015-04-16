@@ -2,7 +2,7 @@
 
 mixin = Ember.Mixin.create
 
-  defaults: Ember.computed(-> @get("currentUser.settings")).property("currentUser")
+  defaults: Ember.computed.alias("currentUser.settings")
   fields: "location dobDay dobMonth dobYear sex gender".w()
   requirements: "location dobDay dobMonth dobYear sex".w()
   validations:  "dobDay dobMonth dobYear".w()
