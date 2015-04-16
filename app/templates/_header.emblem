@@ -20,14 +20,22 @@ if currentUser.loggedIn
 
       //Account
       .navbar-right
+        / .dropdown
+        /   .dropdown-button #{currentUser.email} &#9662;
+        /   ul.menu
+        /     li: link-to "graph.account"
+        /       = t "menu_item_account"
+        /     / li = t "menu_item_print_report"
+        /     / li = t "menu_item_edit_checkin"
+        /     li click="logout" = t "menu_item_logout"
         .dropdown
-          .dropdown-button #{currentUser.email} &#9662;
-          ul.menu
-            li: link-to "graph.account"
-              = t "menu_item_account"
-            / li = t "menu_item_print_report"
-            / li = t "menu_item_edit_checkin"
-            li click="logout" = t "menu_item_logout"
+          .dropdown-container
+            / p.dropdown-description account
+            p.dropdown-button #{currentUser.email} &#9662;
+            ul.dropdown-menu.dropdown-select
+              li: link-to "graph.account"
+                = t "menu_item_account"
+              li click="logout" = t "menu_item_logout"
 
 else
   nav.navbar-centered

@@ -7,12 +7,23 @@ view = Ember.View.extend
       $('.js-menu,.js-menu-screen').toggleClass('is-visible')
       e.preventDefault()
 
-    $(".dropdown-button").click ->
-      $(".menu").toggleClass("show-menu")
+    # $(".dropdown-button").click ->
+    #   $(".menu").toggleClass("show-menu")
       # $(".menu > li").click ->
       #   debugger
       #   $(".dropdown-button").html($(@).html())
       #   $(".menu").removeClass("show-menu")
+    $('.dropdown-button').click ->
+      $('.dropdown-menu').toggleClass 'show-menu'
+      $('.dropdown-menu > li').click ->
+        $('.dropdown-menu').removeClass 'show-menu'
+        return
+      $('.dropdown-menu.dropdown-select > li').click ->
+        $('.dropdown-button').html $(this).html()
+        return
+      return
+    return
+
 
   willDestroyElement: ->
 
