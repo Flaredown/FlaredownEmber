@@ -101,10 +101,11 @@
       @include position(absolute, 0 1em 0 0);
       color: $dropdown-background;
       content: "\25b2";
-      font-size: 1.4em;
+      font-size: 1em;
       pointer-events: none;
       text-shadow: 0 -2px 2px transparentize(black, 0.7);
       top: -1em;
+      width: 100%;
     }
   }
 
