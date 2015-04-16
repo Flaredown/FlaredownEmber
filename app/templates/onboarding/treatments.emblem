@@ -1,13 +1,12 @@
 h2 = t "onboarding.treatments_to_track"
 
-each treatment in treatments
-  h6.treatment
-  	= treatment.name
-br
+form submit="save"
+  each treatment in treatments
+    h6.treatment
+    	= treatment.name
+  br
 
-.checkin-search
-	view "questioner/trackable-search" trackableType="treatment"
+  .checkin-search
+  	view "questioner/trackable-search" trackableType="treatment"
 
-br
-link-to "Back"
-button#continue-button.submit-button click="save" = t "onboarding.continue"
+  partial "onboarding/nav"

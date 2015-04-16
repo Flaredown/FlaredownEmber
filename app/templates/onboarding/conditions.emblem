@@ -1,14 +1,12 @@
 h2 = t "onboarding.conditions_to_track"
 
-each condition in conditions
-  h6.condition
-  	= condition.name
-br
-
-.checkin-search
-	view "questioner/trackable-search" trackableType="condition"
-
-br
-link-to "Back"
 form submit="save"
-  view "forms/saveButton" name="continue"
+  each condition in conditions
+    h6.condition
+    	= condition.name
+  br
+
+  .checkin-search
+  	view "questioner/trackable-search" trackableType="condition"
+
+  partial "onboarding/nav"

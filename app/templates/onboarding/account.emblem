@@ -13,4 +13,4 @@ form submit="save"
   view "forms/radioInput" name="sex"
   view "forms/textInput" name="gender"
 
-  view "forms/saveButton" name="continue"
+  partial "onboarding/nav"

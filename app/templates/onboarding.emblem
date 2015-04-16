@@ -1,6 +1,1 @@
-h1 onboarding stuff
-.pagination-dots
-  ul: each step in steps
-    li: link-to step class="complete page-dot" | &nbsp;
-
 .onboarding = outlet

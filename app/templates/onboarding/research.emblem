@@ -6,6 +6,4 @@ form submit="save"
   view "forms/selectInput" name="highestEducation"
   view "forms/textInput" name="activityLevel"
 
-  br
-  link-to "back"
-  view "forms/saveButton" name="continue"
+  partial "onboarding/nav"

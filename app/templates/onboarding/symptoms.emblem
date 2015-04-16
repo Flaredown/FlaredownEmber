@@ -1,14 +1,12 @@
 h2 = t "onboarding.symptoms_to_track"
 
-each symptom in symptoms
-  h6.symptom
-  	= symptom.name
-br
-
-.checkin-search
-	view "questioner/trackable-search" trackableType="symptom"
-
-br
-link-to "Back"
 form submit="save"
-  view "forms/saveButton" name="continue"
+  each symptom in symptoms
+    h6.symptom
+    	= symptom.name
+  br
+
+  .checkin-search
+  	view "questioner/trackable-search" trackableType="symptom"
+
+  partial "onboarding/nav"

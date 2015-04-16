@@ -8,6 +8,4 @@ form submit="save"
       li = section
     hr
 
-  br
-  link-to "Back"
-  button#continue-button.submit-button click="save" = t "onboarding.continue"
+  partial "onboarding/nav"
