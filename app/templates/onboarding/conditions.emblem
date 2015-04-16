@@ -9,6 +9,6 @@ br
 	view "questioner/trackable-search" trackableType="condition"
 
 br
-br
+link-to "Back"
 form submit="save"
   view "forms/saveButton" name="continue"

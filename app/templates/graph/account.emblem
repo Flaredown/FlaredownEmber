@@ -24,12 +24,13 @@
             br
 
         else
-          h5 {{dobMonth}} / {{dobDay}} / {{dobYear}}
-          h5 = location
-          h5 = sex
-          h5 = gender
-
-          br
-          br
+          label = t "onboarding.dob"
+          h4 {{dobMonth}} / {{dobDay}} / {{dobYear}}
+          label = t "onboarding.location"
+          h4 = location
+          label = t "onboarding.sex"
+          h4 = sex
+          label = t "onboarding.gender"
+          h4 = gender
 
           a href="javascript:void(0);" click="edit" | {{t "edit_account"}}

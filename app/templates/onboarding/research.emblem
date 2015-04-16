@@ -7,5 +7,5 @@ form submit="save"
   view "forms/textInput" name="activityLevel"
 
   br
-  br
+  link-to "back"
   view "forms/saveButton" name="continue"

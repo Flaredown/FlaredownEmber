@@ -3,11 +3,11 @@ h2 = t "onboarding.research_questions_for_conditions"
 form submit="save"
 
   each description in catalogDescriptions
-    h2 = description.title
+    h4 = description.title
     ul: each section in description.sections
       li = section
-
+    hr
 
   br
-  br
-  view "forms/saveButton" name="continue"
+  link-to "Back"
+  button#continue-button.submit-button click="save" = t "onboarding.continue"

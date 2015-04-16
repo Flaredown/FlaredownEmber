@@ -9,6 +9,5 @@ br
 	view "questioner/trackable-search" trackableType="treatment"
 
 br
-br
-form submit="save"
-  view "forms/saveButton" name="continue"
+link-to "Back"
+button#continue-button.submit-button click="save" = t "onboarding.continue"
