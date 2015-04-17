@@ -26,9 +26,8 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   # Watch some user actions
   modalChanged: Ember.observer ->
     unless @get("modalOpen")
-      @send("save")
+      @send("save") if @saveForm()
       @set("sectionsSeen", [])
-      @set("edit", null)
       @transitionToRoute("graph")
       @set("modalOpen", true)
   .observes("modalOpen")
