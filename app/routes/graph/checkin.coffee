@@ -24,7 +24,7 @@ route = AuthRoute.extend GroovyResponseHandlerMixin,
         (response) =>
           @store.pushPayload "entry", response
           @store.find "entry", response.entry.id
-        @errorCallback
+        @errorCallback.bind(@)
       )
 
   afterModel: (model, transition, params) ->

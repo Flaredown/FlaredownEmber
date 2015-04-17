@@ -21,7 +21,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         @getLocale()
 
       (response) =>
-        @errorCallback(response)
+        @errorCallback(response).bind(@) unless response.status is 401 # don't error on unauthorized, they'll be sent to login instead
         @getLocale()
 
     )

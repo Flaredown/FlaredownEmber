@@ -12,7 +12,7 @@ route = AuthRoute.extend GroovyResponseHandlerMixin,
       url: "#{config.apiNamespace}/me/catalogs"
     ).then(
       (response) -> response
-      @errorCallback
+      @errorCallback.bind(@)
     )
 
   beforeModel: ->

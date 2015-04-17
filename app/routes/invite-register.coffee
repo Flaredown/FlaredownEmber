@@ -11,7 +11,7 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
       url: "#{config.apiNamespace}/users/invitee/#{params.invitation_token}"
     ).then(
       (response) => response
-      @errorCallback
+      @errorCallback.bind(@)
     )
 
   setupController: (controller,model) ->

@@ -1,6 +1,9 @@
 `import Ember from 'ember'`
+`import config from '../config/environment'`
+`import ajax from 'ic-ajax'`
+`import FormHandlerMixin from '../mixins/form_handler'`
 
-mixin = Ember.Mixin.create
+mixin = Ember.Mixin.create FormHandlerMixin,
 
   defaults: Ember.computed.alias("currentUser.settings")
   fields: "location dobDay dobMonth dobYear sex gender".w()
@@ -13,5 +16,29 @@ mixin = Ember.Mixin.create
   dobValid: (-> @get("dobDayValid") and @get("dobMonthValid") and @get("dobYearValid") ).property("dobDayValid", "dobMonthValid", "dobYearValid")
 
   locationOptions: Em.computed.alias("Ember.I18n.translations.location_options")
+
+  actions:
+    save: ->
+      if @saveForm()
+        settings = @getProperties(@get("fields"))
+        ajax("#{config.apiNamespace}/me.json",
+          type: "POST"
+          data: {settings: settings}
+        ).then(
+          (response) =>
+            @endSave()
+            @get("currentUser").setProperties("settings", settings)
+
+            if @get("isOnboarding")
+              @target.send("save") # bump to route
+            else
+              @set("editing", false)
+
+
+          @errorCallback.bind(@)
+        )
+      else
+        false
+
 
 `export default mixin`

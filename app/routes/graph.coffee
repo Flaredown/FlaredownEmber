@@ -12,7 +12,7 @@ route = AuthRoute.extend GroovyResponseHandlerMixin,
       data: { start_date: @get("currentUser").get("defaultStartDate").format("MMM-DD-YYYY"), end_date: @get("currentUser").get("defaultEndDate").format("MMM-DD-YYYY") }
     ).then(
       (response) -> response
-      @errorCallback
+      @errorCallback.bind(@)
     )
 
   setupController: (controller, model) ->
