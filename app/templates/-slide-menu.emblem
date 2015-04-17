@@ -1,8 +1,9 @@
 if currentUser.loggedIn
   nav.js-menu.sliding-panel-content
     ul
-      / li: link-to "graph"
-      /   = t "menu_item_graph"
+      if currentUser.graphable
+        li: link-to "graph"
+          = t "menu_item_graph"
       li: link-to "insights"
         = t "menu_item_stats"
       li: link-to "reports"

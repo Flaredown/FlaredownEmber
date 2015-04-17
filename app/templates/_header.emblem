@@ -13,14 +13,20 @@ if currentUser.loggedIn
 
         // Sections
         ul.navbar-sections
-          / li: link-to "graph" | {{ t "menu_item_graph" }}
-          / li &#47;
+          if currentUser.graphable
+            li: link-to "graph" | {{ t "menu_item_graph" }}
+            li &#47;
           li: link-to "insights" | {{ t "menu_item_stats" }}
           li &#47;
           li: link-to "reports" | {{ t "menu_item_investigations" }}
 
+        ul.navbar-sections
+          li: small: a href="#" click="'toggleGraph' target=currentUser" [Toggle Graph]
+
+
       //Account
       .navbar-right
+
         / .dropdown
         /   .dropdown-button #{currentUser.email} &#9662;
         /   ul.menu

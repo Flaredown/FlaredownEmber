@@ -4,7 +4,7 @@
 
 route = AuthRoute.extend
 
-  beforeModel: -> @transitionTo("graph.checkin", "today", "1")
+  beforeModel: -> @transitionTo("graph.checkin", "today", "1") unless @get("currentUser.graphable")
   model: (params) ->
     ajax(
       url: "#{config.apiNamespace}/graph"
@@ -15,6 +15,7 @@ route = AuthRoute.extend
     )
 
   setupController: (controller, model) ->
+    @_super()
     user = @get("currentUser")
 
     controller.set "model",           {}
@@ -37,6 +38,7 @@ route = AuthRoute.extend
     # @get("pusher").unsubscribe("graph_for_#{user_id}") if user_id
 
   actions:
+
     updates: (message) ->
       # TODO use Pusher data, not hard-coded example
       @controllerFor("graph").get("catalog.scores").pushObject {x: 1391922000, y: 500 }

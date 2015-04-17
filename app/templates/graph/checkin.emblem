@@ -1,8 +1,10 @@
-/ .modal
-/
-/   = input type="checkbox" class="modal-state" id="modal-1" checkedBinding="modalOpen"
-/   .modal-window
-/     .modal-inner
-/       label.modal-close for="modal-1" &times;
-/       div: view "questioner"
-view "questioner"
+if currentUser.graphable
+  .modal
+
+    = input type="checkbox" class="modal-state" id="modal-1" checkedBinding="modalOpen"
+    .modal-window
+      .modal-inner
+        label.modal-close for="modal-1" &times;
+        div: view "questioner"
+else
+  .checkin-container: view "questioner"

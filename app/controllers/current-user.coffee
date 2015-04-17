@@ -6,9 +6,10 @@
 controller = Ember.ObjectController.extend
   needs: ["login"]
 
-  loggedIn: Ember.computed ->
-    @get("controllers.login.isAuthenticated")
-  .property("controllers.login.isAuthenticated")
+   # disable graph
+  graphable: Em.computed(-> JSON.parse(@get("settings.graphable")) ).property("settings.graphable")
+
+  loggedIn: Ember.computed.alias("controllers.login.isAuthenticated")
 
   defaultStartDate: moment().utc().subtract(40,"days").startOf("day")
   defaultEndDate: moment().utc().startOf("day")
@@ -41,6 +42,17 @@ controller = Ember.ObjectController.extend
 
   subscribe: (channel) -> @get("pusherChannels").addObject "#{channel}_#{@get("obfuscated_id")}" unless @get("pusherChannels")["#{channel}_#{@get("obfuscated_id")}"]
 
+  actions:
+    toggleGraph: ->
+      graphable = not @get("graphable")
+      @set("settings.graphable", "#{graphable}")
+      ajax("#{config.apiNamespace}/me.json",
+        type: "POST"
+        data: {settings: {graphable: graphable}}
+      ).then(
+        (response) => window.location = "/"
+        (response) => null
+      )
 
 
 `export default controller`
