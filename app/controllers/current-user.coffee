@@ -7,7 +7,12 @@ controller = Ember.ObjectController.extend
   needs: ["login"]
 
    # disable graph
-  graphable: Em.computed(-> JSON.parse(@get("settings.graphable")) ).property("settings.graphable")
+  graphable: Em.computed(->
+    if @get("settings.graphable") is undefined
+      false
+    else
+      JSON.parse(@get("settings.graphable"))
+  ).property("settings.graphable")
 
   loggedIn: Ember.computed.alias("controllers.login.isAuthenticated")
 
