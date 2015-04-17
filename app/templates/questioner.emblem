@@ -1,4 +1,13 @@
-.checkin-date = fancyDate
+.checkin-date-container
+  if currentUser.graphable
+    .checkin-date = fancyDate
+  else
+    .yesterday: link-to "graph.checkin" yesterdayDate "1"
+       |yesterday
+    .checkin-date = fancyDate
+    .tomorrow: link-to "graph.checkin" tomorrowDate "1"
+       |tomorrow
+
 .pagination-dots
 	ul
 		each sec in sections

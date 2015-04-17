@@ -13,7 +13,7 @@ model = DS.Model.extend
   complete:             DS.attr("boolean")
   just_created:         DS.attr("boolean")
 
-  moment:     Ember.computed(-> moment.utc(@get("date")) ).property("date")
+  moment:     Ember.computed(-> moment(@get("date")) ).property("date")
   unixDate:   Ember.computed(-> @get("moment").unix() ).property("moment")
   niceDate:   Ember.computed(-> @get("moment").format("MMM-DD-YYYY") ).property("moment")
   fancyDate:  Ember.computed(-> @get("moment").format("MMMM D, YYYY") ).property("moment")

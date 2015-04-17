@@ -11,6 +11,9 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   modalOpen: true
   sectionsSeen: []
 
+  yesterdayDate: Em.computed(-> moment(@get("moment")).subtract(1,"day").format("MMM-DD-YYYY") ).property("moment")
+  tomorrowDate: Em.computed(-> moment(@get("moment")).add(1,"day").format("MMM-DD-YYYY") ).property("moment")
+
   nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
   userQuestionSections: ["conditions","symptoms"]
   defaultResponseValues:
