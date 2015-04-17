@@ -93,19 +93,22 @@
     margin: 20px auto 0 auto;
     font-size: 1.2em;
     max-width: 20em;
-    li {
+    .checkin-treatment-name-wrapper {
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
     }
     .bg-default, .tbg- { background-color: $primary; }
   }
   .checkin-treatment-name {
-    @include span-columns(11);
+    @include span-columns(10);
     @include wrap-ellipsis;
     text-align: left;
     padding: 5px 15px;
     border-radius: 999px;
+
+    &:hover {
+      opacity: .9;
+    }
 
     &.active {
       color: white;
@@ -117,31 +120,41 @@
     }
 
   }
-  .checkin-treatment-edit, .checkin-treatment-remove {
+  .checkin-treatment-remove {
     @include span-columns(1);
     text-align: center;
+    cursor: pointer;
   }
   form {
     width: 100%;
   }
   .checkin-treatment-dose-inputs {
     text-align: left;
+    margin-top: 3px;
     & > * {
       font-size: .8em;
     }
-    .form-quantity-input {
+    .form-quantity {
       width: 25%;
-      padding: 4px;
       display: inline-block;
-      margin: 3px 0 0 10%;
+      margin: 0 0 0 5px;
     }
-    .select2-container {
+    .form-unit {
       width: 50%;
       display: inline-block;
-      margin: 0 0 0 3px;
+      margin-left: 5px;
+      margin-bottom: 0;
+      label {
+        margin: 0;
+      }
+    }
+    .form-quantity-input {
+      padding: 4px;
     }
     .select2-choice {
-      padding: 0 3px;
+      padding: 3px;
+      position: relative;
+      top: -2px;
     }
   }
   .save-treatment {
