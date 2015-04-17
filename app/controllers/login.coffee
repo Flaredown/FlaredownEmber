@@ -3,8 +3,9 @@
 `import ajax from 'ic-ajax'`
 `import FormHandlerMixin from '../mixins/form_handler'`
 `import UserSetupMixin from '../mixins/user_setup'`
+`import EmailPassValidations from '../mixins/email_pass_validations'`
 
-controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin,
+controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin, EmailPassValidations,
   translationRoot: "unauthenticated"
 
   queryParams: ["user_email", "user_token"]
@@ -12,12 +13,6 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin,
   fields: "email password".w()
   requirements: "email password".w()
   validations:  "email password".w()
-
-  emailValid: Em.computed( ->
-    email_regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    email_regex.test(@get("email"))
-  ).property("email")
-  passwordValid: Em.computed( -> @get("password.length") >= 2 ).property("password")
 
   isAuthenticated: Ember.computed(-> @get("currentUser.model.id") ).property("currentUser.model")
 

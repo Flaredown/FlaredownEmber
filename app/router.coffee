@@ -9,8 +9,7 @@ Router.map ->
   # Pre-Auth
   @resource "login", path: "login"
   @resource "register", path: "register"
-  @resource "form-error", path: "form-error"
-
+  @route "passwordReset", path: "reset-your-password"
   @route "inviteRegister", path: "accept-invitation/:invitation_token"
 
   # Post-Auth

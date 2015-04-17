@@ -10,7 +10,8 @@ module.exports = function(environment) {
     locationType: 'auto',
     apiVersion:      1,
     apiNamespace:    '/v1',
-    afterLoginRoute: 'graph',
+    // afterLoginRoute: 'graph',
+    afterLoginRoute: 'graph.checkin',
     pusher: {
       key: "12bdfdebc5307b2d8918",
       app_id: "65526"
