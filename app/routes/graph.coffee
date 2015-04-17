@@ -4,7 +4,7 @@
 
 route = AuthRoute.extend
 
-  beforeModel: -> @transitionTo("graph.checkin", "today", "1") unless @get("currentUser.graphable")
+  # beforeModel: -> @transitionTo("graph.checkin", "today", "1") unless @get("currentUser.graphable")
   model: (params) ->
     ajax(
       url: "#{config.apiNamespace}/graph"

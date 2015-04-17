@@ -3,9 +3,14 @@
   text-align: center;
   outline: none;
   width: 100%;
-  .checkin-date {
-    padding: 20px 0 20px 0;
-    color: grey;
+  .checkin-date-container {
+    .yesterday, .tomorrow { display: inline-block; }
+    .checkin-date {
+      display: inline-block;
+      width: 250px;
+      padding: 20px 0 20px 0;
+      color: grey;
+    }
   }
   .checkin-content {
     h3 {
