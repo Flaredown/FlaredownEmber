@@ -1,0 +1,34 @@
+.modal
+
+  = input type="checkbox" class="modal-state" id="modal-account" checkedBinding="modalOpen"
+  .modal-window
+    .modal-inner
+      label.modal-close for="modal-account" &times;
+      div
+        if editing
+          form submit="save"
+            view "forms/selectInput" name="location" optionsTranslationRoot=false
+
+            label = t "onboarding.dob"
+            .account-dob-wrapper
+              view "forms/textInput" name="dobMonth" placeholder="08" noLabelText=true
+              view "forms/textInput" name="dobDay" placeholder="22" noLabelText=true
+              view "forms/textInput" name="dobYear" placeholder="1980" noLabelText=true
+
+            view "forms/radioInput" name="sex"
+            view "forms/textInput" name="gender"
+
+            view "forms/saveButton" name="forms.save"
+            br
+
+        else
+          label = t "onboarding.dob"
+          h4 {{dobMonth}} / {{dobDay}} / {{dobYear}}
+          label = t "onboarding.location"
+          h4 = location
+          label = t "onboarding.sex"
+          h4 = sex
+          label = t "onboarding.gender"
+          h4 = gender
+
+          a href="javascript:void(0);" click="edit" | {{t "edit_account"}}

@@ -3,6 +3,8 @@
 `import ajax from 'ic-ajax'`
 
 route = AuthRoute.extend
+
+  beforeModel: -> @transitionTo("graph.checkin", "today", "1")
   model: (params) ->
     ajax(
       url: "#{config.apiNamespace}/graph"

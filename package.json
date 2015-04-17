@@ -41,7 +41,9 @@
     "express": "^4.8.5",
     "glob": "^4.0.5",
     "liquid-fire": "^0.17.1",
-    "node-sass": "^2.0.1"
+    "node-sass": "^2.0.1",
+    "broccoli-file-remover": "^0.3.1",
+    "broccoli-merge-trees": "^0.2.1"
   },
   "dependencies": {
     "rimraf": "2.2.8",

@@ -5,4 +5,6 @@
 /     .modal-inner
 /       label.modal-close for="modal-1" &times;
 /       div: view "questioner"
+
 view "questioner"
+outlet

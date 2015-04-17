@@ -32,22 +32,15 @@ app.import({development: 'bower_components/jquery-simulate/jquery.simulate.js'})
 
 app.import('bower_components/ember-i18n/lib/i18n.js');
 
-// app.import('vendor/bootstrap/js/transition.js');
-// app.import('vendor/bootstrap/js/modal.js');
-// app.import('vendor/bootstrap/js/dropdown.js');
-
-// Use `app.import` to add additional libraries to the generated
-// output files.
+// No Graph for now
+// removeFile = require('broccoli-file-remover');
+// mergeTrees = require('broccoli-merge-trees');
 //
-// If you need to use different assets in different
-// environments, specify an object as the first parameter. That
-// object's keys should be the environment name and the values
-// should be the asset to use in that environment.
+// appTree = app.toTree()
 //
-// If the library that you are including contains AMD or ES6
-// modules that you would like to import into your application
-// please specify an object with the list of modules as keys
-// along with the exports of each module as its value.
-
+// filteredTree = removeFile(appTree, {
+//   paths: ["assets/flaredown/controllers"],
+// });
+//
+// module.exports = mergeTrees([filteredTree]);
 module.exports = app.toTree();
-// module.exports = app.toTree(images);

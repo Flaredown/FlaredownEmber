@@ -8,12 +8,13 @@ if currentUser.loggedIn
           img src="assets/menuIcon.svg" alt="menu"
 
         // Logo
-        img.navbar-logo src="assets/logo.svg"
+        link-to "graph.checkin" "today" "1"
+          img.navbar-logo src="assets/logo.svg"
 
         // Sections
         ul.navbar-sections
-          li: link-to "graph" | {{ t "menu_item_graph" }}
-          li &#47;
+          / li: link-to "graph" | {{ t "menu_item_graph" }}
+          / li &#47;
           li: link-to "insights" | {{ t "menu_item_stats" }}
           li &#47;
           li: link-to "reports" | {{ t "menu_item_investigations" }}
