@@ -61,7 +61,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
       return if form is @
       pass = false if not form.get("isDestroyed") and not form.saveForm()
 
-    @errorCallback(response, @) unless pass
+    @errorCallback(response) unless pass
     pass
 
   .property("requirements.@each", "validations.@each", "subForms.@each").volatile()

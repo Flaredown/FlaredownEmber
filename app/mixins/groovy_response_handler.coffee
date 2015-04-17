@@ -5,7 +5,7 @@ mixin = Ember.Mixin.create
   errors: null
   saving: false
 
-  errorCallback: (response, controller) ->
+  errorCallback: (response) ->
     @set("errors", null)
     @set("saving", false)
 

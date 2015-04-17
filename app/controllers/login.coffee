@@ -42,7 +42,7 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin,
           (response) =>
             @endSave()
             @setupUser(@container)
-          (response) => @errorCallback(response, @)
+          @errorCallback
         )
 
     loginWithToken: ->
@@ -52,7 +52,7 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin,
         data: @getProperties("user_email", "user_token")
       ).then(
         (response) => @setupUser(@container)
-        (response) => @errorCallback(response, @)
+        @errorCallback
       )
 
     logout: ->

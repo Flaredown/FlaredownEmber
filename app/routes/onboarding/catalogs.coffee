@@ -3,15 +3,16 @@
 `import config from '../../config/environment'`
 `import ajax from 'ic-ajax'`
 `import Ember from 'ember'`
+`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
-route = AuthRoute.extend
+route = AuthRoute.extend GroovyResponseHandlerMixin,
 
   model: ->
     ajax(
       url: "#{config.apiNamespace}/me/catalogs"
     ).then(
       (response) -> response
-      (response) -> # TODO handler here
+      @errorCallback
     )
 
   beforeModel: ->

@@ -1,8 +1,9 @@
 `import AuthRoute from './authenticated'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
+`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
-route = AuthRoute.extend
+route = AuthRoute.extend GroovyResponseHandlerMixin,
 
   # beforeModel: -> @transitionTo("graph.checkin", "today", "1") unless @get("currentUser.graphable")
   model: (params) ->
@@ -11,7 +12,7 @@ route = AuthRoute.extend
       data: { start_date: @get("currentUser").get("defaultStartDate").format("MMM-DD-YYYY"), end_date: @get("currentUser").get("defaultEndDate").format("MMM-DD-YYYY") }
     ).then(
       (response) -> response
-      (response) -> # TODO handler here
+      @errorCallback
     )
 
   setupController: (controller, model) ->

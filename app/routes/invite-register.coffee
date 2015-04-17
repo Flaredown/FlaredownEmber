@@ -1,6 +1,7 @@
 `import Ember from 'ember'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
+`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
 route = Ember.Route.extend GroovyResponseHandlerMixin,
 
@@ -10,7 +11,7 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
       url: "#{config.apiNamespace}/users/invitee/#{params.invitation_token}"
     ).then(
       (response) => response
-      (response) => @errorCallback(response)
+      @errorCallback
     )
 
   setupController: (controller,model) ->

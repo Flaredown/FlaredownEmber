@@ -1,8 +1,9 @@
 `import Ember from 'ember'`
 `import ajax from 'ic-ajax'`
 `import config from '../config/environment'`
+`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
-mixin = Ember.Mixin.create
+mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
   setupUser: (container) ->
     @app           = container.lookup("application:main")
@@ -20,8 +21,9 @@ mixin = Ember.Mixin.create
         @getLocale()
 
       (response) =>
+        @errorCallback(response)
         @getLocale()
-        # @errorCallback(response, @) # TODO this doesn't work
+
     )
 
   getLocale: ->
@@ -43,7 +45,7 @@ mixin = Ember.Mixin.create
 
 
       (response) =>
-        @errorCallback(response, @) # TODO this doesn't work
+        @errorCallback(response)
         @app.advanceReadiness() unless @app_is_ready
     )
 

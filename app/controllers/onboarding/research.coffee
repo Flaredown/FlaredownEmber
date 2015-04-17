@@ -24,7 +24,7 @@ controller = Ember.Controller.extend FormHandlerMixin,
           (response) =>
             @endSave()
             @target.send("save") # bump to route
-          (response) => @errorCallback(response, @)
+          @errorCallback
         )
       else
         false

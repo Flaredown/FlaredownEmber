@@ -1,8 +1,9 @@
 `import AuthRoute from './authenticated'`
 `import config from '../config/environment'`
+`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 `import ajax from 'ic-ajax'`
 
-route = AuthRoute.extend
+route = AuthRoute.extend GroovyResponseHandlerMixin,
   model: (params, transition, queryParams) ->
     date = params.date
     today = moment.utc().format("MMM-DD-YYYY")
@@ -24,7 +25,7 @@ route = AuthRoute.extend
           @store.pushPayload "entry", response
           @store.find "entry", response.entry.id
         ,
-        (response) ->
+        @errorCallback(response)
       )
 
   afterModel: (model, transition, params) ->

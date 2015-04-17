@@ -61,7 +61,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
             unless @get("currentUser.treatments").findBy("id","#{response.treatment.id}")
               @get("currentUser.treatments").pushObject @store.createRecord "treatment", {id: response.treatment.id, name: response.treatment.name}
 
-          (response) => @errorCallback(response, @)
+          @errorCallback
         )
 
     removeTreatment: (treatment) ->
@@ -82,7 +82,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
           @get("currentUser.symptoms").pushObject @store.createRecord "symptom", {id: response.symptom.id, name: response.symptom.name}
 
-        (response) => @errorCallback(response, @)
+        @errorCallback
       )
 
     removeSymptom: (symptom) ->
@@ -104,7 +104,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
           @get("currentUser.conditions").pushObject @store.createRecord "condition", {id: response.condition.id, name: response.condition.name}
 
-        (response) => @errorCallback(response, @)
+        @errorCallback
       )
 
     removeCondition: (condition) ->

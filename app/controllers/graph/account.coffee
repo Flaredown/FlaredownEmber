@@ -28,7 +28,7 @@ controller = Ember.Controller.extend FormHandlerMixin, AccountFormMixin,
           (response) =>
             @set("editing", false)
             @endSave()
-          (response) => @errorCallback(response, @)
+          @errorCallback
         )
       else
         false

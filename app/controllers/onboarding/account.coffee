@@ -18,7 +18,7 @@ controller = Ember.Controller.extend FormHandlerMixin, AccountFormMixin,
           (response) =>
             @endSave()
             @target.send("save") # bump to route
-          (response) => @errorCallback(response, @)
+          @errorCallback
         )
       else
         false
