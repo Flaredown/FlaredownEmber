@@ -1,10 +1,7 @@
 `import Ember from 'ember'`
+`import UnAuthRoute from './unauthenticated'`
 
-route = Ember.Route.extend
-  beforeModel: (transition) ->
-    if (@controllerFor('login').get("isAuthenticated"))
-      @transitionTo('graph')
-
+route = UnAuthRoute.extend
   setupController: (controller, model) ->
     @_super(controller, model);
 
