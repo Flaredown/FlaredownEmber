@@ -20,9 +20,8 @@ liquid-with section as liquidSection
 
   .checkin-navigate
 
-  	unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" = t "nav.back_caps"
+    unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" = t "nav.back_caps"
+    unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" = t "nav.next_caps"
 
-  	unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" = t "nav.next_caps"
-
-  	if isLastSection
-  		a.checkin-finish href="javascript:void(0);" click="'save' true" = t "nav.done_caps"
+    if isLastSection: if currentUser.graphable: link-to "graph" class="checkin-finish"
+      = t "nav.done_caps"

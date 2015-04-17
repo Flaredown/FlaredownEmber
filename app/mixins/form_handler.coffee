@@ -6,10 +6,10 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
   init: ->
     @_super()
 
-    @set("fields"      , Ember.A([])) unless Em.isPresent @get("fields") # all fields
-    @set("requirements", Ember.A([])) unless Em.isPresent @get("requirements") # fields that are required to have a value
-    @set("validations" , Ember.A([])) unless Em.isPresent @get("validations") # validations to be checked
-    @set("subForms"    , Ember.A([])) unless Em.isPresent @get("subForms") # validations sent from subcomponents
+    @set("fields"      , Ember.A([])) unless Em.isPresent @get("fields")        # all fields
+    @set("requirements", Ember.A([])) unless Em.isPresent @get("requirements")  # fields that are required to have a value
+    @set("validations" , Ember.A([])) unless Em.isPresent @get("validations")   # validations to be checked
+    @set("subForms"    , Ember.A([])) unless Em.isPresent @get("subForms")      # validations sent from subcomponents
 
     @setProperties
       saving:       false
@@ -35,6 +35,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
   hasChecks: Ember.computed(-> @get("requirements").length + @get("validations").length + @get("subForms").length ).property("requirements.@each", "validations.@each", "subForms.@each")
 
+  niceName: (key) -> if @get("translationRoot") then Em.I18n.t("#{@get("translationRoot")}.#{key.underscore()}") else key
   checkFields: Em.computed ->
     pass      = true
     response  = @get("errorResponseTemplate")()
@@ -43,7 +44,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
       unless Em.isPresent(@get(key))
         pass = false
 
-        error = { kind: "required", message: "The field #{key.capitalize()} is required"} # TODO needs I18n with placeholder
+        error = { kind: "required", message: Em.I18n.t("nice_errors.field_required", {field: @niceName(key)}) }
         response.errors.fields[key] = []
         response.errors.fields[key].addObject error
 
@@ -51,14 +52,11 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
       if response.errors.fields[key] is undefined and Em.isPresent(@get(key)) and not @get("#{key}Valid")
         pass = false
 
-        error = { kind: "invalid", message: "The field #{key.capitalize()} is not valid"} # TODO needs I18n with placeholder
+        error = { kind: "required", message: Em.I18n.t("nice_errors.field_invalid", {field:  @niceName(key)}) }
         response.errors.fields[key] = []
         response.errors.fields[key].addObject error
 
-    # simply check that these pass
-    @get("subForms").forEach (form) =>
-      console.log "DUPS!!!!!!!!!!!" if form is @
-      return if form is @
+    @get("subForms").forEach (form) => # simply check that these pass
       pass = false if not form.get("isDestroyed") and not form.saveForm()
 
     @errorCallback(response) unless pass

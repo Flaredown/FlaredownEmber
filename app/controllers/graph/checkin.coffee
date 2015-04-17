@@ -34,9 +34,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
   sectionChanged: Ember.observer ->
     if @get("section")
-
-      # Set seen sections
-      @get("sectionsSeen").addObject @get("section")
+      @get("sectionsSeen").addObject @get("section") # Set seen sections
       @transitionToRoute("graph.checkin", @get("dateAsParam"), @get("section"))
 
   .observes("section")

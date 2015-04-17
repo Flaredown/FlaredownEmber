@@ -31,4 +31,6 @@ if currentUser.graphable
             li click="'filter' filterable.id" class={filterable.filtered:filtered-treatment:filterable-treatment}
               div class={:graph-controls-treatment-dot filterable.color}
               = filterable.name
+
+
 outlet
