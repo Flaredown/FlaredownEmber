@@ -10,3 +10,4 @@
 
       view "forms/saveButton" name="login" action="login"
       link-to "register" | {{ t "unauthenticated.login_register_now" }}
+      link-to "passwordReset" | {{ t "unauthenticated.password_reset" }}

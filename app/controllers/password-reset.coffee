@@ -27,7 +27,7 @@ controller = Ember.Controller.extend FormHandlerMixin, EmailPassValidations, Use
       if @saveForm()
         data = {}
         data["v#{config.apiVersion}_user"] = @getProperties("password", "password_confirmation")
-        data["v#{config.apiVersion}_user"] = {reset_password_token: @get("resetToken")}
+        data["v#{config.apiVersion}_user"]["reset_password_token"] = @get("resetToken")
 
         ajax("#{config.apiNamespace}/users/password.json",
           type: "PUT"
@@ -36,7 +36,7 @@ controller = Ember.Controller.extend FormHandlerMixin, EmailPassValidations, Use
           (response) =>
             @endSave()
             @setupUser(@container)
-            # @transitionToRoute(config.afterLoginRoute)
+            Ember.run.next => @transitionToRoute(config.afterLoginRoute)
           @errorCallback.bind(@)
         )
 
