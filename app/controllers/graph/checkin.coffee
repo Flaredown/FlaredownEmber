@@ -6,6 +6,8 @@
 `import ajax from 'ic-ajax'`
 
 controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResponseHandlerMixin, FormHandlerMixin,
+
+  saveOnSectionChange: true
   modalOpen: true
   sectionsSeen: []
 
@@ -188,13 +190,15 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       @send("nextSection") if @get("sectionQuestions.length") is 1
 
     setSection: (section) ->
-      return false unless @saveForm()
-      @set("section", section) if @get("sections").mapBy("number").contains(section)
+      if @saveForm()
+        @send("save") if @get("saveOnSectionChange")
+        @set("section", section) if @get("sections").mapBy("number").contains(section)
 
     nextSection:     -> @send("setSection",(@get("section")+1)) unless @get("section") is @get("sections.lastObject.number")
     previousSection: -> @send("setSection",(@get("section")-1)) unless @get("section") is @get("sections.firstObject.number")
 
     save: (close) ->
+
       data =
         entry:
           JSON.stringify({
@@ -203,18 +207,20 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
             treatments: @get("treatments").map((treatment) -> treatment.getProperties("name", "quantity", "unit") if treatment.get("active")).compact()
           })
 
-      ajax(
-        url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
-        type: "PUT"
-        data: data
-      ).then(
-        (response) =>
-          @set("modalOpen", false) if close
-          # if @get("checkinComplete") # only process the entry if it's complete
-          # TODO unfilled question datums
-          # TODO reenable when putting graph back in
-          # @get("controllers.graph").send("dayProcessing", @get("date"))
-        (response) => @errorCallback(response)
-      )
+      unless @get("lastSave.entry") is data.entry # don't bother saving unless there are changes
+        ajax(
+          url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
+          type: "PUT"
+          data: data
+        ).then(
+          (response) =>
+            @set("lastSave", data)
+            @set("modalOpen", false) if close
+            # if @get("checkinComplete") # only process the entry if it's complete
+            # TODO unfilled question datums
+            # TODO reenable when putting graph back in
+            # @get("controllers.graph").send("dayProcessing", @get("date"))
+          (response) => @errorCallback(response)
+        )
 
 `export default controller`
