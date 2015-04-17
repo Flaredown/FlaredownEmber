@@ -3,7 +3,6 @@
 
 route = Ember.Route.extend
   beforeModel: (transition) ->
-    debugger
     @transitionTo(config.afterLoginRoute) if @controllerFor('login').get("isAuthenticated")
 
 

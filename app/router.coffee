@@ -8,7 +8,7 @@ Router = Ember.Router.extend
 Router.map ->
   # Pre-Auth
   @resource "login", path: "login"
-  @resource "register", path: "register"
+  # @resource "register", path: "register"
   @route "passwordReset", path: "reset-your-password"
   @route "inviteRegister", path: "accept-invitation/:invitation_token"
 
