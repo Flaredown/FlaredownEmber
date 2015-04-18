@@ -11,7 +11,9 @@ Router.reopen
     ga('send', 'pageview', { 'page': @get('url'), 'title': @get('url') })
   ).on('didTransition')
 
-  notifyKeen: (-> @keenPageviewEvent() ).on('didTransition')
+  notifyKeen: (->
+    @keenPageviewEvent() unless config.environment is "development"
+  ).on('didTransition')
 
 Router.map ->
   # Pre-Auth
