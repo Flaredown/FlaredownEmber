@@ -1,27 +1,25 @@
-.checkin-date-container
-  if currentUser.graphable
-    .checkin-date = fancyDate
-  else
-    .yesterday: link-to "graph.checkin" yesterdayDate "1"
-       |yesterday
-    .checkin-date = fancyDate
-    .tomorrow: link-to "graph.checkin" tomorrowDate "1"
-       |tomorrow
+#tracking-questioner
+  .checkin-date-container
+      .yesterday: link-to "graph.checkin" yesterdayDate "1"
+         | &lsaquo;
+      .checkin-date = fancyDate
+      .tomorrow: link-to "graph.checkin" tomorrowDate "1"
+         | &rsaquo;
 
-.pagination-dots
-	ul
-		each sec in sections
-			li click="'setSection' sec.number"
-				a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
+  .pagination-dots
+  	ul
+  		each sec in sections
+  			li click="'setSection' sec.number"
+  				a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
-liquid-with section as liquidSection
-  / view "forms/errors" errors="controller.allErrors"
-  .checkin-content: partial currentPartial
+  liquid-with section as liquidSection
+    / view "forms/errors" errors="controller.allErrors"
+    .checkin-content: partial currentPartial
 
-  .checkin-navigate
+    .checkin-navigate
 
-    unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" = t "nav.back_caps"
-    unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" = t "nav.next_caps"
+      unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" = t "nav.back_caps"
+      unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" = t "nav.next_caps"
 
-    if isLastSection: if currentUser.graphable: link-to "graph" class="checkin-finish"
-      = t "nav.done_caps"
+      if isLastSection: if currentUser.graphable: link-to "graph" class="checkin-finish"
+        = t "nav.done_caps"
