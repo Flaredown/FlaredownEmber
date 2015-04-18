@@ -1,0 +1,24 @@
+#tracking-questioner {
+	@include card;
+	@include standard-shadow;
+	max-width: 600px;
+	margin: 0 auto;
+	padding-bottom: 0;
+	.checkin-date-container {
+		.yesterday, .tomorrow {
+			font-size: 2em;
+			padding: 5px 20px;
+			position: relative;
+			top: 3px;
+			&:hover {
+				transform: scale(1.2);
+				a {
+					color: grey;
+				}
+			}
+			a {
+				color: $lightgrey;
+			}
+		}
+	}	
+}

@@ -7,7 +7,6 @@
     .yesterday, .tomorrow { display: inline-block; }
     .checkin-date {
       display: inline-block;
-      width: 250px;
       padding: 20px 0 20px 0;
       color: grey;
     }
@@ -48,7 +47,7 @@
     color: grey;
     font-size: 1.2em;
     margin: 1px;
-    background: $lightgrey;
+    background: #eee;
     &:first-of-type {
       border-top-left-radius: 7px;
       border-top-right-radius: 7px;
