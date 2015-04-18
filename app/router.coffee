@@ -1,9 +1,17 @@
 `import DS from 'ember-data'`
 `import Ember from 'ember'`
 `import config from './config/environment'`
+`import KeenMixin from './mixins/keen'`
 
-Router = Ember.Router.extend
+Router = Ember.Router.extend KeenMixin,
   location: config.locationType
+
+Router.reopen
+  notifyGoogleAnalytics: (->
+    ga('send', 'pageview', { 'page': @get('url'), 'title': @get('url') })
+  ).on('didTransition')
+
+  notifyKeen: (-> @keenPageviewEvent() ).on('didTransition')
 
 Router.map ->
   # Pre-Auth

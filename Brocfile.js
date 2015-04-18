@@ -7,6 +7,15 @@ var app = new EmberApp({
   }
 });
 
+// Keen pageview tracking prereqs
+app.import('bower_components/purl/purl.js');
+app.import('bower_components/ua-parser-js/src/ua-parser.js');
+app.import('bower_components/uuid-js/lib/uuid.js');
+app.import('bower_components/jquery-cookie/jquery.cookie.js');
+
+
+app.import('bower_components/moment/moment.js');
+
 app.import('bower_components/pusher/dist/pusher.js');
 
 app.import('bower_components/moment/moment.js');

@@ -11,6 +11,11 @@ module.exports = function(environment) {
     apiVersion:      1,
     apiNamespace:    '/v1',
     afterLoginRoute: 'graph',
+    ga_id: "UA-62007375-3", // dev
+    keen: { // staging
+      project_id: "55327e0646f9a75ef4402fc1",
+      write_key: "c6222280f213adef6860fff3e431e3d933ed3314e9c9a283133230418d2cd368f11f519bdceaa913ba75e097eb5f1d92435bba3c885ea2417a9179550053f590fac16c0fabc1f44bd1c19206dbce6ddc7ae890312c8e6248a25618286cd9d5966194f07d52e9880b11ee9f5b6ce91ad2",
+    },
     pusher: {
       key: "12bdfdebc5307b2d8918",
       app_id: "65526"
@@ -18,10 +23,10 @@ module.exports = function(environment) {
 
     contentSecurityPolicy: {
       'default-src': "'self'",
-      'script-src': "'self' http://*.pusher.com 'unsafe-inline' 'unsafe-eval'",
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' http://*.pusher.com www.google-analytics.com/analytics.js www.google.com/jsapi d26b395fwzu5fz.cloudfront.net api.keen.io",
       'font-src': "'self'",
       'connect-src': "`self` http://localhost:* ws://*.pusherapp.com http://*.pusher.com",
-      'img-src': "'self'",
+      'img-src': "'self' www.google-analytics.com/collect",
       'style-src': "'self' 'unsafe-inline'",
       'frame-src': ""
     },
@@ -66,12 +71,18 @@ module.exports = function(environment) {
   if (environment === 'staging') {
     ENV.pusher.key = '40edeaadb34fd870d29e';
     ENV.pusher.app_id = '102551';
+    ENV.keen.project_id = '55327e0646f9a75ef4402fc1';
+    ENV.keen.write_key = 'c6222280f213adef6860fff3e431e3d933ed3314e9c9a283133230418d2cd368f11f519bdceaa913ba75e097eb5f1d92435bba3c885ea2417a9179550053f590fac16c0fabc1f44bd1c19206dbce6ddc7ae890312c8e6248a25618286cd9d5966194f07d52e9880b11ee9f5b6ce91ad2';
+    ENV.ga_id = 'UA-62007375-1';
   }
 
   if (environment === 'production') {
     // TODO changeme
     ENV.pusher.key = '40edeaadb34fd870d29e';
     ENV.pusher.app_id = '102551';
+    ENV.keen.project_id = '55328229672e6c290c2be9cd';
+    ENV.keen.write_key = '2cebdf5d1c5aa2d18fd11763ca8639ee0e158d28b5644ec75a91e414a740b668d314f6ea163940c3631c4900ee3a759608cfaeeda9c7f3bb14cb2d58c3950bb60ff54473443d16488b3436b7b1dc5e5d39a712e1a8c9fbbdbf7c119eea79df16aebbd5e76a4c63348f56c7eac064b5aa';
+    ENV.ga_id = 'UA-62007375-2';
   }
 
   return ENV;

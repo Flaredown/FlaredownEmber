@@ -43,9 +43,11 @@
     "liquid-fire": "^0.17.1",
     "node-sass": "^2.0.1",
     "broccoli-file-remover": "^0.3.1",
-    "broccoli-merge-trees": "^0.2.1"
+    "broccoli-merge-trees": "^0.2.1",
+    "ember-browserify": "^0.6.4"
   },
   "dependencies": {
+    "keen-js": "^3.2.4",
     "rimraf": "2.2.8",
     "ember-cli-dotenv": "^0.3.4"
   }
