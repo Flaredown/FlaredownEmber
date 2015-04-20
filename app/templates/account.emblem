@@ -1,9 +1,9 @@
 .modal
 
   = input type="checkbox" class="modal-state" id="modal-account" checkedBinding="modalOpen"
-  .modal-window
+  .modal-fade-screen
     .modal-inner
-      label.modal-close for="modal-account" &times;
+      label.modal-close for="modal-account"
       div
         if editing
           form submit="save"
