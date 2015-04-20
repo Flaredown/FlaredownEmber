@@ -23,7 +23,8 @@ view = Ember.View.extend FormInputMixin,
   ).property("controller", "value")
 
   placeholder: Em.computed( ->
-    key = if @get("i18nKey") then "#{@get("i18nKey")}.#{name}" else @get("name").underscore()
+    name = @get("name").underscore()
+    key = if @get("i18nKey") then "#{@get("i18nKey")}.#{name}" else name
     placeholder = Ember.I18n.t("#{key}_placeholder")
     if placeholder.match(/missing translation/i) then Ember.I18n.t(key) else placeholder
   ).property("i18nKey")
