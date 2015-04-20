@@ -8,7 +8,7 @@
 controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin, EmailPassValidations,
   translationRoot: "unauthenticated"
 
-  queryParams: ["user_email", "user_token"]
+  queryParams: ["user_email", "user_token", "sso", "sig"]
 
   fields: "email password".w()
   requirements: "email password".w()
@@ -24,6 +24,7 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin, EmailPass
     else
       @transitionToRoute(config.afterLoginRoute) if window.location.pathname is "/login"
 
+
   actions:
     login: ->
       if @saveForm()
@@ -36,7 +37,19 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin, EmailPass
         ).then(
           (response) =>
             @endSave()
-            @setupUser(@container)
+
+            # Do single sign on for Discourse
+            if @get("sso") and @get("sig")
+              ajax("#{config.apiNamespace}/talk_sso.json}",
+                type: "GET"
+                data: {sso: @get("sso"), sig: @get("sig")}
+              ).then(
+                (response) => window.location = response.sso_url
+                @errorCallback.bind(@)
+              )
+            else
+              @setupUser(@container)
+
           @errorCallback.bind(@)
         )
 

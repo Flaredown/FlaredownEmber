@@ -2,6 +2,7 @@
 `import UnAuthRoute from './unauthenticated'`
 
 route = UnAuthRoute.extend
+
   setupController: (controller, model) ->
     @_super(controller, model);
 
