@@ -32,7 +32,7 @@ test "Text field required", ->
 
   visit('/onboarding/account').then(
     ->
-      triggerEvent("#continue-button", "click")
+      triggerEvent(".continue-button", "click")
       ok $(".form-dob-day .errors .error-message").length is 1
       ok $(".form-dob-day .errors .error-message").text().match(/required/i)
 
@@ -48,7 +48,7 @@ test "Text field invalid", ->
   visit('/onboarding/account').then(
     ->
       fillIn(".form-dob-day-input", "133")
-      triggerEvent("#continue-button", "click")
+      triggerEvent(".continue-button", "click")
       andThen ->
         ok $(".form-dob-day .errors .error-message").length is 1
         ok $(".form-dob-day .errors .error-message").text().match(/valid/i)
@@ -59,7 +59,7 @@ test "Radio input required", ->
 
   visit('/onboarding/account').then(
     ->
-      triggerEvent("#continue-button", "click")
+      triggerEvent(".continue-button", "click")
       ok $(".form-sex .errors .error-message").length is 1
       ok $(".form-sex .errors .error-message").text().match(/required/i)
 

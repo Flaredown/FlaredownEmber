@@ -242,9 +242,8 @@ test "Can search for symptoms (any trackable)", ->
   visit('/checkin/Aug-13-2014/9').then( ->
 
     andThen ->
-      $("input.form-symptom-search").select2("search", "sli")
+      $("input.form-symptom-select").select2("search", "sli")
 
-      # stop()
       Ember.run.later ->
         ok $(".select2-results li:eq(0) span").text() is "\"sli\"", "first result is search term + quotations"
         ok $(".select2-results li").length is 3, "sli, slippery tongue and sneezing"

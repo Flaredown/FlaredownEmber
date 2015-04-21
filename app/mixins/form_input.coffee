@@ -17,7 +17,7 @@ mixin = Ember.Mixin.create
     else
       Em.defineProperty @, "errors", Em.computed( ->
         @get("#{@get("errorsRoot")}.#{@get("name")}")
-      ).property("#{@get("errorsRoot")}.@each")
+      ).property("#{@get("errorsRoot")}.#{@get("name")}.@each")
 
     @get("parentForm.subForms").addObject(@get("controller")) if @get("parentForm")
 
@@ -39,8 +39,8 @@ mixin = Ember.Mixin.create
     if @get("kind") is "number" # special validity for number input types (they don't return a value when inputting word characters)
       el = $("##{@get("elementId")} input")[0]
       return true if el and el.validity and el.validity.badInput
-
-    Ember.isPresent(@get("value"))
+    else
+      Ember.isPresent(@get("value"))
   ).property("value")
   isValid: Ember.computed(->
     return true unless @get("controller.validations").contains(@get("name"))
@@ -48,8 +48,8 @@ mixin = Ember.Mixin.create
     if @get("kind") is "number" # special validity for number input types (they don't return a value when inputting word characters)
       el = $("##{@get("elementId")} input")[0]
       return false if el and el.validity and not el.validity.valid
-
-    @get("controller.#{@get("name")}Valid")
+    else
+      @get("controller.#{@get("name")}Valid")
   ).property("value")
   hasErrors: Ember.computed(-> Ember.isPresent(@get("errors")) ).property("errors")
   saving: Ember.computed.alias("controller.saving")

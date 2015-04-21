@@ -32,7 +32,12 @@ fixture = Ember.Object.create({
     location_options: {
       US: "United States"
     },
+
     onboarding: {
+      sex_options: {
+        male: "male",
+        female: "female",
+      },
       highest_education_options: [],
       ethnic_origin_options: [],
       occupation_options: []

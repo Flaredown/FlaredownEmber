@@ -52,7 +52,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
       if response.errors.fields[key] is undefined and Em.isPresent(@get(key)) and not @get("#{key}Valid")
         pass = false
 
-        error = { kind: "required", message: Em.I18n.t("nice_errors.field_invalid", {field:  @niceName(key)}) }
+        error = { kind: "invalid", message: Em.I18n.t("nice_errors.field_invalid", {field:  @niceName(key)}) }
         response.errors.fields[key] = []
         response.errors.fields[key].addObject error
 

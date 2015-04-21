@@ -17,9 +17,16 @@ moduleFor("controller:onboarding.account", "Form Handler Mixin Test",
     setup: ->
       App         = startApp()
       store       = App.__container__.lookup("store:main")
+
+      Ember.run ->
+        current_user = App.__container__.lookup("controller:current_user")
+        current_user.set "model", store.createRecord("user", userFixture.current_user)
+      # route.set("currentUser", current_user)
+
       controller  = @subject()
 
       Ember.run ->
+
         controller.set "model",       {}
 
     teardown: ->

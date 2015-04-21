@@ -2,7 +2,7 @@
 `import config from '../../config/environment'`
 `import ajax from 'ic-ajax'`
 `import Ember from 'ember'`
-`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
+`import GroovyResponseHandlerMixin from '../../mixins/groovy_response_handler'`
 
 route = Ember.Route.extend GroovyResponseHandlerMixin,
 
@@ -14,8 +14,8 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
       @errorCallback.bind(@)
     )
 
-  beforeModel: ->
-    @_super()
+  beforeModel: (transition) ->
+    @_super(transition)
     @get("currentUser.model").reload().then(
       => UserSetupMixin.apply({}).setupUser(@container)
     )

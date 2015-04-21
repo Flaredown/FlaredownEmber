@@ -54,7 +54,6 @@ Em.Route.reopen
   attemptedTransition: false
 
   beforeModel: (transition) ->
-    loggedIn = @get("currentUser.loggedIn")
     attemptedTransition = @get("attemptedTransition")
     routeName = @get("routeName")
 
@@ -75,7 +74,7 @@ Em.Route.reopen
       @transitionTo("fourOhFour")
     else
 
-      if loggedIn
+      if @get("currentUser.loggedIn")
         if transition.queryParams.sso and transition.queryParams.sig
           return @redirectToTalk(transition.queryParams.sso, transition.queryParams.sig)
 
@@ -94,7 +93,9 @@ Em.Route.reopen
 
         # Make them finish that onboarding
         else if not @get("currentUser.onboarded") and not /onboarding/.test(routeName)
+
           Ember.debug("Base.Route :: Redirect to onboarding not complete")
+          return if /onboarding/.test(window.location.pathname) # what was original intention?
           @transitionTo("onboarding.account")
 
         else if transition.targetName is "graph.index" and not @get("currentUser.graphable")

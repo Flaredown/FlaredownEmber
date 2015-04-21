@@ -169,6 +169,8 @@ test "builds #responsesData on for all questions, including any existing respons
 test "action#setResponse sets a value for a response given the current context", ->
   expect 2
 
+  Ember.$.mockjax url: "#{config.apiNamespace}/entries/*", type: 'PUT', responseText: entryFixture("Aug-13-2014")
+
   Ember.run -> controller.set("section", 6) # hbi complications section
 
   # Ambiguous with multiple section questions... using as test case

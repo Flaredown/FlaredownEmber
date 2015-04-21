@@ -37,22 +37,22 @@ inline_response = {
   }
 }
 
-modal_response = {
-  'errors' : {
-    'error_group' : 'modal',
-    'title' : 'Some Error Occurred',
-    'message' : 'We are sorry that some error occurred'
-  }
-}
-
-growl_response = {
-  'errors' : {
-    'error_group' : 'growl',
-    'title' : "Sorry, Your account isn't verified yet",
-    'message' : "Check back later when your account will be verified by our admin",
-    'type' : "error"
-  }
-}
+# modal_response = {
+#   'errors' : {
+#     'error_group' : 'modal',
+#     'title' : 'Some Error Occurred',
+#     'message' : 'We are sorry that some error occurred'
+#   }
+# }
+#
+# growl_response = {
+#   'errors' : {
+#     'error_group' : 'growl',
+#     'title' : "Sorry, Your account isn't verified yet",
+#     'message' : "Check back later when your account will be verified by our admin",
+#     'type' : "error"
+#   }
+# }
 
 inlineErrors = ->
 
@@ -65,25 +65,25 @@ inlineErrors = ->
     status: 500
     responseText: inline_response
 
-modalErrors =->
-  data = {}
-  data["v#{config.apiVersion}_user"] = {"email" : "abc@abc.com" : "password" : "123"}
-  Ember.$.mockjax
-    url: "#{config.apiNamespace}/users/sign_in.json"
-    type: 'POST'
-  #data: data
-    status: 500
-    responseText: modal_response
-
-growlErrors =->
-  data = {}
-  data["v#{config.apiVersion}_user"] = {"email" : "abc@abc.com" : "password" : "123"}
-  Ember.$.mockjax
-    url: "#{config.apiNamespace}/users/sign_in.json"
-    type: 'POST'
-  #data: data
-    status: 500
-    responseText: growl_response
+# modalErrors =->
+#   data = {}
+#   data["v#{config.apiVersion}_user"] = {"email" : "abc@abc.com" : "password" : "123"}
+#   Ember.$.mockjax
+#     url: "#{config.apiNamespace}/users/sign_in.json"
+#     type: 'POST'
+#   #data: data
+#     status: 500
+#     responseText: modal_response
+#
+# growlErrors =->
+#   data = {}
+#   data["v#{config.apiVersion}_user"] = {"email" : "abc@abc.com" : "password" : "123"}
+#   Ember.$.mockjax
+#     url: "#{config.apiNamespace}/users/sign_in.json"
+#     type: 'POST'
+#   #data: data
+#     status: 500
+#     responseText: growl_response
 
 successfulLogin = ->
   Ember.$.mockjax
@@ -101,45 +101,45 @@ successfulLogin = ->
     responseText: localeFixture
 
 test "Inline errors are shown on inline error response", ->
-  expect 4
+  expect 2
   inlineErrors()
 
   visit('/login').then(
     ->
-      triggerEvent("#login-button", "click")
+      triggerEvent(".login-button", "click")
       andThen ->
-        ok $("#email").closest('.form-group').hasClass('has-error'), 'Email has class "has-error"'
-        ok $("#password").closest('.form-group').hasClass('has-error'), 'Password has class "has-error"'
-        ok $("ul#email-messages li").length > 0, 'Email errors are listed'
-        ok $("ul#password-messages li").length > 0, 'Password errors are listed'
+        ok $(".form-email").hasClass('errors'), 'Email has error class'
+        ok $(".form-password").hasClass('errors'), 'Password has error class'
   )
 
 
-test "modal is shown on modal error response", ->
-  expect 1
-  modalErrors()
-
-  visit('/login').then(
-    ->
-      triggerEvent("#login-button", "click")
-      andThen -> assertModalPresent()
-  )
-
-test "alert is shown on growl error response", ->
-  growlErrors()
-
-  visit('/login').then(
-    ->
-      triggerEvent("#login-button", "click")
-      andThen -> assertAlertPresent()
-  )
+# test "modal is shown on modal error response", ->
+#   expect 1
+#   modalErrors()
+#
+#   visit('/login').then(
+#     ->
+#       triggerEvent(".login-button", "click")
+#       andThen -> assertModalPresent()
+#   )
+#
+# test "alert is shown on growl error response", ->
+#   growlErrors()
+#
+#   visit('/login').then(
+#     ->
+#       triggerEvent(".login-button", "click")
+#       andThen -> assertAlertPresent()
+#   )
 
 test "sets up colors on login", ->
   expect 1
 
   visit('/login').then ->
+    fillIn(".form-email input", "test@test.com")
+    fillIn(".form-password input", "abc123")
     successfulLogin()
-    triggerEvent("#login-button", "click")
+    triggerEvent(".login-button", "click")
 
     andThen -> ok Em.isPresent(window.treatmentColors), "has some treatmentColors"
 

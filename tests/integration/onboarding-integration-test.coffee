@@ -48,42 +48,42 @@ test "Existence of onboarding pages", ->
 
   visit('/onboarding/account').then(
     ->
-      ok(find(".navbar").length, "Page shows up")
+      ok(find(".navbar-logo").length, "Page shows up")
       ok(currentRouteName() == "onboarding.account", "Route OK")
   )
 
   visit('/onboarding/research-questions').then(
     ->
-      ok(find(".navbar").length, "Page shows up")
+      ok(find(".navbar-logo").length, "Page shows up")
       ok(currentRouteName() == "onboarding.research", "Route OK")
   )
 
   visit('/onboarding/conditions').then(
     ->
-      ok(find(".navbar").length, "Page shows up")
+      ok(find(".navbar-logo").length, "Page shows up")
       ok(currentRouteName() == "onboarding.conditions", "Route OK")
   )
 
   visit('/onboarding/condition-questions').then(
     ->
-      ok(find(".navbar").length, "Page shows up")
+      ok(find(".navbar-logo").length, "Page shows up")
       ok(currentRouteName() == "onboarding.catalogs", "Route OK")
   )
 
   visit('/onboarding/symptoms').then(
     ->
-      ok(find(".navbar").length, "Page shows up")
+      ok(find(".navbar-logo").length, "Page shows up")
       ok(currentRouteName() == "onboarding.symptoms", "Route OK")
   )
 
   visit('/onboarding/treatments').then(
     ->
-      ok(find(".navbar").length, "Page shows up")
+      ok(find(".navbar-logo").length, "Page shows up")
       ok(currentRouteName() == "onboarding.treatments", "Route OK")
   )
 
   visit('/onboarding/complete').then(
     ->
-      ok(find(".navbar").length, "Page shows up")
+      ok(find(".navbar-logo").length, "Page shows up")
       ok(currentRouteName() == "onboarding.complete", "Route OK")
   )

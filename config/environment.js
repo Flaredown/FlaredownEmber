@@ -60,6 +60,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
     ENV.sentry.development = true;
+    ENV.sentry.skipCdn = true;
   }
 
   if (environment === 'test') {
@@ -75,6 +76,7 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
     ENV.sentry.development = true;
+    ENV.sentry.skipCdn = true;
 
     ENV.APP.rootElement = '#ember-testing';
   }

@@ -64,6 +64,7 @@ test "No graph user gets redirected to checkin, unless already going there", ->
 test "Non-onboarded user gets redirected to onboarding", ->
   expect 2
   user = userObject()
+  user.current_user.checked_in_today = true
   user.current_user.settings.onboarded = "false"
   Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
 

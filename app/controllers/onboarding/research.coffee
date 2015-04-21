@@ -7,7 +7,7 @@ controller = Ember.Controller.extend FormHandlerMixin,
 
   translationRoot: "onboarding"
 
-  defaults: Ember.computed(-> @get("currentUser.settings")).property("currentUser")
+  defaults: Ember.computed(-> @get("currentUser.settings") ).property("currentUser")
   fields: "ethnicOrigin occupation highestEducation activityLevel".w()
   requirements: "".w()
   validations:  "activityLevel".w()
