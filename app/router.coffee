@@ -79,7 +79,10 @@ Em.Route.reopen
         if transition.queryParams.sso and transition.queryParams.sig
           return @redirectToTalk(transition.queryParams.sso, transition.queryParams.sig)
 
-        if @get("unauthedOnly")
+        if attemptedTransition
+          attemptedTransition.retry()
+          @set("attemptedTransition", false)
+        else if @get("unauthedOnly")
           Ember.debug("Base.Route :: Redirect to afterLoginRoute on trying to access unauthedOnly page")
           @transitionTo(config.afterLoginRoute)
 
