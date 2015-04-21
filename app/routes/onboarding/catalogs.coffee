@@ -1,11 +1,10 @@
-`import AuthRoute from '../authenticated'`
 `import UserSetupMixin from '../../mixins/user_setup'`
 `import config from '../../config/environment'`
 `import ajax from 'ic-ajax'`
 `import Ember from 'ember'`
 `import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
-route = AuthRoute.extend GroovyResponseHandlerMixin,
+route = Ember.Route.extend GroovyResponseHandlerMixin,
 
   model: ->
     ajax(

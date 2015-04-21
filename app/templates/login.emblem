@@ -1,6 +1,6 @@
 .login-form
   h3.centered = t "unauthenticated.login"
-  if tokenLogin
+  if isOutsideAuth
     = t "unauthenticated.logging_you_in"
   else
     form submit="login"

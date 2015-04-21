@@ -11,12 +11,15 @@ model = DS.Model.extend
   email:                DS.attr "string"
   authentication_token: DS.attr "string"
 
-  symptomColors:        DS.attr()
-  treatmentColors:      DS.attr()
+  symptomColors:        DS.attr(defaultValue: (-> []) )
+  treatmentColors:      DS.attr(defaultValue: (-> []) )
 
-  settings:             DS.attr()
-  catalogs:             DS.attr()
+  settings:             DS.attr(defaultValue: (-> {}) )
 
   checked_in_today:     DS.attr "boolean"
+
+  # settings
+  graphable: Em.computed(-> if @get("settings.graphable") is undefined then false else JSON.parse(@get("settings.graphable")) ).property("settings.graphable")
+  onboarded: Em.computed(-> if @get("settings.onboarded") is undefined then false else JSON.parse(@get("settings.onboarded")) ).property("settings.onboarded")
 
 `export default model`

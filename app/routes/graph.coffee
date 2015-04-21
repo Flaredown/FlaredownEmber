@@ -1,19 +1,20 @@
-`import AuthRoute from './authenticated'`
 `import config from '../config/environment'`
 `import ajax from 'ic-ajax'`
 `import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
-route = AuthRoute.extend GroovyResponseHandlerMixin,
+route = Ember.Route.extend GroovyResponseHandlerMixin,
 
-  # beforeModel: -> @transitionTo("graph.checkin", "today", "1") unless @get("currentUser.graphable")
   model: (params) ->
-    ajax(
-      url: "#{config.apiNamespace}/graph"
-      data: { start_date: @get("currentUser").get("defaultStartDate").format("MMM-DD-YYYY"), end_date: @get("currentUser").get("defaultEndDate").format("MMM-DD-YYYY") }
-    ).then(
-      (response) -> response
-      @errorCallback.bind(@)
-    )
+    if @get("currentUser.graphable")
+      ajax(
+        url: "#{config.apiNamespace}/graph"
+        data: { start_date: @get("currentUser").get("defaultStartDate").format("MMM-DD-YYYY"), end_date: @get("currentUser").get("defaultEndDate").format("MMM-DD-YYYY") }
+      ).then(
+        (response) -> response
+        @errorCallback.bind(@)
+      )
+    else
+      {}
 
   setupController: (controller, model) ->
     @_super()

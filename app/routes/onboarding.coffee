@@ -1,7 +1,6 @@
-`import AuthRoute from './authenticated'`
 `import Ember from 'ember'`
 
-route = AuthRoute.extend
+route = Ember.Route.extend
   steps: "account research conditions catalogs symptoms treatments complete".w()
   step: ""
 

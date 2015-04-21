@@ -1,6 +1,5 @@
 `import Ember from 'ember'`
-`import UnAuthRoute from './unauthenticated'`
 
-route = UnAuthRoute.extend()
+route = Ember.Route.extend(unauthedOnly: true)
 
 `export default route`

@@ -1,10 +1,10 @@
 `import Ember from 'ember'`
 `import config from '../config/environment'`
-`import UnAuthRoute from './unauthenticated'`
 `import ajax from 'ic-ajax'`
 `import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 
-route = UnAuthRoute.extend GroovyResponseHandlerMixin,
+route = Ember.Route.extend GroovyResponseHandlerMixin,
+  unauthedOnly: true
 
   model: (params) ->
     ajax(

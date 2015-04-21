@@ -6,15 +6,7 @@
 controller = Ember.ObjectController.extend
   needs: ["login"]
 
-   # disable graph
-  graphable: Em.computed(->
-    if @get("settings.graphable") is undefined
-      false
-    else
-      JSON.parse(@get("settings.graphable"))
-  ).property("settings.graphable")
-
-  loggedIn: Ember.computed.alias("controllers.login.isAuthenticated")
+  loggedIn: Ember.computed( -> parseInt(@get("controllers.login.isAuthenticated")) ).property("controllers.login.isAuthenticated")
 
   defaultStartDate: moment().utc().subtract(40,"days").startOf("day")
   defaultEndDate: moment().utc().startOf("day")

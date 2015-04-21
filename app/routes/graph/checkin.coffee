@@ -1,9 +1,8 @@
-`import AuthRoute from '../authenticated'`
 `import config from '../../config/environment'`
 `import ajax from 'ic-ajax'`
 `import GroovyResponseHandlerMixin from '../../mixins/groovy_response_handler'`
 
-route = AuthRoute.extend GroovyResponseHandlerMixin,
+route = Ember.Route.extend GroovyResponseHandlerMixin,
   model: (params, transition, queryParams) ->
     date = params.date
     today = moment.utc().format("MMM-DD-YYYY")

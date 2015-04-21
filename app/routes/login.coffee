@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
-`import UnAuthRoute from './unauthenticated'`
 
-route = UnAuthRoute.extend
+route = Ember.Route.extend
+  unauthedOnly: true
 
   setupController: (controller, model) ->
     @_super(controller, model);
