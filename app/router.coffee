@@ -99,6 +99,10 @@ Em.Route.reopen
           Ember.debug("Base.Route :: Redirect ungraphable user to checkin")
           @transitionTo("graph.checkin", "today", "1")
 
+        else if @get("currentUser.checked_in_today")
+          @set("currentUser.checked_in_today", true)
+          @transitionTo("graph.checkin", "today", 1)
+
       else
 
         if @get("authedOnly")
