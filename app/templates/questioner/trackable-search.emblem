@@ -1,2 +1,2 @@
 view "questioner/trackable-search-select" trackableType=view.trackableType
-view "forms/errors"
+view "forms/errors" translateErrors=true

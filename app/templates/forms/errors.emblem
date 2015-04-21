@@ -1,3 +1,7 @@
 if view.errors.length
   .errors: each error in view.errors
-    small.error-message= error.message
+    small.error-message
+      if view.translateErrors
+        = nice-error error.message
+      else
+        = error.message
