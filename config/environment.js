@@ -34,7 +34,7 @@ module.exports = function(environment) {
       'script-src': "'self' 'unsafe-inline' 'unsafe-eval' http://*.pusher.com www.google-analytics.com/analytics.js www.google.com/jsapi d26b395fwzu5fz.cloudfront.net api.keen.io cdn.ravenjs.com",
       'font-src': "'self'",
       'connect-src': "`self` http://localhost:* ws://*.pusherapp.com http://*.pusher.com",
-      'img-src': "'self' www.google-analytics.com/collect data: app.getsentry.com",
+      'img-src': "'self' www.google-analytics.com data: app.getsentry.com",
       'style-src': "'self' 'unsafe-inline'",
       'frame-src': ""
     },

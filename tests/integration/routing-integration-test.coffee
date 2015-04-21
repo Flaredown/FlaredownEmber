@@ -10,9 +10,13 @@
 
 App = null
 
+userObject = ->
+  Em.Object.create(userFixture)
+
 module('Base Routing Integration', {
   setup: ->
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture
+    user = userObject()
+    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
     Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture
     Ember.$.mockjax url: "#{config.apiNamespace}/graph", type: 'GET', responseText: graphFixture(moment().utc().startOf("day").subtract(5,"days"))
     today = moment().utc().format("MMM-DD-YYYY")
@@ -31,42 +35,38 @@ test "Logged in on 'unauthedOnly' page goes to default route", ->
 #   expect 1
 #   visit('/checkin/!@$%^/1').then( -> ok currentURL() == "/something-went-wrong" )
 
-module('Base Routing Integration', {
-  setup: ->
-    userFixture.current_user.settings.graphable = "false"
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture
-    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture
-    today = moment().utc().format("MMM-DD-YYYY")
-    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', data: {date: today}, responseText: entryFixture(today)
+test "Not checked in today goes to today checkin", ->
+  expect 1
+  user = userObject()
+  user.current_user.checked_in_today = false
+  Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
 
-    App = startApp(); null
-
-  teardown: -> Ember.run(App, App.destroy); $.mockjax.clear()
-})
+  visit('/').then( -> ok currentURL() == "/checkin/today/1" )
 
 test "No graph user gets redirected to checkin", ->
   expect 1
+  user = userObject()
+  user.current_user.checked_in_today = true
+  user.current_user.settings.graphable = "false"
+  Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
+
   visit('/').then( -> ok currentURL() == "/checkin/today/1" )
 
 test "No graph user gets redirected to checkin, unless already going there", ->
   expect 1
+  user = userObject()
+  user.current_user.checked_in_today = true
+  user.current_user.settings.graphable = "false"
+  Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
+
   visit('/checkin/today/2').then( -> ok currentURL() == "/checkin/today/2" )
-
-module('Base Routing Integration', {
-  setup: ->
-    userFixture.current_user.settings.onboarded = "false"
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture
-    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture
-    today = moment().utc().format("MMM-DD-YYYY")
-    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', data: {date: today}, responseText: entryFixture(today)
-
-    App = startApp(); null
-
-  teardown: -> Ember.run(App, App.destroy); $.mockjax.clear()
-})
 
 test "Non-onboarded user gets redirected to onboarding", ->
   expect 2
+  user = userObject()
+  user.current_user.settings.onboarded = "false"
+  Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
+
   visit('/checkin/today/1').then( ->
     ok currentURL() == "/onboarding/account"
     visit('/onboarding/research-questions').then( -> ok currentURL() == "/onboarding/research-questions" )

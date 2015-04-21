@@ -80,8 +80,10 @@ Em.Route.reopen
           return @redirectToTalk(transition.queryParams.sso, transition.queryParams.sig)
 
         if attemptedTransition
+          Ember.debug("Base.Route :: Redirect existing attemped transition")
           attemptedTransition.retry()
           @set("attemptedTransition", false)
+
         else if @get("unauthedOnly")
           Ember.debug("Base.Route :: Redirect to afterLoginRoute on trying to access unauthedOnly page")
           @transitionTo(config.afterLoginRoute)
@@ -99,7 +101,8 @@ Em.Route.reopen
           Ember.debug("Base.Route :: Redirect ungraphable user to checkin")
           @transitionTo("graph.checkin", "today", "1")
 
-        else if @get("currentUser.checked_in_today")
+        else if not @get("currentUser.checked_in_today")
+          Ember.debug("Base.Route :: Not checked in today and no other catches, redirect to checkin")
           @set("currentUser.checked_in_today", true)
           @transitionTo("graph.checkin", "today", 1)
 
