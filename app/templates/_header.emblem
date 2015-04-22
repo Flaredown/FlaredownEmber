@@ -62,6 +62,7 @@ nav.navbar-centered
                 = t "menu_item_account"
               li href="javascript:void(0);" click="logout" = t "menu_item_logout"
       li &bull;
-      li Where's the graph?
+      li: link-to "upcoming"
+        | Upcoming features
       li &bull;
       li Discussion

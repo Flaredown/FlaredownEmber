@@ -22,6 +22,7 @@ Router.map ->
   # @resource "register", path: "register"
   @route "passwordReset", path: "reset-your-password"
   @route "inviteRegister", path: "accept-invitation/:invitation_token"
+  @route 'upcoming', path: "upcoming"
 
   # Post-Auth
   @resource "graph", path: "", ->
