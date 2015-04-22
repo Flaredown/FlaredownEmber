@@ -1,3 +1,6 @@
+body {
+	padding-bottom: 1em;
+}
 #tracking-questioner {
 	@include card;
 	@include standard-shadow;
@@ -37,5 +40,18 @@
 	}
 	ul.dropdown-menu li {
 		width: 100%;
+	}
+}
+#upcoming {
+	@include card;
+	@include standard-shadow;
+	@include outer-container;
+	max-width: 600px;
+	h1 {
+		text-align: center;
+		margin: 1em 0;
+	}
+	p {
+		margin-bottom: 4em;
 	}
 }
