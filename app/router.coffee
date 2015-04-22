@@ -56,15 +56,7 @@ Em.Route.reopen
   beforeModel: (transition) ->
     attemptedTransition = @get("attemptedTransition")
     routeName = @get("routeName")
-
-    # if attemptedTransition and attemptedTransition.targetName isnt "index"
-    #   attemptedTransition.retry()
-    #   @set("attemptedTransition", false)
-    # else
-    #   @transitionToRoute(config.afterLoginRoute) if window.location.pathname is "/login"
-
-    # return if routeName is "application"
-    # debugger
+    @set("authedOnly", false) if @get("unauthedOnly")
 
     return if routeName is "application"
     return if routeName is "fourOhFour"
