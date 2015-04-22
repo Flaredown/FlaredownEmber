@@ -1,12 +1,12 @@
 .checkin-symptoms
-  if symptoms.length
+  if sectionQuestions.length
     h3 = t "how_active_were_your_symptoms"
 
     each symptom in sectionQuestions
       view "questioner/symptom" active=true
 
-    ul: each symptom in inactiveSymptoms
-      view "questioner/symptom" active=false
+    / ul: each symptom in inactiveSymptoms
+    /   view "questioner/symptom" active=false
 
   else
     h3 = t "oops_no_symptoms_being_tracked"

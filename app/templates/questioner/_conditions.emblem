@@ -1,7 +1,7 @@
 .checkin-conditions
-  h3 = t "how_active_were_your_conditions"
+  if sectionQuestions.length
+    h3 = t "how_active_were_your_conditions"
 
-  if conditions.length
     each condition in sectionQuestions
       view "questioner/condition" active=true
 

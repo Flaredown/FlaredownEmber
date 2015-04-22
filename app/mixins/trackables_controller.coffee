@@ -3,7 +3,6 @@
 `import ajax from 'ic-ajax'`
 `import FormHandlerMixin from '../mixins/form_handler'`
 
-
 mixin = Ember.Mixin.create FormHandlerMixin,
   isEntry: Ember.computed(-> @get("model.constructor.typeKey") is "entry").property("model")
 
@@ -11,11 +10,11 @@ mixin = Ember.Mixin.create FormHandlerMixin,
     if @get("isEntry") then @get("model.treatments") else @get("currentUser.treatments")
   .property("currentUser.treatments.@each", "model.treatments.@each")
 
-  # inactiveTreatments: Ember.computed(->
-  #   actives = @get("treatments").mapBy("name")
-  #   @get("currentUser.treatments").filter (treatment) ->
-  #     not actives.contains treatment.get("name")
-  # ).property("currentUser.treatments", "treatments.@each")
+  inactiveTreatments: Ember.computed(->
+    actives = @get("treatments").mapBy("name")
+    @get("currentUser.treatments").filter (treatment) ->
+      not actives.contains treatment.get("name")
+  ).property("currentUser.treatments", "treatments.@each")
 
   conditions: Ember.computed ->
     if @get("responsesData")
@@ -35,7 +34,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       @get("responsesData").filterBy("catalog", "symptoms")
     else
       @get("currentUser.symptoms")
-  .property("responsesData.@each.symptoms.@each")
+  .property("responsesData.@each.symptoms.@each", "currentUser.symptoms.@each")
 
   inactiveSymptoms: Ember.computed ->
     actives = @get("symptoms").mapBy("name")
@@ -45,7 +44,14 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
   actions:
     ### TREATMENTS ###
-    treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
+    # treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
+    toggleTreatment: (treatment) ->
+      treatment.toggleProperty("active")
+      if treatment.get("active")
+        @get("model.treatments").addObject(treatment)
+      else
+        @get("model.treatments").removeObject(treatment)
+
     addTreatment: (treatment) ->
       unless @get("treatments").findBy("id","#{treatment.id}")
         ajax("#{config.apiNamespace}/treatments",
@@ -65,7 +71,8 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         )
 
     removeTreatment: (treatment) ->
-      @get("treatments").removeObject treatment
+      @get("currentUser.treatments").removeObject treatment
+      @get("model.treatments").removeObject(treatment) if @get("isEntry")
       treatment.unloadRecord()
 
     ### SYMPTOMS ###

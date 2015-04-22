@@ -2,10 +2,11 @@
   if treatments
     h3 = t "which_treatments_taken_today"
     ul: each treatment in treatments
-      view "questioner/treatment" content=treatment active=treatment.added
+      view "questioner/treatment" content=treatment
 
-    / ul: each treatment in inactiveTreatments
-    /   view "questioner/treatment" editable=true active=false
+    ul: each treatment in inactiveTreatments
+      unless treatment.active
+        view "questioner/treatment" content=treatment inactiveList=true
   else
     h3 = t "oops_no_treatments_being_tracked"
 

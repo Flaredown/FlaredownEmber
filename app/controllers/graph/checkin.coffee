@@ -199,18 +199,17 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
     save: (close) ->
 
-      treatment_data = if @get("treatments")
-        @get("treatments").map((treatment) -> treatment.getProperties("name", "quantity", "unit") if treatment.get("active")).compact()
-      else
-        []
+
+      checkin_data =
+        responses: @get("responsesData")
+        notes: @get("notes")
+
+      treatment_data = @get("treatments").map((treatment) -> treatment.getProperties("name", "quantity", "unit") if treatment.get("active")).compact()
+      checkin_data["treatments"] = treatment_data if Em.isPresent(treatment_data)
 
       data =
         entry:
-          JSON.stringify({
-            responses: @get("responsesData")
-            notes: @get("notes")
-            treatments: treatment_data
-          })
+          JSON.stringify(checkin_data)
 
       unless @get("lastSave.entry") is data.entry # don't bother saving unless there are changes
         ajax(

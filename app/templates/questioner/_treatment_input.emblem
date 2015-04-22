@@ -1,8 +1,9 @@
 li
 	form  submit="'save' target=view"
 		.checkin-treatment-name-wrapper
-			div click="'toggleActive' treatment target=view" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
+			div click="'toggleTreatment' treatment" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
 			.checkin-treatment-remove click="'destroy' treatment target=view" &times;
+
 		if treatment.active
 			.checkin-treatment-dose-inputs
 				view "forms/numberInput" name="quantity" controller=view parentForm=controller placeholder="30" noLabelText=true

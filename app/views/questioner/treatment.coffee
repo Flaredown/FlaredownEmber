@@ -23,10 +23,11 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
 
   quantityValid: (-> /^\d+$/.test(@get("quantity")) ).property("quantity")
 
-  willDestroyElement: -> @get("controller").send("addTreatment", @getProperties("id", "name", "quantity", "unit"))
+  willDestroyElement: -> @get("controller").send("addTreatment", @getProperties("id", "name", "quantity", "unit")) if @get("active") and @get("inactiveList")
+  didInsertElement: -> @set("content.active", true) unless @get("inactiveList")
 
   actions:
-    toggleActive: (treatment) -> @toggleProperty("active")
+    toggleActive: (treatment) -> @get("controller").send("toggleTreatment", treatment)
 
     destroy: (treatment) ->
       swal
