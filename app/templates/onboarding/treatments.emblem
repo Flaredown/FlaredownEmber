@@ -2,8 +2,7 @@ h2 = t "onboarding.treatments_to_track"
 
 form submit="save"
   each treatment in treatments
-    h6.treatment
-    	= treatment.name
+    h6.treatment= treatment.name
   br
 
   .checkin-search

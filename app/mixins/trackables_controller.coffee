@@ -76,6 +76,12 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       @get("model.treatments").removeObject(treatment) if @get("isEntry")
       treatment.unloadRecord()
 
+    # deactivateTreatment: (treatment) ->
+    #   ajax("#{config.apiNamespace}/treatments/#{treatment.id}", type: "DELETE").then(
+    #     (response) => @send("removeTreatment",treatment)
+    #     @errorCallback.bind(@)
+    #   )
+
     ### SYMPTOMS ###
     addSymptom: (symptom) ->
       ajax("#{config.apiNamespace}/symptoms",
@@ -98,6 +104,12 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         if section[0].name is symptom.name
           @get("catalog_definitions.symptoms").removeAt(i)
 
+    # deactivateSymptom: (symptom) ->
+    #   ajax("#{config.apiNamespace}/symptoms/#{symptom.id}", type: "DELETE").then(
+    #     (response) => @send("removeSymptom",symptom)
+    #     @errorCallback.bind(@)
+    #   )
+
     ### CONDITIONS ###
     addCondition: (condition) ->
       ajax("#{config.apiNamespace}/conditions",
@@ -119,6 +131,12 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       @get("catalog_definitions.conditions").forEach (section,i) =>
         if section[0].name is condition.name
           @get("catalog_definitions.conditions").removeAt(i)
+
+    # deactivateCondition: (condition) ->
+    #   ajax("#{config.apiNamespace}/conditions/#{condition.id}", type: "DELETE").then(
+    #     (response) => @send("removeCondition",condition)
+    #     @errorCallback.bind(@)
+    #   )
 
   simpleQuestionTemplate: (name) ->
     [{

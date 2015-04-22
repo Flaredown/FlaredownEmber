@@ -28,4 +28,10 @@ h6.symptom, h6.treatment, h6.condition {
 		content: "✔ ";
 		color: $primary;
 	}
+  .trackable-remove {
+    @include span-columns(1);
+    text-align: center;
+    cursor: pointer;
+  }
+
 }
