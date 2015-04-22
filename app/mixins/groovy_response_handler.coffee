@@ -15,6 +15,8 @@ mixin = Ember.Mixin.create
       response = response.jqXHR.responseJSON
     else if typeof response.responseJSON isnt "undefined"
       response = response.responseJSON
+    # else
+    #   response = @genericFiveHundred()
 
     switch response.errors.kind
       when "inline"
@@ -36,5 +38,12 @@ mixin = Ember.Mixin.create
     title = "#{title} Error"
     sweetAlert(title, Ember.I18n.t(description), "error")
     sweetAlert(title, description, "error")
+
+  genericFiveHundred: ->
+    Ember.Object.create
+      errors:
+        kind:
+          title: "500"
+          description: "500_description"
 
 `export default mixin`

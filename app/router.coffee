@@ -83,11 +83,15 @@ Em.Route.reopen
           # Ember.debug("Base.Route :: 404 because logged in on no-auth page")
           # @transitionTo("fourOhFour")
 
-        # Make them finish that onboarding
+        else if @get("currentUser.onboarded") and routeName is "onboarding"
+          @transitionTo(config.afterLoginRoute)
+
         else if not @get("currentUser.onboarded") and not /onboarding/.test(routeName)
 
           Ember.debug("Base.Route :: Redirect to onboarding not complete")
-          return if /onboarding/.test(window.location.pathname) # what was original intention?
+          if /onboarding/.test(window.location.pathname) # what was original intention?
+            return transition.abort()
+
           @transitionTo("onboarding.account")
 
         else if transition.targetName is "graph.index" and not @get("currentUser.graphable")

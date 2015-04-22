@@ -10,6 +10,7 @@ App = null
 
 module('Forms Integration Tests', {
   setup: ->
+    userFixture.current_user.settings.onboarded = "false"
     Ember.$.mockjax
       url: "#{config.apiNamespace}/current_user",
       responseText: userFixture

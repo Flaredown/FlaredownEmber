@@ -54,15 +54,16 @@ nav.navbar-centered
     img.navbar-logo src="assets/logo.svg"
   h4 Early Access
   if currentUser.loggedIn
-    ul.tracking-navigation
-      li.dropdown
-          .dropdown-container
-            a.dropdown-button My account
-            ul.dropdown-menu.dropdown-select
-              li: link-to "graph.account"
-                = t "menu_item_account"
-              li href="javascript:void(0);" click="logout" = t "menu_item_logout"
-      li &bull;
-      li Where's the graph?
-      li &bull;
-      li Discussion
+    if currentUser.onboarded
+      ul.tracking-navigation
+        li.dropdown
+            .dropdown-container
+              a.dropdown-button My account
+              ul.dropdown-menu.dropdown-select
+                li: link-to "graph.account"
+                  = t "menu_item_account"
+                li href="javascript:void(0);" click="logout" = t "menu_item_logout"
+        li &bull;
+        li Where's the graph?
+        li &bull;
+        li Discussion

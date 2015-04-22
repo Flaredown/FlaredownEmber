@@ -14,7 +14,7 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
         data: {settings: settings}
       ).then(
         (response) =>
-          @get("currentUser").setProperties("settings", settings)
+          @set("currentUser.settings.onboarded", "true")
           @transitionToRoute("graph.checkin", "today", "1")
         @errorCallback.bind(@)
       )
