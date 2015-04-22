@@ -5,7 +5,7 @@
   else
     form submit="login"
 
-      view "forms/textInput" name="email"
+      view "forms/emailInput" name="email"
       view "forms/passwordInput" name="password"
 
       view "forms/saveButton" name="login" action="login"

@@ -1,10 +1,10 @@
 .checkin-treatments
-  if currentUser.treatments
+  if anyTreatments
     h3 = t "which_treatments_taken_today"
     ul: each treatment in treatments
       view "questioner/treatment" content=treatment
 
-    ul: each treatment in inactiveTreatments
+    ul.inactive-treatments: each treatment in inactiveTreatments
       unless treatment.active
         view "questioner/treatment" content=treatment inactiveList=true
   else

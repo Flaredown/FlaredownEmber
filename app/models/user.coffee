@@ -6,6 +6,7 @@ model = DS.Model.extend
   treatments:           DS.hasMany "treatment"
   conditions:           DS.hasMany "condition"
   symptoms:             DS.hasMany "symptoms"
+  catalogs:             DS.hasMany "catalogs"
 
   locale:               DS.attr "string"
   email:                DS.attr "string"

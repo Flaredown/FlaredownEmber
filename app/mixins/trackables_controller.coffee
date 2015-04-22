@@ -6,6 +6,7 @@
 mixin = Ember.Mixin.create FormHandlerMixin,
   isEntry: Ember.computed(-> @get("model.constructor.typeKey") is "entry").property("model")
 
+  anyTreatments: Em.computed.or("model.treatments", "currentUser.treatments")
   treatments: Ember.computed ->
     if @get("isEntry") then @get("model.treatments") else @get("currentUser.treatments")
   .property("currentUser.treatments.@each", "model.treatments.@each")

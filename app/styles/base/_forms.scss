@@ -89,7 +89,7 @@ textarea {
     border-color: red;
     outline: none;
   }
-  input[type="text"], input[type="password"], input[type="number"] {
+  input[type="text"], input[type="email"], input[type="password"], input[type="number"] {
     font-size: 1.2em;
     &:focus {
       border-color: $primary;

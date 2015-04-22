@@ -3,15 +3,9 @@
 
 view = Ember.View.extend FormInputMixin,
 
-  kind: "number"
-  min:  "0"
-  step: "0.1"
-  willValidate: false
-
-  templateName: "forms/number-input"
-  classNames: ["number-input"]
+  kind: "email"
+  templateName: "forms/text-input"
+  classNames: ["text-input"]
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent"]
-  # attributeBindings: ["min", "step", "willValidate"]
-
 
 `export default view`

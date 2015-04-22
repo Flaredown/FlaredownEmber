@@ -7,5 +7,6 @@ view = Ember.View.extend FormInputMixin,
   templateName: "forms/text-input"
   classNames: ["text-input"]
   classNameBindings: ["isValid:valid:invalid", "hasErrors:errors:no-errors", "present:present:absent"]
+  attributeBindinds: ["type"]
 
 `export default view`
