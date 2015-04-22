@@ -50,7 +50,8 @@
   /   h4 Early Access
 
 nav.navbar-centered
-  img.navbar-logo src="assets/logo.svg"
+  link-to "graph.checkin" "today" "1"
+    img.navbar-logo src="assets/logo.svg"
   h4 Early Access
   if currentUser.loggedIn
     ul.tracking-navigation
