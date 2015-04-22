@@ -1,5 +1,5 @@
 .checkin-treatments
-  if treatments
+  if currentUser.treatments
     h3 = t "which_treatments_taken_today"
     ul: each treatment in treatments
       view "questioner/treatment" content=treatment
