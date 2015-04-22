@@ -4,6 +4,8 @@ form submit="save"
   each condition in conditions
     h6.condition
     	= condition.name
+  .explainer = t "onboarding.change_these_later"
+
   br
 
   .checkin-search

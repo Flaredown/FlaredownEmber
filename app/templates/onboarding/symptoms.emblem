@@ -4,6 +4,8 @@ form submit="save"
   each symptom in symptoms
     h6.symptom
     	= symptom.name
+  .explainer = t "onboarding.change_these_later"
+
   br
 
   .checkin-search

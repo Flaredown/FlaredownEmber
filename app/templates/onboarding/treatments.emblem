@@ -3,6 +3,9 @@ h2 = t "onboarding.treatments_to_track"
 form submit="save"
   each treatment in treatments
     h6.treatment= treatment.name
+
+  .explainer = t "onboarding.change_these_later"
+
   br
 
   .checkin-search

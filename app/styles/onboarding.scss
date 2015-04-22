@@ -16,12 +16,18 @@
   nav {
     margin-top: 50px;
   }
+  .explainer {
+    text-align: center;
+    font-size: 0.8em;
+    font-style: italic;
+  }
 }
 .account-dob-wrapper {
 	.text-input {
 		@include span-columns(4);
 	}
 }
+
 h6.symptom, h6.treatment, h6.condition {
 	font-size: 1.2em;
 	&:before {
