@@ -6,9 +6,9 @@ form submit="save"
   label = t "onboarding.dob"
 
   .account-dob-wrapper
-  	view "forms/textInput" name="dobMonth" noLabelText=true
-  	view "forms/textInput" name="dobDay" noLabelText=true
-  	view "forms/textInput" name="dobYear" noLabelText=true
+    view "forms/textInput" name="dobDay"
+    view "forms/textInput" name="dobMonth"
+    view "forms/textInput" name="dobYear"
 
   view "forms/radioInput" name="sex"
   view "forms/textInput" name="gender"

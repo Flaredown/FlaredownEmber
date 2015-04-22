@@ -11,9 +11,10 @@
 
             label = t "onboarding.dob"
             .account-dob-wrapper
-              view "forms/textInput" name="dobMonth" placeholder="08" noLabelText=true
-              view "forms/textInput" name="dobDay" placeholder="22" noLabelText=true
-              view "forms/textInput" name="dobYear" placeholder="1980" noLabelText=true
+
+              view "forms/textInput" name="dobDay" placeholder="22"
+              view "forms/textInput" name="dobMonth" placeholder="08"
+              view "forms/textInput" name="dobYear" placeholder="1980"
 
             view "forms/radioInput" name="sex"
             view "forms/textInput" name="gender"
