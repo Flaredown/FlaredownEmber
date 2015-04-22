@@ -2,10 +2,15 @@ h2 = t "onboarding.research_questions_for_conditions"
 
 form submit="save"
 
-  each description in catalogDescriptions
-    h4 = description.title
-    ul: each section in description.sections
-      li = section
-    hr
+  if catalogDescriptions
+
+    each description in catalogDescriptions
+      h4 = description.title
+      ul: each section in description.sections
+        li = section
+      hr
+
+  else
+    h4 = t "onboarding.no_research_questions_for_conditions"
 
   partial "onboarding/nav"
