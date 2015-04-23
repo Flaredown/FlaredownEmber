@@ -102,6 +102,12 @@
       align-items: center;
     }
     .bg-default, .tbg- { background-color: $primary; }
+    li {
+      margin-bottom: 1em;
+    }
+    &.inactive-treatments {
+      margin-top: 0;
+    }
   }
   .checkin-treatment-name {
     @include span-columns(10);
