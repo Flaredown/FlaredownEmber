@@ -35,8 +35,8 @@ moduleFor("controller:graph", "Graph Controller (basic)",
         controller.set "loadedStartDate", moment(startDay)
         controller.set "loadedEndDate",   moment().utc().startOf("day")
 
-        window.symptomColors    = userFixture.current_user.symptom_colors
-        window.treatmentColors  = userFixture.current_user.treatment_colors
+        window.symptomColors    = userFixture().current_user.symptom_colors
+        window.treatmentColors  = userFixture().current_user.treatment_colors
 
         # Not reset properly by App.destroy
         controller.set "_processedDatumDays",   []

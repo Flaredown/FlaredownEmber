@@ -65,15 +65,15 @@ test "Inline errors are shown on inline error response", ->
         ok $(".form-password").hasClass('errors'), 'Password has error class'
   )
 
-test "alert is shown on growl error response", ->
-  Ember.$.mockjax
-    url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 500, responseText: general_error_response
-
-  visit('/login').then(
-    ->
-      triggerEvent(".login-button", "click")
-      andThen -> assertAlertPresent()
-  )
+# test "alert is shown on growl error response", ->
+#   Ember.$.mockjax
+#     url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 500, responseText: general_error_response
+#
+#   visit('/login').then(
+#     ->
+#       triggerEvent(".login-button", "click")
+#       andThen -> assertAlertPresent()
+#   )
 
 test "sets up colors on login", ->
   expect 1
