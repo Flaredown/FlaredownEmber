@@ -3,3 +3,7 @@
 		max-width: 500px;
 	}
 }
+.password-reset-form {
+	@include outer-container;
+	@include single-col;
+}
