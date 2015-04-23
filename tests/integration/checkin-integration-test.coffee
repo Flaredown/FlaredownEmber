@@ -154,13 +154,13 @@ test "Warned of treatment removal", ->
 
 # Completeness
 test "Setting a response on a normal select marks that section as 'complete'", ->
-  expect 1
+  expect 2
 
   # Page 3, HBI general wellbeing, incomplete
   visit('/checkin/Aug-13-2014/3').then( ->
-    current_complete_count = $(".pagination-dots a.complete").length
+    ok !$(".pagination-dots a:eq(2)").hasClass("complete"), "isn't complete"
     triggerEvent ".checkin-response-select li:eq(0)", "click"
-    ok current_complete_count is $(".pagination-dots a.complete").length - 1
+    ok $(".pagination-dots a:eq(2)").hasClass("complete"), "is complete"
   )
 
 test "Null values on symptom responses do not count as complete", ->
