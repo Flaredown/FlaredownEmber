@@ -4,7 +4,7 @@
 	margin-bottom: 2em;
 	h2 {
 	  text-align: center;
-	  margin: 50px 0;
+	  margin: 1em 0;
 	}
 	h4.birthday {
 		margin-top: 50px;
@@ -19,6 +19,18 @@
     text-align: center;
     font-size: 0.8em;
     font-style: italic;
+  }
+  .tip {
+  	margin: 1em auto 2em auto;
+  }
+  .explainer {
+  	margin: .5em;
+  	color: grey;
+  	text-align: left;
+  }
+  .success_img {
+  	margin: 2em auto;
+  	display: block;
   }
 }
 .account-dob-wrapper {

@@ -1,8 +1,6 @@
 h2 = t "onboarding.setup_complete"
-img src="http://www.comicsandmemes.com/wp-content/uploads/2013/04/Success-baby.jpg"
+img.success_img src="assets/onboarding_success.png"
 form submit="save"
-  h3 = t "onboarding.ready_for_checkin"
-  br
   a href="javascript: void(0)" click="back" {{ t "nav.back"}}
   view "forms/saveButton" name="checkin"
 

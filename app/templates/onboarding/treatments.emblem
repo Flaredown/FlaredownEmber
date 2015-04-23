@@ -1,14 +1,15 @@
 h2 = t "onboarding.treatments_to_track"
 
+.tip = t "tips.onboarding_treatments"
+
 form submit="save"
   each treatment in treatments
     h6.treatment= treatment.name
-
-  .explainer = t "onboarding.change_these_later"
 
   br
 
   .checkin-search
   	view "questioner/trackable-search" trackableType="treatment"
+  .explainer = t "onboarding.change_these_later"
 
   partial "onboarding/nav"

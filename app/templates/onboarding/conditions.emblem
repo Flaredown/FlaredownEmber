@@ -1,14 +1,16 @@
 h2 = t "onboarding.conditions_to_track"
 
+.tip = t "tips.onboarding_conditions"
+
 form submit="save"
   each condition in conditions
     h6.condition
     	= condition.name
-  .explainer = t "onboarding.change_these_later"
 
   br
 
   .checkin-search
   	view "questioner/trackable-search" trackableType="condition"
+  .explainer = t "onboarding.change_these_later"
 
   partial "onboarding/nav"

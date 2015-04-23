@@ -116,3 +116,11 @@ label {
   @include outer-container;
   @include single-col;
 }
+.tip {
+  background: #ECF7F6;
+  color: $primary;
+  padding: .5em 1em;
+  text-align: left;
+  border: 1px solid $primary;
+  border-radius: 3px;
+}
