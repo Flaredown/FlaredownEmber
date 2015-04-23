@@ -3,8 +3,8 @@ label
     = view.label
 
   each option in view.options
-    div click="'set' option.value target=view" class=option.class
-      h4.option-name
+    div class=option.class
+      = radio-button value=option.name groupValue=view.value
         = option.name
 
   view "forms/errors"
