@@ -26,7 +26,7 @@ module('Check-In Integration', {
       responseText: graphFixture()
 
     # For "today" tests
-    today = moment().utc().format("MMM-DD-YYYY")
+    today = moment().format("MMM-DD-YYYY")
     Ember.$.mockjax
       url: "#{config.apiNamespace}/entries",
       type: 'POST'
@@ -65,6 +65,7 @@ test "Can see the checkin", ->
 
 test "Can see the checkin for 'today' ", ->
   expect 2
+
 
   visit('/checkin/today/1').then( ->
     assertModalPresent()
