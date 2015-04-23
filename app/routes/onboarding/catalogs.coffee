@@ -6,6 +6,7 @@
 
 route = Ember.Route.extend GroovyResponseHandlerMixin,
 
+  redirect: (model,transition) -> @transitionTo("onboarding.symptoms") if transition.targetName is "onboarding.catalogs" and not Em.keys(model).length
   model: ->
     ajax(
       url: "#{config.apiNamespace}/me/catalogs"
