@@ -8,6 +8,7 @@
 
   liquid-with section as liquidSection
     / view "forms/errors" errors="controller.allErrors"
+    h4 = t sectionHeader
     .checkin-content: partial currentPartial
 
     .pagination-dots
