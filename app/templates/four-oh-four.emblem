@@ -1,3 +1,4 @@
-h1 Oops! Page not found.
+.four-oh-four
+	h1 Oops! Page not found.
 
-partial "error-resolution-helper"
+	partial "error-resolution-helper"

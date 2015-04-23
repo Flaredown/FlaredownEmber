@@ -1,3 +1,4 @@
-h1 Oops! Something went wrong!
+.five-hundred
+	h1 Oops! Something went wrong!
 
-partial "error-resolution-helper"
+	partial "error-resolution-helper"

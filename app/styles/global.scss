@@ -112,3 +112,7 @@ label {
     max-width: 75px;
   }
 }
+.five-hundred, .four-oh-four {
+  @include outer-container;
+  @include single-col;
+}

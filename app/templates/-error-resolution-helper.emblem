@@ -2,7 +2,7 @@ p Please check the following:
 .error You're logged in correctly, and should be logged in.
 .error The link you clicked hasn't expired.
 .error You're authorized to view the page.
-
+br
 p If you're still stuck, please try:
 .error Refreshing the page.
 .error Contact support at the bottom of the page.
