@@ -84,8 +84,8 @@ Em.Route.reopen
           # Ember.debug("Base.Route :: 404 because logged in on no-auth page")
           # @transitionTo("fourOhFour")
 
-        # else if @get("currentUser.onboarded") and routeName is "onboarding"
-        #   @transitionTo(config.afterLoginRoute)
+        else if @get("currentUser.onboarded") and routeName is "onboarding"
+          @transitionTo(config.afterLoginRoute)
 
         else if not @get("currentUser.onboarded") and not /onboarding/.test(routeName)
           Ember.debug("Base.Route :: Redirect to onboarding not complete")
