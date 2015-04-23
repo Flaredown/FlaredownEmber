@@ -5,7 +5,7 @@
 route = Ember.Route.extend GroovyResponseHandlerMixin,
   model: (params, transition, queryParams) ->
     date = params.date
-    today = moment.utc().format("MMM-DD-YYYY")
+    today = moment().format("MMM-DD-YYYY")
     @set "section", parseInt params.section
 
     date = today if params.date is "today" or today is params.date
