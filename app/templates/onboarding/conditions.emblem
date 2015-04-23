@@ -7,8 +7,6 @@ form submit="save"
     h6.condition
     	= condition.name
 
-  br
-
   .checkin-search
   	view "questioner/trackable-search" trackableType="condition"
   .explainer = t "onboarding.change_these_later"
