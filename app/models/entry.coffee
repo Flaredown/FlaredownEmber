@@ -19,7 +19,7 @@ model = DS.Model.extend
   fancyDate:  Ember.computed(-> @get("moment").format("MMMM D, YYYY") ).property("moment")
 
   dateAsParam: Ember.computed ->
-    return "today" if moment.utc().format("MMM-DD-YYYY") is @get("niceDate")
+    return "today" if moment().format("MMM-DD-YYYY") is @get("niceDate")
     @get("niceDate")
   .property("niceDate")
 
