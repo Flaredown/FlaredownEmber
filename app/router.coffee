@@ -72,41 +72,42 @@ Em.Route.reopen
           return @redirectToTalk(transition.queryParams.sso, transition.queryParams.sig)
 
         if attemptedTransition
-          Ember.debug("Base.Route :: Redirect existing attemped transition")
+          Ember.Logger.info("Base.Route :: Redirect existing attemped transition")
           attemptedTransition.retry()
           @set("attemptedTransition", false)
 
         else if @get("unauthedOnly")
-          Ember.debug("Base.Route :: Redirect to afterLoginRoute on trying to access unauthedOnly page")
+          Ember.Logger.info("Base.Route :: Redirect to afterLoginRoute on trying to access unauthedOnly page")
           @transitionTo(config.afterLoginRoute)
 
           # Or 404?
-          # Ember.debug("Base.Route :: 404 because logged in on no-auth page")
+          # Ember.Logger.info("Base.Route :: 404 because logged in on no-auth page")
           # @transitionTo("fourOhFour")
 
         else if @get("currentUser.onboarded") and routeName is "onboarding"
+          Ember.Logger.info("Base.Route :: Already onboarded, sending to after login route")
           @transitionTo(config.afterLoginRoute)
 
         else if not @get("currentUser.onboarded") and not /onboarding/.test(routeName)
-          Ember.debug("Base.Route :: Redirect to onboarding not complete")
+          Ember.Logger.info("Base.Route :: Redirect to onboarding not complete")
           if /onboarding/.test(window.location.pathname) # what was original intention?
             return transition.abort()
 
           @transitionTo("onboarding.account")
 
         else if transition.targetName is "graph.index" and not @get("currentUser.graphable")
-          Ember.debug("Base.Route :: Redirect ungraphable user to checkin")
+          Ember.Logger.info("Base.Route :: Redirect ungraphable user to checkin")
           @transitionTo("graph.checkin", "today", "1")
 
         else if not @get("currentUser.checked_in_today") and @get("currentUser.onboarded")
-          Ember.debug("Base.Route :: Not checked in today and no other catches, redirect to checkin")
+          Ember.Logger.info("Base.Route :: Not checked in today and no other catches, redirect to checkin")
           @set("currentUser.checked_in_today", true)
           @transitionTo("graph.checkin", "today", 1)
 
       else
 
         if @get("authedOnly")
-          Ember.debug("Base.Route :: Redirect to login because not logged in")
+          Ember.Logger.info("Base.Route :: Redirect to login because not logged in")
           @set("attemptedTransition", transition)
           @transitionTo("login")
 

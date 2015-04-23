@@ -6,17 +6,6 @@
 `import userFixture from "../fixtures/user-fixture"`
 `import localeFixture from "../fixtures/locale-fixture"`
 
-App = null
-
-module('Login Integration', {
-  setup: ->
-    App = startApp()
-    null
-  teardown: ->
-    Ember.run(App, App.destroy);
-    $.mockjax.clear();
-})
-
 inline_response = {
   'errors' : {
     'error_group' : 'inline',
@@ -37,72 +26,36 @@ inline_response = {
   }
 }
 
-# modal_response = {
-#   'errors' : {
-#     'error_group' : 'modal',
-#     'title' : 'Some Error Occurred',
-#     'message' : 'We are sorry that some error occurred'
-#   }
-# }
-#
-# growl_response = {
-#   'errors' : {
-#     'error_group' : 'growl',
-#     'title' : "Sorry, Your account isn't verified yet",
-#     'message' : "Check back later when your account will be verified by our admin",
-#     'type' : "error"
-#   }
-# }
+general_error_response = {
+  'errors' : {
+    'kind' : 'general',
+    'title' : "Sorry, Your account isn't verified yet",
+    'message' : "Check back later when your account will be verified by our admin",
+    'type' : "error"
+  }
+}
 
-inlineErrors = ->
 
-  data = {}
-  data["v#{config.apiVersion}_user"] = {"email" : "abc@abc.com" : "password" : "123"}
-  Ember.$.mockjax
-    url: "#{config.apiNamespace}/users/sign_in.json"
-    type: 'POST'
-    #data: data
-    status: 500
-    responseText: inline_response
+App = null
 
-# modalErrors =->
-#   data = {}
-#   data["v#{config.apiVersion}_user"] = {"email" : "abc@abc.com" : "password" : "123"}
-#   Ember.$.mockjax
-#     url: "#{config.apiNamespace}/users/sign_in.json"
-#     type: 'POST'
-#   #data: data
-#     status: 500
-#     responseText: modal_response
-#
-# growlErrors =->
-#   data = {}
-#   data["v#{config.apiVersion}_user"] = {"email" : "abc@abc.com" : "password" : "123"}
-#   Ember.$.mockjax
-#     url: "#{config.apiNamespace}/users/sign_in.json"
-#     type: 'POST'
-#   #data: data
-#     status: 500
-#     responseText: growl_response
+module('Login Integration', {
+  setup: ->
+    App = startApp()
+    null
+  teardown: ->
+    Ember.run(App, App.destroy);
+    $.mockjax.clear();
+})
 
 successfulLogin = ->
-  Ember.$.mockjax
-    url: "#{config.apiNamespace}/users/sign_in.json"
-    type: 'POST'
-    status: 201
-    responseText: {}
-
-  Ember.$.mockjax
-    url: "#{config.apiNamespace}/current_user",
-    responseText: userFixture
-
-  Ember.$.mockjax
-    url: "#{config.apiNamespace}/locales/en",
-    responseText: localeFixture
+  Ember.$.mockjax url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 201, responseText: {}
+  Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
+  Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
 
 test "Inline errors are shown on inline error response", ->
   expect 2
-  inlineErrors()
+
+  Ember.$.mockjax url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 500, responseText: inline_response
 
   visit('/login').then(
     ->
@@ -112,25 +65,15 @@ test "Inline errors are shown on inline error response", ->
         ok $(".form-password").hasClass('errors'), 'Password has error class'
   )
 
+test "alert is shown on growl error response", ->
+  Ember.$.mockjax
+    url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 500, responseText: general_error_response
 
-# test "modal is shown on modal error response", ->
-#   expect 1
-#   modalErrors()
-#
-#   visit('/login').then(
-#     ->
-#       triggerEvent(".login-button", "click")
-#       andThen -> assertModalPresent()
-#   )
-#
-# test "alert is shown on growl error response", ->
-#   growlErrors()
-#
-#   visit('/login').then(
-#     ->
-#       triggerEvent(".login-button", "click")
-#       andThen -> assertAlertPresent()
-#   )
+  visit('/login').then(
+    ->
+      triggerEvent(".login-button", "click")
+      andThen -> assertAlertPresent()
+  )
 
 test "sets up colors on login", ->
   expect 1

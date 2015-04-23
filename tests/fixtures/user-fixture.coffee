@@ -1,4 +1,4 @@
-user = {
+user = -> {
   "current_user": {
     "id": 1,
     "email": "test@test.com",

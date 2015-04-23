@@ -11,18 +11,17 @@ App = null
 
 module('Onboarding Integration Tests', {
   setup: ->
-    userFixture.current_user.settings.onboarded = "false"
+    user = userFixture()
+    user.current_user.settings.onboarded = "false"
     Ember.$.mockjax
       url: "#{config.apiNamespace}/current_user",
-      responseText: userFixture
+      responseText: user
 
     Ember.$.mockjax
       url: "#{config.apiNamespace}/current_user/1",
-      responseText: userFixture
+      responseText: user
 
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/locales/en",
-      responseText: localeFixture
+    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
 
     Ember.$.mockjax
       url: "#{config.apiNamespace}/me/catalogs",

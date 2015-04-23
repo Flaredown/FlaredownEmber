@@ -194,7 +194,7 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
         @set("loadedStartDate",start) if start < @get("loadedStartDate")
         @loadMoreRaw(response)
 
-      (response) => console.log "?!?! error on getting graph"
+      (response) => console.log "?!?! error on getting graph" # TODO replace with groovy handler
     )
 
   loadMoreRaw: (raw) ->
@@ -215,9 +215,9 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
 
 
   actions:
-    dayProcessing: (day) -> @get("serverProcessingDays").addObject(moment(day).utc().startOf("day").unix())
+    dayProcessing: (day) -> @get("serverProcessingDays").addObject(moment(day, "MMM-DD-YYYY").utc().startOf("day").unix())
     dayProcessed: (day) ->
-      date  = moment(day).utc().startOf("day")
+      date  = moment(day, "MMM-DD-YYYY").utc().startOf("day")
       day   = date.unix()
       if @get("serverProcessingDays").contains(day)
         @get("_processedDatumDays").removeObject(day)

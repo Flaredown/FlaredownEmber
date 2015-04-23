@@ -13,17 +13,9 @@ App = null
 
 module('Check-In Integration', {
   setup: ->
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/current_user",
-      responseText: userFixture
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/locales/en",
-      responseText: localeFixture
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/graph",
-      responseText: graphFixture()
+    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
+    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
+    Ember.$.mockjax url: "#{config.apiNamespace}/graph", responseText: graphFixture()
 
     # For "today" tests
     today = moment().format("MMM-DD-YYYY")
@@ -35,16 +27,9 @@ module('Check-In Integration', {
       responseText: entryFixture(today)
 
     # For other dates
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/entries",
-      type: 'POST'
-      # data:
-      #   date: "Aug-13-2014"
-      responseText: entryFixture("Aug-13-2014")
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/symptoms/search/*",
-      responseText: symptomSearchFixture
+    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', responseText: entryFixture("Aug-13-2014")
+    Ember.$.mockjax url: "#{config.apiNamespace}/entries/*", type: 'PUT', responseText: {}
+    Ember.$.mockjax url: "#{config.apiNamespace}/symptoms/search/*", responseText: symptomSearchFixture
 
     App = startApp()
     null

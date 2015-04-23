@@ -14,30 +14,15 @@ App   = null
 today = moment().utc().startOf("day").format("MMM-DD-YYYY")
 
 module('Graph Integration', {
+  needs: ["controller:graph"]
+
   setup: ->
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/current_user",
-      type: 'GET'
-      responseText: userFixture
+    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", type: 'GET', responseText: userFixture()
+    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
+    Ember.$.mockjax url: "#{config.apiNamespace}/entries/*", type: 'PUT', responseText: {}
 
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/locales/en",
-      responseText: localeFixture
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/entries/*",
-      type: 'PUT'
-      responseText: {}
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/graph",
-      type: 'GET'
-      responseText: graphFixture(moment().utc().startOf("day").subtract(5,"days"))
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/entries",
-      type: 'POST'
-      responseText: entryFixture(today)
+    Ember.$.mockjax url: "#{config.apiNamespace}/graph", type: 'GET', responseText: graphFixture(moment().utc().startOf("day").subtract(5,"days"))
+    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', responseText: entryFixture(today)
 
     App = startApp()
     null
@@ -112,6 +97,7 @@ test "Updating entry goes to loading state and updates entry on graph", ->
   expect 2
 
   controller = App.__container__.lookup("controller:graph")
+
 
   visit('/').then ->
 

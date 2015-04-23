@@ -1,6 +1,6 @@
 `import Ember from 'ember'`
 
-fixture = Ember.Object.create({
+fixture = -> Ember.Object.create({
   "en":{
     "hello":"Hello world",
     "catalogs":{

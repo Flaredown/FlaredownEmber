@@ -14,11 +14,9 @@ module('Note Integration Tests', {
   setup: ->
     Ember.$.mockjax
       url: "#{config.apiNamespace}/current_user",
-      responseText: userFixture
+      responseText: userFixture()
 
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/locales/en",
-      responseText: localeFixture
+    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
 
     Ember.$.mockjax
       url: "#{config.apiNamespace}/graph",

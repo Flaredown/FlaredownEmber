@@ -10,14 +10,10 @@ App = null
 
 module('Forms Integration Tests', {
   setup: ->
-    userFixture.current_user.settings.onboarded = "false"
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/current_user",
-      responseText: userFixture
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/locales/en",
-      responseText: localeFixture
+    user = userFixture()
+    user.current_user.settings.onboarded = "false"
+    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
+    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
 
     App = startApp()
     null
