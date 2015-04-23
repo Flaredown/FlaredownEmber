@@ -3,6 +3,6 @@ img src="http://www.comicsandmemes.com/wp-content/uploads/2013/04/Success-baby.j
 form submit="save"
   h3 = t "onboarding.ready_for_checkin"
   br
-  a.btn href="javascript: void(0)" click="back" {{ t "nav.back"}}
+  a href="javascript: void(0)" click="back" {{ t "nav.back"}}
   view "forms/saveButton" name="checkin"
 

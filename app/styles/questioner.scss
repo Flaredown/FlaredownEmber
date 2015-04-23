@@ -35,6 +35,9 @@
     max-width: 350px;
     margin: 40px auto 20px auto;
   }
+  .pagination-dots {
+    margin-top: 2em;
+  }
 }
 
 ////////////// Select Input Styles ///////////////
@@ -116,17 +119,16 @@
     padding: 5px 15px;
     border-radius: 999px;
 
-    &:hover {
-      opacity: .9;
-    }
-
     &.active {
       color: white;
     }
 
     &.inactive {
-      background: $lightgrey;
+      background: #eee;
       color: grey;
+      &:hover {
+        background: $lightgrey;
+      }
     }
 
   }

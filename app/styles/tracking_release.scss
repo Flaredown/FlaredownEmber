@@ -7,19 +7,22 @@ body {
 	margin: 0 auto;
 	padding-bottom: 0;
 	.checkin-date-container {
+		.checkin-date {
+			color: $primary;
+		}
 		.yesterday, .tomorrow {
 			font-size: 2em;
-			padding: 5px 20px;
 			position: relative;
 			top: 3px;
 			&:hover {
 				transform: scale(1.2);
 				a {
-					color: grey;
+					color: $primary;
 				}
 			}
 			a {
-				color: $lightgrey;
+				padding: 5px 20px;
+				color: $primary;
 			}
 		}
 	}	

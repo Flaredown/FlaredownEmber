@@ -6,15 +6,15 @@
       .tomorrow: link-to "graph.checkin" tomorrowDate "1"
          | &rsaquo;
 
-  .pagination-dots
-  	ul
-  		each sec in sections
-  			li click="'setSection' sec.number"
-  				a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
-
   liquid-with section as liquidSection
     / view "forms/errors" errors="controller.allErrors"
     .checkin-content: partial currentPartial
+
+    .pagination-dots
+      ul
+        each sec in sections
+          li click="'setSection' sec.number"
+            a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
     .checkin-navigate
 

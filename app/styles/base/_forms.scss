@@ -42,7 +42,7 @@ label {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: $lightgrey;
+  background: $primary;
   margin: 3px 5px;
   &.selected, &.active {
     transform: scale(1.5);
