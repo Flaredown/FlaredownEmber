@@ -7,6 +7,11 @@
 	border-radius: 5px;
 	background: white;
 	padding: 30px;
+	box-shadow: 0 4px 0 $shadow;
+}
+@mixin single-col {
+	@include card;
+	max-width: 500px;
 }
 @mixin wrap-ellipsis {
   white-space: nowrap;

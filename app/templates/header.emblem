@@ -56,15 +56,25 @@ nav.navbar-centered
   if currentUser.loggedIn
     if currentUser.onboarded
       ul.tracking-navigation
+
+        li
+          link-to "graph.checkin" "today" "1"
+            | Checkin
+        li &bull;
+
+        li: link-to "upcoming"
+          | What's next?
+        li &bull;
+
+        li Discussion
+        li &bull;
+
         li.dropdown
             .dropdown-container
-              a.dropdown-button My account
+              a.dropdown-button Account
               ul.dropdown-menu.dropdown-select
                 li: link-to "graph.account"
                   = t "menu_item_account"
                 li href="javascript:void(0);" click="logout" = t "menu_item_logout"
-        li &bull;
-        li: link-to "upcoming"
-          | Upcoming features
-        li &bull;
-        li Discussion
+
+        

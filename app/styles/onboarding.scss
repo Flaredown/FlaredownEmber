@@ -1,7 +1,6 @@
 .onboarding {
 	@include outer-container;
-	@include card;
-	max-width: 600px;
+	@include single-col;
 	margin-bottom: 2em;
 	h2 {
 	  text-align: center;

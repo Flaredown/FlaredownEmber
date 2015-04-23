@@ -3,7 +3,6 @@ body {
 }
 #tracking-questioner {
 	@include card;
-	@include standard-shadow;
 	max-width: 600px;
 	margin: 0 auto;
 	padding-bottom: 0;
@@ -43,9 +42,8 @@ body {
 	}
 }
 #upcoming {
-	@include card;
-	@include standard-shadow;
 	@include outer-container;
+	@include card;
 	max-width: 600px;
 	h1 {
 		text-align: center;
@@ -53,5 +51,8 @@ body {
 	}
 	p {
 		margin-bottom: 4em;
+	}
+	img {
+		margin-bottom: 1em;
 	}
 }

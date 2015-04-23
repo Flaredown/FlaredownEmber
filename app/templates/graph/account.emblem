@@ -1,4 +1,4 @@
-.modal
+.modal.account-modal
 
   = input type="checkbox" class="modal-state" id="modal-account" checkedBinding="modalOpen"
   .modal-fade-screen
