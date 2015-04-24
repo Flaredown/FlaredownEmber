@@ -25,6 +25,6 @@ view = Ember.View.extend
     if Ember.I18n.translations.get(name) then Ember.I18n.t(name) else Ember.I18n.t("#{@get("i18nKey")}.#{name}")
   ).property("i18nKey")
 
-  click: -> @send(@get("action")) unless @get("disabled")
+  tap: -> @send(@get("action")) unless @get("disabled")
 
 `export default view`

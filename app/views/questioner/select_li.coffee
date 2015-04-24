@@ -14,6 +14,6 @@ view = Ember.View.extend
   mouseEnter: ->  @get("parentView").send("setHover", @get("input.value"))
   mouseOut: ->    @get("parentView").send("setHover", null)
 
-  click: ->       @get("parentView").send("sendResponse", @get("input.value"))
+  tap: ->       @get("parentView").send("sendResponse", @get("input.value"))
 
 `export default view`
