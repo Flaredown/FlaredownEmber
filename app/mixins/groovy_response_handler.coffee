@@ -40,6 +40,8 @@ mixin = Ember.Mixin.create
     return sweetAlert(title, Ember.I18n.t(description), "error")
     # sweetAlert(title, description, "error")
 
+  generalErrorFor: (name) ->
+    @handleGeneralErrors(name, "#{name}_description")
   genericFiveHundred: ->
     Ember.Object.create
       errors:

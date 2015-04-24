@@ -2,9 +2,10 @@
 `import Ember from 'ember'`
 `import ajax from 'ic-ajax'`
 `import config from './config/environment'`
+`import GroovyResponseHandlerMixin from './mixins/groovy_response_handler'`
 `import KeenMixin from './mixins/keen'`
 
-Router = Ember.Router.extend KeenMixin,
+Router = Ember.Router.extend KeenMixin, GroovyResponseHandlerMixin,
   location: config.locationType
 
 Router.reopen
@@ -68,6 +69,12 @@ Em.Route.reopen
     else
 
       if @get("currentUser.loggedIn")
+        if transition.targetName is "graph.checkin" and transition.state.params["graph.checkin"]
+          if moment(transition.state.params["graph.checkin"].date, "MMM-DD-YYYY") > moment()
+            Ember.Logger.info("Base.Route :: No future dates, transition aborted with error")
+            @generalErrorFor("future_date")
+            transition.abort()
+
         if transition.queryParams.sso and transition.queryParams.sig
           return @redirectToTalk(transition.queryParams.sso, transition.queryParams.sig)
 
