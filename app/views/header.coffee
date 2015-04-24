@@ -17,7 +17,7 @@ view = Ember.View.extend
         $('.dropdown-menu > li').click ->
           $('.dropdown-menu').removeClass 'show-menu'
         $('.dropdown-menu.dropdown-select > li').click ->
-          $('.dropdown-button').html @$.html()
+          $('.dropdown-button').html $(@).html()
 
 
 `export default view`
