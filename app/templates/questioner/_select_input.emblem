@@ -1,4 +1,7 @@
 .checkin-response
   ul class={ simplifiedQuestion:simple-checkin-response:checkin-response-select hasValue:has-value}
     each input in inputs
-      view "questioner/select-li" input=input
+      if view.isCatalog
+        view "questioner/catalog-select-input" input=input
+      else
+        view "questioner/trackable-select-input" input=input
