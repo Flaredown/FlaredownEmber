@@ -1,10 +1,10 @@
 li
 	form submit="'save' target=view"
 		.checkin-treatment-name-wrapper
-			div{action 'toggleTreatment' treatment}{bind-attr class=":checkin-treatment-name view.active:active:inactive view.colorClass"} = treatment.name
+			div{action 'toggleTreatment' treatment}{bind-attr class=":checkin-treatment-name view.takenList:active:inactive view.colorClass"} = treatment.name
 			.checkin-treatment-remove{action 'destroy' treatment target=view} &times;
 
-		if treatment.active
+		if view.takenList
 			.checkin-treatment-dose-inputs
 				view "forms/numberInput" name="quantity" controller=view parentForm=controller placeholder="30" noLabelText=true
 				view "forms/selectInput" name="unit" controller=view allowCustom=true optionI18nKey="treatment_units" noLabelText=true

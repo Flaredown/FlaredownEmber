@@ -217,7 +217,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         responses: @get("responsesData")
         notes: @get("notes")
 
-      treatment_data = @get("treatments").map((treatment) -> treatment.getProperties("name", "quantity", "unit") if treatment.get("active")).compact() if @get("treatments")
+      treatment_data = @get("treatments").map((treatment) -> treatment.getProperties("name", "quantity", "unit") ).compact() if @get("treatments")
       checkin_data["treatments"] = treatment_data if Em.isPresent(treatment_data)
 
       data =

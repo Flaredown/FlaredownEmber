@@ -45,13 +45,12 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
   actions:
     ### TREATMENTS ###
-    # treatmentEdited: -> @get("treatments").forEach (treatment) -> treatment.set("quantity", parseFloat(treatment.get("quantity")))
     toggleTreatment: (treatment) ->
-      treatment.toggleProperty("active")
-      if treatment.get("active")
-        @get("model.treatments").addObject(treatment)
-      else
+      if @get("model.treatments").contains(treatment)
         @get("model.treatments").removeObject(treatment)
+      else
+        @get("model.treatments").addObject(treatment)
+
 
     addTreatment: (treatment) ->
       unless @get("treatments").findBy("id","#{treatment.id}")
@@ -62,7 +61,6 @@ mixin = Ember.Mixin.create FormHandlerMixin,
           (response) =>
             if @get("isEntry")
               newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
-              newTreatment.set("active", true)
               @get("model.treatments").addObject newTreatment
 
             unless @get("currentUser.treatments").findBy("id","#{response.treatment.id}")

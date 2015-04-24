@@ -15,6 +15,7 @@ initializer = Ember.Object.create {
     container.injection('route', 'currentUser', 'current-user:current')
     container.injection('controller', 'currentUser', 'current-user:current')
     container.injection('component', 'currentUser', 'current-user:current')
+    container.injection('model', 'currentUser', 'current-user:current')
     container.injection('view', 'currentUser', 'current-user:current')
 
     UserSetupMixin.apply({}).setupUser(container)
