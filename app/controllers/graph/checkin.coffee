@@ -199,7 +199,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       @propertyDidChange("responsesData")
 
       # Transition to next section automatially if it wasn't previously completed
-      if @hasCompleteResponse(@get("currentSection.category"), @get("currentSection.category_number")) and not previouslyCompleted
+      if @hasCompleteResponse(@get("currentSection.category"), @get("currentSection.category_number")-1) and not previouslyCompleted
         Ember.run.later((=> @send("nextSection")), 150)
 
     setSection: (section) ->
