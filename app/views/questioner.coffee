@@ -2,7 +2,7 @@
 
 view = Ember.View.extend
   templateName: "questioner"
-  elementId: "questioner"
+  classNames: ["questioner"]
 
   entryBinding:   "controller"
 

@@ -7,4 +7,5 @@ if currentUser.graphable
         label.modal-close for="modal-1"
         div: view "questioner"
 else
-  .checkin-container: view "questioner"
+  liquid-with moment as liquidMoment
+    .checkin-container: view "questioner"
