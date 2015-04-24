@@ -15,13 +15,13 @@
   .pagination-dots
     ul
       each sec in sections
-        li click="'setSection' sec.number"
-          a.page-dot href="javascript:void(0);" class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
+        li{action 'setSection' sec.number}
+          a.page-dot class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
   .checkin-navigate
 
-    unless isFirstSection: a.checkin-back href="javascript:void(0);" click="previousSection" = t "nav.back_caps"
-    unless isLastSection: a.checkin-next href="javascript:void(0);" click="nextSection" = t "nav.next_caps"
+    unless isFirstSection: a.checkin-back{action "previousSection"} = t "nav.back_caps"
+    unless isLastSection: a.checkin-next{action "nextSection"} = t "nav.next_caps"
 
     if isLastSection: if currentUser.graphable: link-to "graph" class="checkin-finish"
       = t "nav.done_caps"

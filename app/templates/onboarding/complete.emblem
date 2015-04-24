@@ -1,6 +1,6 @@
 h2 = t "onboarding.setup_complete"
 img.success_img src="assets/onboarding_success.png"
 form submit="save"
-  a href="javascript: void(0)" click="back" {{ t "nav.back"}}
+  a{action "back"} = t "nav.back"
   view "forms/saveButton" name="checkin"
 

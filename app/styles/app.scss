@@ -9,6 +9,11 @@
 //@import "base/variables";
 
 //Internal styles
+
+a {
+  // since most of our anchors don't have hrefs
+  cursor: pointer;
+}
 @import "fonts";
 @import "colorable";
 @import "global";

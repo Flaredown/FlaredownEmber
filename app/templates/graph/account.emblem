@@ -32,4 +32,4 @@
           label = t "onboarding.gender"
           h4 = gender
 
-          a href="javascript:void(0);" click="edit" {{t "edit_account"}}
+          a{action "edit"} = t "edit_account"

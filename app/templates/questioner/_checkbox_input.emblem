@@ -1,5 +1,5 @@
 .checkin-response-checkbox
-	.switch
-		input.cmn-toggle.cmn-toggle-round class={checked:checked:unchecked} click="'toggleBoolean' value" type="checkbox" id=questionName
+	.switch{action 'toggleBoolean' value}
+		input class={checked:checked:unchecked :cmn-toggle :cmn-toggle-round} type="checkbox" id=questionName
 		label for=questionName
 		label for=questionName = t questionName

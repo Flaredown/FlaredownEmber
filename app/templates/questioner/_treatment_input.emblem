@@ -1,8 +1,8 @@
 li
-	form  submit="'save' target=view"
+	form submit="'save' target=view"
 		.checkin-treatment-name-wrapper
-			div click="'toggleTreatment' treatment" class={:checkin-treatment-name view.active:active:inactive view.colorClass } = treatment.name
-			.checkin-treatment-remove click="'destroy' treatment target=view" &times;
+			div{action 'toggleTreatment' treatment}{bind-attr class=":checkin-treatment-name view.active:active:inactive view.colorClass"} = treatment.name
+			.checkin-treatment-remove{action 'destroy' treatment target=view} &times;
 
 		if treatment.active
 			.checkin-treatment-dose-inputs

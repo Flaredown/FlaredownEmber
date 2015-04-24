@@ -21,7 +21,7 @@
 /           li: link-to "reports" | {{ t "menu_item_investigations" }}
 
 /         ul.navbar-sections
-/           li: small: a href="#" click="'toggleGraph' target=currentUser" [Toggle Graph]
+/           li: small: a{action 'toggleGraph' target=currentUser} [Toggle Graph]
 
 
 /       //Account
@@ -34,7 +34,7 @@
 /         /       = t "menu_item_account"
 /         /     / li = t "menu_item_print_report"
 /         /     / li = t "menu_item_edit_checkin"
-/         /     li click="logout" = t "menu_item_logout"
+/         /     li{action "logout"} = t "menu_item_logout"
 /         .dropdown
 /           .dropdown-container
 /             / p.dropdown-description account
@@ -42,7 +42,7 @@
 /             ul.dropdown-menu.dropdown-select
 /               li: link-to "graph.account"
 /                 = t "menu_item_account"
-/               li click="logout" = t "menu_item_logout"
+/               li{action "logout"} = t "menu_item_logout"
 
 / else
   / nav.navbar-centered
@@ -76,6 +76,6 @@ nav.navbar-centered
               ul.dropdown-menu.dropdown-select
                 li: link-to "graph.account"
                   = t "menu_item_account"
-                li href="javascript:void(0);" click="logout" = t "menu_item_logout"
+                li{action "logout"} = t "menu_item_logout"
 
-        
+

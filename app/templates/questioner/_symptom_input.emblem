@@ -1,5 +1,5 @@
 if view.active
   h5
   	= symptom.name
-  	span.checkin-symptom-remove click="'destroy' symptom target=view" &times;
+  	span.checkin-symptom-remove{action 'destroy' symptom target=view} &times;
   = questioner-input type="basic" question=symptom section=currentSection responses=responsesData action="setResponse"

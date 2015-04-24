@@ -204,7 +204,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         @set("section", section) if @get("sections").mapBy("number").contains(section)
 
     nextSection:     -> @send("setSection",(@get("section")+1)) unless @get("section") is @get("sections.lastObject.number")
-    previousSection: -> @send("setSection",(@get("section")-1)) unless @get("section") is @get("sections.firstObject.number")
+    previousSection: -> console.log "?!?!?!"; @send("setSection",(@get("section")-1)) unless @get("section") is @get("sections.firstObject.number")
 
     save: (close) ->
 

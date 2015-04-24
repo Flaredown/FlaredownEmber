@@ -13,6 +13,7 @@ app.import('bower_components/ua-parser-js/src/ua-parser.js');
 app.import('bower_components/uuid-js/lib/uuid.js');
 app.import('bower_components/jquery-cookie/jquery.cookie.js');
 
+app.import('bower_components/fastclick/lib/fastclick.js');
 
 app.import('bower_components/moment/moment.js');
 

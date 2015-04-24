@@ -12,7 +12,7 @@ if currentUser.loggedIn
       li.account-option: link-to "graph.account"
         = t "menu_item_account"
       / li = t "menu_item_print"
-      li.account-option click="logout"
+      li.account-option{action "logout"}
         a href="#"
           = t "menu_item_logout"
 
