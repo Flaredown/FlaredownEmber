@@ -28,7 +28,5 @@
           h4 = location
           label = t "onboarding.sex"
           h4 = sex
-          label = t "onboarding.gender"
-          h4 = gender
 
           a{action "edit"} = t "edit_account"
