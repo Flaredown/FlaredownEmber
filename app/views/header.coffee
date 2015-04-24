@@ -3,7 +3,7 @@
 view = Ember.View.extend
 
   templateName: "header"
-  loginWatcher: Em.observer(-> @activateMenu() ).observes("currentUser.loggedIn")
+  userWatcher: Em.observer(-> @activateMenu() ).observes("currentUser.loggedIn", "currentUser.onboarded")
   didInsertElement: -> @activateMenu()
 
   activateMenu: ->
