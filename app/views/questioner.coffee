@@ -15,14 +15,30 @@ view = Ember.View.extend
   sectionChanged: Ember.observer ->
     @set("entry.section", 1) if @get("entry.sections") and not @get("entry.sections").mapBy("number").contains @get("entry.section")
 
-    that = @
-    Ember.run ->
-      that.setFocus()
-      that.$("input").attr("tabindex", "1") if that.$("input")
-      that.$("button[type=submit]").attr("tabindex", "2") if that.$("button[type=submit]")
+    Ember.run =>
+      @setFocus()
+      @$("input").attr("tabindex", "1") if @$("input")
+      @$("button[type=submit]").attr("tabindex", "2") if @$("button[type=submit]")
+
+    Ember.run.next =>
+      @get("removeTooltip").attach($(".remove-trackable")) if @get("removeTooltip")
 
   .observes("entry.section").on("init")
 
+  didInsertElement: ->
+    @set "removeTooltip", new jBox("Tooltip", {
+    # $(".remove-trackable").jBox("Tooltip", {
+      id: "remove-trackable-tooltip"
+      content: Ember.I18n.t("trackable_remove_tooltip")
+      offset: {x:0, y:-40}
+      addClass: "remove-trackable-tooltip"
+      x: "center"
+      y: "center"
+      ignoreDelay: true
+      fade: false
+    })
+    @get("removeTooltip").attach($(".remove-trackable"))
+  willDestroyElement: -> @get("removeTooltip").destroy()
 
   keyDown: (e) ->
     active = $(document.activeElement)

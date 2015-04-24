@@ -2,7 +2,7 @@ li
 	form submit="'save' target=view"
 		.checkin-treatment-name-wrapper
 			div{action 'toggleTreatment' treatment}{bind-attr class=":checkin-treatment-name view.takenList:active:inactive view.colorClass"} = treatment.name
-			.checkin-treatment-remove{action 'destroy' treatment target=view} &times;
+			.remove-trackable.checkin-treatment-remove{action 'destroy' treatment target=view} &times;
 
 		if view.takenList
 			.checkin-treatment-dose-inputs
