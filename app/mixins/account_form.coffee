@@ -6,7 +6,7 @@
 mixin = Ember.Mixin.create FormHandlerMixin,
 
   defaults: Ember.computed(-> @get("currentUser.settings") ).property("currentUser")
-  fields: "location dobDay dobMonth dobYear sex gender".w()
+  fields: "location dobDay dobMonth dobYear sex".w()
   requirements: "location dobDay dobMonth dobYear sex".w()
   validations:  "dobDay dobMonth dobYear".w()
 

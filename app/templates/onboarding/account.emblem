@@ -11,6 +11,5 @@ form submit="save"
     view "forms/textInput" name="dobYear"
 
   view "forms/radioInput" name="sex"
-  view "forms/textInput" name="gender"
 
   partial "onboarding/nav"

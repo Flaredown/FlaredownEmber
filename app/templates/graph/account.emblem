@@ -17,7 +17,6 @@
               view "forms/textInput" name="dobYear" placeholder="1980"
 
             view "forms/radioInput" name="sex"
-            view "forms/textInput" name="gender"
 
             view "forms/saveButton" name="forms.save"
             br
