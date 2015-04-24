@@ -23,4 +23,8 @@ model = DS.Model.extend
   graphable: Em.computed(-> if @get("settings.graphable") is undefined then false else JSON.parse(@get("settings.graphable")) ).property("settings.graphable")
   onboarded: Em.computed(-> if @get("settings.onboarded") is undefined then false else JSON.parse(@get("settings.onboarded")) ).property("settings.onboarded")
 
+  didLoad: ->
+    # TODO HACK!
+    @set("settings.ethnicOrigin", JSON.parse(@get("settings.ethnicOrigin"))) if @get("settings.ethnicOrigin")
+
 `export default model`

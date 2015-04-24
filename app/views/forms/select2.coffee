@@ -21,7 +21,10 @@ view = Ember.View.extend
       multiple: @get("multiple")
       formatResult: @get("formatted").bind(@)
       initSelection: ((el,callback) ->
-        initialValue = @get("content").findBy("text",@get("value"))
+        initialValue = if @get("multiple")
+            @get("content").map( (option,i) => option if @get("value").contains(option.text) ).compact()
+          else
+            @get("content").findBy("text",@get("value"))
         callback(initialValue) if initialValue
       ).bind(@)
     }
