@@ -15,6 +15,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     @controller.store.find("currentUser", 0).then(
       (currentUser) =>
         @controller.set "content", currentUser
+        window.user_id          = @controller.get("obfuscated_id")
         window.treatmentColors  = @controller.get("treatmentColors")
         window.symptomColors    = @controller.get("symptomColors")
 

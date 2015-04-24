@@ -51,9 +51,9 @@ mixin = Ember.Mixin.create
         permanent_tracker: $.cookie('permanent_cookie')['id']
 
       # If you know that the user is currently logged in, add information about the user.
-      if @get("currentUser.loggedIn")
+      if window.user_id
         eventProperties["user"] = {
-          id: @get("currentUser.obfuscated_id")
+          id: window.user_id
         }
 
       #Add information about the referrer of the same format as the current page
