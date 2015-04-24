@@ -21,7 +21,7 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
   unit: Em.computed.alias("content.unit")
   active: Em.computed.alias("content.active")
 
-  quantityValid: (-> /^\d+(\.\d+)?$/.test(@get("quantity")) ).property("quantity")
+  quantityValid: (-> /^([0-9]*[1-9][0-9]*(\.[0-9]+)?|[0]*\.[0-9]*[1-9][0-9]*)$/.test(@get("quantity")) ).property("quantity")
 
   willDestroyElement: -> @get("controller").send("addTreatment", @getProperties("id", "name", "quantity", "unit")) if @get("active") and @get("inactiveList")
   didInsertElement: -> @set("content.active", true) unless @get("inactiveList")
