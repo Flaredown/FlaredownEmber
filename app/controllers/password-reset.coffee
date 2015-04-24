@@ -5,11 +5,14 @@
 `import FormHandlerMixin from '../mixins/form_handler'`
 `import EmailPassValidations from '../mixins/email_pass_validations'`
 
-controller = Ember.Controller.extend FormHandlerMixin, EmailPassValidations, UserSetupMixin,
+controller = Ember.Controller.extend FormHandlerMixin, EmailPassValidations, UserSetupMixin, Em.I18n.TranslateableProperties,
 
   success: false
   translationRoot: "unauthenticated"
   queryParams: ["resetToken"]
+
+  passwordPlaceholderTranslation: "unauthenticated.new_password_placeholder"
+  passwordConfirmationPlaceholderTranslation: "unauthenticated.new_password_confirmation_placeholder"
 
   fields: "email".w()
   requirements: "email".w()

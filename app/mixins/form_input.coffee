@@ -6,6 +6,7 @@ mixin = Ember.Mixin.create
 
   errorsRoot: "controller.errors.fields"
   parentForm: false # if present, validates also at specified controller
+  customLabel: false
 
   init: ->
     @_super()
@@ -31,6 +32,8 @@ mixin = Ember.Mixin.create
   # Value and properties
   valueName: Ember.computed(-> "controller.#{@get("name")}" ).property("name")
   value: Ember.computed(-> @get(@get("valueName")) ).property("controller","valueName")
+
+
 
   valueObserver: Ember.observer(-> @set("controller.#{@get("name")}", @get("value")) ).observes("value")
 
@@ -69,6 +72,7 @@ mixin = Ember.Mixin.create
   ).property("name", "i18nKey")
 
   label: Ember.computed(->
+    return @get("customLabel") if @get("customLabel")
     name = @get("name").underscore()
     key = if @get("i18nKey") then "#{@get("i18nKey")}.#{name}" else name
     Ember.I18n.t(key)
