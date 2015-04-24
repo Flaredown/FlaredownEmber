@@ -16,7 +16,17 @@ model = DS.Model.extend
   moment:     Ember.computed(-> moment(@get("date"), "MMM-DD-YYYY") ).property("date")
   unixDate:   Ember.computed(-> @get("moment").unix() ).property("moment")
   niceDate:   Ember.computed(-> @get("moment").format("MMM-DD-YYYY") ).property("moment")
-  fancyDate:  Ember.computed(-> @get("moment").format("MMMM D, YYYY") ).property("moment")
+  fancyDate:  Ember.computed(->
+    diff = @get("moment").diff(moment(), "days")
+    if diff is 0
+      Ember.I18n.t("today")
+    else if diff is -1
+      Ember.I18n.t("yesterday")
+    else if @get("moment").format("YYYY") is moment().format("YYYY")
+      @get("moment").format("MMMM D")
+    else
+      @get("moment").format("MMMM D, YYYY")
+  ).property("moment")
 
   dateAsParam: Ember.computed ->
     return "today" if moment().format("MMM-DD-YYYY") is @get("niceDate")
