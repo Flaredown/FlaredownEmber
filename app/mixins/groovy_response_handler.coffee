@@ -17,6 +17,8 @@ mixin = Ember.Mixin.create
     else if typeof(response.responseJSON) isnt "undefined"
       response = response.responseJSON
 
+    response = @genericFiveHundred() if response and not response.errors or not response.errors.kind
+
     switch response.errors.kind
       when "inline"
         @set("errors", response.errors)

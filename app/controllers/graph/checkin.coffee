@@ -5,7 +5,7 @@
 `import FormHandlerMixin from '../../mixins/form_handler'`
 `import ajax from 'ic-ajax'`
 
-controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResponseHandlerMixin, FormHandlerMixin,
+controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResponseHandlerMixin, FormHandlerMixin, Em.I18n.TranslateableProperties,
 
   saveOnSectionChange: true
   modalOpen: true
@@ -133,6 +133,15 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   currentSection:             Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each")
   isFirstSection:             Ember.computed( -> @get("sections.firstObject.number") is @get("section") ).property("section", "sections.@each")
   isLastSection:              Ember.computed( -> @get("sections.lastObject.number") is @get("section") ).property("section", "sections.@each")
+
+  sectionHeader:              Ember.computed( ->
+    key = "catalogs.#{@get("currentSection.category")}.section_#{@get("currentSection.category_number")}_header"
+
+    if Em.I18n.translations.get(key)
+      Em.I18n.t(key)
+    else
+      false
+   ).property("section", "sections.@each")
 
   questionSections:           Ember.computed.filterBy("sections", "question")
   completedQuestionSections:  Ember.computed.filterBy("questionSections", "complete")

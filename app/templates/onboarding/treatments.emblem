@@ -6,8 +6,6 @@ form submit="save"
   each treatment in treatments
     h6.treatment= treatment.name
 
-  br
-
   .checkin-search
   	view "questioner/trackable-search" trackableType="treatment"
   .explainer = t "onboarding.change_these_later"

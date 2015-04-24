@@ -7,8 +7,6 @@ form submit="save"
     h6.symptom
     	= symptom.name
 
-  br
-
   .checkin-search
   	view "questioner/trackable-search" trackableType="symptom"
   .explainer = t "onboarding.change_these_later"
