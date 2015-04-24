@@ -186,6 +186,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
     closeCheckin: -> @set("modalOpen", false)
 
     setResponse: (question_name, value) ->
+      previouslyCompleted = @get("currentSection.complete")
       id = "#{@get("currentCategory")}_#{question_name}_#{@get("model.id")}"
       response = @get("responses").findBy("id", id)
 
@@ -196,7 +197,10 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         @get("responses").addObject newResponse
 
       @propertyDidChange("responsesData")
-      @send("nextSection") if @get("sectionQuestions.length") is 1
+
+      # Transition to next section automatially if it wasn't previously completed
+      if @hasCompleteResponse(@get("currentSection.category"), @get("currentSection.category_number")) and not previouslyCompleted
+        Ember.run.later((=> @send("nextSection")), 150)
 
     setSection: (section) ->
       if @saveForm()
@@ -204,7 +208,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         @set("section", section) if @get("sections").mapBy("number").contains(section)
 
     nextSection:     -> @send("setSection",(@get("section")+1)) unless @get("section") is @get("sections.lastObject.number")
-    previousSection: -> console.log "?!?!?!"; @send("setSection",(@get("section")-1)) unless @get("section") is @get("sections.firstObject.number")
+    previousSection: -> @send("setSection",(@get("section")-1)) unless @get("section") is @get("sections.firstObject.number")
 
     save: (close) ->
 
