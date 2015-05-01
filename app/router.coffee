@@ -70,10 +70,16 @@ Em.Route.reopen
 
       if @get("currentUser.loggedIn")
         if transition.targetName is "graph.checkin" and transition.state.params["graph.checkin"]
-          if moment(transition.state.params["graph.checkin"].date, "MMM-DD-YYYY") > moment()
+          attempted_date = moment(transition.state.params["graph.checkin"].date, "MMM-DD-YYYY")
+          if attempted_date > moment()
             Ember.Logger.info("Base.Route :: No future dates, transition aborted with error")
             @generalErrorFor("future_date")
             transition.abort()
+          else if attempted_date < moment().subtract(2, "weeks")
+            Ember.Logger.info("Base.Route :: No future dates, transition aborted with error")
+            @generalErrorFor("distant_past_date")
+            transition.abort()
+
 
         if transition.queryParams.sso and transition.queryParams.sig
           return @redirectToTalk(transition.queryParams.sso, transition.queryParams.sig)
