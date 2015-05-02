@@ -16,12 +16,15 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
   nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
   userQuestionSections: ["conditions","symptoms"]
+  isTrackableSection: Em.computed( -> ["treatments", "conditions", "symptoms"].contains(@get("currentSection").category) ).property("currentSection")
   defaultResponseValues:
     checkbox: 0
     select: null
     number: null
 
   needs: ["graph"]
+
+  showPastWarning: Em.computed.and("isTrackableSection", "isPast")
 
   # Watch some user actions
   modalChanged: Ember.observer ->

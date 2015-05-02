@@ -12,6 +12,9 @@
       h5 = sectionHeader
     .checkin-content: partial currentPartial
 
+  if showPastWarning
+    .editing-the-past-warning.tip = t "editing_the_past_warning"
+
   .pagination-dots
     ul
       each sec in sections
