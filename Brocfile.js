@@ -1,9 +1,13 @@
 /* global require, module */
 
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
 var app = new EmberApp({
   dotEnv: {
     clientAllowedKeys: ['NOT_CI']
+  },
+  fingerprint: {
+    enabled: (process.env.EMBER_ENV != "development")
   }
 });
 
