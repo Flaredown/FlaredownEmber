@@ -12,6 +12,7 @@ view = Ember.View.extend
 
   tagName: "input"
   allowCustom: false
+  open: false
 
   config: Ember.computed( ->
     _config = {
@@ -39,13 +40,28 @@ view = Ember.View.extend
     else
       "<span class='name'>#{option.text}</span>"
 
+  focused: (event) ->
+    select2 = @$().data("select2")
+    Ember.run.later => select2.open() unless @get("open")
+
   opened: (event) ->
+    Ember.run.later(
+      => @set("open", true)
+      ,
+      200
+    )
+
+  closed: (event) -> @set("open", false)
+
   selected: (event) ->
-    choice = event.choice.text
-    if @get("multiple")
-      @get("value").addObject(choice)
+    if @get("open")
+      choice = event.choice.text
+      if @get("multiple")
+        @get("value").addObject(choice)
+      else
+        @set("value", choice)
     else
-      @set("value", choice)
+      false
 
   removed: (event) ->
     choice = event.choice.text
@@ -56,7 +72,9 @@ view = Ember.View.extend
     Ember.run.scheduleOnce('afterRender', @, 'processChildElements')
     @$().on("select2-selecting", @selected.bind(@))
     @$().on("select2-removing", @removed.bind(@))
-    @$().on("select2-open", @opened.bind(@))
+    @$().on("select2-opening", @opened.bind(@))
+    @$().on("select2-opening", @closed.bind(@))
+    @$().on("select2-focus", @focused.bind(@))
     @set("value", []) if not @get("value") and @get("multiple") is true
 
   processChildElements: -> @$().select2(@get("config")).select2("val", @get("value"))
