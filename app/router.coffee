@@ -120,6 +120,8 @@ Em.Route.reopen
           @transitionTo("graph.checkin", "today", 1)
 
       else
+        if transition.queryParams.sso and transition.queryParams.sig
+          @transitionTo("login")
 
         if @get("authedOnly")
           Ember.Logger.info("Base.Route :: Redirect to login because not logged in")
