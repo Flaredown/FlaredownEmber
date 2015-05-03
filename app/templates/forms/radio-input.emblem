@@ -1,10 +1,8 @@
-label
-  unless view.noLabelText
-    = view.label
+unless view.noLabelText
+  = view.label
 
-  each option in view.options
-    div class=option.class
-      = radio-button value=option.name groupValue=view.value
-        = option.name
+each option in view.options
+  = radio-button value=option.name groupValue=view.value class=option.class
+    = option.name
 
-  view "forms/errors"
+view "forms/errors"

@@ -15,11 +15,9 @@ view = Ember.View.extend FormInputMixin,
     options ||= []
 
     options.map (item) =>
-      checked = item is @get("value")
       {
         name: Ember.I18n.t "#{@get("optionI18nKey")}.#{item}"
-        checked: checked
-        class: "radio-option #{if checked then 'checked' else 'unchecked'} form-#{@get("name").dasherize()}-option-#{item.dasherize()}"
+        class: "radio-option form-#{@get("name").dasherize()}-option-#{item.dasherize()}"
         value: item
       }
   ).property("controller", "value")

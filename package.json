@@ -42,7 +42,7 @@
     "ember-data": "^1.0.0-beta.15",
     "ember-export-application-global": "^1.0.2",
     "ember-mobiletouch": "1.4.10",
-    "ember-radio-button": "1.0.5",
+    "ember-radio-button": "git://github.com/theworkerant/ember-radio-button.git#master",
     "emblem": "0.3.18",
     "express": "^4.8.5",
     "glob": "^4.0.5",
