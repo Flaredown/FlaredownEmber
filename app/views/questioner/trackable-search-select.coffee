@@ -16,17 +16,27 @@ view = Select2View.extend
       prompt = Ember.I18n.t("add_trackable_prompt",kind: @get("trackableType"))
       "<span class='name'>\"#{trackable.text}\"</span><div class='count'>#{prompt}</div>"
 
-  opened: (event) -> @get("controller").resetErrorsOn(@get("trackableType"))
+  opened: (event) ->
+    @_super()
+    @get("controller").resetErrorsOn(@get("trackableType"))
+
   selected: (event) ->
-    trackable = if @get("trackableType") is "treatment"
-      {name: event.choice.text, quantity: null, unit: null, added: true}
+    if @get("open")
+      trackable = if @get("trackableType") is "treatment"
+        {name: event.choice.text, quantity: null, unit: null, added: true}
+      else
+        {name: event.choice.text}
+
+      @get("controller").send("add#{@get("trackableType").capitalize()}", trackable)
+      @rerender() # start from scratch with blank search
+
+  existingTrackables: Ember.computed( ->
+    if @get("trackableType") is "treatment"
+      @get("currentUser.treatments").mapBy("name")
     else
-      {name: event.choice.text}
+      @get("controller.#{@get("trackableType")}s").mapBy("name")
+  ).property("trackableType", "currentUser.treatments.@each", "controller.symptoms.@each", "controller.conditions.@each")
 
-    @get("controller").send("add#{@get("trackableType").capitalize()}", trackable)
-    @rerender() # start from scratch with blank search
-
-  existingTrackables: Ember.computed( -> @get("controller.#{@get("trackableType")}s").mapBy("name") ).property("trackableType", "controller")
   config: Ember.computed( ->
     {
       minimumInputLength: 3
@@ -34,7 +44,7 @@ view = Select2View.extend
       formatResult: @get("formatted").bind(@)
       formatInputTooShort: -> Em.I18n.t("forms.keep_typing")
       ajax:
-        existingTrackables: @get("existingTrackables")
+        existingTrackables: (=> @get("existingTrackables"))
         transport: Ember.$.ajax
         url: (query) => "#{config.apiNamespace}/#{@get("trackableType")}s/search/#{query}"
         dataType: 'json'
@@ -43,7 +53,7 @@ view = Select2View.extend
           formatted_results = [{id: 0, text: original.term, count: null}]
 
           formatted_results.addObjects response.map (item,i) ->
-            {id: i+1, text: item.name, count: item.count, disabled: @existingTrackables.contains(item.name)}
+            {id: i+1, text: item.name, count: item.count, disabled: @existingTrackables().contains(item.name)}
           , @
 
           {

@@ -60,7 +60,10 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         ).then(
           (response) =>
             if @get("isEntry")
-              newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{@get("id")}"})
+              existings = @get("model.treatments").findBy("name",treatment.name)
+              repetition = if existings then existings.length+1 else 1
+
+              newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}"})
               @get("model.treatments").addObject newTreatment
 
             unless @get("currentUser.treatments").findBy("id","#{response.treatment.id}")

@@ -6,7 +6,9 @@ view = Select2View.extend Em.I18n.TranslateableProperties,
   placeholderTranslation: "treatment_unit_prompt"
   content: Ember.computed( -> Ember.I18n.translations.treatment_units.map (unit,i) -> {id:i+1, text: unit} ).property("value")
 
-  opened: (event) -> @get("controller").resetErrorsOn(@get("trackableType"))
+  opened: (event) ->
+    @_super()
+    @get("controller").resetErrorsOn(@get("trackableType"))
 
   config: Ember.computed( ->
     {
