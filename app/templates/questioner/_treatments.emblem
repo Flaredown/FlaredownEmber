@@ -1,11 +1,8 @@
 .checkin-treatments
-  if anyTreatments
+  if treatments
     h3 = t "which_treatments_taken_today"
-    ul: each treatment in treatments
-      view "questioner/treatment" content=treatment takenList=true
-
-    ul.inactive-treatments: each treatment in inactiveTreatments
-      view "questioner/treatment" content=treatment
+    ul: each treatment in treatmentNames
+      view "questioner/treatment" name=treatment
   else
     h3 = t "oops_no_treatments_being_tracked"
 

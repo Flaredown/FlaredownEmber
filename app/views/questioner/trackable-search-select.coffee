@@ -31,11 +31,8 @@ view = Select2View.extend
       @rerender() # start from scratch with blank search
 
   existingTrackables: Ember.computed( ->
-    if @get("trackableType") is "treatment"
-      @get("currentUser.treatments").mapBy("name")
-    else
-      @get("controller.#{@get("trackableType")}s").mapBy("name")
-  ).property("trackableType", "currentUser.treatments.@each", "controller.symptoms.@each", "controller.conditions.@each")
+    @get("controller.#{@get("trackableType")}s").mapBy("name")
+  ).property("trackableType", "controller.treatments.@each", "controller.symptoms.@each", "controller.conditions.@each")
 
   config: Ember.computed( ->
     {

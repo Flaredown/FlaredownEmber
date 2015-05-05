@@ -1,10 +1,14 @@
-li
-	form submit="'save' target=view"
-		.checkin-treatment-name-wrapper
-			div{action 'toggleTreatment' treatment}{bind-attr class=":checkin-treatment-name view.takenList:active:inactive view.colorClass"} = treatment.name
-			.remove-trackable.checkin-treatment-remove{action 'destroy' treatment target=view} &times;
+.switch{action 'toggleTreatment' view.name}
+  input.cmn-toggle.cmn-toggle-round class={view.active:checked:unchecked} type="checkbox" id=view.id
+  label for=view.id
+    = view.name
 
-		if view.takenList
-			.checkin-treatment-dose-inputs
-				view "forms/numberInput" name="quantity" controller=view parentForm=controller placeholder="30" noLabelText=true
-				view "forms/selectInput" name="unit" controller=view allowCustom=true optionI18nKey="treatment_units" noLabelText=true
+if view.active
+  if view.doses.length
+    ul: each dose in view.doses
+      view "questioner/treatment_dose" content=dose
+
+  a{action 'addTreatmentDose' view.name} = t "add_dose"
+
+unless isPast
+  .remove-trackable.checkin-treatment-remove{action 'destroy' view.name target=view} &times;

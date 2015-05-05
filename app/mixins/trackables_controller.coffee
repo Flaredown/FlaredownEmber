@@ -5,11 +5,15 @@
 
 mixin = Ember.Mixin.create FormHandlerMixin,
   isEntry: Ember.computed(-> @get("model.constructor.typeKey") is "entry").property("model")
+  isPastEntry: Ember.computed.and("isEntry", "model.isPast")
 
   anyTreatments: Em.computed.or("model.treatments", "currentUser.treatments")
   treatments: Ember.computed ->
-    if @get("isEntry") then @get("model.treatments") else @get("currentUser.treatments")
+    if @get("isEntry") then @get("model.treatments") else @get("currentUser.treatments").filterBy("repetition", 1)
   .property("currentUser.treatments.@each", "model.treatments.@each")
+
+  treatmentNames: Em.computed(-> @get("treatments").mapBy("name").uniq() ).property("treatments.@each")
+  treatmentsByName: (name) -> @get("treatments").filterBy("name",name)
 
   inactiveTreatments: Ember.computed(->
     actives = @get("treatments").mapBy("name")
@@ -43,39 +47,75 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       not actives.contains symptom.get("name")
   .property("currentUser.symptoms", "symptoms.@each")
 
+  addEntryTreatment: (treatment) ->
+    treatment = treatment.getProperties("name", "quantity", "unit") if Em.typeOf(treatment) is "instance"
+    existings = @get("model.treatments").filterBy("name",treatment.name)
+    repetition = if existings then existings.length+1 else 1
+
+    newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}", active: true, editing: true})
+    @get("model.treatments").addObject newTreatment
+
+  addEntrySymptom: (symptom) ->
+    @get("catalog_definitions.symptoms").addObject(@simpleQuestionTemplate(symptom.name))
+    newResponse = @store.createRecord "response", {id: "symptoms_#{symptom.name}_#{@get("id")}", value: null, name: symptom.name, catalog: "symptoms"}
+    @get("responses").addObject newResponse
+
+  addEntryCondition: (condition) ->
+    @get("catalog_definitions.conditions").addObject(@simpleQuestionTemplate(condition.name))
+    newResponse = @store.createRecord "response", {id: "conditions_#{condition.name}_#{@get("id")}", value: null, name: condition.name, catalog: "conditions"}
+    @get("responses").addObject newResponse
+
+
   actions:
     ### TREATMENTS ###
-    toggleTreatment: (treatment) ->
-      if @get("model.treatments").contains(treatment)
-        @get("model.treatments").removeObject(treatment)
-      else
-        @get("model.treatments").addObject(treatment)
+    addTreatmentDose: (name) ->
+      treatments = @treatmentsByName(name)
+      treatments.forEach (treatment) -> treatment.set("editing", false)
 
+      if treatments.get("firstObject.active")
+        @addEntryTreatment(treatments.get("firstObject"))
+      else # not yet activated, activate and start edit
+        treatments.set("firstObject.editing", true) unless treatments.get("length") > 1
+        treatments.forEach (treatment) -> treatment.set("active", true)
+
+    removeTreatmentDose: (treatment) ->
+      treatments = @get("treatments").filterBy("name",treatment.get("name"))
+      if treatments.length is 1
+        treatment.set("active", false)
+      else
+        @get("model.treatments").removeObject(treatment)
+
+    toggleTreatment: (name) ->
+      if @treatmentsByName(name).get("firstObject.active")
+        @treatmentsByName(name).forEach (treatment) -> treatment.set("active", false)
+      else
+        @send("addTreatmentDose", name)
 
     addTreatment: (treatment) ->
       unless @get("treatments").findBy("id","#{treatment.id}")
-        ajax("#{config.apiNamespace}/treatments",
-          type: "POST"
-          data: {name: treatment.name}
-        ).then(
-          (response) =>
-            if @get("isEntry")
-              existings = @get("model.treatments").findBy("name",treatment.name)
-              repetition = if existings then existings.length+1 else 1
+        if @get("isPastEntry")
+          @addEntryTreatment(treatment)
 
-              newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}"})
-              @get("model.treatments").addObject newTreatment
+        else # track it!
+          ajax("#{config.apiNamespace}/treatments",
+            type: "POST"
+            data: {name: treatment.name}
+          ).then(
+            (response) =>
+              @addEntryTreatment(treatment) if @get("isEntry")
+              unless @get("currentUser.treatments").findBy("id","#{response.treatment.id}")
+                @get("currentUser.treatments").pushObject @store.createRecord "treatment", {id: response.treatment.id, name: response.treatment.name}
 
-            unless @get("currentUser.treatments").findBy("id","#{response.treatment.id}")
-              @get("currentUser.treatments").pushObject @store.createRecord "treatment", {id: response.treatment.id, name: response.treatment.name}
+            @errorCallback.bind(@)
+          )
 
-          @errorCallback.bind(@)
-        )
+    removeTreatment: (name) ->
+      @treatmentsByName(name).forEach (treatment) =>
+        @get("currentUser.treatments").removeObject treatment
+        @get("model.treatments").removeObject(treatment) if @get("isEntry")
+        treatment.unloadRecord()
 
-    removeTreatment: (treatment) ->
-      @get("currentUser.treatments").removeObject treatment
-      @get("model.treatments").removeObject(treatment) if @get("isEntry")
-      treatment.unloadRecord()
+
 
     # deactivateTreatment: (treatment) ->
     #   ajax("#{config.apiNamespace}/treatments/#{treatment.id}", type: "DELETE").then(
@@ -85,20 +125,20 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
     ### SYMPTOMS ###
     addSymptom: (symptom) ->
-      ajax("#{config.apiNamespace}/symptoms",
-        type: "POST"
-        data: {name: symptom.name}
-      ).then(
-        (response) =>
-          if @get("isEntry")
-            @get("catalog_definitions.symptoms").addObject(@simpleQuestionTemplate(symptom.name))
-            newResponse = @store.createRecord "response", {id: "symptoms_#{symptom.name}_#{@get("id")}", value: null, name: symptom.name, catalog: "symptoms"}
-            @get("responses").addObject newResponse
+      if @get("isPastEntry")
+        @addEntrySymptom(symptom)
 
-          @get("currentUser.symptoms").pushObject @store.createRecord "symptom", {id: response.symptom.id, name: response.symptom.name}
+      else # track it!
+        ajax("#{config.apiNamespace}/symptoms",
+          type: "POST"
+          data: {name: symptom.name}
+        ).then(
+          (response) =>
+            @addEntrySymptom(symptom) if @get("isEntry")
+            @get("currentUser.symptoms").pushObject @store.createRecord "symptom", {id: response.symptom.id, name: response.symptom.name}
 
-        @errorCallback.bind(@)
-      )
+          @errorCallback.bind(@)
+        )
 
     removeSymptom: (symptom) ->
       @get("catalog_definitions.symptoms").forEach (section,i) =>
@@ -113,16 +153,16 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
     ### CONDITIONS ###
     addCondition: (condition) ->
+      if @get("isPastEntry")
+        @addEntryCondition(condition)
+
+      else # track it!
       ajax("#{config.apiNamespace}/conditions",
         type: "POST"
         data: {name: condition.name}
       ).then(
         (response) =>
-          if @get("isEntry")
-            @get("catalog_definitions.conditions").addObject(@simpleQuestionTemplate(condition.name))
-            newResponse = @store.createRecord "response", {id: "conditions_#{condition.name}_#{@get("id")}", value: null, name: condition.name, catalog: "conditions"}
-            @get("responses").addObject newResponse
-
+          @addEntryCondition(condition) if @get("isEntry")
           @get("currentUser.conditions").pushObject @store.createRecord "condition", {id: response.condition.id, name: response.condition.name}
 
         @errorCallback.bind(@)

@@ -16,7 +16,8 @@ model = DS.Model.extend
   moment:     Ember.computed(-> moment(@get("date"), "MMM-DD-YYYY") ).property("date")
   unixDate:   Ember.computed(-> @get("moment").unix() ).property("moment")
   niceDate:   Ember.computed(-> @get("moment").format("MMM-DD-YYYY") ).property("moment")
-  isPast:     Ember.computed(-> @get("fancyDate") isnt "today" ).property("fancyDate")
+  isPast:     Ember.computed(-> @get("fancyDate") isnt Ember.I18n.t("today") ).property("fancyDate")
+
   fancyDate:  Ember.computed(->
     diff = @get("moment").diff(moment(), "days")
     if diff is 0

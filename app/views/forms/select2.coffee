@@ -77,7 +77,7 @@ view = Ember.View.extend
     @$().on("select2-focus", @focused.bind(@))
     @set("value", []) if not @get("value") and @get("multiple") is true
 
-  processChildElements: -> @$().select2(@get("config")).select2("val", @get("value")) unless @get("isDestroyed")
+  processChildElements: -> @$().select2(@get("config")).select2("val", @get("value")) unless @get("isDestroyed") or @get("isDestroying")
   willDestroyElement: -> @$().select2("destroy")
 
 `export default view`
