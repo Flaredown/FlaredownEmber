@@ -16,7 +16,7 @@ controller = Ember.Controller.extend GroovyResponseHandlerMixin,
         (response) =>
           @set("currentUser.settings.onboarded", "true")
           # TODO switch back to today after QA
-          @transitionToRoute("graph.checkin", "Apr-01-2015", "1")
+          @transitionToRoute("graph.checkin", moment().subtract(13, "days").format("MMM-DD-YYYY"), "1")
           # @transitionToRoute("graph.checkin", "today", "1")
         @errorCallback.bind(@)
       )
