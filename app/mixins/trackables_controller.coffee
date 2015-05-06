@@ -157,16 +157,16 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         @addEntryCondition(condition)
 
       else # track it!
-      ajax("#{config.apiNamespace}/conditions",
-        type: "POST"
-        data: {name: condition.name}
-      ).then(
-        (response) =>
-          @addEntryCondition(condition) if @get("isEntry")
-          @get("currentUser.conditions").pushObject @store.createRecord "condition", {id: response.condition.id, name: response.condition.name}
+        ajax("#{config.apiNamespace}/conditions",
+          type: "POST"
+          data: {name: condition.name}
+        ).then(
+          (response) =>
+            @addEntryCondition(condition) if @get("isEntry")
+            @get("currentUser.conditions").pushObject @store.createRecord "condition", {id: response.condition.id, name: response.condition.name}
 
-        @errorCallback.bind(@)
-      )
+          @errorCallback.bind(@)
+        )
 
     removeCondition: (condition) ->
       @get("catalog_definitions.conditions").forEach (section,i) =>
