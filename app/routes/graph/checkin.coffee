@@ -31,7 +31,8 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
     controller = @controllerFor("graph.checkin")
     model.set("section", @get("section"))
 
-    unless model.get("just_created")
+
+    if not model.get("just_created") and transition.params["graph.checkin"].date isnt model.get("date")
       Ember.run.next =>
         summarySection = controller.get("sections.lastObject").number
         model.set("section", summarySection)
