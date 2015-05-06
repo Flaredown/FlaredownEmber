@@ -27,7 +27,14 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
       )
 
   afterModel: (model, transition, params) ->
+    @_super()
     model.set("section", @get("section"))
+
+    if model.get("just_created")
+      Ember.run.next =>
+        controller = @controllerFor("graph.checkin")
+        summarySection = controller.get("sections.lastObject").number
+        model.set("section", summarySection)
 
   actions:
     close: -> @transitionTo "graph"
