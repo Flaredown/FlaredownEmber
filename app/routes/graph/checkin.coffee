@@ -28,13 +28,17 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
 
   afterModel: (model, transition, params) ->
     @_super()
+    controller = @controllerFor("graph.checkin")
     model.set("section", @get("section"))
 
     if model.get("just_created")
       Ember.run.next =>
-        controller = @controllerFor("graph.checkin")
         summarySection = controller.get("sections.lastObject").number
         model.set("section", summarySection)
+
+    has_notes = Em.isPresent(model.get("notes"))
+    if has_notes
+      Ember.run.next => controller.set("show_notes", has_notes)
 
   actions:
     close: -> @transitionTo "graph"

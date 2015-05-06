@@ -24,8 +24,4 @@ each group in trackableResponses
     / feel free to remove
     hr
 
-a.summary-add-note Add a note
-
-
-/ When the user clicks the "Add a note" link, it should be replaced with this textarea
-/ textarea.summary-note
+partial "questioner/notes"

@@ -42,4 +42,7 @@ mixin = Ember.Mixin.create Em.I18n.TranslateableProperties, colorableMixin,
 
   ).property("trackableSections", "responsesData", "treatments")
 
+  actions:
+    toggleNotes: -> @toggleProperty("show_notes"); false
+
 `export default mixin`

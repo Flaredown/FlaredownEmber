@@ -15,7 +15,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   yesterdayDate: Em.computed(-> moment(@get("moment")).subtract(1,"day").format("MMM-DD-YYYY") ).property("moment")
   tomorrowDate: Em.computed(-> moment(@get("moment")).add(1,"day").format("MMM-DD-YYYY") ).property("moment")
 
-  nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
+  nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "tags", "finish"]
   userQuestionSections: ["conditions","symptoms"]
   trackableSections: ["treatments", "conditions", "symptoms"]
   isTrackableSection: Em.computed( -> @get("trackableSections").contains(@get("currentSection").category) ).property("currentSection")
@@ -79,7 +79,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       length = @get("catalog_definitions.#{catalog}.length")
       _definition.push [catalog,length] unless length is 0 or @get("userQuestionSections").contains(catalog)
 
-    ["conditions", "symptoms", "treatments", "notes", "finish"].forEach (section) -> _definition.push [section, 1]
+    ["conditions", "symptoms", "treatments", "tags", "finish"].forEach (section) -> _definition.push [section, 1]
 
     _definition
   .property("catalogsSorted", "catalog_definitions", "catalog_definitions.symptoms.@each")

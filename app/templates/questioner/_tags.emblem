@@ -1,0 +1,3 @@
+.checkin-tags
+  h1 tags go here
+  view "questioner/tag-search"

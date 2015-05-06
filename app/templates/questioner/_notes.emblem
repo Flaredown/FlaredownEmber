@@ -1,5 +1,7 @@
 .checkin-note
-  h3 What else happened today?
-
-  view "questioner/note"
-  view "questioner/tag-search"
+  if show_notes
+    .checkin-note
+      view "questioner/note"
+    a.btn{action "save"} save notes
+  else
+    a{action "toggleNotes"}{bind-attr class=":summary-add-note"} = t "leave_a_note"
