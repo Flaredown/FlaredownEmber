@@ -9,7 +9,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
   anyTreatments: Em.computed.or("model.treatments", "currentUser.treatments")
   treatments: Ember.computed ->
-    if @get("isEntry") then @get("model.treatments") else @get("currentUser.treatments").filterBy("repetition", 1)
+    if @get("isEntry") then @get("model.treatments") else @get("currentUser.treatments")
   .property("currentUser.treatments.@each", "model.treatments.@each")
 
   treatmentNames: Em.computed(-> @get("treatments").mapBy("name").uniq() ).property("treatments.@each")
