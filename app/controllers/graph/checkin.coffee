@@ -3,9 +3,10 @@
 `import TrackablesControllerMixin from '../../mixins/trackables_controller'`
 `import GroovyResponseHandlerMixin from '../../mixins/groovy_response_handler'`
 `import FormHandlerMixin from '../../mixins/form_handler'`
+`import SummaryMixin from '../../mixins/checkin_summary'`
 `import ajax from 'ic-ajax'`
 
-controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResponseHandlerMixin, FormHandlerMixin, Em.I18n.TranslateableProperties,
+controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResponseHandlerMixin, FormHandlerMixin, Em.I18n.TranslateableProperties, SummaryMixin,
 
   saveOnSectionChange: true
   modalOpen: true
@@ -16,7 +17,8 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
   nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "notes", "finish"]
   userQuestionSections: ["conditions","symptoms"]
-  isTrackableSection: Em.computed( -> ["treatments", "conditions", "symptoms"].contains(@get("currentSection").category) ).property("currentSection")
+  trackableSections: ["treatments", "conditions", "symptoms"]
+  isTrackableSection: Em.computed( -> @get("trackableSections").contains(@get("currentSection").category) ).property("currentSection")
   defaultResponseValues:
     checkbox: 0
     select: null
@@ -210,6 +212,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         @send("save") if @get("saveOnSectionChange")
         @set("section", section) if @get("sections").mapBy("number").contains(section)
 
+    sectionByName:   (name) -> @send("setSection",(@get("sections").findBy("category", name).number ))
     nextSection:     -> @send("setSection",(@get("section")+1)) unless @get("section") is @get("sections.lastObject.number")
     previousSection: -> @send("setSection",(@get("section")-1)) unless @get("section") is @get("sections.firstObject.number")
 

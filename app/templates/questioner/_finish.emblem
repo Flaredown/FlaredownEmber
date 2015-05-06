@@ -1,5 +1,30 @@
-h1 = t "checkin_complete"
+each group in trackableResponses
+  div
 
-/ p = t "x_of_y_sections_completed" x=completedQuestionSections.length y=questionSections.length
+    a{action "sectionByName" group.type}{bind-attr class=":summary-section-link group.type"} = group.categoryName
+    each response in group.responses
+      a{action "sectionByName" group.type}{bind-attr class=":summary-trackable group.type"}
+        .trackable-name = response.name
 
-img src="assets/checkin-success.svg" alt="success!"
+      if group.pippable
+        .trackable-rating class={group.type}
+          if response.pips
+            each pip in response.pips
+              .summary-pip class={response.colorClass} style="width: 10px; display: inline-block;" *
+          else
+            = t "no_rating"
+
+      else
+        / must be a treatment! Show metadata
+        .trackable-metadata class={group.type}
+          each repeat in response.repetitions
+            span.trackable-metadata-item.treatment-quantity = repeat.quantity
+            span.trackable-metadata-item.treatment-unit     = repeat.unit
+
+    / feel free to remove
+    hr
+
+a.summary-add-note Add a note
+
+/ When the user clicks the "Add a note" link, it should be replaced with this textarea
+/ textarea.summary-note
