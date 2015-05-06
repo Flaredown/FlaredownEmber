@@ -1,5 +1,6 @@
 if view.active
   h5
-  	= condition.name
-  	span.remove-trackable.checkin-condition-remove{action 'destroy' condition target=view} &times;
+    = condition.name
+    unless isPast
+      span.remove-trackable.checkin-condition-remove{action 'destroy' condition target=view} &times;
   = questioner-input type="basic" question=condition section=currentSection responses=responsesData action="setResponse"
