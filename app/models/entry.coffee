@@ -10,6 +10,7 @@ model = DS.Model.extend
   catalog_definitions:  DS.attr()
   notes:                DS.attr("string")
   treatments:           DS.hasMany("treatment")
+  tags:                 DS.attr()
   complete:             DS.attr("boolean")
   just_created:         DS.attr("boolean")
 

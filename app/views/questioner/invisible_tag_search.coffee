@@ -9,7 +9,7 @@ view = Select2View.extend
     if trackable.count isnt null
       "<span class='name'>#{trackable.text}</span><div class='count'>used #{trackable.count} time(s) before</div>"
     else
-      prompt = Ember.I18n.t("#{@get("currentUser.locale")}.add_tag_prompt")
+      prompt = Ember.I18n.t("add_tag_prompt")
       "<span class='name'>\"#{trackable.text}\"</span><div class='count'>#{prompt}</div>"
 
   classNames: ['invisible-tag-search', "note-tag-search"]

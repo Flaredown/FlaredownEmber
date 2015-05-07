@@ -3,7 +3,7 @@
   if isOutsideAuth
     h3.centered = t "unauthenticated.logging_you_in"
     .tip style="text-align: center;" = t "unauthenticated.being_redirected"
-    .loading-spinner: img src="assets/fd_spinner.gif"
+    partial "loading-spinner"
   else
     h3.centered = t "unauthenticated.login"
     form submit="login"

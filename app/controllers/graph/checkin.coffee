@@ -222,12 +222,16 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
     nextSection:     -> @send("setSection",(@get("section")+1)) unless @get("section") is @get("sections.lastObject.number")
     previousSection: -> @send("setSection",(@get("section")-1)) unless @get("section") is @get("sections.firstObject.number")
 
+    addTag: (tag) -> @get("tags").addObject(tag) unless @get("tags").contains(tag)
+    removeTag: (tag) -> @get("tags").removeObject(tag)
+
     save: (close) ->
 
 
       checkin_data =
         responses: @get("responsesData")
         notes: @get("notes")
+        tags: @get("tags")
 
       if @get("treatments")
         treatment_data = @get("treatments").map((treatment) ->
