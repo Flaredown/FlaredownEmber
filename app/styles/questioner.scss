@@ -1,7 +1,11 @@
 ////////////// Global Questioner Styles ///////////////
 
+// modals
 .questioner-modal {
 	width: 700px;
+}
+.form-modal {
+  z-index: 1000000;
 }
 
 .questioner {

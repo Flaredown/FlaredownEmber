@@ -1,5 +1,5 @@
 if view.editing
-  fd-modal alignment='center' translucentOverlay=true close="toggleEdit"
+  fd-modal alignment='center' translucentOverlay=true container-class="form-modal" close="toggleEdit"
 
     form submit="'save' target=view"
       .checkin-treatment-dose-inputs
