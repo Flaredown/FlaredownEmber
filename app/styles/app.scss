@@ -1,6 +1,10 @@
 @import "variables";
 @import "mixins";
 
+// modal with a wormhole!
+@import "ember-modal-dialog/ember-modal-structure";
+@import "ember-modal-dialog/ember-modal-appearance";
+
 // Bourbon
 @import "bourbon/bourbon";
 @import "base/grid-settings";

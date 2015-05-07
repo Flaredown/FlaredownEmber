@@ -10,7 +10,9 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
   # modalOpen: true
   editingChanged: Ember.observer ->
     unless @get("editing") # trying to stop editing...
-      Ember.run.next => @set("editing", not @saveForm())
+      Ember.run.next =>
+        @set("editing", not @saveForm())
+        @endSave()
   .observes("editing")
 
   unitOptions: Em.computed(-> Em.I18n.translations.treatment_units ).property()
@@ -32,6 +34,6 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
 
   actions:
     removeDose: -> @get("controller").send("removeTreatmentDose", @get("content"))
-    toggleEdit: -> @toggleProperty("editing")
+    toggleEdit: -> @toggleProperty("editing"); false;
 
 `export default view`

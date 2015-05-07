@@ -1,21 +1,15 @@
 if view.editing
-  / ----- modal looks awful, needs a fix -----
-  / .modal.treatment-edit-modal
-  /   = input type="checkbox" class="modal-state" id=view.id checkedBinding="view.editing"
-  /   .modal-fade-screen
-  /     .modal-inner
-  /       label.modal-close for=view.id &times;
-  /       div
+  fd-modal alignment='center' translucentOverlay=true close="toggleEdit"
 
-  form submit="'save' target=view"
-    .checkin-treatment-dose-inputs
-      view "forms/numberInput" name="quantity" controller=view parentForm=controller placeholder="30" noLabelText=true
-      view "forms/selectInput" name="unit" controller=view allowCustom=true optionI18nKey="treatment_units" noLabelText=true
+    form submit="'save' target=view"
+      .checkin-treatment-dose-inputs
+        view "forms/numberInput" name="quantity" controller=view parentForm=controller placeholder="30" noLabelText=true
+        view "forms/selectInput" name="unit" controller=view allowCustom=true optionI18nKey="treatment_units" noLabelText=true
 
-    a.dose-remove-link{action "removeDose" target=view} = t "remove_dose"
-    |&nbsp;&nbsp;
-    / this button will be replaced by modal close button
-    a.dose-done-link{action "toggleEdit" target=view} done!
+      a.dose-remove-link{action "removeDose" target=view} = t "remove_dose"
+      |&nbsp;&nbsp;
+      / this button will be replaced by modal close button
+      a.dose-done-link{action "toggleEdit" target=view} done!
 
 
 else

@@ -56,6 +56,7 @@ view = Ember.View.extend
         when 57 then @get("entry").send("setSection", 9)    # keyboard: 9
         when 37 then @get("entry").send("previousSection")  # keyboard: left arrow
         when 39 then @get("entry").send("nextSection")      # keyboard: right arrow
-        when 27 then @get("entry").set("modalOpen", false)  # keyboard: escape
+        # TODO reenable for Graph Release (use key responder thing)
+        # when 27 then @get("entry").set("modalOpen", false)  # keyboard: escape
 
 `export default view`
