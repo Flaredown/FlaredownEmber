@@ -1,11 +1,6 @@
 if currentUser.graphable
-  .modal
-
-    = input type="checkbox" class="modal-state" id="modal-1" checkedBinding="modalOpen"
-    .modal-fade-screen
-      .modal-inner
-        label.modal-close for="modal-1"
-        div: view "questioner"
+  fd-modal translucentOverlay=true container-class="questioner-modal center-top-modal" close="closeCheckin"
+    view "questioner"
 else
   liquid-with moment as liquidMoment
     .checkin-container: view "questioner"

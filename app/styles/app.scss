@@ -4,6 +4,14 @@
 // modal with a wormhole!
 @import "ember-modal-dialog/ember-modal-structure";
 @import "ember-modal-dialog/ember-modal-appearance";
+.center-top-modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  top: 100px;
+  z-index: 100000;
+}
 
 // Bourbon
 @import "bourbon/bourbon";

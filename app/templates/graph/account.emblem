@@ -1,4 +1,4 @@
-fd-modal alignment='center' translucentOverlay=true container-class="account-modal" close="close"
+fd-modal translucentOverlay=true container-class="account-modal center-top-modal" close="close"
   if editing
     form submit="save"
       view "forms/selectInput" name="location" optionsTranslationRoot=false
