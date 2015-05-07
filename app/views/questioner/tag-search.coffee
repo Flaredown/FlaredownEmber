@@ -5,20 +5,19 @@
 view = Select2View.extend
 
   formatted: (tag) ->
-    if tag.count isnt null
-      "<span class='name'>#{tag.text}</span><div class='count'>used #{tag.count} time(s) before</div>"
-    else
-      prompt = Ember.I18n.t("add_tag_prompt")
-      "<span class='name'>\"#{tag.text}\"</span><div class='count'>#{prompt}</div>"
+    switch tag.scope
+      when "single"
+        "<span class='name single'>#{tag.text}</span><div class='count'>#{Ember.I18n.t("used_x_times_before", count: tag.count)}</div>"
+      when "multi"
+        "<span class='name multi'>#{tag.text}</span><div class='count'>#{Ember.I18n.t("used_x_times_before", count: tag.count)}</div>"
+      else
+        "<span class='name'>\"#{tag.text}\"</span><div class='count'>#{Ember.I18n.t("add_tag_prompt")}</div>"
 
   classNames: ['tag-search']
 
   selected: (event) ->
     if @get("open")
       @get("controller.tags").addObject(event.choice.text)
-
-
-      # @$().select2({ allowClear: true })
 
       Ember.run.later(
         =>
@@ -52,14 +51,17 @@ view = Select2View.extend
         delay: 0
         cache: true
         results: (response, _, original) ->
-          formatted_results = [{id: 0, text: original.term, count: null}]
 
-          formatted_results.addObjects response.map (item,i) ->
-            {id: i+1, text: item.name, count: item.count }
+
+          formatted_results = response.map (item,i) ->
+            {id: i+1, text: item.name, count: item.count, scope: item.scope }
           , @
 
+          unless formatted_results.findBy("text", original.term)
+            formatted_results.addObject {id: 0, text: original.term, count: null}
+
           {
-            results: formatted_results
+            results: formatted_results.sortBy("id")
           }
 
     }

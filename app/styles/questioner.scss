@@ -253,21 +253,6 @@
 
 /////////////////// NOTE /////////////////////
 
-// Don't display search field for notes suggestion search
-.note-tag-search {
-  .select2-choice {
-    display: none;
-  }
-}
-
-.invisible-tag-search {
-  .select2-focusser,
-  .select2-search,
-  .select2-searching,
-  .select2-search input {
-      display: none !important;
-  }
-}
 .checkin-note {
   .checkin-note-textarea {
     height: 200px;

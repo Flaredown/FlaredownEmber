@@ -1,0 +1,45 @@
+.tag-search {
+  .select2-result-label {
+    .name {
+      color: #333;
+      font-size: 1.2em;
+
+      // personal tags
+      &.single {
+      }
+      // community tags
+      &.multi {
+        color: red;
+      }
+    }
+    .count {
+      color: #999;
+      font-style: italic;
+      font-size: 0.7em;
+    }
+    .description {
+      color: #666;
+      font-style: italic;
+      font-size: 0.7em;
+    }
+
+  }
+
+}
+
+
+// Don't display search field for notes suggestion search
+//.note-tag-search {
+//  .select2-choice {
+//    display: none;
+//  }
+//}
+//
+//.invisible-tag-search {
+//  .select2-focusser,
+//  .select2-search,
+//  .select2-searching,
+//  .select2-search input {
+//      display: none !important;
+//  }
+//}
