@@ -26,18 +26,19 @@ view = Ember.View.extend
   .observes("entry.section").on("init")
 
   didInsertElement: ->
-    @set "removeTooltip", new jBox("Tooltip", {
-    # $(".remove-trackable").jBox("Tooltip", {
-      id: "remove-trackable-tooltip"
-      content: Ember.I18n.t("trackable_remove_tooltip")
-      offset: {x:0, y:-40}
-      addClass: "remove-trackable-tooltip"
-      x: "center"
-      y: "center"
-      ignoreDelay: true
-      fade: false
-    })
-    @get("removeTooltip").attach($(".remove-trackable"))
+    unless @get("controller.isPast")
+      @set "removeTooltip", new jBox("Tooltip", {
+      # $(".remove-trackable").jBox("Tooltip", {
+        id: "remove-trackable-tooltip"
+        content: Ember.I18n.t("trackable_remove_tooltip")
+        offset: {x:0, y:-40}
+        addClass: "remove-trackable-tooltip"
+        x: "center"
+        y: "center"
+        ignoreDelay: true
+        fade: false
+      })
+      @get("removeTooltip").attach($(".remove-trackable"))
   willDestroyElement: -> @get("removeTooltip").destroy()
 
   keyDown: (e) ->

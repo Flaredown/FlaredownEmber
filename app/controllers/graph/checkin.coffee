@@ -70,7 +70,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
           responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
 
     responses
-  .property("catalog_definitions")
+  .property("catalog_definitions", "responses.@each")
 
   ### Sections: All the pages in the checkin form ###
   sectionsDefinition: Ember.computed ->
@@ -190,6 +190,12 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   actions:
     closeCheckin: -> @set("modalOpen", false)
 
+    removeResponse: (question_name) ->
+      previouslyCompleted = @get("currentSection.complete")
+      id = "#{@get("currentCategory")}_#{question_name}_#{@get("model.id")}"
+      response = @get("responses").findBy("id", id)
+      @get("responses").removeObject(response) if response
+
     setResponse: (question_name, value) ->
       previouslyCompleted = @get("currentSection.complete")
       id = "#{@get("currentCategory")}_#{question_name}_#{@get("model.id")}"
@@ -223,7 +229,13 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         responses: @get("responsesData")
         notes: @get("notes")
 
-      treatment_data = @get("treatments").map((treatment) -> treatment.getProperties("name", "quantity", "unit") ).compact() if @get("treatments")
+      if @get("treatments")
+        treatment_data = @get("treatments").map((treatment) ->
+          if treatment.get("active")
+            treatment.getProperties("name", "quantity", "unit")
+          else
+            Ember.merge treatment.getProperties("name"), {quantity: null, unit: null}
+        ).compact()
       checkin_data["treatments"] = treatment_data if Em.isPresent(treatment_data)
 
       data =

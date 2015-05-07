@@ -7,18 +7,24 @@ view = Ember.View.extend
   classNames: ["checkin-symptom"]
 
   actions:
-    destroy: (symptom) ->
-      swal
-        title: "Are you sure?",
-        text: Ember.I18n.t("confirm_symptom_remove", symptom: symptom.name)
-        type: "warning"
-        showCancelButton: true
-        closeOnConfirm: true
-        =>
-          @get("controller").send("removeSymptom", symptom)
+    remove: (symptom) ->
+      @set("controller.lastSave", false)
+      @get("controller").send("removeSymptom", symptom)
 
+    destroy: (symptom) ->
+      if @get("controller.isPast")
+        @send("remove", symptom)
+      else
+        swal
+          title: "Are you sure?",
+          text: Ember.I18n.t("confirm_symptom_remove", symptom: symptom.name)
+          type: "warning"
+          showCancelButton: true
+          closeOnConfirm: true
+          => @send("remove", symptom)
 
     add: (symptom) ->
+      @set("controller.lastSave", false)
       @get("controller").send("addSymptom", symptom.name)
 
     save: ->

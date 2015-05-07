@@ -67,6 +67,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
 
   actions:
+
     ### TREATMENTS ###
     addTreatmentDose: (name) ->
       treatments = @treatmentsByName(name)
@@ -145,6 +146,10 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         if section[0].name is symptom.name
           @get("catalog_definitions.symptoms").removeAt(i)
 
+      # TODO Beware during Questioner Refactor! Removal of catalog_definitions.symptoms above doesn't trigger
+      # update of responsesData, removeResponse below does though so it's okay for now.
+      @send("removeResponse", symptom.name)
+
     # deactivateSymptom: (symptom) ->
     #   ajax("#{config.apiNamespace}/symptoms/#{symptom.id}", type: "DELETE").then(
     #     (response) => @send("removeSymptom",symptom)
@@ -172,6 +177,8 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       @get("catalog_definitions.conditions").forEach (section,i) =>
         if section[0].name is condition.name
           @get("catalog_definitions.conditions").removeAt(i)
+
+      @send("removeResponse", condition.name)
 
     # deactivateCondition: (condition) ->
     #   ajax("#{config.apiNamespace}/conditions/#{condition.id}", type: "DELETE").then(

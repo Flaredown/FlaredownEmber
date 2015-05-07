@@ -10,5 +10,5 @@ if view.active
 
   a{action 'addTreatmentDose' view.name} = t "add_dose"
 
-unless isPast
-  .remove-trackable.checkin-treatment-remove{action 'destroy' view.name target=view} &times;
+
+.remove-trackable.checkin-treatment-remove{action 'destroy' view.name target=view} &times;

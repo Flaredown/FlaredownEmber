@@ -11,14 +11,23 @@ view = Ember.View.extend colorableMixin,
   active: Em.computed( -> @get("doses.firstObject.active") ).property("name", "doses.@each.active")
   doses: Em.computed(-> @get("controller.treatments").filterBy("name", @get("name"))  ).property("controller.treatments.@each", "name")
 
+
   actions:
+    remove: (treatment_name) ->
+      @set("controller.lastSave", false)
+      @get("controller").send("removeTreatment", treatment_name)
+
     destroy: (treatment_name) ->
-      swal
-        title: "Are you sure?",
-        text: Ember.I18n.t("confirm_treatment_remove", treatment: treatment_name)
-        type: "warning"
-        showCancelButton: true
-        closeOnConfirm: true
-        => @get("controller").send("removeTreatment", treatment_name)
+      if @get("controller.isPast")
+        @send("remove", treatment_name)
+      else
+        swal
+          title: "Are you sure?",
+          text: Ember.I18n.t("confirm_treatment_remove", treatment: treatment_name)
+          type: "warning"
+          showCancelButton: true
+          closeOnConfirm: true
+          => @send("remove", treatment_name)
+
 
 `export default view`
