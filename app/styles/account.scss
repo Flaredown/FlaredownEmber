@@ -1,7 +1,5 @@
 .account-modal {
-	.modal-inner {
-		max-width: 500px;
-	}
+	width: 500px;
 }
 .password-reset-form {
 	@include outer-container;

@@ -15,6 +15,7 @@ controller = Ember.Controller.extend AccountFormMixin,
   .observes("modalOpen")
 
   actions:
+    close: -> @set("modalOpen", false)
     edit: -> @set("editing", true)
 
 `export default controller`

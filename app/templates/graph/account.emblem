@@ -1,32 +1,26 @@
-.modal.account-modal
+fd-modal alignment='center' translucentOverlay=true container-class="account-modal" close="close"
+  if editing
+    form submit="save"
+      view "forms/selectInput" name="location" optionsTranslationRoot=false
 
-  = input type="checkbox" class="modal-state" id="modal-account" checkedBinding="modalOpen"
-  .modal-fade-screen
-    .modal-inner
-      label.modal-close for="modal-account"
-      div
-        if editing
-          form submit="save"
-            view "forms/selectInput" name="location" optionsTranslationRoot=false
+      label = t "onboarding.dob"
+      .account-dob-wrapper
 
-            label = t "onboarding.dob"
-            .account-dob-wrapper
+        view "forms/textInput" name="dobDay" placeholder="22"
+        view "forms/textInput" name="dobMonth" placeholder="08"
+        view "forms/textInput" name="dobYear" placeholder="1980"
 
-              view "forms/textInput" name="dobDay" placeholder="22"
-              view "forms/textInput" name="dobMonth" placeholder="08"
-              view "forms/textInput" name="dobYear" placeholder="1980"
+      view "forms/radioInput" name="sex"
 
-            view "forms/radioInput" name="sex"
+      view "forms/saveButton" name="forms.save"
+      br
 
-            view "forms/saveButton" name="forms.save"
-            br
+  else
+    label = t "onboarding.dob"
+    h4 {{dobMonth}} / {{dobDay}} / {{dobYear}}
+    label = t "onboarding.location"
+    h4 = location
+    label = t "onboarding.sex"
+    h4 = sex
 
-        else
-          label = t "onboarding.dob"
-          h4 {{dobMonth}} / {{dobDay}} / {{dobYear}}
-          label = t "onboarding.location"
-          h4 = location
-          label = t "onboarding.sex"
-          h4 = sex
-
-          a{action "edit"} = t "edit_account"
+    a{action "edit"} = t "edit_account"
