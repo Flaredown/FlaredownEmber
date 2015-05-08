@@ -71,11 +71,11 @@ nav.navbar-centered
         li &bull;
 
         li.dropdown
-            .dropdown-container
-              a.dropdown-button Account
-              ul.dropdown-menu.dropdown-select
-                li: link-to "graph.account"
-                  = t "menu_item_account"
-                li{action "logout"} = t "menu_item_logout"
+          .dropdown-container
+            a.dropdown-button Account
+            ul.dropdown-menu.dropdown-select
+              li: link-to "graph.account"
+                = t "menu_item_account"
+              li{action "logout"} = t "menu_item_logout"
 
 

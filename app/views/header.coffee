@@ -16,8 +16,13 @@ view = Ember.View.extend
         $('.dropdown-menu').toggleClass 'show-menu'
         $('.dropdown-menu > li').click ->
           $('.dropdown-menu').removeClass 'show-menu'
-        $('.dropdown-menu.dropdown-select > li').click ->
-          $('.dropdown-button').html $(@).html()
+
+        # Don't replace menu selection, we just want the menu to stay the same
+        # $('.dropdown-menu.dropdown-select > li').click ->
+        #   $('.dropdown-button').html $(@).html()
+
+      $("body").click (event) ->
+        $('.dropdown-menu').removeClass 'show-menu' unless event.target.className is "dropdown-button"
 
 
 `export default view`
