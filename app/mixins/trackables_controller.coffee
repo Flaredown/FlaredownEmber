@@ -47,12 +47,13 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       not actives.contains symptom.get("name")
   .property("currentUser.symptoms", "symptoms.@each")
 
-  addEntryTreatment: (treatment) ->
+  addEntryTreatment: (treatment, editing) ->
+    editing ||= false
     treatment = treatment.getProperties("name", "quantity", "unit") if Em.typeOf(treatment) is "instance"
     existings = @get("model.treatments").filterBy("name",treatment.name)
     repetition = if existings then existings.length+1 else 1
 
-    newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}", active: true, editing: true})
+    newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}", active: true, editing: editing})
     @get("model.treatments").addObject newTreatment
 
   addEntrySymptom: (symptom) ->
@@ -73,11 +74,14 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       treatments = @treatmentsByName(name)
       treatments.forEach (treatment) -> treatment.set("editing", false)
 
-      if treatments.get("firstObject.active")
-        @addEntryTreatment(treatments.get("firstObject"))
-      else # not yet activated, activate and start edit
-        treatments.set("firstObject.editing", true) unless treatments.get("length") > 1
-        treatments.forEach (treatment) -> treatment.set("active", true)
+      if treatments.get("firstObject.hasDose") # add another dose, go straight to edit
+        @addEntryTreatment(treatments.get("firstObject"), true)
+      else
+        treatments.get("firstObject").setProperties(quantity: "", unit: "", editing: true)
+
+      # else # not yet activated, activate and but don't edit
+        # treatments.set("firstObject.editing", true) unless treatments.get("length") > 1
+        # treatments.forEach (treatment) -> treatment.set("active", true)
 
     removeTreatmentDose: (treatment) ->
       treatments = @get("treatments").filterBy("name",treatment.get("name"))
@@ -88,9 +92,15 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
     toggleTreatment: (name) ->
       if @treatmentsByName(name).get("firstObject.active")
-        @treatmentsByName(name).forEach (treatment) -> treatment.set("active", false)
+        # Clear the first treatment of dose info and deactive, kill any others
+        @treatmentsByName(name).get("firstObject").setProperties(quantity: false, unit: false, editing: false, active: false)
+        @treatmentsByName(name).slice(1).forEach (treatment) =>
+          @get("model.treatments").removeObject(treatment)
       else
-        @send("addTreatmentDose", name)
+        @treatmentsByName(name).forEach (treatment) -> treatment.set("active", true)
+        @treatmentsByName(name).get("firstObject").setProperties(quantity: false, unit: false)
+
+      false
 
     addTreatment: (treatment) ->
       unless @get("treatments").findBy("id","#{treatment.id}")

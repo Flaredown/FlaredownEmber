@@ -7,6 +7,7 @@ model = DS.Model.extend
   unit:     DS.attr("string")
   # quantity: Em.computed( -> @get("currentUser.settings.treatment_#{@get("name")}_quantity") ).property("currentUser.settings.@each")
   # unit: Em.computed( -> @get("currentUser.settings.treatment_#{@get("name")}_unit") ).property("currentUser.settings.@each")
+  hasDose: Em.computed.and("quantity", "unit")
 
   didLoad: ->
     if @get("quantity") and @get("unit")

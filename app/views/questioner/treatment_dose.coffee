@@ -11,9 +11,15 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
   editingChanged: Ember.observer ->
     unless @get("editing") # trying to stop editing...
       Ember.run.next =>
-        @set("editing", not @saveForm())
-        @endSave()
+        # prevent errors on form by prefilling
+        @setProperties(quantity: "", unit: "") unless @get("hasDose")
+
+        unless @get("isDestroyed") or not @get("isDestroying")
+          @set("editing", not @saveForm())
+          @endSave()
   .observes("editing")
+
+  hasDose: Em.computed.and("quantity", "unit")
 
   unitOptions: Em.computed(-> Em.I18n.translations.treatment_units ).property()
 

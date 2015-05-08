@@ -11,7 +11,8 @@ if view.editing
       a.dose-done-link{action "toggleEdit" target=view} = t "nav.done_caps"
 
 else
-  a.dose-edit-link{action "toggleEdit" target=view}
-    = view.quantity
-    |&nbsp;
-    = view.unit
+  if view.hasDose
+    a.dose-edit-link{action "toggleEdit" target=view}
+      = view.quantity
+      |&nbsp;
+      = view.unit
