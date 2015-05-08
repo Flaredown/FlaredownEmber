@@ -39,7 +39,7 @@ view = Ember.View.extend
         fade: false
       })
       @get("removeTooltip").attach($(".remove-trackable"))
-  willDestroyElement: -> @get("removeTooltip").destroy()
+  willDestroyElement: -> @get("removeTooltip").destroy() if @get("removeTooltip")
 
   keyDown: (e) ->
     active = $(document.activeElement)
