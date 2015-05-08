@@ -113,7 +113,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
     _sections
 
-  .property("sectionsDefinition", "catalogs", "section", "responsesData.@each.value")
+  .property("sectionsDefinition.@each", "catalogs", "section", "responsesData.@each.value")
 
   ### Section Helpers ###
   isSeen: (section) ->
@@ -135,7 +135,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         response.get("value") isnt null
       ).contains(false)
 
-  currentSection:             Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each")
+  currentSection:             Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each", "sectionsDefinition.@each")
   isFirstSection:             Ember.computed( -> @get("sections.firstObject.number") is @get("section") ).property("section", "sections.@each")
   isLastSection:              Ember.computed( -> @get("sections.lastObject.number") is @get("section") ).property("section", "sections.@each")
 
