@@ -18,6 +18,7 @@
       display: inline-block;
       padding: 20px 0 20px 0;
       color: grey;
+      cursor: pointer;
     }
   }
   .checkin-content {
@@ -102,94 +103,67 @@
   }
 }
 
+////////////// Treatment Input Styles ///////////////
+
 .checkin-treatments {
-  ul {
+  .checkin-treatments-ul {
     @include row;
     width: 90%;
     margin: 20px auto 0 auto;
-    font-size: 1.2em;
     max-width: 20em;
-    .checkin-treatment-name-wrapper {
-      display: flex;
-      align-items: center;
-    }
-    .bg-default, .tbg- { background-color: $primary; }
-    li {
-      margin-bottom: 1em;
-    }
-    &.inactive-treatments {
-      margin-top: 0;
-    }
-  }
-  .checkin-treatment-name {
-    @include span-columns(10);
-    @include wrap-ellipsis;
     text-align: left;
-    padding: 5px 15px;
-    border-radius: 999px;
+    font-size: 1.2em;
+  }
+  .checkin-treatment {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 1em;
+  }
 
-    &.active {
-      color: white;
+  .switch {
+    @include span-columns(10);
+    display: flex;
+    align-items: center;
+    label {
+      display: inline-block;
     }
-
-    &.inactive {
-      background: #eee;
-      color: grey;
-      &:hover {
-        background: $lightgrey;
-      }
+    .checkin-treatment-name {
+      margin-left: 15px;
+      text-overflow: ellipsis;
+      max-width: 75%;
+      overflow: hidden;
+      font-size: 1.5em;
     }
-
   }
   .checkin-treatment-remove {
-    @include span-columns(1);
+    @include span-columns(2);
     text-align: center;
+    font-size: 1.5em;
+    color: $lightgrey;
     cursor: pointer;
-  }
-  form {
-    width: 100%;
-  }
-  .checkin-treatment-dose-inputs {
-    text-align: left;
-    margin-top: 5px;
-    & > * {
-      font-size: .8em;
-    }
-    .form-quantity {
-      width: 25%;
-      display: inline-block;
-      margin: 0 0 0 5px;
-      vertical-align: top;
-      label {
-        margin: 0;
-      }
-      input[type="number"] {
-        margin-bottom: 0;
-      }
-    }
-    .form-unit {
-      width: 50%;
-      display: inline-block;
-      margin-left: 5px;
-      margin-bottom: 0;
-      vertical-align: top;
-      label {
-        margin: 0;
-      }
-    }
-    .form-quantity-input {
-      padding: 4px;
-    }
-    .select2-choice {
-      padding: 2.5px 3px;
-      position: relative;
+    &:hover {
+      color: black;
     }
   }
-  .save-treatment {
-    margin-top: 20px;
+
+  .checkin-treatment-doses {
+    display: inline-block;
+    width: 100%
+  }
+  .checkin-treatment-dose {
+    display: inline-block;
+    border-radius: 999px;
+    border: 1px solid $primary;
+    padding: 0 10px;
+    margin: 0 5px 5px 0;
+  }
+
+  .checkin-treatment-dose-add {
     display: inline-block;
   }
 }
+
+////////////// Symptom/Condition Input Styles ///////////////
 
 .checkin-symptoms, .checkin-conditions {
   .simple-checkin-response {
