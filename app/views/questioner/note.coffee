@@ -22,8 +22,8 @@ view = Ember.View.extend # TaggableNotesMixin,
   attributeBindings: ["contenteditable", "spellcheck", "role", "aria-multiline"]
 
   # Placeholder
-  placeholder: "<span class='placeholder'>Use <span class='hashtag'>#hashtags</span> to mark triggers on the graph</span>"
-  isPlaceheld: Ember.computed(-> @$().text() is "Use #hashtags to mark triggers on the graph").property().volatile()
+  placeholder: "<span class='placeholder'>Leave a note about your day</span>"
+  isPlaceheld: Ember.computed(-> @$().text() is "Leave a note about your day").property().volatile()
   setPlaceholder: -> @$().html(@placeholder) if Ember.isEmpty(@$().text())
 
   didInsertElement: ->

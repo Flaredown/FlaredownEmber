@@ -1,9 +1,9 @@
 h1 = t "tag_your_day"
-.tags-page
-  ul.checkin-tags: each tag in tags
-    .tag.checkin-tag
+.checkin-tags
+  ul.checkin-tags-list: each tag in tags
+    .checkin-tag{action "removeTag" tag}
       = tag
-      span.remove-tag{action "removeTag" tag} &nbsp;(X)
+      span.remove-tag &nbsp;&times;
 
   view "questioner/tag-search"
   view "questioner/popular-tags"
