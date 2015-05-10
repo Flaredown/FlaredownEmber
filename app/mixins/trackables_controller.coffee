@@ -85,10 +85,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
     removeTreatmentDose: (treatment) ->
       treatments = @get("treatments").filterBy("name",treatment.get("name"))
-      if treatments.length is 1
-        treatment.set("active", false)
-      else
-        @get("model.treatments").removeObject(treatment)
+      @get("model.treatments").removeObject(treatment) unless treatments.length is 1
 
     toggleTreatment: (name) ->
       if @treatmentsByName(name).get("firstObject.active")
