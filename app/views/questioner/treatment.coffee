@@ -6,10 +6,11 @@ view = Ember.View.extend colorableMixin,
   templateName: "questioner/_treatment_input"
   classNames: ["checkin-treatment"]
 
-  colorClass: Ember.computed(-> @colorClasses("treatments_#{@get("name")}", "treatment").bg ).property("name")
+  # colorClass: Ember.computed(-> @colorClasses("treatments_#{@get("name")}", "treatment").bg ).property("name")
 
   active: Em.computed( -> @get("controller.treatments").filterBy("name", @get("name")).get("firstObject.active") ).property("controller.treatments.@each.active")
   doses: Em.computed(-> @get("controller.treatments").filterBy("name", @get("name")).filterBy("hasDose",true) ).property("controller.treatments.@each.hasDose", "name")
+  colors: Ember.computed(->  @colorClasses("treatments_#{@get("name")}", "treatment") ).property("name")
 
   actions:
     remove: (treatment_name) ->

@@ -1,8 +1,8 @@
 div
   .switch{action 'toggleTreatment' view.name}
-    input.cmn-toggle.cmn-toggle-round class={view.active:checked:unchecked} type="checkbox" id=view.id
-    label for=view.id
-    label.checkin-treatment-name for=view.id
+    input class={view.active:checked:unchecked view.colors.bg :cmn-toggle :cmn-toggle-round} type="checkbox"
+    label
+    label.checkin-treatment-name class={view.colors.color}
       = view.name
   .remove-trackable.checkin-treatment-remove{action 'destroy' view.name target=view} &times;
 

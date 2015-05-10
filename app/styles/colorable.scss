@@ -12,6 +12,10 @@ $treatments: #113F63, #9EB9BA, #256DA0, #61B2D5, #28A178, #A9D0C3, #829C42, #B3C
     .tfill-#{$i} {
         fill: $color;
     }
+    // switch bg
+    input.cmn-toggle-round.checked.tbg-#{$i} + label:before {
+      background-color: $color;
+    }
 }
 
 @each $color in $symptoms {

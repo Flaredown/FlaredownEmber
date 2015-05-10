@@ -24,8 +24,6 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
 
   unitOptions: Em.computed(-> Em.I18n.translations.treatment_units ).property()
 
-  colorClass: Ember.computed(-> @colorClasses("treatments_#{@get("name")}", "treatment").bg ).property("name")
-
   fields: "name quantity unit".w()
   requirements: "name quantity unit".w()
   validations:  "quantity".w()
