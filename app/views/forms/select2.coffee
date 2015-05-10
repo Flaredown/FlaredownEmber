@@ -25,7 +25,11 @@ view = Ember.View.extend
         initialValue = if @get("multiple")
             @get("content").map( (option,i) => option if @get("value").contains(option.text) ).compact()
           else
-            @get("content").findBy("text",@get("value"))
+            selection = @get("content").findBy("text",@get("value"))
+            if selection
+              selection
+            else if @get("allowCustom")
+              {id: 0, text: @get("value")}
         callback(initialValue) if initialValue
       ).bind(@)
     }
