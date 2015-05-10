@@ -11,7 +11,7 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
   editingChanged: Ember.observer ->
     unless @get("editing") # trying to stop editing...
       Ember.run.next =>
-        unless @get("isDestroyed") or not @get("isDestroying")
+        unless @get("isDestroyed") or @get("isDestroying")
           # prevent errors on form by prefilling
           unless @get("hasDose")
             @set "quantity", @get("currentUser.settings.treatment_#{@get("name")}_quantity")
