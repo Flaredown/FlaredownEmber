@@ -16,10 +16,13 @@ each group in trackableResponses
 
       else
         / must be a treatment! Show metadata
-        .trackable-metadata class={group.type}
-          each repeat in response.repetitions
-            span.trackable-metadata-item.treatment-quantity = repeat.quantity
-            span.trackable-metadata-item.treatment-unit     = repeat.unit
+        if response.taken
+          .trackable-metadata class={group.type}
+            each repeat in response.repetitions
+              span.trackable-metadata-item.treatment-quantity = repeat.quantity
+              span.trackable-metadata-item.treatment-unit     = repeat.unit
+        else
+          = t "not_taken"
 
     / feel free to remove
     hr

@@ -29,6 +29,7 @@ mixin = Ember.Mixin.create Em.I18n.TranslateableProperties, colorableMixin,
             colorClass: color
             pips: if response.value then [1..response.value-1] else []
             repetitions: repetitions
+            taken: repetitions.get("firstObject.active")
           }
         )
 
