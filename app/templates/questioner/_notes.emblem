@@ -2,6 +2,6 @@
   if show_notes
     .checkin-note
       view "questioner/note"
-    a.btn{action "save"} save notes
+    a.btn{action "save"} save note
   else
     a{action "toggleNotes"}{bind-attr class=":summary-add-note"} = t "leave_a_note"

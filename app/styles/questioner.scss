@@ -240,7 +240,7 @@
     box-sizing: border-box;
     text-align: left;
     .placeholder {
-      opacity: .5;
+      color: $lightgrey;
     }
     .hashtag {
       color: $primary;
@@ -248,5 +248,55 @@
     &:focus {
       outline: none;
     }
+  }
+}
+
+/////////////////// SUMMARY /////////////////////
+.checkin-summary {
+  .summary-section {
+    margin: 1.5em 0;
+    display: inline-block;
+    width: 100%;
+  }
+  .summary-section-link {
+    margin: 0 0 .5em 0;
+    display: inline-block;
+    font-size: 1.2em;
+  }
+  .summary-trackable {
+    margin-top: .25em;
+    display: inline-block;
+    width: 100%;
+  }
+  .summary-trackable-name {
+    @include span-columns(6);
+    text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .summary-trackable-rating {
+    @include span-columns(6);
+    text-align: left;
+  }
+  .summary-pip {
+    @include span-columns(3);
+    height: 30px;
+    display: inline-block;
+    border-radius: 5px;
+    &.bg-default {
+      background: $primary;
+    }
+  }
+  .summary-trackable-metadata {
+    @include span-columns(6);
+    text-align: left;
+  }
+  .summary-treatment-dose {
+    padding: 0 5px;
+    border-radius: 999px;
+    border: 1px solid $primary;
+    display: inline-block;
+    color: $primary;
+    margin: 0 5px 5px 0;
   }
 }

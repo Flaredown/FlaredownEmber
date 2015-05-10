@@ -1,27 +1,26 @@
-each group in trackableResponses
-  div
+.checkin-summary
+  each group in trackableResponses
+    .summary-section
 
-    a{action "sectionByName" group.type}{bind-attr class=":summary-section-link group.type"} = group.categoryName
-    each response in group.responses
-      a{action "sectionByName" group.type}{bind-attr class=":summary-trackable group.type"}
-        .trackable-name = response.name
+      a{action "sectionByName" group.type}{bind-attr class=":summary-section-link"} = group.categoryName
+      each response in group.responses
+        .summary-trackable
+          .summary-trackable-name = response.name
 
-      if group.pippable
-        .trackable-rating class={group.type}
-          if response.pips
-            each pip in response.pips
-              .summary-pip class={response.colorClass} style="width: 10px; display: inline-block;" *
+          if group.pippable
+            .summary-trackable-rating
+              if response.pips
+                each pip in response.pips
+                  .summary-pip class={response.colorClass}
+              else
+                = t "no_rating"
+
           else
-            = t "no_rating"
+            / must be a treatment! Show metadata
+            .summary-trackable-metadata class={group.type}
+              each repeat in response.repetitions
+                .summary-treatment-dose
+                  span = repeat.quantity
+                  span = repeat.unit
 
-      else
-        / must be a treatment! Show metadata
-        .trackable-metadata class={group.type}
-          each repeat in response.repetitions
-            span.trackable-metadata-item.treatment-quantity = repeat.quantity
-            span.trackable-metadata-item.treatment-unit     = repeat.unit
-
-    / feel free to remove
-    hr
-
-partial "questioner/notes"
+  partial "questioner/notes"
