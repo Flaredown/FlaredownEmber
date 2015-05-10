@@ -6,6 +6,7 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
   tagName: "li"
   templateName: "questioner/_treatment_dose_input"
   classNames: ["checkin-treatment-dose"]
+  classNameBindings: ["colors.border"]
 
   editingChanged: Ember.observer ->
     unless @get("editing") # trying to stop editing...
@@ -20,6 +21,8 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
           @endSave()
 
   .observes("editing")
+
+  colors: Ember.computed(->  @colorClasses("treatments_#{@get("name")}", "treatment") ).property("name")
 
   unitOptions: Em.computed(-> Em.I18n.translations.treatment_units ).property()
 

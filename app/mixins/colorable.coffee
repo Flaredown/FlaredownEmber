@@ -12,6 +12,7 @@ mixin = Ember.Mixin.create
       bg:     "#{type_key}bg-#{id}"
       fill:   "#{type_key}fill-#{id}"
       color:  "#{type_key}clr-#{id}"
+      border:  "#{type_key}border-#{id}"
     }
 
 `export default mixin`

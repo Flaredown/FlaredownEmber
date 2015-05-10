@@ -1,5 +1,5 @@
 if view.hasDose
-  a.dose-edit-link{action "toggleEdit" target=view}
+  a{action "toggleEdit" target=view}{bind-attr class=":dose-edit-link view.colors.color"}
     = view.quantity
     |&nbsp;
     = view.unit
