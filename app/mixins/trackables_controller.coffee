@@ -88,6 +88,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       treatments = @get("treatments").filterBy("name",treatment.get("name"))
       if treatments.length is 1
         treatments.get("firstObject").setProperties(quantity: null, unit: null, editing: false)
+        @propertyDidChange("treatments")
       else
         @get("model.treatments").removeObject(treatment)
         treatment.unloadRecord()

@@ -7,7 +7,6 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
   templateName: "questioner/_treatment_dose_input"
   classNames: ["checkin-treatment-dose"]
 
-  # modalOpen: true
   editingChanged: Ember.observer ->
     unless @get("editing") # trying to stop editing...
       Ember.run.next =>
