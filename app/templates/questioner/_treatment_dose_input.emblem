@@ -1,3 +1,9 @@
+if view.hasDose
+  a.dose-edit-link{action "toggleEdit" target=view}
+    = view.quantity
+    |&nbsp;
+    = view.unit
+
 if view.editing
   fd-modal alignment='center' translucentOverlay=true container-class="form-modal" close="toggleEdit"
 
@@ -9,10 +15,3 @@ if view.editing
       a.dose-remove-link{action "removeDose" target=view} = t "remove_dose"
       |&nbsp;&nbsp;
       a.dose-done-link{action "toggleEdit" target=view} = t "nav.done_caps"
-
-else
-  if view.hasDose
-    a.dose-edit-link{action "toggleEdit" target=view}
-      = view.quantity
-      |&nbsp;
-      = view.unit

@@ -8,9 +8,8 @@ view = Ember.View.extend colorableMixin,
 
   colorClass: Ember.computed(-> @colorClasses("treatments_#{@get("name")}", "treatment").bg ).property("name")
 
-  active: Em.computed( -> @get("doses.firstObject.active") ).property("name", "doses.@each.active")
-  doses: Em.computed(-> @get("controller.treatments").filterBy("name", @get("name"))  ).property("controller.treatments.@each", "name")
-
+  active: Em.computed( -> @get("controller.treatments").filterBy("name", @get("name")).get("firstObject.active") ).property("controller.treatments.@each.active")
+  doses: Em.computed(-> @get("controller.treatments").filterBy("name", @get("name")).filterBy("hasDose",true) ).property("controller.treatments.@each.hasDose", "name")
 
   actions:
     remove: (treatment_name) ->

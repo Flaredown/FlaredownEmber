@@ -10,7 +10,7 @@ model = DS.Model.extend
   hasDose: Em.computed.and("quantity", "unit")
 
   didLoad: ->
-    if @get("quantity") and @get("unit")
+    if @get("hasDose")
       @set("active", true)
     else
       @set "quantity", @get("currentUser.settings.treatment_#{@get("name")}_quantity")
