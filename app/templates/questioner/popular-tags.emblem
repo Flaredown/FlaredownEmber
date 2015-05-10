@@ -1,10 +1,9 @@
-h3 = t "popular"
+h4 = t "popular"
 
 if view.popularTags.length
   ul.popular-tags: each tag in view.popularTags
-    li.tag.popular-tag{action "addTag" tag.name}
-      = tag.name
-      |-
-      = tag.count
+    li.popular-tag{action "addTag" tag.name}
+      a = tag.name
+      
 else
   partial "loading-spinner"
