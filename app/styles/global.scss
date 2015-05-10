@@ -143,3 +143,32 @@ body > .loading-spinner {
   border: 1px solid $primary;
   border-radius: 3px;
 }
+
+// MODAL
+.center-top-modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  top: 125px;
+  z-index: 1000;
+}
+.ember-modal-overlay {
+  height: 100vh;
+  left: 0;
+  opacity: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 50;
+}
+.ember-modal-dialog {
+  z-index: 50;
+  position: absolute;
+  padding: 2em;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+.ember-modal-dialog > div{
+  position: relative;
+  right: 50%;
+}
