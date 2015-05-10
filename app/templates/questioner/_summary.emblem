@@ -26,5 +26,4 @@ each group in trackableResponses
 
     / feel free to remove
     hr
-
 partial "questioner/notes"
