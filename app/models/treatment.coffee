@@ -7,13 +7,14 @@ model = DS.Model.extend
   unit:     DS.attr("string")
   # quantity: Em.computed( -> @get("currentUser.settings.treatment_#{@get("name")}_quantity") ).property("currentUser.settings.@each")
   # unit: Em.computed( -> @get("currentUser.settings.treatment_#{@get("name")}_unit") ).property("currentUser.settings.@each")
-  hasDose: Em.computed.and("quantity", "unit")
+  hasDose: Em.computed(-> @get("quantity") isnt null and @get("unit") isnt null).property("quantity", "unit")
 
   didLoad: ->
-    if @get("hasDose")
-      @set("active", true)
-    else
-      @set "quantity", @get("currentUser.settings.treatment_#{@get("name")}_quantity")
-      @set "unit", @get("currentUser.settings.treatment_#{@get("name")}_unit")
+    @set("active", true) if @get("hasDose")
+    #
+    # else
+    #   @set("active", false)
+    #   @set "quantity", @get("currentUser.settings.treatment_#{@get("name")}_quantity")
+    #   @set "unit", @get("currentUser.settings.treatment_#{@get("name")}_unit")
 
 `export default model`

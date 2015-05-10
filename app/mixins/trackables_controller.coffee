@@ -73,11 +73,12 @@ mixin = Ember.Mixin.create FormHandlerMixin,
     addTreatmentDose: (name) ->
       treatments = @treatmentsByName(name)
       treatments.forEach (treatment) -> treatment.set("editing", false)
+      first = treatments.get("firstObject")
 
-      if treatments.get("firstObject.hasDose") # add another dose, go straight to edit
+      if first.get("hasDose") # add another dose, go straight to edit
         @addEntryTreatment(treatments.get("firstObject"), true)
       else
-        treatments.get("firstObject").setProperties(quantity: "", unit: "", editing: true)
+        first.setProperties(quantity: @get("currentUser.settings.treatment_#{first.get("name")}_quantity"), unit: @get("currentUser.settings.treatment_#{first.get("name")}_unit"), editing: true, active: true)
 
       # else # not yet activated, activate and but don't edit
         # treatments.set("firstObject.editing", true) unless treatments.get("length") > 1
@@ -86,19 +87,20 @@ mixin = Ember.Mixin.create FormHandlerMixin,
     removeTreatmentDose: (treatment) ->
       treatments = @get("treatments").filterBy("name",treatment.get("name"))
       if treatments.length is 1
-        treatments.get("firstObject").setProperties(quantity: "", unit: "", editing: false)
+        treatments.get("firstObject").setProperties(quantity: null, unit: null, editing: false)
       else
         @get("model.treatments").removeObject(treatment)
+        treatment.unloadRecord()
 
     toggleTreatment: (name) ->
       if @treatmentsByName(name).get("firstObject.active")
         # Clear the first treatment of dose info and deactive, kill any others
-        @treatmentsByName(name).get("firstObject").setProperties(quantity: false, unit: false, editing: false, active: false)
+        @treatmentsByName(name).get("firstObject").setProperties(quantity: null, unit: null, editing: false, active: false)
         @treatmentsByName(name).slice(1).forEach (treatment) =>
           @get("model.treatments").removeObject(treatment)
       else
         @treatmentsByName(name).forEach (treatment) -> treatment.set("active", true)
-        @treatmentsByName(name).get("firstObject").setProperties(quantity: false, unit: false)
+        @treatmentsByName(name).get("firstObject").setProperties(quantity: null, unit: null)
 
       false
 

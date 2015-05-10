@@ -13,14 +13,14 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
       Ember.run.next =>
         unless @get("isDestroyed") or not @get("isDestroying")
           # prevent errors on form by prefilling
-          @setProperties(quantity: "", unit: "") unless @get("hasDose")
+          unless @get("hasDose")
+            @set "quantity", @get("currentUser.settings.treatment_#{@get("name")}_quantity")
+            @set "unit", @get("currentUser.settings.treatment_#{@get("name")}_unit")
 
           @set("editing", not @saveForm())
           @endSave()
 
   .observes("editing")
-
-  hasDose: Em.computed.and("quantity", "unit")
 
   unitOptions: Em.computed(-> Em.I18n.translations.treatment_units ).property()
 
@@ -36,6 +36,7 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
   unit: Em.computed.alias("content.unit")
   active: Em.computed.alias("content.active")
   editing: Em.computed.alias("content.editing")
+  hasDose: Em.computed.alias("content.hasDose")
 
   quantityValid: (-> /^([0-9]*[1-9][0-9]*(\.[0-9]+)?|[0]*\.[0-9]*[1-9][0-9]*)$/.test(@get("quantity")) ).property("quantity")
 
