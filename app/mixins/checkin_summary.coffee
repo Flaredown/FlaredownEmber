@@ -26,8 +26,9 @@ mixin = Ember.Mixin.create Em.I18n.TranslateableProperties, colorableMixin,
         Ember.merge(
           response,
           {
+            validResponse: not [null,undefined].contains(response.value)
             colorClass: color
-            pips: if response.value then [1..response.value-1] else []
+            pips: if response.value then [1..response.value] else []
             repetitions: repetitions
             taken: repetitions.get("firstObject.active")
           }

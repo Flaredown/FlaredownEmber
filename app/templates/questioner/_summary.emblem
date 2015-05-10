@@ -9,9 +9,12 @@
 
           if group.pippable
             .summary-trackable-rating
-              if response.pips
-                each pip in response.pips
-                  .summary-pip class={response.colorClass}
+              if response.validResponse
+                if response.pips.length
+                  each pip in response.pips
+                    .summary-pip class={response.colorClass}
+                else
+                  |happy face rating
               else
                 = t "no_rating"
 
@@ -22,6 +25,7 @@
                 each repeat in response.repetitions
                   .summary-treatment-dose
                     span = repeat.quantity
+                    |&nbsp;
                     span = repeat.unit
             else
               = t "not_taken"
