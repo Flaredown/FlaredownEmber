@@ -16,7 +16,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     ajax("#{config.apiNamespace}/current_user").then(
       (response) =>
         @store.pushPayload "currentUser", response
-        model = @store.find("currentUser", "1")
+        model = @store.find("currentUser", "0")
         # WARNING: I think because deferReadiness is activated, the store does not sync so getLocale cannot depend on currentUser on first load
 
         @controller.set "model", model
