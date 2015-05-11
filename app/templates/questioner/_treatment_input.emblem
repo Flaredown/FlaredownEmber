@@ -2,7 +2,7 @@ div
   .switch{action 'toggleTreatment' view.name}
     input class={view.active:checked:unchecked view.colors.bg :cmn-toggle :cmn-toggle-round} type="checkbox"
     label
-    label.checkin-treatment-name class={view.colors.color}
+    label.checkin-treatment-name
       = view.name
   .remove-trackable.checkin-treatment-remove{action 'destroy' view.name target=view} &times;
 
@@ -11,4 +11,4 @@ if view.active
     ul.checkin-treatment-doses: each dose in view.doses
       view "questioner/treatment_dose" content=dose
 
-  a.checkin-treatment-dose-add{action 'addTreatmentDose' view.name} = t "add_dose"
+  a.checkin-treatment-dose-add{action 'addTreatmentDose' view.name} class={view.colors.color} = t "add_dose"

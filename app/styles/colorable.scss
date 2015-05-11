@@ -34,7 +34,7 @@ $conditions: #ECC916, #F58A5A, #D15423, #D47C87, #C01E55, #DB9126, #B83B8A, #ED8
         fill: $color;
     }
     .sborder-#{$i} {
-        fill: $color !important;
+        border-color: $color !important;
     }
 }
 
@@ -50,6 +50,6 @@ $conditions: #ECC916, #F58A5A, #D15423, #D47C87, #C01E55, #DB9126, #B83B8A, #ED8
         fill: $color;
     }
     .cborder-#{$i} {
-        fill: $color !important;
+        border-color: $color !important;
     }
 }
