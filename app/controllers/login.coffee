@@ -16,7 +16,7 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin, EmailPass
 
   isTalkLogin: Ember.computed( -> @get("sso") and @get("sig") ).property("sso","sig")
   isOutsideAuth: Ember.computed( -> (@get("currentUser.loggedIn") and @get("isTalkLogin")) or @get("tokenLogin") ).property("isTalkLogin","tokenLogin")
-  isAuthenticated: Ember.computed(-> @get("currentUser.model.id") ).property("currentUser.model")
+  # isAuthenticated: Ember.computed(-> @get("currentUser.id") ).property("currentUser")
 
   redirectToTransition: ->
     attemptedTransition = @get("attemptedTransition")

@@ -67,7 +67,6 @@ Em.Route.reopen
     if routeName is "badURL"
       @transitionTo("fourOhFour")
     else
-
       if @get("currentUser.loggedIn")
         if transition.targetName is "graph.checkin" and transition.state.params["graph.checkin"]
           attempted_date = moment(transition.state.params["graph.checkin"].date, "MMM-DD-YYYY")
@@ -119,6 +118,7 @@ Em.Route.reopen
           @transitionTo("graph.checkin", "today", 1)
 
       else
+        # TODO duplicate of below?
         if transition.queryParams.sso and transition.queryParams.sig
           @transitionTo("login")
 

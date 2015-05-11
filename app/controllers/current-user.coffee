@@ -6,7 +6,7 @@
 controller = Ember.ObjectController.extend
   needs: ["login"]
 
-  loggedIn: Ember.computed( -> parseInt(@get("controllers.login.isAuthenticated")) ).property("controllers.login.isAuthenticated")
+  loggedIn: Ember.computed( -> parseInt(@get("model.id")) ).property("model.id")
 
   defaultStartDate: moment().utc().subtract(40,"days").startOf("day")
   defaultEndDate: moment().utc().startOf("day")

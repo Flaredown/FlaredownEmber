@@ -7,5 +7,5 @@ adapter = DS.ActiveModelAdapter.extend
     url = "#{url}/#{id}" if id isnt "0"
 
     url
-    
+
 `export default adapter`
