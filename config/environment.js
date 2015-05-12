@@ -53,8 +53,8 @@ module.exports = function(environment) {
 
         //passed to the respective recognizer
         tune : {
-          tap : { time : 250, threshold : 9 }, //Hammer default is 250 / 2
-          press : { time : 251, threshold : 9 }, //Hammer default is 500 / 5
+          tap : { time : 400, threshold : 9 }, //Hammer default is 250 / 2
+          press : { time : 401, threshold : 9 }, //Hammer default is 500 / 5
           swipe : { direction : 6, velocity : 0.3, threshold : 25 },
           pan : { direction : 6 },
           pinch : {},
