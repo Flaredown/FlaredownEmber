@@ -46,7 +46,10 @@ view = Ember.View.extend
 
   focused: (event) ->
     select2 = @$().data("select2")
-    Ember.run.later => select2.open() unless @get("open")
+    Ember.run.later(
+      => select2.open() unless @get("open")
+    , 100
+    )
 
   opened: (event) ->
     Ember.run.later(

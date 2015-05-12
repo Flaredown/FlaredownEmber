@@ -16,17 +16,14 @@ view = Select2View.extend
   classNames: ['tag-search']
 
   selected: (event) ->
-    if @get("open")
-      @get("controller.tags").addObject(event.choice.text)
+    @get("controller.tags").addObject(event.choice.text)
 
-      Ember.run.later(
-        =>
-          @$().select2("data", null)
-          @$().select2("search")
-        20
-      )
-    else
-      false
+    Ember.run.later(
+      =>
+        @$().select2("data", null)
+        @$().select2("search")
+      20
+    )
 
   closed:   (event) ->
     @set("open", false)
