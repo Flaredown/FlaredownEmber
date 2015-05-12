@@ -245,21 +245,12 @@
   }
   h4 {
     margin: 1em 0 .25em 0;
-    // text-align: left;
   }
   .popular-tags {
-    // text-align: left;
     li {
       display: inline-block;
       font-size: 1.2em;
-      &:after {
-        content: " ";
-        color: $lightgrey;
-        margin: 0 15px;
-      }
-      &:last-of-type:after {
-        content: "";
-      }
+      margin: 0 10px;
     }
   }
 }
