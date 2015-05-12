@@ -4,18 +4,19 @@ $conditions: #ECC916, #F58A5A, #D15423, #D47C87, #C01E55, #DB9126, #B83B8A, #ED8
 
 @each $color in $treatments {
     $i: index($treatments, $color);
-    .tbg-#{$i} {
-        background-color: $color;
-    }
-    .tclr-#{$i} {
-        color: $color;
-    }
-    .tfill-#{$i} {
-        fill: $color;
-    }
-    .tborder-#{$i} {
-        border-color: $color !important;
-    }
+
+    .tbg-{ background-color: $primary; }
+    .tbg-#{$i} { background-color: $color; }
+
+    .tclr- { color: $primary; }
+    .tclr-#{$i} { color: $color; }
+
+    .tfill- { fill: $primary; }
+    .tfill-#{$i} { fill: $color; }
+
+    .tborder- { border-color: $primary !important; }
+    .tborder-#{$i} { border-color: $color !important; }
+
     // switch bg
     input.cmn-toggle-round.checked.tbg-#{$i} + label:before {
       background-color: $color;
@@ -24,32 +25,32 @@ $conditions: #ECC916, #F58A5A, #D15423, #D47C87, #C01E55, #DB9126, #B83B8A, #ED8
 
 @each $color in $symptoms {
     $i: index($symptoms, $color);
-    .sbg-#{$i} {
-        background-color: $color;// !important;
-    }
-    .sclr-#{$i} {
-        color: $color;
-    }
-    .sfill-#{$i} {
-        fill: $color;
-    }
-    .sborder-#{$i} {
-        border-color: $color !important;
-    }
+
+    .sbg-{ background-color: $primary; }
+    .sbg-#{$i} { background-color: $color; }
+
+    .sclr- { color: $primary; }
+    .sclr-#{$i} { color: $color; }
+
+    .sfill- { fill: $primary; }
+    .sfill-#{$i} { fill: $color; }
+
+    .sborder- { border-color: $primary !important; }
+    .sborder-#{$i} { border-color: $color !important; }
 }
 
 @each $color in $conditions {
     $i: index($conditions, $color);
-    .cbg-#{$i} {
-        background-color: $color;// !important;
-    }
-    .cclr-#{$i} {
-        color: $color;
-    }
-    .cfill-#{$i} {
-        fill: $color;
-    }
-    .cborder-#{$i} {
-        border-color: $color !important;
-    }
+
+    .cbg-{ background-color: $primary; }
+    .cbg-#{$i} { background-color: $color; }
+
+    .cclr- { color: $primary; }
+    .cclr-#{$i} { color: $color; }
+
+    .cfill- { fill: $primary; }
+    .cfill-#{$i} { fill: $color; }
+
+    .cborder- { border-color: $primary !important; }
+    .cborder-#{$i} { border-color: $color !important; }
 }
