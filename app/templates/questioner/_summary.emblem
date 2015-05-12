@@ -16,7 +16,7 @@
                 else
                   |happy face rating
               else
-                = t "no_rating"
+                .summary-empty = t "no_rating"
 
           else
             / must be a treatment! Show metadata
@@ -28,6 +28,6 @@
                     |&nbsp;
                     span = repeat.unit
             else
-              = t "not_taken"
+              .summary-empty = t "not_taken"
 
   partial "questioner/notes"

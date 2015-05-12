@@ -304,9 +304,12 @@
     text-overflow: ellipsis;
     overflow: hidden;
   }
-  .summary-trackable-rating {
+  .summary-trackable-rating, .summary-empty {
     @include span-columns(6);
     text-align: left;
+  }
+  .summary-empty {
+    color: $lightgrey;
   }
   .summary-pip {
     @include span-columns(3);
