@@ -23,8 +23,6 @@
 
   .checkin-navigate
 
-    unless isFirstSection: a.checkin-back{action "previousSection"} = t "nav.back_caps"
+    unless isFirstSection
+      unless isLastSection: a.checkin-back{action "previousSection"} = t "nav.back_caps"
     unless isLastSection: a.checkin-next{action "nextSection"} = t "nav.next_caps"
-
-    if isLastSection: if currentUser.graphable: link-to "graph" class="checkin-finish"
-      = t "nav.done_caps"
