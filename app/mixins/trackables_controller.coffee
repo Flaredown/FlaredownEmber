@@ -79,6 +79,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         @addEntryTreatment(treatments.get("firstObject"), true)
       else
         first.setProperties(quantity: @get("currentUser.settings.treatment_#{first.get("name")}_quantity"), unit: @get("currentUser.settings.treatment_#{first.get("name")}_unit"), editing: true, active: true)
+        @propertyDidChange("treatments")
 
       # else # not yet activated, activate and but don't edit
         # treatments.set("firstObject.editing", true) unless treatments.get("length") > 1
