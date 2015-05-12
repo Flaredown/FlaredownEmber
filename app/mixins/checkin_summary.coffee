@@ -20,17 +20,16 @@ mixin = Ember.Mixin.create Em.I18n.TranslateableProperties, colorableMixin,
         repetitions = responses.filterBy("name",name)
         response = repetitions.get("firstObject").getProperties("name", "value")
 
-        color = if type is "conditions" then "bg-default" else @colorClasses("#{type}_#{name}", singular_type).bg
-
         # the response, includes repetitions
         Ember.merge(
           response,
           {
             validResponse: not [null,undefined].contains(response.value)
-            colorClass: color
+            colors: @colorClasses("#{type}_#{name}", singular_type)
             pips: if response.value then [1..response.value] else []
             repetitions: repetitions
             taken: repetitions.get("firstObject.active")
+            hasDose: repetitions.get("firstObject.hasDose")
           }
         )
 

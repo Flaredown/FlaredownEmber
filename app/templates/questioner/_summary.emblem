@@ -3,31 +3,48 @@
     .summary-section
 
       a{action "sectionByName" group.type}{bind-attr class=":summary-section-link"} = group.categoryName
-      each response in group.responses
-        .summary-trackable
-          .summary-trackable-name = response.name
+      if group.responses.length
 
-          if group.pippable
-            .summary-trackable-rating
-              if response.validResponse
-                if response.pips.length
-                  each pip in response.pips
-                    .summary-pip class={response.colorClass}
+        each response in group.responses
+          .summary-trackable
+            .summary-trackable-name = response.name
+
+            if group.pippable
+              .summary-trackable-rating
+                if response.validResponse
+                  if response.pips.length
+                    each pip in response.pips
+                      .summary-pip class={response.colors.bg}
+                  else
+                    |happy face rating
                 else
-                  |happy face rating
-              else
-                .summary-empty = t "no_rating"
+                  .summary-empty = t "no_rating"
 
-          else
-            / must be a treatment! Show metadata
-            if response.taken
-              .summary-trackable-metadata class={group.type}
-                each repeat in response.repetitions
-                  .summary-treatment-dose
-                    span = repeat.quantity
-                    |&nbsp;
-                    span = repeat.unit
             else
-              .summary-empty = t "not_taken"
+              / must be a treatment! Show metadata
+              if response.taken
+                if response.hasDose
+                  .summary-taken = t "taken"
+                else
+                  .summary-trackable-metadata class={group.type}
+                    each repeat in response.repetitions
+                      .summary-treatment-dose  class={response.colors.border response.colors.color}
+                        span = repeat.quantity
+                        |&nbsp;
+                        span = repeat.unit
+              else
+                .summary-empty = t "not_taken"
+      else
+        .no-trackables {{t "not_tracking_trackable" type=group.type}}
+
+
+  if tags.length
+    a{action "sectionByName" "tags"}{bind-attr class=":summary-section-link"} = t "tags"
+    .checkin-tags
+      ul.checkin-tags-list: each tag in tags
+        .checkin-tag= tag
+    // spacing HACK!
+    p &nbsp;
+
 
   partial "questioner/notes"

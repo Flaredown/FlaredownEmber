@@ -255,6 +255,12 @@
   }
 }
 
+.checkin-summary {
+  .checkin-tag {
+    font-size: 1em;
+  }
+}
+
 /////////////////// NOTE /////////////////////
 
 .checkin-note {
@@ -304,11 +310,11 @@
     text-overflow: ellipsis;
     overflow: hidden;
   }
-  .summary-trackable-rating, .summary-empty {
+  .summary-trackable-rating, .summary-empty, .summary-taken {
     @include span-columns(6);
     text-align: left;
   }
-  .summary-empty {
+  .summary-empty, .no-trackables {
     color: $lightgrey;
   }
   .summary-pip {
@@ -329,7 +335,7 @@
     border-radius: 999px;
     border: 1px solid $primary;
     display: inline-block;
-    color: $primary;
+//    color: $primary;
     margin: 0 5px 5px 0;
   }
 }
