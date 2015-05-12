@@ -1,8 +1,8 @@
 .register-form
   h3.centered = t "your_registration_information"
   form submit="register"
-    if isInvite
-      h3 This is an invitation!
+    / if isInvite
+    /   h3 This is an invitation!
 
     view "forms/textInput" name="email"
     view "forms/passwordInput" name="password"
