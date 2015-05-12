@@ -26,7 +26,7 @@ mixin = Ember.Mixin.create UserSetupMixin, EmailPassValidations,
         ).then(
           (response) =>
             @endSave()
-            @setupUser(@container)
+            @setupUser(@container, response)
             @transitionToRoute(config.afterLoginRoute)
 
           (response) => @errorCallback(response)

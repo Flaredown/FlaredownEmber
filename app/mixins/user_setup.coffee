@@ -5,7 +5,7 @@
 
 mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
-  setupUser: (container) ->
+  setupUser: (container, payload) ->
     @app           = container.lookup("application:main")
     @controller    = container.lookup("controller:currentUser")
     @store         = @controller.get("store")
@@ -13,25 +13,29 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
     @app.deferReadiness() unless @app_is_ready
 
-    ajax("#{config.apiNamespace}/current_user").then(
-      (response) =>
-        @store.pushPayload "currentUser", response
-        model = @store.find("currentUser", "0")
-        # WARNING: I think because deferReadiness is activated, the store does not sync so getLocale cannot depend on currentUser on first load
+    promise = if payload
+      payload.current_user = payload.user if payload.user
 
-        @controller.set "model", model
-        window.user_id          = response.current_user.obfuscated_id
-        window.treatmentColors  = response.current_user.treatmentColors
-        window.symptomColors    = response.current_user.symptomColors
+      @store.pushPayload("currentUser", payload)
+      @store.find("currentUser", payload.current_user.id)
+    else
+      @store.fetchById("currentUser", 0)
 
-        @getLocale("en")
+    promise.then(
+        (response) =>
+          @controller.set "model", response
+          window.user_id          = @controller.get("obfuscated_id")
+          window.treatmentColors  = @controller.get("treatmentColors")
+          window.symptomColors    = @controller.get("symptomColors")
 
-      (response) =>
-        @errorCallback(response).bind(@) unless response.jqXHR.status is 401 # don't error on unauthorized, they'll be sent to login instead
-        @controller.set "content", {}
-        @getLocale("en")
+          @getLocale("en")
 
-    )
+        (response) =>
+          @errorCallback(response).bind(@) unless response.status is 401 # don't error on unauthorized, they'll be sent to login instead
+          @controller.set "content", {}
+          @getLocale("en")
+
+      )
 
   getLocale: (locale)->
     locale = @controller.get("locale") if @controller.get("locale")
@@ -46,6 +50,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         if @app_is_ready
           # Send to proper place based on login status
           Ember.run.next =>
+            console.log @controller.get("loggedIn"), @controller.get("model")
             @controller.get("controllers.login").redirectToTransition() if @controller.get("loggedIn")
         else
           @app.advanceReadiness()

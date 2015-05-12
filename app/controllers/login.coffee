@@ -49,7 +49,7 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin, EmailPass
                 @errorCallback.bind(@)
               )
             else
-              @setupUser(@container)
+              @setupUser(@container, response)
 
           @errorCallback.bind(@)
         )
@@ -60,7 +60,7 @@ controller = Ember.Controller.extend FormHandlerMixin, UserSetupMixin, EmailPass
         type: "GET"
         data: @getProperties("user_email", "user_token")
       ).then(
-        (response) => @setupUser(@container)
+        (response) => @setupUser(@container,response)
         @errorCallback.bind(@)
       )
 
