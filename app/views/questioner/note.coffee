@@ -39,7 +39,9 @@ view = Ember.View.extend # TaggableNotesMixin,
     @set "value", @get("controller.notes")
     @get("controller").send("save")
 
-  textAdded: -> @get("controller").set("notes", @$().text())
+  textAdded: ->
+    @get("controller").set("notes", @$().text())
+    @set "controller.notesSaved", false
 
   paste: (event) ->
     event.preventDefault()

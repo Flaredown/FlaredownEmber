@@ -12,6 +12,8 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   modalOpen: true
   sectionsSeen: []
 
+  notesSaved: false
+
   yesterdayDate: Em.computed(-> moment(@get("moment")).subtract(1,"day").format("MMM-DD-YYYY") ).property("moment")
   tomorrowDate: Em.computed(-> moment(@get("moment")).add(1,"day").format("MMM-DD-YYYY") ).property("moment")
 
@@ -227,7 +229,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
     save: (close) ->
 
-
       checkin_data =
         responses: @get("responsesData")
         notes: @get("notes")
@@ -254,6 +255,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         ).then(
           (response) =>
             @set("lastSave", data)
+            @set("notesSaved", true)
             @set("modalOpen", false) if close
             # if @get("checkinComplete") # only process the entry if it's complete
             # TODO unfilled question datums
