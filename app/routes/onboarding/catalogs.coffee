@@ -6,7 +6,13 @@
 
 route = Ember.Route.extend GroovyResponseHandlerMixin,
 
-  redirect: (model,transition) -> @transitionTo("onboarding.symptoms") if transition.targetName is "onboarding.catalogs" and not Em.keys(model).length
+  redirect: (model,transition) ->
+    if not Em.keys(model).length
+      if transition.targetName is "onboarding.catalogs"
+        @transitionTo("onboarding.symptoms")
+      else if transition.targetName is "onboarding.research"
+        @transitionTo("onboarding.conditions")
+
   model: ->
     ajax(
       url: "#{config.apiNamespace}/me/catalogs"
@@ -15,12 +21,6 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
       @errorCallback.bind(@)
     )
 
-  beforeModel: (transition) ->
-    @_super(transition)
-    @get("currentUser.model").reload().then(
-      => UserSetupMixin.apply({}).setupUser(@container)
-    )
-
+  afterModel: (model, transition) -> UserSetupMixin.apply({}).getLocale(@container)
 
 `export default route`
-

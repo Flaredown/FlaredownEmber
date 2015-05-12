@@ -5,11 +5,14 @@
 
 mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
-  setupUser: (container, payload) ->
+  setup: (container) ->
     @app           = container.lookup("application:main")
     @controller    = container.lookup("controller:currentUser")
     @store         = @controller.get("store")
     @app_is_ready  = @app._readinessDeferrals is 0
+
+  setupUser: (container, payload) ->
+    @setup(container)
 
     @app.deferReadiness() unless @app_is_ready
 
@@ -28,17 +31,19 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
           window.treatmentColors  = @controller.get("treatmentColors")
           window.symptomColors    = @controller.get("symptomColors")
 
-          @getLocale("en")
+          @getLocale(container)
 
         (response) =>
           @errorCallback(response).bind(@) unless response.status is 401 # don't error on unauthorized, they'll be sent to login instead
           @controller.set "content", {}
-          @getLocale("en")
+          @getLocale(container)
 
       )
 
-  getLocale: (locale)->
+  getLocale: (container)->
+    @setup(container)
     locale = @controller.get("locale") if @controller.get("locale")
+    locale ||= "en"
 
     # Ask the API for the locale for the current user
     ajax("#{config.apiNamespace}/locales/#{locale}").then(
@@ -50,7 +55,6 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         if @app_is_ready
           # Send to proper place based on login status
           Ember.run.next =>
-            console.log @controller.get("loggedIn"), @controller.get("model")
             @controller.get("controllers.login").redirectToTransition() if @controller.get("loggedIn")
         else
           @app.advanceReadiness()
