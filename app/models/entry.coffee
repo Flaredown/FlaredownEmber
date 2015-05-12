@@ -38,5 +38,8 @@ model = DS.Model.extend
 
   validResponses: Ember.computed.filter("responses", (response) -> !Ember.isEmpty response.get("value"))
 
+  didLoad: ->
+    @set("tags",{}) unless @get("tags")
+
 
 `export default model`
