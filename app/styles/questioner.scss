@@ -2,7 +2,7 @@
 
 // modals
 .questioner-modal {
-	width: 700px;
+  width: 700px;
 }
 .form-modal {
   z-index: 1001;
@@ -231,17 +231,29 @@
 
 .checkin-tags {
   .checkin-tag {
-    border-radius: 999px;
-    background: $primary;
-    color: white;
+    margin: 0 5px 5px 0;
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    &:hover {
+      opacity: .85;
+    }
+  }
+  .checkin-tag-text {
     font-size: 1.5em;
     display: inline-block;
-    margin: 0 5px 5px 0;
-    padding: 0 10px;
     cursor: pointer;
-    &:hover .remove-tag {
-      transform: scale(1.1);
-    }
+    height: 100%;
+    background: orange;
+    border-top-right-radius: 999px;
+    border-bottom-right-radius: 999px;
+    padding: 0 10px 0 0;
+    color: white;
+  }
+  .checkin-tag-pointer {
+    height: 100%;
+    position: relative;
+    right: -1px;
   }
   h4 {
     margin: 1em 0 .25em 0;
@@ -337,5 +349,15 @@
     display: inline-block;
 //    color: $primary;
     margin: 0 5px 5px 0;
+  }
+  .checkin-tag {
+    height: 30px;
+    font-size: .75em;
+    &:hover {
+      opacity: 1;
+    }
+    .checkin-tag-text {
+      cursor: default;
+    }
   }
 }
