@@ -11,6 +11,7 @@ ul {
 }
 a {
   color: $primary;
+  cursor: pointer;
   &:hover {
     text-decoration: none;
   }
@@ -39,6 +40,11 @@ label {
 }
 .container {
   @include outer-container;
+}
+.legal {
+  @include card;
+  @include outer-container;
+  max-width: 700px;
 }
 .centered {
   text-align: center;
