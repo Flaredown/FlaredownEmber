@@ -16,7 +16,7 @@
                     each pip in response.pips
                       .summary-pip class={response.colors.bg}
                   else
-                    |happy face rating
+                    img src="assets/summary_smiley.svg" class={response.colors.fill}
                 else
                   .summary-empty = t "no_rating"
 
