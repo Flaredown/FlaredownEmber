@@ -149,6 +149,16 @@ body > .loading-spinner {
   border: 1px solid $primary;
   border-radius: 3px;
 }
+.footer {
+  text-align: center;
+  margin-top: 1em;
+  a {
+    color: $dark-shadow;
+    & + a {
+      margin-left: 25px;
+    }
+  }
+}
 
 // MODAL
 .center-top-modal {
