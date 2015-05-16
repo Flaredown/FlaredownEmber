@@ -150,7 +150,8 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         ).then(
           (response) =>
             @addEntrySymptom(symptom) if @get("isEntry")
-            @get("currentUser.symptoms").pushObject @store.createRecord "symptom", {id: response.symptom.id, name: response.symptom.name}
+            unless @get("currentUser.symptoms").findBy("id","#{response.symptom.id}")
+              @get("currentUser.symptoms").pushObject @store.createRecord "symptom", {id: response.symptom.id, name: response.symptom.name}
 
           @errorCallback.bind(@)
         )
@@ -182,7 +183,8 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         ).then(
           (response) =>
             @addEntryCondition(condition) if @get("isEntry")
-            @get("currentUser.conditions").pushObject @store.createRecord "condition", {id: response.condition.id, name: response.condition.name}
+            unless @get("currentUser.conditions").findBy("id","#{response.condition.id}")
+              @get("currentUser.conditions").pushObject @store.createRecord "condition", {id: response.condition.id, name: response.condition.name}
 
           @errorCallback.bind(@)
         )
