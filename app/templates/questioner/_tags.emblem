@@ -1,9 +1,10 @@
 h1 = t "tag_your_day"
 .checkin-tags
   ul.checkin-tags-list: each tag in tags
-    .checkin-tag{action "removeTag" tag}
-      = tag
-      span.remove-tag &nbsp;&times;
+    li.checkin-tag{action "removeTag" tag}
+      img.checkin-tag-pointer src="assets/tag-point.svg"
+      .checkin-tag-text
+        = tag
 
   view "questioner/tag-search"
   view "questioner/popular-tags"

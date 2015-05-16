@@ -3,3 +3,5 @@ partial "slide-menu"
 
 .main
   #content= outlet
+
+partial "footer"

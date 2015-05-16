@@ -24,6 +24,8 @@ Router.map ->
   @route "passwordReset", path: "reset-your-password"
   @route "inviteRegister", path: "accept-invitation/:invitation_token"
   @route 'upcoming', path: "upcoming"
+  @route 'termsOfService', path: "terms-of-service"
+  @route 'privacyPolicy', path: "privacy-policy"
 
   # Post-Auth
   @resource "graph", path: "", ->
@@ -49,7 +51,8 @@ Router.map ->
 
 `export default Router`
 
-# Base Routing Behavior
+# Base Routing Behavior 
+
 Em.Route.reopen
   authedOnly: true
   unauthedOnly: false

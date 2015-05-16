@@ -1,7 +1,7 @@
 @import "variables";
 @import "mixins";
 
-// modal with a wormhole!
+// Modal
 @import "ember-modal-dialog/ember-modal-structure";
 @import "ember-modal-dialog/ember-modal-appearance";
 
@@ -10,14 +10,8 @@
 @import "base/grid-settings";
 @import "neat/neat";
 @import "base/base";
-//@import "base/variables";
 
-//Internal styles
-
-a {
-  // since most of our anchors don't have hrefs
-  cursor: pointer;
-}
+// Internal styles
 @import "fonts";
 @import "colorable";
 @import "global";

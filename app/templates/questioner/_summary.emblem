@@ -16,7 +16,7 @@
                     each pip in response.pips
                       .summary-pip class={response.colors.bg}
                   else
-                    |happy face rating
+                    img src="assets/summary_smiley.svg" class={response.colors.fill}
                 else
                   .summary-empty = t "no_rating"
 
@@ -38,13 +38,16 @@
         .no-trackables {{t "not_tracking_trackable" type=group.type}}
 
 
-  if tags.length
+  .summary-section
     a{action "sectionByName" "tags"}{bind-attr class=":summary-section-link"} = t "tags"
-    .checkin-tags
-      ul.checkin-tags-list: each tag in tags
-        .checkin-tag= tag
-    // spacing HACK!
-    p &nbsp;
+    if tags.length
+      .checkin-tags
+        ul.checkin-tags-list: each tag in tags
+          li.checkin-tag
+            img.checkin-tag-pointer src="assets/tag-point.svg"
+            .checkin-tag-text= tag
+    else
+      p No tags today
 
 
   partial "questioner/notes"

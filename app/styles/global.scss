@@ -11,6 +11,7 @@ ul {
 }
 a {
   color: $primary;
+  cursor: pointer;
   &:hover {
     text-decoration: none;
   }
@@ -39,6 +40,17 @@ label {
 }
 .container {
   @include outer-container;
+}
+.legal {
+  @include card;
+  @include outer-container;
+  max-width: 700px;
+  ul {
+    list-style-type: circle;
+  }
+  p + h5, ul + h5 {
+    margin-top: 2em;
+  }
 }
 .centered {
   text-align: center;
@@ -142,6 +154,17 @@ body > .loading-spinner {
   text-align: left;
   border: 1px solid $primary;
   border-radius: 3px;
+}
+.footer {
+  text-align: center;
+  margin-top: 2em;
+  color: $dark-shadow;
+  a {
+    color: $dark-shadow;
+    & + a {
+      margin-left: 25px;
+    }
+  }
 }
 
 // MODAL

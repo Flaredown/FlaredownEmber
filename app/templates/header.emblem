@@ -60,15 +60,15 @@ nav.navbar-centered
         li
           link-to "graph.checkin" "today" "1"
             | Checkin
-        li &bull;
+        li &nbsp;&nbsp;
 
         li: link-to "upcoming"
           | What's next?
-        li &bull;
+        li &nbsp;&nbsp;
 
         li
           a href="https://talk.flaredown.com" target="_blank" Discussion
-        li &bull;
+        li &nbsp;&nbsp;
 
         li.dropdown
           .dropdown-container
