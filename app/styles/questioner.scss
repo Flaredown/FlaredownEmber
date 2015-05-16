@@ -262,6 +262,12 @@
 }
 
 /////////////////// NOTE /////////////////////
+input,
+textarea,
+[contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+}
 
 .checkin-note {
   .checkin-note-textarea {
