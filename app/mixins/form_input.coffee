@@ -33,8 +33,6 @@ mixin = Ember.Mixin.create
   valueName: Ember.computed(-> "controller.#{@get("name")}" ).property("name")
   value: Ember.computed(-> @get(@get("valueName")) ).property("controller","valueName")
 
-
-
   valueObserver: Ember.observer(-> @set("controller.#{@get("name")}", @get("value")) ).observes("value")
 
   present: Ember.computed(->

@@ -1,5 +1,8 @@
 .checkin-response
-	ul: each input in question.inputs
-	  li
-	    form submit="'sendResponse' value"
-	      = input class="response-input form-control input-lg" type="number" valueBinding="value"
+  ul: each input in question.inputs
+    li
+      form submit="'sendResponse' value"
+        = input class="response-input form-control input-lg" type="number" valueBinding="value"
+
+        // HACK!! TODO: replace this form stuff with something better, data-based idea for components
+        .errors: small.error-message = controller.errors.fields.value.firstObject.message

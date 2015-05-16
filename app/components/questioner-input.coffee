@@ -1,7 +1,9 @@
 `import Ember from 'ember'`
 `import colorableMixin from '../mixins/colorable'`
+# `import formInputMixin from '../mixins/form_input'`
+`import formHandlerMixin from '../mixins/form_handler'`
 
-component = Ember.Component.extend colorableMixin,
+component = Ember.Component.extend colorableMixin, formHandlerMixin,
   questionName: Ember.computed(-> "catalogs.#{@get("section.category")}.#{@get("question.name")}").property("question.name", "section.category")
 
   layoutName: Ember.computed(-> "questioner/_#{@get("question.kind")}_input" ).property("question.kind")
@@ -13,6 +15,13 @@ component = Ember.Component.extend colorableMixin,
 
   hoverValue: null
   hovering: Ember.computed(-> Em.isPresent(@get("hoverValue"))).property("hoverValue")
+
+  fields: []
+  requirements: []
+  validations: []
+
+  # For "number" type
+  valueValid: (-> /^([0-9]*[1-9][0-9]*(\.[0-9]+)?|[0]*\.[0-9]*[1-9][0-9]*)$/.test(@get("value")) ).property("value")
 
   inputs: Ember.computed(->
     uniq_name = "#{@get("section.category")}_#{@get("question.name")}"
@@ -49,8 +58,18 @@ component = Ember.Component.extend colorableMixin,
 
   checked: Ember.computed( -> @get("value") > 0.0 ).property("value")
 
-  didInsertElement: ->   @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", offset: {x:0, y:-40} , addClass: "trackable-input-tooltip", x: "center", y: "center", ignoreDelay: true, fade: false})
-  willDestroyElement: -> @get("jBox").destroy()
+  didInsertElement: ->
+    @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", offset: {x:0, y:-40} , addClass: "trackable-input-tooltip", x: "center", y: "center", ignoreDelay: true, fade: false})
+    if @get("question.kind") is "number"
+      @set("fields", "value".w())
+      @set("validations",  "value".w())
+      # HACK! TODO refactor
+      # @set("parentView.controller.subForms", []) # clobber all other previous forms
+      @get("parentView.controller.subForms").addObject(@)
+
+  willDestroyElement: ->
+    @send("sendResponse", @get("value")) if @get("value")
+    @get("jBox").destroy()
 
   mouseEnter: -> @set("mouseOff", false)
   mouseLeave: ->
@@ -73,6 +92,7 @@ component = Ember.Component.extend colorableMixin,
     toggleBoolean: (value) ->
       @set "value", if value is 0 then 1.0 else 0.0
       @sendAction "action", @get("question.name"), @get("value")
+
     sendResponse: (value) ->
       @propertyWillChange("value")
       value = parseFloat(value)

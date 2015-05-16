@@ -200,7 +200,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         @get("responses").removeObject(response)
         response.unloadRecord()
 
-
     setResponse: (question_name, value) ->
       previouslyCompleted = @get("currentSection.complete")
       id = "#{@get("currentCategory")}_#{question_name}_#{@get("model.id")}"
