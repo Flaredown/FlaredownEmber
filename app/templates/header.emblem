@@ -52,7 +52,7 @@
 nav.navbar-centered
   link-to "graph.checkin" "today" "1"
     img.navbar-logo src="assets/logo.svg"
-  h4 Early Access
+  h5 Early Access
   if currentUser.loggedIn
     if currentUser.onboarded
       ul.tracking-navigation
