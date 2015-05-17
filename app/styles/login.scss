@@ -2,3 +2,8 @@
 	@include outer-container;
 	@include single-col;
 }
+.accept-terms {
+	label {
+		display: inline;
+	}
+}

@@ -6,6 +6,15 @@
     view "forms/passwordInput" name="password"
     view "forms/passwordInput" name="password_confirmation"
 
+    p.accept-terms
+      input type="checkbox" id="legal"
+      label for="legal" I have read and agreed to the&nbsp;
+      link-to "termsOfService" | Terms of Service
+      label for="legal" &nbsp;and&nbsp;
+      link-to "privacyPolicy" | Privacy Policy
+
+    hr
+
     if isInvite
       view "forms/saveButton" name="enable_early_access" action="register"
     else
