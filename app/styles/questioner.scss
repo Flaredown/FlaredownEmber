@@ -147,7 +147,7 @@
   }
 
   .checkin-treatment-doses {
-    display: inline-block;
+    display: inline;
     width: 100%
   }
   .checkin-treatment-dose {
@@ -156,13 +156,16 @@
     border: 1px solid $primary;
     padding: 0 10px;
     margin: 0 5px 5px 0;
-    a:hover {
+    &:hover {
       opacity: .75;
     }
   }
 
   .checkin-treatment-dose-add {
     display: inline-block;
+    &:hover {
+      opacity: .75;
+    }
   }
 }
 

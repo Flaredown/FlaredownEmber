@@ -9,7 +9,7 @@ $conditions: #ECC916, #F58A5A, #D15423, #D47C87, #C01E55, #DB9126, #B83B8A, #ED8
     .tbg-#{$i} { background-color: $color; }
 
     .tclr- { color: $primary; }
-    .tclr-#{$i} { color: $color; }
+    .tclr-#{$i} { color: $color !important; }
 
     .tfill- { fill: $primary; }
     .tfill-#{$i} { fill: $color; }
