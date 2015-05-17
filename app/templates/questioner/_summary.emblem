@@ -49,5 +49,5 @@
     else
       p No tags today
 
-
-  partial "questioner/notes"
+  .summary-section
+    partial "questioner/notes"
