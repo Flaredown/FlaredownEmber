@@ -11,6 +11,8 @@
       view "forms/emailInput" name="email"
       view "forms/passwordInput" name="password"
 
+      p Early access is open to <a href="http://igg.me/at/flaredown">Flaredown backers</a>. If you are a backer and you have not received an email invite, <a href="mailto:contact@flaredown.com">contact us</a>.
+      hr
       view "forms/saveButton" name="login" action="login"
       / link-to "register" | {{ t "unauthenticated.login_register_now" }}
       link-to "passwordReset" | {{ t "unauthenticated.password_reset" }}

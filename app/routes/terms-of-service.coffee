@@ -1,5 +1,5 @@
 `import Ember from 'ember'`
 
-TermsOfServiceRoute = Ember.Route.extend()
+TermsOfServiceRoute = Ember.Route.extend(authedOnly: false)
 
 `export default TermsOfServiceRoute`
