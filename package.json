@@ -41,14 +41,14 @@
     "ember-cli-uglify": "1.0.1",
     "ember-data": "1.0.0-beta.16.1",
     "ember-export-application-global": "^1.0.2",
-    "ember-mobiletouch": "1.4.10",
     "ember-modal-dialog": "0.6.0",
     "ember-radio-button": "git://github.com/theworkerant/ember-radio-button.git#master",
     "emblem": "0.3.18",
     "express": "^4.8.5",
     "glob": "^4.0.5",
     "liquid-fire": "^0.17.1",
-    "node-sass": "^2.0.1"
+    "node-sass": "^2.0.1",
+    "ember-cli-fastclick": "^1.0.3"
   },
   "dependencies": {
     "keen-js": "^3.2.4",

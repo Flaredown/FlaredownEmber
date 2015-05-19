@@ -29,54 +29,55 @@ module.exports = function(environment) {
       development: false // Set to true, to disable while developing
     },
 
-    mobileTouch: {
-
-        //which gesture families to allow, will create a recognizer for each
-        //a minimum of tap must be present, turning off unused gestures can help performance
-        // use : ['tap', 'press', 'pan', 'swipe'],
-        use : ['tap'],
-
-        //whether to alias "press" to tap within Ember's eventing
-        // very useful if you don't need to distinguish and don't want to lose
-        // taps from people who tap longer
-        // alwaysTapOnPress : false,
-
-        //whether links and actions should trigger tap behavior on press as well
-        // if eventName or "on" has not been explicitly defined
-        // currently does not work with actions
-        defaultTapOnPress : true,
-
-        //passed to new Hammer.Manager(element, options)
-        // options : {
-        //    domEvents : true
-        // },
-
-        //passed to the respective recognizer
-        tune : {
-          tap : { time : 400, threshold : 9 }, //Hammer default is 250 / 2
-          press : { time : 401, threshold : 9 }, //Hammer default is 500 / 5
-          swipe : { direction : 6, velocity : 0.3, threshold : 25 },
-          pan : { direction : 6 },
-          pinch : {},
-          rotate : {}
-        },
-
-        //what default Ember events should be disabled
-        events : [
-          'touchstart',
-          'touchmove',
-          'touchend',
-          'touchcancel',
-          'mousedown',
-          'mouseup',
-          'click', //not removed, re-aliased to internalClick.  Use cautiously.
-          'dblclick',
-          'mousemove',
-          // 'mouseenter',
-          // 'mouseleave'
-        ]
-
-    },
+    // mobileTouch: {
+    //
+    //     //which gesture families to allow, will create a recognizer for each
+    //     //a minimum of tap must be present, turning off unused gestures can help performance
+    //     // use : ['tap', 'press', 'pan', 'swipe'],
+    //     use : ['tap'],
+    //
+    //     //whether to alias "press" to tap within Ember's eventing
+    //     // very useful if you don't need to distinguish and don't want to lose
+    //     // taps from people who tap longer
+    //     // alwaysTapOnPress : false,
+    //
+    //     //whether links and actions should trigger tap behavior on press as well
+    //     // if eventName or "on" has not been explicitly defined
+    //     // currently does not work with actions
+    //     defaultTapOnPress : true,
+    //
+    //     //passed to new Hammer.Manager(element, options)
+    //     // options : {
+    //     //    domEvents : true
+    //     // },
+    //
+    //     //passed to the respective recognizer
+    //     tune : {
+    //       tap : { time : 1000, threshold : 50}, //Hammer default is 250 / 2
+    //       // Flaredown doesn't really care about presses... and the tap detection seems wonky so...
+    //       press : { time : 1001, threshold : 50 }, //Hammer default is 500 / 5
+    //       swipe : { direction : 6, velocity : 0.3, threshold : 25 },
+    //       pan : { direction : 6 },
+    //       pinch : {},
+    //       rotate : {}
+    //     },
+    //
+    //     //what default Ember events should be disabled
+    //     events : [
+    //       'touchstart',
+    //       'touchmove',
+    //       'touchend',
+    //       'touchcancel',
+    //       'mousedown',
+    //       'mouseup',
+    //       'click', //not removed, re-aliased to internalClick.  Use cautiously.
+    //       'dblclick',
+    //       'mousemove',
+    //       'mouseenter',
+    //       'mouseleave'
+    //     ]
+    //
+    // },
 
     contentSecurityPolicy: {
       'default-src': "'self'",

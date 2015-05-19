@@ -26,5 +26,6 @@ view = Ember.View.extend
   ).property("i18nKey")
 
   tap: -> @send(@get("action")) unless @get("disabled")
+  click: -> @send(@get("action")) unless @get("disabled")
 
 `export default view`

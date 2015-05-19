@@ -2,7 +2,6 @@
 `import colorableMixin from '../../mixins/colorable'`
 
 view = Ember.View.extend
-
   tagName: "li"
   templateName: "questioner/_select_li"
   classNameBindings: ["input.highlight:highlight:no-highlight", "input.selected:selected:not-selected", "input.hide_color:hide-color", "input.color", "input.type","metaLabel"]
@@ -14,6 +13,10 @@ view = Ember.View.extend
   mouseEnter: ->  @get("parentView").send("setHover", @get("input.value"))
   mouseOut: ->    @get("parentView").send("setHover", null)
 
-  tap: ->       @get("parentView").send("sendResponse", @get("input.value"))
+  click: -> @send("select")
+  tap: -> @send("select")
+
+  actions:
+    select: -> @get("parentView").send("sendResponse", @get("input.value"))
 
 `export default view`
