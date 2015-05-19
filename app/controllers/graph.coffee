@@ -3,22 +3,49 @@
 `import viewportMixin from '../mixins/viewport_manager'`
 `import colorableMixin from '../mixins/colorable'`
 `import config from '../config/environment'`
+`import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 `import ajax from 'ic-ajax'`
 
-controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
-  ### Set by route ###
-  # rawData, firstEntryDate, viewportStart, catalog, loadedStartDate, loadedEndDate
+computed = Ember.computed
+
+controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyResponseHandlerMixin,
+  ### The route sets up a few attributes ###
+  # rawData -- condensed data by "type" (source)
+  # firstEntryDate
+  # viewportStart
+  # catalog -- current selected catalog
+  # loadedStartDate
+  # loadedEndDate
 
   filtered: [] # default to no filtering
 
   # Some timeline preference helpers
-  isTwoWeeks:   Ember.computed.equal("viewportDays.length", 14)
-  isTwoMonths:  Ember.computed.equal("viewportDays.length", 60)
-  isOneYear:    Ember.computed.equal("viewportDays.length", 365)
+  isTwoWeeks:   computed.equal("viewportDays.length", 14)
+  isTwoMonths:  computed.equal("viewportDays.length", 60)
+  isOneYear:    computed.equal("viewportDays.length", 365)
 
-  ### Datapoints, made a bit more friendly to our purposes ###
-  rawDatapoints: Ember.computed(->
+  # The various kinds of datums: catalogs, symptoms, treatments
+  sources: computed("rawData", -> Object.keys(@get("rawData")).sort() )
+
+  # The Raw Data, made a bit more friendly to our purposes
+  # --- Example rawData response ---
+  # {
+  #   "treatments":[
+  #     {
+  #       "order": 1,
+  #       "x": 1428710400,
+  #       "name": "B12",
+  #       "quantity": "1.0",
+  #       "unit": "tab"
+  #     },
+  #     ... more days here ...
+  #   ],
+  #   "symptoms": [ ... same as above ... ],
+  #   "hbi": [ ... a catalog example ... ]
+  # }
+  rawDatapoints: computed("rawData", ->
     _data = []
+
     # Push together all the sources datapoints keeping track of source
     @get("sources").forEach (source) =>
       @get("rawData.#{source}").forEach (datapoint) ->
@@ -27,10 +54,10 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
         _data.pushObject datapoint
 
     _data.sortBy("x")
-  ).property("rawData")
+  )
 
-  ### All the days possible inside the raw responses ###
-  days: Ember.computed( ->
+  ### All the days possible within the raw responses ###
+  days: computed("loadedStartDate", "loadedEndDate", ->
 
     if @get("loadedStartDate") and @get("loadedEndDate")
       current   = moment(@get("loadedStartDate"))
@@ -39,19 +66,17 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
       until range.get("lastObject") is @get("loadedEndDate").unix() or range.length > 1000
         range.pushObject current.add(1, "days").unix()
       range
+  )
 
-  ).property("loadedStartDate", "loadedEndDate")
+  ## Datums! -- All possible individual "pips" available to rendered/filtered ###
+  # NOTE: not the same as the D3 datum concept! But close.
 
-  ## Datums! ###
   serverProcessingDays: [] # days marked for processing on the API side
 
   _processedDatumDays:  [] # internal for use in setting up #datums when new data comes in
   _processedDatums:     [] # internal for use in setting up #datums when new data comes in
-  clearDatumsForDays: (days) ->
-    @get("_processedDatumDays").removeObjects( days )
-    @set("_processedDatums", @get("_processedDatums").reject( (datum) => days.contains(datum.get("day")) ))
 
-  datums: Ember.computed ->
+  datums: computed("rawDatapoints.@each", "serverProcessingDays.@each", ->
     if @get("rawDatapoints") and @get("days")
 
       # Remove any server processing days from the already processed days so they are reprocessed below
@@ -75,69 +100,84 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
 
             datapointsForDayBySource.forEach (datapoint,i) =>
               if source is "treatments"
-                @get("_processedDatums").pushObject datum.create content:
-                  day:        day
-                  order:      i
-                  name:       datapoint.name
-                  type:       "treatment"
-                  controller: @
+                @get("_processedDatums").pushObject datum.create content: {day: day, order: i, name: datapoint.name, type: "treatment", controller: @}
 
-              else # must be a catalog
+              else # it must be a regular pip
                 if datapoint.points isnt 0
                   [1..datapoint.points].forEach (j) =>
                     y_order = datapoint.order + (j / 10) # order + 1, plus decimal second order (1.1, 1.2, etc)
-                    @get("_processedDatums").pushObject datum.create content:
-                      day:      day
-                      catalog:  source
-                      order:    y_order
-                      name:     datapoint.name
-                      type:     "symptom"
-                      controller: @
+                    @get("_processedDatums").pushObject datum.create content: {day: day, catalog: source, order: y_order, name: datapoint.name, type: "symptom", controller: @}
 
+          else # it's loading, being processed or missing
 
-          else
             catalog = if source is "treatments" then undefined else source
             type    = if source is "treatments" then "treatment" else "symptom"
 
             if @get("serverProcessingDays").contains(day)
 
-              loading_pips = if type is "treatment" then 1 else 3
+              loading_pips = if type is "treatment" then 1 else 3 # loading "animation" for treatments only has 1 pip, others have 3 "loading" pips
               [1..loading_pips].forEach (i) =>
-                @get("_processedDatums").pushObject datum.create content:
-                  day:        day
-                  catalog:    catalog
-                  order:      i
-                  type:       type
-                  processing: true
-                  controller: @
+                @get("_processedDatums").pushObject datum.create content: {day: day, catalog: catalog, order: i, type: type, processing: true, controller: @}
 
-            else # There are no datums for the day and soure... so put in a "missing" datum for that source
+            else # There are no datums for the day and source... so put in a "missing" datum for that source
+
               unless type is "treatment"
-                @get("_processedDatums").pushObject datum.create content:
-                  day:      day
-                  catalog:  catalog
-                  order:    1.1
-                  type:     type
-                  missing:  true
-                  controller: @
+                @get("_processedDatums").pushObject datum.create content: {day: day, catalog: catalog, order: 1.1, type: type, missing: true, controller: @}
 
     @get("_processedDatums")
-  .property("rawDatapoints.@each", "serverProcessingDays.@each")
+  )
 
-  ### Catalogs and Filters ###
-  sources: Ember.computed( -> Object.keys(@get("rawData")).sort() ).property("rawData")
-  catalogs: Ember.computed( ->
-    @get("sources").reject((name) -> name is "treatments").map (catalog) => {name: catalog, active: @get("catalog") is catalog}
-  ).property("sources", "catalog")
+  ### Datum filtering in anticipation of D3 ###
+  #
+  # 1. catalogDatums
+  # 2. unfilteredDatums
+  # 3. unfilteredDatumsByDay
+  # 4. unfilteredDatumsByDayInViewport
+  #
+  # Typically only #4 is rendered by D3, but the intermediates are used as well
+  # for various sorting/arranging within D3
 
-  filterableNames: Ember.computed( ->
+  # 1. Everything in the acive catalog + treatments
+  catalogDatums: computed("datums.@each", "catalog", ->
+    @get("datums").filter (datum) =>
+      datum.get("catalog") is @get("catalog") or Em.isEmpty(datum.get("catalog")) # TODO: should be "is_treatment" or something, not "not catalog"
+  )
+
+  # 2. Reject filtered datums with ids in filtered
+  unfilteredDatums: computed("catalogDatums", "filtered.@each", ->
+    if Em.isEmpty(@get("filtered")) then return @get("catalogDatums")
+    @get("catalogDatums").reject (datapoint) => @get("filtered").contains datapoint.get("sourced_name")
+  )
+
+  # 3. Group by day
+  unfilteredDatumsByDay: computed("unfilteredDatums", "days", ->
+    @get("days").map (day) =>
+      @get("unfilteredDatums").filterBy("day", day).sortBy("order")
+  )
+
+  # 4. Filter by viewport days only
+  unfilteredDatumsByDayInViewport: computed("unfilteredDatums", "viewportDays", ->
+    in_viewport = @get("unfilteredDatums").filter((datum) => @get("viewportDays").contains(datum.get("day")))
+    @get("viewportDays").map (day) => in_viewport.filterBy("day", day)
+  )
+
+  ### Catalogs and Filtering Helpers ###
+  catalogs: computed("sources", "catalog", ->
+    @get("sources").reject (name) -> name is "treatments"
+      .map (catalog) =>
+        {name: catalog, active: @get("catalog") is catalog} # is it the currently selected catalog?
+  )
+
+  filterableNames: computed("rawData", ->
     _names = []
     @get("sources").forEach (source) =>
       @get("rawData.#{source}").mapBy("name").uniq().forEach (name) -> _names.pushObject([source,name])
     _names
-  ).property("rawData")
+  )
 
-  filterables: Ember.computed( ->
+  # Filterables, or trackables, are things that can be filtered off/on the graph
+  # e.g. treatments, symptoms, catalog responses
+  filterables: computed("filterableNames", "filtered.@each", ->
     filtered = @get("filtered")
     @get("filterableNames").map (name_array) =>
       [source,name] = name_array
@@ -149,36 +189,23 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
       source:   source
       color:    @colorClasses(id,type).bg
       filtered: filtered.contains(id)
+  )
 
-  ).property("filterableNames", "filtered.@each")
+  ### Filter helpers ###
+  activeFilterables:    computed.filterBy("filterables", "filtered", true)
+  inactiveFilterables:  computed.filterBy("filterables", "filtered", false)
+  catalogFilterables:   computed("filterables", "catalog", -> @get("filterables").filterBy("source", @get("catalog")) )
+  treatmentFilterables: computed.filterBy("filterables", "source", "treatments")
 
-  activeFilterables:      Ember.computed.filterBy("filterables", "filtered", true)
-  inactiveFilterables:    Ember.computed.filterBy("filterables", "filtered", false)
-  catalogFilterables:     Ember.computed(-> @get("filterables").filterBy("source", @get("catalog")) ).property("filterables", "catalog")
-  treatmentFilterables:   Ember.computed.filterBy("filterables", "source", "treatments")
+  ### Datum Sorting/Filtering ###
+  viewportDatums:   computed("datums.@each", "viewportDays", -> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) )
+  treatmentDatums:  computed.filterBy("unfilteredDatums", "type", "treatment")
+  symptomDatums:    computed.filterBy("unfilteredDatums", "type", "symptom")
 
-  ### Collection Sorting/Filtering ###
-  viewportDatums: Ember.computed(-> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) ).property("datums.@each", "viewportDays")
-  treatmentDatums: Ember.computed.filterBy("unfilteredDatums", "type", "treatment")
-  symptomDatums:   Ember.computed.filterBy("unfilteredDatums", "type", "symptom")
-
-  ### catalogDatums -> unfilteredDatums -> unfilteredDatumsByDay -> unfilteredDatumsByDayInViewport ###
-  catalogDatums: Ember.computed(-> @get("datums").filter( (datum) => datum.get("catalog") is @get("catalog") or Em.isEmpty(datum.get("catalog")) ) ).property("datums.@each", "catalog")
-
-  # Reject filtered datums with ids in filtered
-  unfilteredDatums: Ember.computed(->
-    if Ember.isEmpty(@get("filtered")) then return @get("catalogDatums")
-    @get("catalogDatums").reject (datapoint) => @get("filtered").contains datapoint.get("sourced_name")
-  ).property("catalogDatums", "filtered.@each")
-
-  # Group by day
-  unfilteredDatumsByDay: Ember.computed( -> @get("days").map (day) => @get("unfilteredDatums").filterBy("day", day).sortBy("order") ).property("unfilteredDatums", "days")
-
-  # Filter by viewport days only
-  unfilteredDatumsByDayInViewport: Ember.computed(->
-    in_viewport = @get("unfilteredDatums").filter((datum) => @get("viewportDays").contains(datum.get("day")))
-    @get("viewportDays").map (day) => in_viewport.filterBy("day", day)
-  ).property("unfilteredDatums", "viewportDays")
+  # Some internal helpers
+  clearDatumsForDays: (days) ->
+    @get("_processedDatumDays").removeObjects( days )
+    @set("_processedDatums", @get("_processedDatums").reject( (datum) => days.contains(datum.get("day")) ))
 
   loadMore: (start,end) ->
     @set "loadingStartDate", start
@@ -194,7 +221,7 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
         @set("loadedStartDate",start) if start < @get("loadedStartDate")
         @loadMoreRaw(response)
 
-      (response) => console.log "?!?! error on getting graph" # TODO replace with groovy handler
+      @errorCallback.bind(@)
     )
 
   loadMoreRaw: (raw) ->
@@ -209,12 +236,12 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
         newRaw[source].pushObject raw_datapoint
 
     @clearDatumsForDays(days)
-    Ember.run.next =>
+    Em.run.next =>
       @set "rawData", newRaw
       @propertyDidChange("rawData")
 
-
   actions:
+    # Hooks for Pusher to call
     dayProcessing: (day) -> @get("serverProcessingDays").addObject(moment(day, "MMM-DD-YYYY").utc().startOf("day").unix())
     dayProcessed: (day) ->
       date  = moment(day, "MMM-DD-YYYY").utc().startOf("day")
@@ -223,7 +250,7 @@ controller = Ember.ObjectController.extend viewportMixin, colorableMixin,
         @get("_processedDatumDays").removeObject(day)
         @get("serverProcessingDays").removeObject(day)
 
-      Ember.run.next => @loadMore(date, date)
+      Em.run.next => @loadMore(date, date)
 
     changeCatalog: (catalog) -> @set("catalog", catalog)
 
