@@ -31,14 +31,15 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
     controller = @controllerFor("graph.checkin")
     model.set("section", @get("section"))
 
-    fromDate = transition.router.state.params["graph.checkin"].date if transition.router.state.params["graph.checkin"]
-    betweenDays = fromDate and (fromDate isnt model.get("dateAsParam"))
-
-    if not model.get("just_created") and (not fromDate or betweenDays)
-       # and (fromDate isnt model.get("dateAsParam"))
-      Ember.run.next =>
-        summarySection = controller.get("sections.lastObject").number
-        model.set("section", summarySection)
+    # TODO reimplement, perhaps in router
+    # fromDate = transition.router.state.params["graph.checkin"].date if transition.router.state.params["graph.checkin"]
+    # betweenDays = fromDate and (fromDate isnt model.get("dateAsParam"))
+    #
+    # if not model.get("just_created") and (not fromDate or betweenDays)
+    #    # and (fromDate isnt model.get("dateAsParam"))
+    #   Ember.run.next =>
+    #     summarySection = controller.get("sections.lastObject").number
+    #     model.set("section", summarySection)
 
     has_notes = Em.isPresent(model.get("notes"))
     if has_notes
