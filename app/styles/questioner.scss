@@ -286,7 +286,7 @@ textarea,
 
 .checkin-note {
   .checkin-note-textarea {
-    height: 200px;
+    min-height: 100px;
     width: 100%;
     padding: 15px;
     box-shadow: none;
@@ -367,6 +367,12 @@ textarea,
     }
     .checkin-tag-text {
       cursor: default;
+    }
+  }
+  .checkin-note.saved .checkin-note-textarea{
+    border-color: transparent;
+    &:hover {
+      border-color: $lightgrey;
     }
   }
 }

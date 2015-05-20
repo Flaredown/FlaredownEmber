@@ -63,7 +63,7 @@ nav.navbar-centered
         li &nbsp;&nbsp;
 
         li: link-to "upcoming"
-          | What's next?
+          | Graph
         li &nbsp;&nbsp;
 
         li

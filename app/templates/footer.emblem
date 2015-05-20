@@ -1,4 +1,5 @@
 .footer
 	link-to "termsOfService" | Terms of Service
 	link-to "privacyPolicy" | Privacy Policy
+	a href="mailto: contact@flaredown.com" Contact
 	p Flaredown &copy; 2015
