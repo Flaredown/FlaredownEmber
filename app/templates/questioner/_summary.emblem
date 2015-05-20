@@ -50,5 +50,5 @@
       p No tags today
 
   .summary-section
-    a.summary-section-link = t "note"
+    a.summary-section-link{action "toggleNotes"} = t "note"
     partial "questioner/notes"

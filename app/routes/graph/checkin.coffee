@@ -43,7 +43,10 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
 
     has_notes = Em.isPresent(model.get("notes"))
     if has_notes
-      Ember.run.next => controller.set("show_notes", has_notes)
+      Ember.run.next =>
+        controller.set("show_notes", has_notes)
+        controller.set("notesSaved", has_notes)
+
 
   actions:
     close: -> @transitionTo "graph"

@@ -44,6 +44,15 @@ mixin = Ember.Mixin.create Em.I18n.TranslateableProperties, colorableMixin,
   ).property("trackableSections", "responsesData", "treatments.@each.active")
 
   actions:
-    toggleNotes: -> @toggleProperty("show_notes"); false
+    toggleNotes: ->
+      @toggleProperty("show_notes") unless Em.isPresent(@get("notes"))
+
+      # Set focus
+      Em.run.next =>
+        $textarea = $(".checkin-note-textarea")
+        if @get("show_notes") and Em.isPresent($textarea)
+          $textarea.focus()
+
+      false
 
 `export default mixin`

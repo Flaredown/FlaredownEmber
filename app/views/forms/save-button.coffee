@@ -4,10 +4,12 @@ view = Ember.View.extend
   action: "save"
   name: "save"
 
+  alignment: "right"
+
   tagName: "button"
   templateName: "forms/save-button"
-  classNames: ["btn-primary", "right"]
-  classNameBindings: ["buttonClass"]
+  classNames: ["btn-primary", ]
+  classNameBindings: ["buttonClass", "alignment"]
   attributeBindings: ["type", "disabled"]
 
   type: "submit"
@@ -25,7 +27,10 @@ view = Ember.View.extend
     if Ember.I18n.translations.get(name) then Ember.I18n.t(name) else Ember.I18n.t("#{@get("i18nKey")}.#{name}")
   ).property("i18nKey")
 
-  tap: -> @send(@get("action")) unless @get("disabled")
-  click: -> @send(@get("action")) unless @get("disabled")
+  # This relies on form submit action currently
+  # TODO: perhaps relying on the button is better? But both means double action firing
+  # tap: -> @get("controller").send(@get("action")) unless @get("disabled")
+  # click: -> @get("controller").send(@get("action")) unless @get("disabled")
+
 
 `export default view`

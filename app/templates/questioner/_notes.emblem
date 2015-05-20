@@ -1,8 +1,8 @@
 .checkin-note class={notesSaved:saved:unsaved}
   if show_notes
-    view "questioner/note"
-
-    // TODO needs translation
-    a.btn.btn-primary{action "save"} save note
+    form submit="save"
+      view "questioner/note"
+      unless notesSaved
+        view "forms/saveButton" alignment="center" name="forms.save"
   else
     a{action "toggleNotes"}{bind-attr class=":summary-add-note"} = t "leave_a_note"
