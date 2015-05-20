@@ -50,4 +50,5 @@
       p No tags today
 
   .summary-section
+    a.summary-section-link = t "note"
     partial "questioner/notes"

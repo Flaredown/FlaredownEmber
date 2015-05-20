@@ -3,6 +3,6 @@
     view "questioner/note"
 
     // TODO needs translation
-    a.btn{action "save"} save note
+    a.btn.btn-primary{action "save"} save note
   else
     a{action "toggleNotes"}{bind-attr class=":summary-add-note"} = t "leave_a_note"
