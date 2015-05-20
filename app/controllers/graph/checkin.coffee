@@ -129,6 +129,8 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       else
         questions = @get("catalog_definitions.#{catalog}")[section_index]
 
+      return false if questions.length > 1 # TODO multiple question seconds are tricky to call "complete" from a UX perspective
+
       not questions.map((question) =>
         return true if question.kind is "checkbox"
 
