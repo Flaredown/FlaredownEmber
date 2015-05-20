@@ -16,7 +16,7 @@
                     each pip in response.pips
                       .summary-pip class={response.colors.bg}
                   else
-                    img src="assets/summary_smiley.svg" class={response.colors.fill}
+                    img.checkin-summary-smiley src="assets/summary_smiley.svg" class={response.colors.fill}
                 else
                   .summary-empty = t "no_rating"
 

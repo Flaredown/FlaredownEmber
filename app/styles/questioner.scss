@@ -321,7 +321,7 @@ textarea,
     font-size: 1.5em;
   }
   .summary-trackable {
-    margin-top: .25em;
+    margin-top: .5em;
     display: inline-block;
     width: 100%;
   }
@@ -374,5 +374,9 @@ textarea,
     &:hover {
       border-color: $lightgrey;
     }
+  }
+  .checkin-summary-smiley {
+    position:relative;
+    top: 3px;
   }
 }
