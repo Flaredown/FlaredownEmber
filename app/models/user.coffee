@@ -2,6 +2,7 @@
 
 model = DS.Model.extend
   obfuscated_id:        DS.attr "string"
+  intercom_hash:        DS.attr "string"
   entries:              DS.hasMany "entry"
   treatments:           DS.hasMany "treatment"
   conditions:           DS.hasMany "condition"
