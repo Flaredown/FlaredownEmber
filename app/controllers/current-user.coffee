@@ -20,7 +20,7 @@ controller = Ember.ObjectController.extend
       app_id: config.intercom_id
     }
 
-    @setupIntercom()
+    @setupIntercom() if config.environment is "production"
   #   if @get("pusher.enabled")
   #     @get("pusherChannels").addArrayObserver(@,
   #       didChange: (channels, offset, removeAmt, addAmt) =>
