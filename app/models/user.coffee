@@ -11,6 +11,7 @@ model = DS.Model.extend
   locale:               DS.attr "string"
   email:                DS.attr "string"
   authentication_token: DS.attr "string"
+  created_at:           DS.attr "date"
 
   symptomColors:        DS.attr(defaultValue: (-> []) )
   treatmentColors:      DS.attr(defaultValue: (-> []) )

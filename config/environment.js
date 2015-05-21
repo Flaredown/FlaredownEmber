@@ -12,6 +12,7 @@ module.exports = function(environment) {
     apiNamespace:    '/v1',
     afterLoginRoute: 'graph',
     ga_id: "UA-62007375-3", // dev
+    intercom_id: "zi05kys7",
     keen: { // staging
       project_id: "55327e0646f9a75ef4402fc1",
       write_key: "c6222280f213adef6860fff3e431e3d933ed3314e9c9a283133230418d2cd368f11f519bdceaa913ba75e097eb5f1d92435bba3c885ea2417a9179550053f590fac16c0fabc1f44bd1c19206dbce6ddc7ae890312c8e6248a25618286cd9d5966194f07d52e9880b11ee9f5b6ce91ad2",
@@ -81,10 +82,10 @@ module.exports = function(environment) {
 
     contentSecurityPolicy: {
       'default-src': "'self'",
-      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' http://*.pusher.com www.google-analytics.com/analytics.js www.google.com/jsapi d26b395fwzu5fz.cloudfront.net api.keen.io cdn.ravenjs.com",
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' http://*.pusher.com www.google-analytics.com/analytics.js https://*.intercom.io https://*.intercomcdn.com www.google.com/jsapi d26b395fwzu5fz.cloudfront.net api.keen.io cdn.ravenjs.com",
       'font-src': "'self'",
-      'connect-src': "`self` http://localhost:* ws://*.pusherapp.com http://*.pusher.com",
-      'img-src': "'self' www.google-analytics.com data: app.getsentry.com",
+      'connect-src': "`self` http://localhost:* ws://*.pusherapp.com http://*.pusher.com wss://*.intercom.io https://*.intercom.io ",
+      'img-src': "'self' www.google-analytics.com data: app.getsentry.com https://*.intercomcdn.com",
       'style-src': "'self' 'unsafe-inline'",
       'frame-src': ""
     },

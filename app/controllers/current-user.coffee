@@ -13,7 +13,14 @@ controller = Ember.ObjectController.extend
 
   ### PUSHER ###
   # pusherChannels: []
-  # modelDidLoad: (->
+  modelDidLoad: (->
+    window.intercomSettings = {
+      email: @get("email"),
+      created_at: moment(this.get("created_at")).utc().unix(),
+      app_id: config.intercom_id
+    }
+
+    @setupIntercom()
   #   if @get("pusher.enabled")
   #     @get("pusherChannels").addArrayObserver(@,
   #       didChange: (channels, offset, removeAmt, addAmt) =>
@@ -31,9 +38,44 @@ controller = Ember.ObjectController.extend
   #
   #   @subscribe("notifications")
   #
-  # ).observes("obfuscated_id").on("model.didLoad")
+  ).observes("obfuscated_id").on("model.didLoad")
 
   subscribe: (channel) -> @get("pusherChannels").addObject "#{channel}_#{@get("obfuscated_id")}" unless @get("pusherChannels")["#{channel}_#{@get("obfuscated_id")}"]
+
+  setupIntercom: ->
+    w = window
+    ic = w.Intercom
+
+    l = ->
+      s = d.createElement('script')
+      s.type = 'text/javascript'
+      s.async = true
+      s.src = 'https://widget.intercom.io/widget/zi05kys7'
+      x = d.getElementsByTagName('script')[0]
+      x.parentNode.insertBefore s, x
+      return
+
+    if typeof ic == 'function'
+      ic 'reattach_activator'
+      ic 'update', intercomSettings
+    else
+      d = document
+
+      i = ->
+        i.c arguments
+        return
+
+      i.q = []
+
+      i.c = (args) ->
+        i.q.push args
+        return
+
+      w.Intercom = i
+      if w.attachEvent
+        w.attachEvent 'onload', l
+      else
+        w.addEventListener 'load', l, false
 
   actions:
     toggleGraph: ->
