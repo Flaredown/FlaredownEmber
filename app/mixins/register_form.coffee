@@ -11,13 +11,15 @@ mixin = Ember.Mixin.create UserSetupMixin, EmailPassValidations,
   modelClass: "user"
 
   defaults: Em.computed.alias("model")
-  fields: "email password password_confirmation invitation_token".w()
-  requirements: "email password password_confirmation".w()
-  validations:  "email password password_confirmation".w()
+  fields: "email password password_confirmation invitation_token legal".w()
+  requirements: "email password password_confirmation legal".w()
+  validations:  "email password password_confirmation legal".w()
 
+  legalValid: Em.computed.equal("legal", 1)
 
   actions:
     register: ->
+      console.log @get("legal")
       if @saveForm()
         ajax(
           type: "PUT"

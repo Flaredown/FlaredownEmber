@@ -67,13 +67,13 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
   allErrors: Em.computed(->
     return [] unless @get("errors")
     _all = []
-    fields =
-      if @get("errors.model")
-        Ember.keys(@get("errors.fields.#{@get("errors.model")}"))
-      else
-        Ember.keys(@get("errors.fields"))
+    root = "errors.fields"
+    fields = Ember.keys(@get("errors.fields"))
 
-    root = if @get("errors.model") then "errors.fields.#{@get("errors.model")}" else "errors.fields"
+    if @get("errors.model") and @get("errors.fields.#{model}")
+      root = "errors.fields.#{@get("errors.model")}"
+      fields = Ember.keys(@get("errors.fields.#{@get("errors.model")}"))
+
     fields.forEach (field) => _all.pushObjects @get("#{root}.#{field}")
     _all
 
@@ -81,7 +81,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
   resetErrorsOn: (key,model) ->
     if @get("errors.fields")
-      if model
+      if model and @get("errors.fields.#{model}")
         @set("errors.fields.#{model}.#{key}", [])
       else
         @set("errors.fields.#{key}", [])
