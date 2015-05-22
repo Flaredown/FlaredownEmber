@@ -223,6 +223,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       if @saveForm()
         @send("save") if @get("saveOnSectionChange")
         @set("section", section) if @get("sections").mapBy("number").contains(section)
+        @endSave()
 
     sectionByName:   (name) -> @send("setSection",(@get("sections").findBy("category", name).number ))
     nextSection:     -> @send("setSection",(@get("section")+1)) unless @get("section") is @get("sections.lastObject.number")
