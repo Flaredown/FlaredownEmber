@@ -195,3 +195,10 @@ body > .loading-spinner {
   position: relative;
   right: 50%;
 }
+
+.switch-input {
+  display: inline;
+  div {
+    display: inline;
+  }
+}
