@@ -58,9 +58,6 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     pass      = true
     response  = @get("errorResponseTemplate")()
 
-    console.log @get("model"), "!!"
-    console.log @get("requirements")
-
     @get("requirements").forEach (key) =>
       unless Em.isPresent(@get(key))
         pass = false
@@ -80,7 +77,6 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     @get("subForms").forEach (form) => # simply check that these pass
       pass = false if not form.get("isDestroyed") and not form.saveForm()
 
-    console.log response.errors
     @errorCallback(response) unless pass
     pass
 
