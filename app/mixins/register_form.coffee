@@ -19,7 +19,6 @@ mixin = Ember.Mixin.create UserSetupMixin, EmailPassValidations,
 
   actions:
     register: ->
-      console.log @get("legal")
       if @saveForm()
         ajax(
           type: "PUT"

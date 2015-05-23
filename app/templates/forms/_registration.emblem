@@ -7,12 +7,12 @@
     view "forms/passwordInput" name="password_confirmation"
 
     p.accept-terms
-      view "forms/checkboxInput" name="legal" showLabel=false
-      / input type="checkbox" id="legal"
-      label for="legal" I have read and agreed to the&nbsp;
-      link-to "termsOfService" | Terms of Service
-      label for="legal" &nbsp;and&nbsp;
-      link-to "privacyPolicy" | Privacy Policy
+      view "forms/checkboxInput" name="legal"
+        / input type="checkbox" id="legal"
+        |I have read and agreed to the&nbsp;
+        link-to "termsOfService" | Terms of Service
+        |&nbsp;and&nbsp;
+        link-to "privacyPolicy" | Privacy Policy
 
     hr
 

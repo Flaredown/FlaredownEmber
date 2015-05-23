@@ -11,14 +11,20 @@ mixin = Ember.Mixin.create
   init: ->
     @_super()
 
-    if @get("controller.modelClass")
-      Em.defineProperty @, "errors", Em.computed( ->
-        @get("#{@get("errorsRoot")}.#{@get("controller.modelClass")}.#{@get("name")}")
-      ).property("#{@get("errorsRoot")}.#{@get("controller.modelClass")}.#{@get("name")}.@each")
-    else
-      Em.defineProperty @, "errors", Em.computed( ->
+    Em.defineProperty @, "errors", Em.computed(
+      "#{@get("errorsRoot")}.#{@get("name")}.@each",
+      "#{@get("errorsRoot")}.#{@get("controller.modelClass")}.#{@get("name")}.@each",
+      ->
+        model_error = if @get("controller.modelClass")
+         @get("#{@get("errorsRoot")}.#{@get("controller.modelClass")}.#{@get("name")}")
+
+        # Model (aka API) errors take precedence
+        return model_error if model_error
+
+        # Otherwise check for local, although this probably shouldn't ever happen
         @get("#{@get("errorsRoot")}.#{@get("name")}")
-      ).property("#{@get("errorsRoot")}.#{@get("name")}.@each")
+
+    )
 
     @get("parentForm.subForms").addObject(@get("controller")) if @get("parentForm")
 

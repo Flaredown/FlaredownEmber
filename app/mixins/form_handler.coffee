@@ -22,7 +22,25 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
 
     # Watch all fields that can take inline errors and reset those errors upon field change
     @get("errorables").forEach (key) =>
+      @addObserver(key, => @resetErrorsOn(key)) if Ember.typeOf(@get(key)) isnt 'function'
       @addObserver(key, => @resetErrorsOn(key,@get("modelClass"))) if Ember.typeOf(@get(key)) isnt 'function'
+
+    # TODO: original intention was for Questioner "global" errors, currently commented as well
+    # Em.defineProperty @, "allErrors", Em.computed("errors.fields.@each", "errors.fields.#{@get("errors.model")}}.@each", ->
+    #   return [] unless @get("errors")
+    #   _all = []
+    #   root = "errors.fields"
+    #   fields = Ember.keys(@get("errors.fields"))
+    #
+    #   console.log "?!?!"
+    #   if @get("errors.model") and @get("errors.fields.#{@get("errors.model")}")
+    #     root = "errors.fields.#{@get("errors.model")}"
+    #     fields.push Ember.keys(@get("errors.fields.#{@get("errors.model")}"))
+    #
+    #   fields.forEach (field) => _all.pushObjects @get("#{root}.#{field}")
+    #   _all
+    #
+    # )
 
   errorResponseTemplate: -> {
     errors: {
@@ -39,6 +57,9 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
   checkFields: Em.computed ->
     pass      = true
     response  = @get("errorResponseTemplate")()
+
+    console.log @get("model"), "!!"
+    console.log @get("requirements")
 
     @get("requirements").forEach (key) =>
       unless Em.isPresent(@get(key))
@@ -59,25 +80,11 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
     @get("subForms").forEach (form) => # simply check that these pass
       pass = false if not form.get("isDestroyed") and not form.saveForm()
 
+    console.log response.errors
     @errorCallback(response) unless pass
     pass
 
   .property("requirements.@each", "validations.@each", "subForms.@each").volatile()
-
-  allErrors: Em.computed(->
-    return [] unless @get("errors")
-    _all = []
-    root = "errors.fields"
-    fields = Ember.keys(@get("errors.fields"))
-
-    if @get("errors.model") and @get("errors.fields.#{model}")
-      root = "errors.fields.#{@get("errors.model")}"
-      fields = Ember.keys(@get("errors.fields.#{@get("errors.model")}"))
-
-    fields.forEach (field) => _all.pushObjects @get("#{root}.#{field}")
-    _all
-
-  ).property("errors.fields.@each.@each")
 
   resetErrorsOn: (key,model) ->
     if @get("errors.fields")

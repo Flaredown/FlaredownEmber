@@ -1,8 +1,8 @@
 if view.isChecked
-  input{action "toggle" target=view}{bind-attr class="view.isChecked:checked:unchecked"}{bind-attr disabled="disabled"} checked="checked" type="checkbox" id=view.switchId
+  input{action "toggle" target=view}{bind-attr class="view.isChecked:checked:unchecked"}{bind-attr disabled="disabled"} checked="checked" type="checkbox" id=view.checkboxId
 else
-  input{action "toggle" target=view}{bind-attr class="view.isChecked:checked:unchecked"}{bind-attr disabled="disabled"} type="checkbox" id=view.switchId
-if view.showLabel
-  label for=view.switchId = view.label
+  input{action "toggle" target=view}{bind-attr class="view.isChecked:checked:unchecked"}{bind-attr disabled="disabled"} type="checkbox" id=view.checkboxId
 
-view "forms/errors"
+label for=view.checkboxId = yield
+
+div: view "forms/errors"

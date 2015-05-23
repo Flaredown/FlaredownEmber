@@ -6,11 +6,11 @@ view = Ember.View.extend FormInputMixin,
   didInsertElement: -> @set("value",0) unless @get("value")
 
   kind: "switch"
-  templateName: "forms/checkbox-input"
-  classNames: ["switch-input"]
+  layoutName: "forms/checkbox-input"
+  classNames: ["checkbox-input"]
   classNameBindings: ["hasErrors:errors:no-errors"]
 
-  switchId: Ember.computed.alias("inputClass")
+  checkboxId: Ember.computed.alias("inputClass")
 
   isChecked: Ember.computed( -> @get("value") > 0.0 ).property("value")
 
