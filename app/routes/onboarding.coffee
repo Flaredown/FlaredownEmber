@@ -20,8 +20,12 @@ route = Ember.Route.extend
     controller.set("isFirstStep", @get("step") is @get("steps.firstObject"))
 
   actions:
-    back: ->
-      @set "step", @get("steps")[@get("steps").indexOf(@get("step"))-1]
+    back: (step) ->
+      if step
+        @set "step", step
+      else
+        @set "step", @get("steps")[@get("steps").indexOf(@get("step"))-1]
+
       @syncStep(@controllerFor("onboarding.#{@get("step")}"))
       @transitionTo("onboarding.#{@get("step")}")
     save: ->

@@ -7,11 +7,12 @@
 route = Ember.Route.extend GroovyResponseHandlerMixin,
 
   redirect: (model,transition) ->
-    if not Em.keys(model).length
-      if transition.targetName is "onboarding.catalogs"
-        @transitionTo("onboarding.symptoms")
-      else if transition.targetName is "onboarding.research"
-        @transitionTo("onboarding.conditions")
+    if not Em.keys(model).length # no catalog questions
+      console.log transition.targetName
+      if /conditions/.test(window.location.pathname) # coming from conditinos
+        @send("back", "symptoms")
+      else if /symptoms/.test(window.location.pathname) # coming from symptoms
+        @send("back", "conditions")
 
   model: ->
     ajax(
