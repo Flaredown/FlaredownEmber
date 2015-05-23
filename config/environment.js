@@ -82,7 +82,7 @@ module.exports = function(environment) {
 
     contentSecurityPolicy: {
       'default-src': "'self'",
-      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' http://*.pusher.com www.google-analytics.com/analytics.js https://*.intercom.io https://*.intercomcdn.com www.google.com/jsapi d26b395fwzu5fz.cloudfront.net api.keen.io cdn.ravenjs.com",
+      'script-src': "'self' 'unsafe-inline' 'unsafe-eval' http://*.pusher.com www.google-analytics.com/analytics.js https://*.intercom.io https://*.intercomcdn.com www.google.com/jsapi d26b395fwzu5fz.cloudfront.net api.keen.io cdn.ravenjs.com www.telize.com",
       'font-src': "'self'",
       'connect-src': "`self` http://localhost:* ws://*.pusherapp.com http://*.pusher.com wss://*.intercom.io https://*.intercom.io ",
       'img-src': "'self' www.google-analytics.com data: app.getsentry.com https://*.intercomcdn.com",

@@ -14,7 +14,7 @@ Router.reopen
   ).on('didTransition')
 
   notifyKeen: (->
-    @keenPageviewEvent() unless config.environment is "development"
+    @keenPageviewEvent() if config.environment isnt "development"
   ).on('didTransition')
 
 Router.map ->
@@ -51,7 +51,7 @@ Router.map ->
 
 `export default Router`
 
-# Base Routing Behavior 
+# Base Routing Behavior
 
 Em.Route.reopen
   authedOnly: true

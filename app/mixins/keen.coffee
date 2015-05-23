@@ -2,7 +2,6 @@
 
 mixin = Ember.Mixin.create
 
-
   keenPageviewEvent: ->
     if typeof(window.keen) isnt "undefined"
       #Configure the jQuery cookie plugin to use JSON.
@@ -54,6 +53,7 @@ mixin = Ember.Mixin.create
       if window.user_id
         eventProperties["user"] = {
           id: window.user_id
+          current_location: window.current_location
         }
 
       #Add information about the referrer of the same format as the current page

@@ -17,6 +17,9 @@ controller = Ember.ObjectController.extend
     window.intercomSettings = {
       email: @get("email"),
       user_hash: @get("intercom_hash")
+      user_country: @get("settings.location")
+      sex: @get("settings.sex")
+      born_at: @get("momentDob").unix()
       onboarded: @get("onboarded")
       created_at: moment(this.get("created_at")).utc().unix(),
       app_id: config.intercom_id

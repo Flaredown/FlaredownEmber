@@ -14,6 +14,8 @@ model = DS.Model.extend
   authentication_token: DS.attr "string"
   created_at:           DS.attr "date"
 
+  currentLocation:      null
+
   symptomColors:        DS.attr(defaultValue: (-> []) )
   treatmentColors:      DS.attr(defaultValue: (-> []) )
 
@@ -21,12 +23,26 @@ model = DS.Model.extend
 
   checked_in_today:     DS.attr "boolean"
 
+
+  momentDob: Em.computed("settings.dobDay", "settings.dobMonth", "settings.dobYear", ->
+    date_string = "#{@get("settings.dobYear")} #{@get("settings.dobMonth")} #{@get("settings.dobDay")}"
+    moment(date_string, "YYYY MM DD")
+  )
+  niceDob: Em.computed("momentDob", -> @get("momentDob").format("MMM DD, YYYY"))
+
   # settings
   graphable: Em.computed(-> if @get("settings.graphable") is undefined then false else JSON.parse(@get("settings.graphable")) ).property("settings.graphable")
   onboarded: Em.computed(-> if @get("settings.onboarded") is undefined then false else JSON.parse(@get("settings.onboarded")) ).property("settings.onboarded")
 
+
+
   didLoad: ->
     # TODO HACK!
     @set("settings.ethnicOrigin", JSON.parse(@get("settings.ethnicOrigin"))) if @get("settings.ethnicOrigin")
+
+    $.getJSON 'http://www.telize.com/geoip?callback=?', (json) =>
+      @set("currentLocation", json)
+      window.current_location = json
+
 
 `export default model`

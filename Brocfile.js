@@ -29,8 +29,6 @@ app.import('bower_components/moment/moment.js');
 
 app.import('bower_components/pusher/dist/pusher.js');
 
-app.import('bower_components/moment/moment.js');
-
 app.import('bower_components/d3/d3.js');
 
 app.import('bower_components/sweetalert/lib/sweet-alert.js');
