@@ -34,6 +34,11 @@ view = Select2View.extend
     @get("controller.#{@get("trackableType")}s").mapBy("name")
   ).property("trackableType", "controller.treatments.@each", "controller.symptoms.@each", "controller.conditions.@each")
 
+  existingTrackablesObs: Em.observer(
+    "controller.treatments.@each", "controller.symptoms.@each", "controller.conditions.@each",
+    -> @rerender()
+  )
+
   config: Ember.computed( ->
     {
       minimumInputLength: 3
@@ -49,7 +54,6 @@ view = Select2View.extend
         results: (response, _, original) ->
           formatted_results = [{id: 0, text: original.term, count: null}]
 
-          console.log @existingTrackables()
           formatted_results.addObjects response.map (item,i) ->
             {id: i+1, text: item.name, count: item.count, disabled: @existingTrackables().contains(item.name)}
           , @
