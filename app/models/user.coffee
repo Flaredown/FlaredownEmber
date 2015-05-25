@@ -40,7 +40,7 @@ model = DS.Model.extend
     # TODO HACK!
     @set("settings.ethnicOrigin", JSON.parse(@get("settings.ethnicOrigin"))) if @get("settings.ethnicOrigin")
 
-    $.getJSON 'http://www.telize.com/geoip?callback=?', (json) =>
+    $.getJSON 'https://www.telize.com/geoip?callback=?', (json) =>
       @set("currentLocation", json)
       window.current_location = json
 
