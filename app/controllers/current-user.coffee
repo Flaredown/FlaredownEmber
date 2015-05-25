@@ -80,10 +80,11 @@ controller = Ember.ObjectController.extend
 
 
       w.Intercom = i
-      if w.attachEvent
-        w.attachEvent 'onload', l
-      else
-        w.addEventListener 'load', l, false
+      l()
+      # if w.attachEvent
+      #   w.attachEvent 'onload', l
+      # else
+      #   w.addEventListener 'load', l, false
 
   actions:
     toggleGraph: ->
