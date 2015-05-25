@@ -27,7 +27,7 @@ controller = Ember.ObjectController.extend
       app_id: config.intercom_id
     }
 
-    @setupIntercom() if config.environment is "production"
+    @setupIntercom()
   #   if @get("pusher.enabled")
   #     @get("pusherChannels").addArrayObserver(@,
   #       didChange: (channels, offset, removeAmt, addAmt) =>
@@ -77,6 +77,7 @@ controller = Ember.ObjectController.extend
       i.c = (args) ->
         i.q.push args
         return
+
 
       w.Intercom = i
       if w.attachEvent
