@@ -3,6 +3,6 @@
     form submit="save"
       view "questioner/note"
       unless notesSaved
-        view "forms/saveButton" alignment="center" name="forms.save"
+        view "forms/saveButton" alignment="center" name="forms.save" class="checkin-note-save"
   else
     a{action "toggleNotes"}{bind-attr class=":summary-add-note"} = t "leave_a_note"
