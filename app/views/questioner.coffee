@@ -31,7 +31,7 @@ view = Ember.View.extend
       # $(".remove-trackable").jBox("Tooltip", {
         id: "remove-trackable-tooltip"
         content: Ember.I18n.t("trackable_remove_tooltip")
-        offset: {x:0, y:-40}
+        offset: {x:0, y:-20}
         addClass: "remove-trackable-tooltip"
         x: "center"
         y: "center"

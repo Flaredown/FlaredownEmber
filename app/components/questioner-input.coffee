@@ -59,7 +59,7 @@ component = Ember.Component.extend colorableMixin, formHandlerMixin,
   checked: Ember.computed( -> @get("value") > 0.0 ).property("value")
 
   didInsertElement: ->
-    @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", offset: {x:0, y:-40} , addClass: "trackable-input-tooltip", x: "center", y: "center", ignoreDelay: true, fade: false})
+    @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", offset: {x:0, y:-20} , addClass: "trackable-input-tooltip", x: "center", y: "center", ignoreDelay: true, fade: false})
     if @get("question.kind") is "number"
       @set("fields", "value".w())
       @set("validations",  "value".w())
@@ -81,7 +81,7 @@ component = Ember.Component.extend colorableMixin, formHandlerMixin,
     setHover: (value) ->
       Ember.run.later(
         => @set("hoverValue", value) unless @get("mouseOff")
-      , 50
+      , 10
       )
 
       if @get("hovering")
