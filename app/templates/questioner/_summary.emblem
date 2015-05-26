@@ -1,4 +1,5 @@
 .checkin-summary
+  h1 = t "summary_title"
   each group in trackableResponses
     .summary-section
 

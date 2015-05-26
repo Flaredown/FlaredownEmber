@@ -16,6 +16,8 @@ fd-modal translucentOverlay=true container-class="account-modal center-top-modal
       br
 
   else
+    label = t "account.email"
+    h4 {{currentUser.email}}
     label = t "onboarding.dob"
     h4 {{dobMonth}} / {{dobDay}} / {{dobYear}}
     label = t "onboarding.location"
@@ -23,4 +25,4 @@ fd-modal translucentOverlay=true container-class="account-modal center-top-modal
     label = t "onboarding.sex"
     h4 = sex
 
-    a{action "edit"} = t "edit_account"
+    a{action "edit"} = t "account.edit"
