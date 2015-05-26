@@ -139,7 +139,7 @@
     @include span-columns(2);
     text-align: center;
     font-size: 1.5em;
-    color: $lightgrey;
+    color: grey;
     cursor: pointer;
     &:hover {
       color: black;
@@ -208,22 +208,18 @@
       &.smiley.hide-color { background-color: $lightgrey; }
     }
   }
+  h4 {
+    position: relative;
+    display: inline;
+  }
   .checkin-symptom-remove, .checkin-condition-remove {
+    position: absolute;
     color: grey;
     margin-left: 5px;
     &:hover {
       color: black;
       cursor: pointer;
     }
-  }
-}
-.trackable-input-tooltip, .remove-trackable-tooltip {
-  .jBox-container {
-    background: black;
-    color: white;
-  }
-  .jBox-pointer:after {
-    background: black;
   }
 }
 
