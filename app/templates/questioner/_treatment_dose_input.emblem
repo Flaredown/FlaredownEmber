@@ -5,7 +5,7 @@ if view.hasDose
     = view.unit
 
 if view.editing
-  fd-modal alignment='center' translucentOverlay=true container-class="form-modal" close="toggleEdit"
+  fd-modal alignment="center" attachment="top right" attachmentTarget="bottom center" alignmentTarget=view.element translucentOverlay=true  close="toggleEdit"
 
     form submit="'save' target=view"
       .checkin-treatment-dose-inputs

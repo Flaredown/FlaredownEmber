@@ -26,7 +26,8 @@
     "uuid-js": "~0.7.5",
     "ua-parser-js": "~0.7.3",
     "purl": "~2.3.1",
-    "fastclick": "~1.0.6"
+    "fastclick": "~1.0.6",
+    "tether": "~0.7.2"
   },
   "devDependencies": {
     "jquery-mockjax": "~1.6.1",
