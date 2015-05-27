@@ -172,7 +172,10 @@
 ////////////// Symptom/Condition Input Styles ///////////////
 
 .checkin-symptoms, .checkin-conditions {
-  .checkin-symptom, .checkin-response, .simple-checkin-response {display:inline-block;}
+  .checkin-symptom, .checkin-condition { margin-bottom: 1.5em;}
+  .checkin-response, .simple-checkin-response {
+    display:inline;
+  }
   .simple-checkin-response {
     li {
       display: inline-block;
