@@ -1,8 +1,9 @@
 if view.hasDose
-  a{action "toggleEdit" target=view}{bind-attr class=":dose-edit-link view.colors.color"}
-    = view.quantity
-    |&nbsp;
-    = view.unit
+  .checkin-treatment-dose class=":colors.border"
+    a{action "toggleEdit" target=view}{bind-attr class=":dose-edit-link view.colors.color"}
+      = view.quantity
+      |&nbsp;
+      = view.unit
 
 if view.editing
   fd-modal alignment="center" attachment="top center" attachmentTarget="bottom center" alignmentTarget=view.parentView.element translucentOverlay=true  close="toggleEdit"

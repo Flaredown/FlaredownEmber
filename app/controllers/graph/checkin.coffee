@@ -243,9 +243,12 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       if @get("treatments")
         treatment_data = @get("treatments").map((treatment) ->
           if treatment.get("active")
+            if treatment.get("hasDose") # Taken w/ doses
+              treatment.getProperties("name", "quantity", "unit")
+            else # Taken no doses
+              Ember.merge treatment.getProperties("name"), {quantity: -1, unit: null}
+          else # Not taken
             treatment.getProperties("name", "quantity", "unit")
-          else
-            Ember.merge treatment.getProperties("name"), {quantity: null, unit: null}
         ).compact()
       checkin_data["treatments"] = treatment_data if Em.isPresent(treatment_data)
 

@@ -49,10 +49,13 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
   addEntryTreatment: (treatment, editing) ->
     editing ||= false
+    treatment.set("quantity", null) if treatment.get("takenWithoutDose")
     treatment = treatment.getProperties("name", "quantity", "unit") if Em.typeOf(treatment) is "instance"
     existings = @get("model.treatments").filterBy("name",treatment.name)
     repetition = if existings then existings.length+1 else 1
 
+    console.log treatment
+    console.log "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}"
     newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}", active: true, editing: editing})
     @get("model.treatments").addObject newTreatment
 
@@ -75,10 +78,12 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       treatments.forEach (treatment) -> treatment.set("editing", false)
       first = treatments.get("firstObject")
 
-      if first.get("hasDose") # add another dose, go straight to edit
+      if first.get("quantity") is null or not first.get("takenWithoutDose") # add a dose (e.g. treatment repetition)
         @addEntryTreatment(treatments.get("firstObject"), true)
-      else
-        first.setProperties(quantity: @get("currentUser.settings.treatment_#{first.get("name")}_quantity"), unit: @get("currentUser.settings.treatment_#{first.get("name")}_unit"), editing: true, active: true)
+      else  # go straight to edit
+        quantity_setting = @get("currentUser.settings.treatment_#{first.get("name")}_quantity") || ""
+        unit_setting = @get("currentUser.settings.treatment_#{first.get("name")}_unit") || ""
+        first.setProperties(quantity: quantity_setting, unit: unit_setting, editing: true, active: true)
         @propertyDidChange("treatments")
 
       # else # not yet activated, activate and but don't edit

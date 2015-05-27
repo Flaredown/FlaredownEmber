@@ -5,7 +5,7 @@
 view = Ember.View.extend colorableMixin, formHandlerMixin,
   tagName: "li"
   templateName: "questioner/_treatment_dose_input"
-  classNames: ["checkin-treatment-dose"]
+  classNames: ["checkin-treatment-dose-li"]
   classNameBindings: ["colors.border"]
 
   editingChanged: Ember.observer ->

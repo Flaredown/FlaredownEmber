@@ -5,8 +5,10 @@ model = DS.Model.extend
   quantity: DS.attr("number")
   unit:     DS.attr("string")
 
-  hasDose: Em.computed(-> @get("quantity") isnt null and @get("unit") isnt null).property("quantity", "unit")
+  takenWithoutDose: Em.computed.equal("quantity", -1)
+  hasDose: Em.computed("quantity", "takenWithoutDose", -> @get("quantity") isnt null and not @get("takenWithoutDose"))
+  taken: Em.computed.or("hasDose", "takenWithoutDose")
 
-  didLoad: -> @set("active", true) if @get("hasDose")
+  didLoad: -> @set("active", true) if @get("taken")
 
 `export default model`

@@ -7,8 +7,7 @@ div
   .remove-trackable.checkin-treatment-remove{action 'destroy' view.name target=view} &times;
 
 if view.active
-  if view.doses.length
-    ul.checkin-treatment-doses: each dose in view.doses
-      view "questioner/treatment_dose" content=dose
+  ul.checkin-treatment-doses: each dose in view.doses
+    view "questioner/treatment_dose" content=dose
 
   a.checkin-treatment-dose-add{action 'addTreatmentDose' view.name} class={view.colors.color} = t "add_dose"
