@@ -49,8 +49,9 @@ mixin = Ember.Mixin.create FormHandlerMixin,
 
   addEntryTreatment: (treatment, editing) ->
     editing ||= false
-    treatment.set("quantity", null) if treatment.get("takenWithoutDose")
-    treatment = treatment.getProperties("name", "quantity", "unit") if Em.typeOf(treatment) is "instance"
+    if Em.typeOf(treatment) is "instance"
+      treatment.set("quantity", null) if treatment.get("takenWithoutDose")
+      treatment = treatment.getProperties("name", "quantity", "unit")
     existings = @get("model.treatments").filterBy("name",treatment.name)
     repetition = if existings then existings.length+1 else 1
 
