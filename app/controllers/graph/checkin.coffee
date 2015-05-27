@@ -127,7 +127,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       if @get("userQuestionSections").contains(catalog)
         questions = @get("catalog_definitions.#{catalog}").mapBy("firstObject")
       else
-        questions = @get("catalog_definitions.#{catalog}")[section_index]
+        questions = @get("catalog_definitions.#{catalog}")[section_index] if @get("catalog_definitions.#{catalog}")
 
       return false if questions.length > 1 # TODO multiple question seconds are tricky to call "complete" from a UX perspective
 
