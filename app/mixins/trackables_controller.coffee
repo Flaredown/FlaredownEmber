@@ -125,18 +125,11 @@ mixin = Ember.Mixin.create FormHandlerMixin,
           )
 
     removeTreatment: (name) ->
+      @send("untrack", name, "treatment")
       @treatmentsByName(name).forEach (treatment) =>
         @get("currentUser.treatments").removeObject treatment
         @get("model.treatments").removeObject(treatment) if @get("isEntry")
         treatment.unloadRecord()
-
-
-
-    # deactivateTreatment: (treatment) ->
-    #   ajax("#{config.apiNamespace}/treatments/#{treatment.id}", type: "DELETE").then(
-    #     (response) => @send("removeTreatment",treatment)
-    #     @errorCallback.bind(@)
-    #   )
 
     ### SYMPTOMS ###
     addSymptom: (symptom) ->
@@ -157,6 +150,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         )
 
     removeSymptom: (symptom) ->
+      @send("untrack", symptom.name, "symptom")
       @get("catalog_definitions.symptoms").forEach (section,i) =>
         if section[0].name is symptom.name
           @get("catalog_definitions.symptoms").removeAt(i)
@@ -165,11 +159,6 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       # update of responsesData, removeResponse below does though so it's okay for now.
       @send("removeResponse", symptom.name)
 
-    # deactivateSymptom: (symptom) ->
-    #   ajax("#{config.apiNamespace}/symptoms/#{symptom.id}", type: "DELETE").then(
-    #     (response) => @send("removeSymptom",symptom)
-    #     @errorCallback.bind(@)
-    #   )
 
     ### CONDITIONS ###
     addCondition: (condition) ->
@@ -190,17 +179,30 @@ mixin = Ember.Mixin.create FormHandlerMixin,
         )
 
     removeCondition: (condition) ->
+      @send("untrack", condition.name, "condition")
       @get("catalog_definitions.conditions").forEach (section,i) =>
         if section[0].name is condition.name
           @get("catalog_definitions.conditions").removeAt(i)
 
       @send("removeResponse", condition.name)
 
-    # deactivateCondition: (condition) ->
-    #   ajax("#{config.apiNamespace}/conditions/#{condition.id}", type: "DELETE").then(
-    #     (response) => @send("removeCondition",condition)
-    #     @errorCallback.bind(@)
-    #   )
+    untrack: (name, type) ->
+      plural = "#{type}s"
+      model = @get("currentUser.#{plural}").findBy("name", name)
+      id = model.get("id") if model # possible it's already been untracked
+      if id and not @get("isPast")
+        ajax("#{config.apiNamespace}/#{plural}/#{id}", type: "DELETE").then(
+          => null
+          @errorCallback.bind(@)
+        )
+
+    # track: (name, type) ->
+    #   plural = "#{type}s"
+    #   unless @get("isPast")
+    #     ajax("#{config.apiNamespace}/#{plural}/#{name}", type: "POST").then(
+    #       => null
+    #       @errorCallback.bind(@)
+    #     )
 
   simpleQuestionTemplate: (name) ->
     [{
