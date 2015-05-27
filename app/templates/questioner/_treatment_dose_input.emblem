@@ -1,5 +1,5 @@
 if view.hasDose
-  .checkin-treatment-dose class=":colors.border"
+  div class={ :checkin-treatment-dose view.colors.border}
     a{action "toggleEdit" target=view}{bind-attr class=":dose-edit-link view.colors.color"}
       = view.quantity
       |&nbsp;
