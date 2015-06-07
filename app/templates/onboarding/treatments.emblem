@@ -1,6 +1,7 @@
 h2 = t "onboarding.treatments_to_track"
 
 .tip = t "tips.onboarding_treatments"
+.tip = t "tips.onboarding_treatments_2"
 
 form submit="save"
   each treatment in treatments

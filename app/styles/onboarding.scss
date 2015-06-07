@@ -22,6 +22,9 @@
   }
   .tip {
   	margin: 1em auto 2em auto;
+    & + .tip {
+      margin-top: -1em;
+    }
   }
   .explainer {
   	margin: .5em;
