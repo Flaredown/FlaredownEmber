@@ -46,31 +46,6 @@ test "Not checked in today goes to today checkin", ->
     visit('/').then( -> ok currentURL() == "/checkin/today/1" )
   , 100
 
-
-test "No graph user gets redirected to checkin", ->
-  expect 1
-
-  stop()
-  Ember.run.later ->
-    start()
-    getCurrentUser().set("checked_in_today", true)
-    getCurrentUser().set("settings.graphable", "false")
-    visit('/').then( -> ok currentURL() == "/checkin/today/1" )
-  , 100
-
-test "No graph user gets redirected to checkin, unless already going there", ->
-  expect 1
-
-  stop()
-  Ember.run.later ->
-    start()
-    getCurrentUser().set("checked_in_today", true)
-    getCurrentUser().set("settings.graphable", "false")
-    visit('/checkin/today/2').then( -> ok currentURL() == "/checkin/today/2" )
-  , 100
-
-
-
 test "Non-onboarded user gets redirected to onboarding", ->
   expect 2
 

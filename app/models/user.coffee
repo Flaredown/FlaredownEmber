@@ -23,7 +23,6 @@ model = DS.Model.extend
 
   checked_in_today:     DS.attr "boolean"
 
-
   momentDob: Em.computed("settings.dobDay", "settings.dobMonth", "settings.dobYear", ->
     date_string = "#{@get("settings.dobYear")} #{@get("settings.dobMonth")} #{@get("settings.dobDay")}"
     moment(date_string, "YYYY MM DD")
@@ -31,10 +30,7 @@ model = DS.Model.extend
   niceDob: Em.computed("momentDob", -> @get("momentDob").format("MMM DD, YYYY"))
 
   # settings
-  graphable: Em.computed(-> if @get("settings.graphable") is undefined then false else JSON.parse(@get("settings.graphable")) ).property("settings.graphable")
   onboarded: Em.computed(-> if @get("settings.onboarded") is undefined then false else JSON.parse(@get("settings.onboarded")) ).property("settings.onboarded")
-
-
 
   didLoad: ->
     # TODO HACK!

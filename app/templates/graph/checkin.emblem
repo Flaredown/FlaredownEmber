@@ -1,6 +1,3 @@
-if currentUser.graphable
-  fd-modal translucentOverlay=true container-class="questioner-modal center-top-modal" close="closeCheckin"
-    view "questioner"
-else
+fd-modal translucentOverlay=true container-class="questioner-modal center-top-modal" close="closeCheckin"
   liquid-with moment as liquidMoment
-    .checkin-container: view "questioner"
+    view "questioner"

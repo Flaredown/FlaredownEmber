@@ -13,9 +13,8 @@
 
 /         // Sections
 /         ul.navbar-sections
-/           if currentUser.graphable
-/             li: link-to "graph" | {{ t "menu_item_graph" }}
-/             li &#47;
+/           li: link-to "graph" | {{ t "menu_item_graph" }}
+/           li &#47;
 /           li: link-to "insights" | {{ t "menu_item_stats" }}
 /           li &#47;
 /           li: link-to "reports" | {{ t "menu_item_investigations" }}
