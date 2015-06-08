@@ -86,17 +86,4 @@ controller = Ember.ObjectController.extend
       # else
       #   w.addEventListener 'load', l, false
 
-  actions:
-    toggleGraph: ->
-      graphable = not @get("graphable")
-      @set("settings.graphable", "#{graphable}")
-      ajax("#{config.apiNamespace}/me.json",
-        type: "POST"
-        data: {settings: {graphable: graphable}}
-      ).then(
-        (response) => window.location = "/"
-        (response) => null
-      )
-
-
 `export default controller`

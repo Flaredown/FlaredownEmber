@@ -5,16 +5,13 @@
 route = Ember.Route.extend GroovyResponseHandlerMixin,
 
   model: (params) ->
-    if @get("currentUser.graphable")
-      ajax(
-        url: "#{config.apiNamespace}/graph"
-        data: { start_date: @get("currentUser").get("defaultStartDate").format("MMM-DD-YYYY"), end_date: @get("currentUser").get("defaultEndDate").format("MMM-DD-YYYY") }
-      ).then(
-        (response) -> response
-        @errorCallback.bind(@)
-      )
-    else
-      {}
+    ajax(
+      url: "#{config.apiNamespace}/graph"
+      data: { start_date: @get("currentUser").get("defaultStartDate").format("MMM-DD-YYYY"), end_date: @get("currentUser").get("defaultEndDate").format("MMM-DD-YYYY") }
+    ).then(
+      (response) -> response
+      @errorCallback.bind(@)
+    )
 
   setupController: (controller, model) ->
     @_super()

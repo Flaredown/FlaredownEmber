@@ -111,10 +111,6 @@ Em.Route.reopen
 
           @transitionTo("onboarding.account")
 
-        else if transition.targetName is "graph.index" and not @get("currentUser.graphable")
-          Ember.Logger.info("Base.Route :: Redirect ungraphable user to checkin")
-          @transitionTo("graph.checkin", "today", "1")
-
         else if not @get("currentUser.checked_in_today") and @get("currentUser.onboarded") and transition.targetName isnt "graph.checkin"
           Ember.Logger.info("Base.Route :: Not checked in today and no other catches, redirect to checkin")
           @set("currentUser.checked_in_today", true)
