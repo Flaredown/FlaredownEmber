@@ -1,7 +1,5 @@
 helperFunctions = ->
-  window.assertModalPresent = ->
-    ok($(".modal").length, "Modal shows up") # Sweet Alert element falls outside test container, using $ to find it
-    $('.modal-state').prop('checked', false)
+  window.assertModalPresent = -> ok($(".ember-modal-dialog").length, "Modal shows up")
 
   window.assertAlertPresent = (confirm) ->
     confirm = false if typeof(confirm) is "undefind"

@@ -9,37 +9,27 @@
 `import userFixture from "../fixtures/user-fixture"`
 
 App = null
+yesterdayFormatted = moment().subtract(1, "days").format("MMM-DD-YYYY")
 
 module('Note Integration Tests', {
   setup: ->
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/current_user",
-      responseText: userFixture()
-
+    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
     Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/graph",
-      responseText: graphFixture()
-
-    Ember.$.mockjax
-      url: "#{config.apiNamespace}/entries",
-      type: 'POST'
-      responseText: entryFixture("Aug-13-2014")
+    Ember.$.mockjax url: "#{config.apiNamespace}/graph", responseText: graphFixture()
+    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', responseText: entryFixture(yesterdayFormatted)
 
     App = startApp()
     null
   teardown: ->
-    Ember.run(App, App.destroy);
-    $.mockjax.clear();
+    Ember.run(App, App.destroy)
+    $.mockjax.clear()
 })
 
-if config.NOT_CI
-  test "Shows up", ->
-    expect 1
-
-    visit("/checkin/Aug-13-2014/11").then ->
-      ok Ember.isPresent find(".checkin-note h3")
+test "Shows up", ->
+  expect 1
+  visit("/checkin/#{yesterdayFormatted}/12").then( ->
+    ok(find(".checkin-note-textarea").length, "note area is present")
+  )
 
 # test "Clears placeholder on focus", ->
 #   expect 2

@@ -40,7 +40,9 @@ moduleFor("route:graph", "Graph Route",
 )
 
 test "sets rawData, firstEntryDate, loadedStartDate, loadedEndDate, viewportStart and catalog", ->
-  expect 1
-
   route.setupController(controller,fixture)
-  deepEqual Object.keys(controller.get("model")).sort(), ["rawData", "firstEntryDate", "catalog", "viewportStart", "loadedStartDate", "loadedEndDate"].sort()
+
+  ["rawData", "firstEntryDate", "catalog", "viewportStart", "loadedStartDate", "loadedEndDate"].forEach((prop)->
+    ok controller.hasOwnProperty(prop), "controller has property #{prop}"
+  )
+  # deepEqual Object.keys().sort(), expected
