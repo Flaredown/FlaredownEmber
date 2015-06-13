@@ -4,5 +4,3 @@
     li: link-to "graph.account"
       = t "menu_item_account"
     li{action "logout"} = t "menu_item_logout"
-
-
