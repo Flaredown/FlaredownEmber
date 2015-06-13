@@ -1,4 +1,5 @@
 `import DS from 'ember-data'`
+`import config from '../config/environment'`
 
 model = DS.Model.extend
   obfuscated_id:        DS.attr "string"
@@ -36,9 +37,10 @@ model = DS.Model.extend
     # TODO HACK!
     @set("settings.ethnicOrigin", JSON.parse(@get("settings.ethnicOrigin"))) if @get("settings.ethnicOrigin")
 
-    $.getJSON 'https://www.telize.com/geoip?callback=?', (json) =>
-      @set("currentLocation", json)
-      window.current_location = json
+    unless config.environment is "test"
+      $.getJSON 'https://www.telize.com/geoip?callback=?', (json) =>
+        @set("currentLocation", json)
+        window.current_location = json
 
 
 `export default model`
