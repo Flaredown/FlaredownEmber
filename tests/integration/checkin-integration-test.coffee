@@ -11,10 +11,11 @@
 
 App = null
 yesterdayFormatted = moment().subtract(1, "days").format("MMM-DD-YYYY")
+user = userFixture()
 
 module('Check-In Integration', {
   setup: ->
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
+    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
     Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
     Ember.$.mockjax url: "#{config.apiNamespace}/graph", responseText: graphFixture()
 
@@ -28,7 +29,11 @@ module('Check-In Integration', {
       responseText: entryFixture(today)
 
     # For other dates
-    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', responseText: entryFixture(yesterdayFormatted)
+    entry = entryFixture(yesterdayFormatted)
+    # just one condition for auto-progression test
+    entry.entry.catalog_definitions.conditions = [entry.entry.catalog_definitions.conditions[0]]
+
+    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', responseText: entry
     Ember.$.mockjax url: "#{config.apiNamespace}/entries/*", type: 'PUT', responseText: {}
     Ember.$.mockjax url: "#{config.apiNamespace}/symptoms/search/*", responseText: symptomSearchFixture
 
@@ -109,15 +114,14 @@ test "go to URL with unavailable section defaults to 1", ->
     ok $(".pagination-dots ul li a.selected")[0] is $(".pagination-dots ul li a:eq(0)")[0]
   )
 
-# TODO FIX ME
-# test "go to the next section when submitting a response (with only 1 question)", ->
-#   expect 1
-#
-#   visit("/checkin/#{yesterdayFormatted}/2").then( ->
-#     triggerEvent ".checkin-response-select li:eq(1)", "click"
-#     andThen ->
-#       ok currentURL() == "/checkin/#{yesterdayFormatted}/3", "Went to the next section"
-#   )
+test "go to the next section when submitting a response (with only 1 question)", ->
+  expect 1
+
+  visit("/checkin/#{yesterdayFormatted}/8").then( ->
+    triggerEvent ".simple-checkin-response li:eq(1)", "click"
+    andThen ->
+      ok currentURL() == "/checkin/#{yesterdayFormatted}/9", "Went to the next section"
+  )
 
 test "escaping modal goes back to index", ->
   expect 2
@@ -130,22 +134,6 @@ test "escaping modal goes back to index", ->
     andThen ->
       ok currentURL() == "/", "Went back to index"
   )
-
-# test "Can edit treatment", ->
-#   expect 2
-#
-#   visit('/checkin/#{yesterdayFormatted}/10').then( ->
-#     triggerEvent ".inactive-treatments .checkin-treatment-name:eq(0)", "click"
-#     # triggerEvent $(".checkin-treatment-edit:eq(0)"), "click"
-#
-#     andThen ->
-#       ok find(".treatment-name-input")
-#       ok find(".checkin-treatment-dose-inputs .form-quantity-input")
-#       # fillIn(".treatment-quantity-input", "200")
-#       # triggerEvent ".save-treatment", "click"
-#       # andThen ->
-#       #   ok $(".checkin-treatment-quantity:eq(0)").text() is "200"
-#   )
 
 test "Warned of treatment removal", ->
   expect 1
@@ -183,46 +171,6 @@ test "Setting a response on a normal select marks that section as 'complete'", -
 #       stop()
 #       ok Em.isPresent(find(".pagination-dots a.symptoms.complete")), "All symptoms filled, now complete"
 #   )
-
-### Colors ###
-test "Treatments get uniq colors", ->
-  expect 2
-
-  # Page 10, treatments section
-  visit("/checkin/#{yesterdayFormatted}/10").then( ->
-    color_class = $(".checkin-treatment:eq(0) .checkin-treatment-dose-add").attr("class").match(/(colorable-\w{1,6}-\d+)/)[0]
-    ok color_class, "Has a color class"
-
-    ok color_class isnt $(".checkin-treatment:eq(1) .checkin-treatment-dose-add").attr("class").match(/(colorable-\w{1,6}-\d+)/)[0], "Color class is different from other treatment"
-  )
-
-test "Conditions get uniq colors", ->
-  expect 2
-
-  # Page 10, treatments section
-  visit("/checkin/#{yesterdayFormatted}/8").then( ->
-    color_class = $(".simple-checkin-response:eq(0) li").attr("class").match(/(colorable-\w{1,6}-\d+)/)[0]
-    ok color_class, "Has a color class"
-
-    ok color_class isnt $(".simple-checkin-response:eq(1) li").attr("class").match(/(colorable-\w{1,6}-\d+)/)[0], "Color class is different from other conditions"
-  )
-
-
-test "Symptoms get uniq colors", ->
-  expect 2
-
-  # Page 9, symptoms section
-  visit("/checkin/#{yesterdayFormatted}/9").then( ->
-    # Make sure they have selection
-    triggerEvent ".simple-checkin-response:eq(0) li:eq(1)", "click"
-    triggerEvent ".simple-checkin-response:eq(1) li:eq(1)", "click"
-
-    andThen ->
-      color_class = $(".simple-checkin-response:eq(0) li:eq(0)").attr("class").match(/(colorable-\w{1,6}-\d+)/)[1]
-      ok color_class, "Has a color class"
-
-      ok color_class isnt $(".simple-checkin-response:eq(1) li:eq(0)").attr("class").match(/(colorable-\w{1,6}-\d+)/)[1], "Color class is different from other symptom"
-  )
 
 test "Symptoms select bar only highlights last selected digit", ->
   expect 3
