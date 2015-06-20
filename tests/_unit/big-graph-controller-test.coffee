@@ -3,7 +3,7 @@
 `import DS from 'ember-data'`
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
-
+`import userFixture from "../fixtures/user-fixture"`
 
 `import bigGraphFixture from "../fixtures/big-graph-fixture"`
 
@@ -19,15 +19,14 @@ moduleFor("controller:graph", "Graph Controller (big)",
   {
     needs: ["controller:graph/datum"]
     setup: ->
+      Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
+
       App         = startApp()
       store       = App.__container__.lookup("store:main")
       controller  = @subject()
       fixture     = bigGraphFixture(365)
 
-      Ember.$.mockjax
-        url: "#{config.apiNamespace}/graph",
-        type: 'GET'
-        responseText: fixture
+      Ember.$.mockjax url: "#{config.apiNamespace}/graph", type: 'GET', responseText: fixture
 
       # Setup somewhere in the middle of available data
       # amount should account for buffer so it doesn't send off another request
@@ -61,7 +60,9 @@ test "#viewportDays all days visible in viewportSize", ->
 
   ok controller.get("viewportDays.length") is controller.get("viewportSize"),                                                         "matches viewport size"
   ok controller.get("viewportDays.firstObject") is moment(controller.get("viewportStart")).add(1,"day").unix(),                       "first day is same as viewportStart + 1 (non-inclusive)"
-  ok controller.get("viewportDays.lastObject") is controller.get("viewportStart").add(controller.get("viewportSize"),"days").unix(),  "last day is same as viewportStart + viewportSize"
+
+  start = moment(controller.get("viewportStart")).add(controller.get("viewportSize"),"days").unix()
+  ok controller.get("viewportDays.lastObject") is start,  "last day is same as viewportStart + viewportSize"
 
   ok controller.get("days").contains(controller.get("viewportStart").unix()),               "days contains the viewportStart"
   ok controller.get("days").contains(controller.get("viewportDays.lastObject")),            "days contains other viewportDays"
@@ -69,7 +70,8 @@ test "#viewportDays all days visible in viewportSize", ->
 test "#viewportEnd is the last date in the viewportDays", ->
   expect 1
 
-  ok controller.get("viewportEnd").unix() is controller.get("viewportStart").add(controller.get("viewportSize"),"days").unix()
+  end = moment(controller.get("viewportStart")).add(controller.get("viewportSize"),"days").unix()
+  ok controller.get("viewportEnd").unix() is end
 
 test "viewport can't overrun graph limitations", ->
   expect 2
@@ -111,7 +113,8 @@ test "#bufferRadius is based on viewportSize, but has minimum", ->
   ok controller.get("bufferRadius") is 20, "Returns min with small viewport"
 
   controller.set "viewportSize", 50
-  ok controller.get("bufferRadius") is 50, "Should be same size as the viewport"
+  Ember.run ->
+    ok controller.get("bufferRadius") is 50, "Should be same size as the viewport"
 
 test "shifting viewport outside of loaded range triggers loading", ->
   expect 2
@@ -125,7 +128,7 @@ test "shifting viewport outside of loaded range triggers loading", ->
   setTimeout(
     ->
       Ember.run ->
-        ok controller.get("loadedStartDate").unix() is moment(controller.get("viewportStart")).subtract(39,"days").unix(), "adds 20 more to the existing buffer"
+        ok controller.get("loadedStartDate").unix() is moment(controller.get("viewportStart")).subtract(40,"days").unix(), "adds 20 more to the existing buffer"
       start()
 
       controller.send("shiftViewport", 1, "past")
@@ -133,7 +136,7 @@ test "shifting viewport outside of loaded range triggers loading", ->
       setTimeout(
         ->
           Ember.run ->
-            ok controller.get("loadedStartDate").unix() is moment(controller.get("viewportStart")).subtract(38,"days").unix(), "doesn't rebuffer unless radius is crossed again"
+            ok controller.get("loadedStartDate").unix() is moment(controller.get("viewportStart")).subtract(39,"days").unix(), "doesn't rebuffer unless radius is crossed again"
             start()
       , 10)
   , 10)

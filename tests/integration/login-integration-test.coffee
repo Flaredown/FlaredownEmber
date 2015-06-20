@@ -48,7 +48,7 @@ module('Login Integration', {
 })
 
 successfulLogin = ->
-  Ember.$.mockjax url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 201, responseText: {}
+  Ember.$.mockjax url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 201, responseText: userFixture()
   Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
   Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
 

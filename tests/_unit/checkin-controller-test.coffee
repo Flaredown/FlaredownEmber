@@ -121,7 +121,7 @@ test "#currentSection is set based on section integer", ->
 test "#categories grabs all category names", ->
   expect 1
 
-  deepEqual controller.get("categories"), ["start", "foo", "hbi", "conditions", "symptoms", "treatments", "notes", "finish"]
+  deepEqual controller.get("categories"), ["start", "foo", "hbi", "conditions", "symptoms", "treatments", "tags", "summary"]
 
 test "#currentCategory gives the name of currentSection's category", ->
   expect 2

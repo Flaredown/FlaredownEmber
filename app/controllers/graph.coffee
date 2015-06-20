@@ -236,9 +236,10 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyRespon
         newRaw[source].pushObject raw_datapoint
 
     @clearDatumsForDays(days)
-    Em.run.next =>
-      @set "rawData", newRaw
-      @propertyDidChange("rawData")
+    # TODO is this next really necessary?
+    # Em.run.next =>
+    @set "rawData", newRaw
+    @propertyDidChange("rawData")
 
   actions:
     # Hooks for Pusher to call
