@@ -40,7 +40,7 @@ component = Ember.Component.extend colorableMixin, formHandlerMixin,
       value:      input.value
       selected:   selected
       highlight:  if (highlight or hovered) then true else false
-      color:      if @get("section.category") is "conditions" then "bg-default" else @colorClasses(uniq_name, "symptom").bg
+      color:      @colorClasses(uniq_name).bg
 
       label:      if input.label and not @get("isBasic") then Ember.I18n.t("labels.#{input.label}") else false
       meta_label: input.meta_label

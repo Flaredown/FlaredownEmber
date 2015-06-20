@@ -22,7 +22,7 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
 
   .observes("editing")
 
-  colors: Ember.computed(->  @colorClasses("treatments_#{@get("name")}", "treatment") ).property("name")
+  colors: Ember.computed(->  @colorClasses("treatments_#{@get("name")}") ).property("name")
 
   unitOptions: Em.computed(-> Em.I18n.translations.treatment_units ).property()
 

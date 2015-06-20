@@ -187,7 +187,7 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyRespon
       id:       id
       name:     name
       source:   source
-      color:    @colorClasses(id,type).bg
+      color:    @colorClasses(id).bg
       filtered: filtered.contains(id)
   )
 
