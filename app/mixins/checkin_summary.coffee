@@ -25,7 +25,7 @@ mixin = Ember.Mixin.create Em.I18n.TranslateableProperties, colorableMixin,
           response,
           {
             validResponse: not [null,undefined].contains(response.value)
-            colors: @colorClasses("#{type}_#{name}", singular_type)
+            colors: @colorClasses("#{type}_#{name}")
             pips: if response.value then [1..response.value] else []
             repetitions: repetitions
             taken: repetitions.get("firstObject.active")

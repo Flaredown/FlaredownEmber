@@ -1,56 +1,25 @@
-$symptoms: #B2BE84, #709CB2, #ED9E81, #E7CC89, #B18DB4, #74A893, #DB7B9C, #F07670;
-$treatments: #113F63, #9EB9BA, #256DA0, #61B2D5, #28A178, #A9D0C3, #829C42, #B3CC83;
-$conditions: #ECC916, #F58A5A, #D15423, #D47C87, #C01E55, #DB9126, #B83B8A, #ED80B2, #F27071, #F7A8A8;
+$colors: #B2BE84, #709CB2, #ED9E81, #E7CC89, #B18DB4, #74A893, #DB7B9C, #F07670;
+//$symptoms:
+//$treatments: #113F63, #9EB9BA, #256DA0, #61B2D5, #28A178, #A9D0C3, #829C42, #B3CC83;
+//$conditions: #ECC916, #F58A5A, #D15423, #D47C87, #C01E55, #DB9126, #B83B8A, #ED80B2, #F27071, #F7A8A8;
 
-@each $color in $treatments {
-    $i: index($treatments, $color);
+@each $color in $colors {
+    $i: index($colors, $color);
 
-    .tbg-{ background-color: $primary; }
-    .tbg-#{$i} { background-color: $color; }
+    .colorable-bg-{ background-color: $primary; }
+    .colorable-bg-#{$i} { background-color: $color; }
 
-    .tclr- { color: $primary; }
-    .tclr-#{$i} { color: $color !important; }
+    .colorable-clr- { color: $primary; }
+    .colorable-clr-#{$i} { color: $color !important; }
 
-    .tfill- { fill: $primary; }
-    .tfill-#{$i} { fill: $color; }
+    .colorable-fill- { fill: $primary; }
+    .colorable-fill-#{$i} { fill: $color; }
 
-    .tborder- { border-color: $primary !important; }
-    .tborder-#{$i} { border-color: $color !important; }
+    .colorable-border- { border-color: $primary !important; }
+    .colorable-border-#{$i} { border-color: $color !important; }
 
     // switch bg
     input.cmn-toggle-round.checked.tbg-#{$i} + label:before {
       background-color: $color;
     }
-}
-
-@each $color in $symptoms {
-    $i: index($symptoms, $color);
-
-    .sbg-{ background-color: $primary; }
-    .sbg-#{$i} { background-color: $color; }
-
-    .sclr- { color: $primary; }
-    .sclr-#{$i} { color: $color; }
-
-    .sfill- { fill: $primary; }
-    .sfill-#{$i} { fill: $color; }
-
-    .sborder- { border-color: $primary !important; }
-    .sborder-#{$i} { border-color: $color !important; }
-}
-
-@each $color in $conditions {
-    $i: index($conditions, $color);
-
-    .cbg-{ background-color: $primary; }
-    .cbg-#{$i} { background-color: $color; }
-
-    .cclr- { color: $primary; }
-    .cclr-#{$i} { color: $color; }
-
-    .cfill- { fill: $primary; }
-    .cfill-#{$i} { fill: $color; }
-
-    .cborder- { border-color: $primary !important; }
-    .cborder-#{$i} { border-color: $color !important; }
 }

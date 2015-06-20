@@ -28,8 +28,7 @@ mixin = Ember.Mixin.create GroovyResponseHandlerMixin,
         (response) =>
           @controller.set "model", response
           window.user_id          = @controller.get("obfuscated_id")
-          window.treatmentColors  = @controller.get("treatmentColors")
-          window.symptomColors    = @controller.get("symptomColors")
+          window.colors           = @controller.get("colors")
 
           @getLocale(container)
 

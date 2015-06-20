@@ -84,11 +84,11 @@ test "sets up colors on login", ->
     successfulLogin()
     triggerEvent(".login-button", "click")
 
-    andThen -> ok Em.isPresent(window.treatmentColors), "has some treatmentColors"
+    andThen -> ok Em.isPresent(window.colors), "has some colors"
 
 test "sets up colors when already logged in", ->
   expect 1
 
   successfulLogin()
   visit('/').then ->
-    ok Em.isPresent(window.treatmentColors), "has some treatmentColors"
+    ok Em.isPresent(window.colors), "has some treatmentColors"

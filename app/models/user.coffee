@@ -17,8 +17,7 @@ model = DS.Model.extend
 
   currentLocation:      null
 
-  symptomColors:        DS.attr(defaultValue: (-> []) )
-  treatmentColors:      DS.attr(defaultValue: (-> []) )
+  colors:               DS.attr(defaultValue: (-> []) )
 
   settings:             DS.attr(defaultValue: (-> {}) )
 

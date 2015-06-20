@@ -15,6 +15,8 @@ moduleFor("controller:graph", "Graph Controller (basic)",
   {
     needs: ["controller:graph/datum", "controller:current-user", "model:user"]
     setup: ->
+      Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
+
       App         = startApp()
       store       = App.__container__.lookup("store:main")
       controller  = @subject()
