@@ -1,72 +1,40 @@
-/ if currentUser.loggedIn
-/   nav.navbar role="navigation"
-/     .navbar-content
-/       .navbar-left
+if currentUser.loggedIn
+  nav.navbar role="navigation"
+    .navbar-content
+      .navbar-left
 
-/         // Slide menu button
-/         button.js-menu-trigger.sliding-panel-button type="button"
-/           img src="assets/menuIcon.svg" alt="menu"
+        // Slide menu button
+        button.js-menu-trigger.sliding-panel-button type="button"
+          img src="assets/menuIcon.svg" alt="menu"
 
-/         // Logo
-/         link-to "graph.checkin" "today" "1"
-/           img.navbar-logo src="assets/logo.svg"
+        // Logo
+        link-to "graph.checkin" "today" "1"
+          img.navbar-logo src="assets/logo.svg"
 
-/         // Sections
-/         ul.navbar-sections
-/           li: link-to "graph" | {{ t "menu_item_graph" }}
-/           li &#47;
-/           li: link-to "insights" | {{ t "menu_item_stats" }}
-/           li &#47;
-/           li: link-to "reports" | {{ t "menu_item_investigations" }}
+        // Sections
+        ul.navbar-sections
+          li: link-to "graph" | {{ t "menu_item_graph" }}
+          li &#47;
+          li: link-to "insights" | {{ t "menu_item_stats" }}
+          li &#47;
+          li: link-to "reports" | {{ t "menu_item_investigations" }}
 
-/         ul.navbar-sections
-/           li: small: a{action 'toggleGraph' target=currentUser} [Toggle Graph]
+        ul.navbar-sections
+          li: small: a{action 'toggleGraph' target=currentUser} [Toggle Graph]
 
 
-/       //Account
-/       .navbar-right
+      //Account
+      .navbar-right
+        .dropdown
+          .dropdown-container
+            / p.dropdown-description account
+            p.dropdown-button #{currentUser.email} &#9662;
+            ul.dropdown-menu.dropdown-select
+              li: link-to "graph.account"
+                = t "menu_item_account"
+              li{action "logout"} = t "menu_item_logout"
 
-/         / .dropdown
-/         /   .dropdown-button #{currentUser.email} &#9662;
-/         /   ul.menu
-/         /     li: link-to "graph.account"
-/         /       = t "menu_item_account"
-/         /     / li = t "menu_item_print_report"
-/         /     / li = t "menu_item_edit_checkin"
-/         /     li{action "logout"} = t "menu_item_logout"
-/         .dropdown
-/           .dropdown-container
-/             / p.dropdown-description account
-/             p.dropdown-button #{currentUser.email} &#9662;
-/             ul.dropdown-menu.dropdown-select
-/               li: link-to "graph.account"
-/                 = t "menu_item_account"
-/               li{action "logout"} = t "menu_item_logout"
-
-/ else
-  / nav.navbar-centered
-  /   img.navbar-logo src="assets/logo.svg"
-  /   h4 Early Access
-
-nav.navbar-centered
-  link-to "graph.checkin" "today" "1"
+else
+  nav.navbar-centered
     img.navbar-logo src="assets/logo.svg"
-  h5 Early Access
-  if currentUser.loggedIn
-    if currentUser.onboarded
-      ul.tracking-navigation
-
-        li
-          link-to "graph.checkin" "today" "1"
-            | Checkin
-        li &nbsp;&nbsp;
-
-        li: link-to "upcoming"
-          | Graph
-        li &nbsp;&nbsp;
-
-        li
-          a href="https://talk.flaredown.com" target="_blank" Discussion
-        li &nbsp;&nbsp;
-
-        view "account-menu"
+    h4 Early Access

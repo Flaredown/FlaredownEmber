@@ -1,28 +1,27 @@
-#tracking-questioner
-  .checkin-date-container
-      .yesterday: link-to "graph.checkin" yesterdayDate "1"
-         | &lsaquo;
-      .checkin-date = fancyDate
-      .tomorrow: link-to "graph.checkin" tomorrowDate "1"
-         | &rsaquo;
+.checkin-date-container
+    .yesterday: link-to "graph.checkin" yesterdayDate "1"
+       | &lsaquo;
+    .checkin-date = fancyDate
+    .tomorrow: link-to "graph.checkin" tomorrowDate "1"
+       | &rsaquo;
 
-  liquid-with section as liquidSection
-    / view "forms/errors" errors="controller.allErrors"
-    if sectionHeader
-      h5 = sectionHeader
-    .checkin-content: partial currentPartial
+liquid-with section as liquidSection
+  / view "forms/errors" errors="controller.allErrors"
+  if sectionHeader
+    h5 = sectionHeader
+  .checkin-content: partial currentPartial
 
-  if showPastWarning
-    .editing-the-past-warning.tip = t "editing_the_past_warning"
+if showPastWarning
+  .editing-the-past-warning.tip = t "editing_the_past_warning"
 
-  .pagination-dots
-    ul
-      each sec in sections
-        li{action 'setSection' sec.number}
-          a.page-dot class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
+.pagination-dots
+  ul
+    each sec in sections
+      li{action 'setSection' sec.number}
+        a.page-dot class={sec.selected:selected sec.skipped:skipped sec.complete:complete sec.category}
 
-  .checkin-navigate
+.checkin-navigate
 
-    unless isFirstSection
-      unless isLastSection: a.checkin-back{action "previousSection"} = t "nav.back_caps"
-    unless isLastSection: a.checkin-next{action "nextSection"} = t "nav.next_caps"
+  unless isFirstSection
+    unless isLastSection: a.checkin-back{action "previousSection"} = t "nav.back_caps"
+  unless isLastSection: a.checkin-next{action "nextSection"} = t "nav.next_caps"

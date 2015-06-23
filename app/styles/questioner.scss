@@ -2,7 +2,8 @@
 
 // modals
 .questioner-modal {
-  width: 700px;
+  max-width: 600px;
+  width: 95%;
 }
 .form-modal {
   z-index: 1001;
@@ -13,12 +14,42 @@
   outline: none;
   width: 100%;
   .checkin-date-container {
-    .yesterday, .tomorrow { display: inline-block; }
+    display: inline-block;
+    width: auto;
     .checkin-date {
+      color: $primary;
       display: inline-block;
       padding: 20px 0 20px 0;
-      color: grey;
       cursor: pointer;
+    }
+    .yesterday, .tomorrow {
+      display: inline-block;
+      font-size: 2em;
+      position: relative;
+      top: 3px;
+      transition: all .25s;
+      &:hover {
+        transform: scale(1.4);
+        a {
+          color: $primary;
+        }
+      }
+      a {
+        padding: 5px 20px;
+        color: $primary;
+      }
+    }
+  }
+  @media (min-width: $tablet) {
+    .checkin-date-container {
+      &:hover {
+        .yesterday, .tomorrow {
+          opacity: 1;
+        }
+      }
+      .yesterday, .tomorrow {
+        opacity: 0;
+      }
     }
   }
   .checkin-content {
@@ -61,6 +92,7 @@
     font-size: 1.2em;
     margin: 1px;
     background: #eee;
+    cursor: pointer;
     &:first-of-type {
       border-top-left-radius: 7px;
       border-top-right-radius: 7px;
