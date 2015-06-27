@@ -19,10 +19,6 @@ if currentUser.loggedIn
           li &#47;
           li: link-to "reports" | {{ t "menu_item_investigations" }}
 
-        ul.navbar-sections
-          li: small: a{action 'toggleGraph' target=currentUser} [Toggle Graph]
-
-
       //Account
       .navbar-right
         .dropdown
