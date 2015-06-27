@@ -80,6 +80,7 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyRespon
     if @get("rawDatapoints") and @get("days")
 
       # Remove any server processing days from the already processed days so they are reprocessed below
+
       if @get("serverProcessingDays.length")
         @clearDatumsForDays(@get("serverProcessingDays"))
 

@@ -30,10 +30,10 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
     # controller.set "endDate",   moment.utc(user.get("defaultEndDate"))
 
   actions:
+    entry_processing: (dateString) -> # from checkin saving
+      @controllerFor("graph").send("dayProcessing",dateString)
 
-    updates: (message) ->
-      # console.log message
-      # TODO use Pusher data, not hard-coded example
-      @controllerFor("graph").get("catalog.scores").pushObject {x: 1391922000, y: 500 }
+    entry_processed: (message) -> # from Pusher
+      @controllerFor("graph").send("dayProcessed", message.entry_date)
 
 `export default route`
