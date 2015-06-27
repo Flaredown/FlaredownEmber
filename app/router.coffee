@@ -78,10 +78,10 @@ Em.Route.reopen
               Ember.Logger.info("Base.Route :: No future dates, transition aborted with error")
               @generalErrorFor("future_date")
               @transitionTo("graph.checkin", "today", "1")
-            else if attempted_date < moment().subtract(2, "weeks")
-              Ember.Logger.info("Base.Route :: No future dates, transition aborted with error")
-              @generalErrorFor("distant_past_date")
-              @transitionTo("graph.checkin", moment().subtract(13, "days").format("MMM-DD-YYYY"), "1")
+            # else if attempted_date < moment().subtract(2, "weeks")
+            #   Ember.Logger.info("Base.Route :: No future dates, transition aborted with error")
+            #   @generalErrorFor("distant_past_date")
+            #   @transitionTo("graph.checkin", moment().subtract(13, "days").format("MMM-DD-YYYY"), "1")
 
 
         if transition.queryParams.sso and transition.queryParams.sig
