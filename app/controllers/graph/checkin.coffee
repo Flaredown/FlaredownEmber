@@ -257,12 +257,14 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
           JSON.stringify(checkin_data)
 
       unless @get("lastSave.entry") is data.entry # don't bother saving unless there are changes
+
         ajax(
           url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
           type: "PUT"
           data: data
         ).then(
           (response) =>
+            @send("entry_processing", @get("date"))
             @set("lastSave", data)
             @set("notesSaved", true)
             @set("modalOpen", false) if close
