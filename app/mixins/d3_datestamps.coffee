@@ -8,10 +8,10 @@ mixin = Ember.Mixin.create
     @get("days").map( (day) => allSymptomDatums.filterBy("day", day)).forEach (dayDatums) ->
       firstDatumsByDays.pushObject dayDatums.sortBy("order").get("firstObject")
 
-    @get("svg").selectAll("text.datestamp").data(firstDatumsByDays, (d) -> d.get("id"))
+    @get("dateG").selectAll("text.datestamp").data(firstDatumsByDays, (d) -> d.get("id"))
 
     # firstDatumsOfTheDay = @get("datumsByDay").map( (dayDatums) -> dayDatums.filterBy("type", "symptom").get("firstObject") ).compact()
-    # @get("svg").selectAll("text.datestamp").data(firstDatumsOfTheDay, (d) -> d.get("id"))
+    # @get("mainG").selectAll("text.datestamp").data(firstDatumsOfTheDay, (d) -> d.get("id"))
 
   datestampEnter: ->
     @datestampSelection()
@@ -23,7 +23,7 @@ mixin = Ember.Mixin.create
           class: "datestamp"
           fill: "black"
           "data-width": => @get("pipDimensions.width")
-          y: (d) => @symptomsHeight+@datesHeight
+          y: (d) => @datesHeight
           dx: -> "#{($(@).attr("data-width") - @getBBox().width) / 2}px"
 
   updateDatestamps: ->
