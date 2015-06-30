@@ -3,9 +3,9 @@
 mixin = Ember.Mixin.create
 
   ### CONTROL FUNCTIONALITY ###
-  # TODO Renable for Graph Release, and fix bug that allows dragging from foreground
-  # draggable: 'true'
-  # attributeBindings: 'draggable'
+  # TODO fix bug that allows dragging from foreground
+  draggable: 'true'
+  attributeBindings: 'draggable'
   graphShifted: false
 
   touchStart: (event) -> @dehighlightPips(); @set "dragStartX", event.originalEvent.touches[0].pageX
