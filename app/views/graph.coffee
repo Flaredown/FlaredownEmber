@@ -8,7 +8,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
   didInsertElement: ->
     @renderGraph()
-    window.onresize = this.resizeGraph.bind(@);
+    window.onresize = this.updateChartSize.bind(@);
 
     # datepicker setup
     $('.graph-controls-startDate').pickadate(
@@ -55,9 +55,9 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   # Graph section heights, (note: depends on css settings)
   symptomsHeight:   400
   datesHeight:      25
-  treatmentsHeight: Ember.computed("treatmentsMax", -> 
+  treatmentsHeight: Ember.computed("treatmentsMax", ->
     Ember.assert("must have treatmentsMax", Ember.isPresent(@get("treatmentsMax")))
-    Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))    
+    Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))
     @get("treatmentPadding") * @get("treatmentsMax") + 40)
   height: Ember.computed("symptomsHeight", "datesHeight", "treatmentsHeight", ->
     @get("symptomsHeight") + @get("datesHeight") + @get("treatmentsHeight")
@@ -116,7 +116,8 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     @set("svg", d3.select(".graph-container").append("svg")
       .attr("id", "graph")
       .attr("width", "100%")
-      .attr("height", @get("height"))
+      .attr("height", "100%")
+      # .attr("height", @get("height"))
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
     )
 
@@ -131,7 +132,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
     @set("dateCanvas", @get("allCanvases").append("g")
       .attr("class", "date-canvas")
-      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")
     )
 
     @set("treatmentCanvas", @get("allCanvases").append("g")
@@ -145,28 +146,17 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     @treatmentEnter()
     @datestampEnter()
 
-updateChartSize: ->
+  updateChartSize: ->
     @get("svg")
-      .attr("height", @get("height"))
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
 
     # in case we want to adjust size of mainCanvas or dateCanvas later
-    @get("dateCanvas")
-      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
+    # @get("dateCanvas")
+    #   .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")
+    #
+    # @get("treatmentCanvas")
+    #   .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
 
-    @get("treatmentCanvas")
-      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
-
-  resizeGraph: ->
-    @_resizeContainer()
-    @_resizeViewbox()
     Em.run.next => @renderGraph()
-
-  _resizeContainer: ->
-    @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
-
-  _resizeViewbox: ->
-    @get("svg")
-      .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
 
 `export default view`
