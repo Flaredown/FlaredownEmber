@@ -45,11 +45,11 @@ mixin = Ember.Mixin.create
     @set "graphShifted", true
 
   shift: Ember.observer ->
-    @get("mainG").attr("transform", "translate(" + @get("shiftGraphPx") + "," + @get("margin").top + ")")
+    @get("allG").attr("transform", "translate(" + @get("shiftGraphPx") + "," + @get("margin").top + ")")
   .observes("shiftGraphPx")
 
   resetGraphShift: ->
     @set "graphShifted", false
-    @get("mainG").attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")")
+    @get("allG").attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")")
 
 `export default mixin`

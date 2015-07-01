@@ -44,7 +44,8 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   datesHeight:      25
   treatmentsHeight: Ember.computed("treatmentsMax", -> 
     Ember.assert("must have treatmentsMax", Ember.isPresent(@get("treatmentsMax")))
-    30 * @get("treatmentsMax") + 40)
+    Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))    
+    @get("treatmentPadding") * @get("treatmentsMax") + 40)
   #treatmentsHeight: 100
   height: Ember.computed("symptomsHeight", "datesHeight", "treatmentsHeight", ->
     @get("symptomsHeight") + @get("datesHeight") + @get("treatmentsHeight")
@@ -109,21 +110,23 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
     )
 
-    @set("mainG", @get("svg").append("g")
+    @set("allG", @get("svg").append("g")
+      .attr("class", "all-canvases")
+    )
+
+    @set("mainG", @get("allG").append("g")
       .attr("class", "main-canvas")
       .attr("transform", "translate(" + @get("margin").left + ", " + @get("margin").top + ")")
     )
 
-    @set("dateG", d3.select(".graph-container svg")
-      .append("g")
-        .attr("class", "date-canvas")
-        .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
+    @set("dateG", @get("allG").append("g")
+      .attr("class", "date-canvas")
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
     )
 
-    @set("treatmentG", d3.select(".graph-container svg")
-      .append("g")
-        .attr("class", "treatment-canvas")
-        .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
+    @set("treatmentG", @get("allG").append("g")
+      .attr("class", "treatment-canvas")
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
     )
 
     @set("isSetup", true)
@@ -137,11 +140,12 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
       .attr("height", @get("height"))
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
 
-    # @get("dateG")
-    #   .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
+    # in case we want to adjust size of mainG or dateG later
+    @get("dateG")
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
 
-    # @get("treatmentG")
-    #   .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
+    @get("treatmentG")
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
 
 
 `export default view`
