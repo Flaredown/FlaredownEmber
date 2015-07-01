@@ -9,6 +9,8 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   didInsertElement: ->
     $('.graph-controls-startDate').pickadate()
     $('.graph-controls-endDate').pickadate(max: @get("controller.viewportEnd").local().toDate())
+    window.onresize = this.resizeGraph.bind(@);
+
     # Enable keyboard to manipulate graph, needing focus is bad though
     #   @$().attr({ tabindex: 1 })
     #   @$().focus()
@@ -18,6 +20,9 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     #   switch e.keyCode
     #     when 37 then @controller.send("shiftViewport", amount, "past")    # keyboard: left arrow
     #     when 39 then @controller.send("shiftViewport", amount, "future")  # keyboard: right arrow
+
+  willDestroy: ->
+    window.onresize = null
 
   ### CONFIG ###
   daysBinding:                    "controller.days"
@@ -90,10 +95,8 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   .property("width", "viewportDays.@each")
 
   setup: ->
-    # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
     @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
-    # @set "height", $(".graph-container").height() - @get("margin").top - @get("margin").bottom
     @setupEndPositions()
 
     @set("svg", d3.select(".graph-container").append("svg")
@@ -106,9 +109,20 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
     @set("isSetup", true)
 
-
     @pipEnter()
     @treatmentEnter()
     @datestampEnter()
+
+  resizeGraph: ->
+    @_resizeContainer()
+    @_resizeViewbox()
+    Em.run.next => @renderGraph()
+
+  _resizeContainer: ->
+    @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
+
+  _resizeViewbox: ->
+    @get("svg")
+      .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
 
 `export default view`
