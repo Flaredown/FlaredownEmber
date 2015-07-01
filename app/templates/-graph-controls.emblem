@@ -20,7 +20,7 @@
                 = filterable.name
 
     ul.graph-controls-treatments
-      p = t "treatments"
+      p.catalog-name = t "treatments"
       each filterable in treatmentFilterables
         li{action 'filter' filterable.id}{bind-attr class="filterable.filtered:filtered-treatment:filterable-treatment"}
           div class={:graph-controls-treatment-dot filterable.color}

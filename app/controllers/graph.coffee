@@ -182,8 +182,10 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyRespon
     filtered = @get("filtered")
     @get("filterableNames").map (name_array) =>
       [source,name] = name_array
+      psuedoCatalog = ["treatments", "symptoms", "conditions"].contains(source)
       id            = "#{source}_#{name}"
       type          = if source is "treatments" then "treatment" else "symptom"
+      name          = if psuedoCatalog then name else Em.I18n.t("catalogs.#{source}.#{name}")
 
       id:       id
       name:     name
