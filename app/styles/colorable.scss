@@ -15,6 +15,9 @@ $colors: #B2BE84, #709CB2, #ED9E81, #E7CC89, #B18DB4, #74A893, #DB7B9C, #F07670;
     .colorable-fill- { fill: $primary; }
     .colorable-fill-#{$i} { fill: $color; }
 
+    .colorable-stroke- { stroke: $primary; }
+    .colorable-stroke-#{$i} { stroke: $color; }
+
     .colorable-border- { border-color: $primary !important; }
     .colorable-border-#{$i} { border-color: $color !important; }
 
