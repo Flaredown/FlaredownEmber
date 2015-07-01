@@ -8,9 +8,16 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
   didInsertElement: ->
     @renderGraph()
-    $('.graph-controls-startDate').pickadate()
-    $('.graph-controls-endDate').pickadate(max: @get("controller.viewportEnd").local().toDate())
     window.onresize = this.resizeGraph.bind(@);
+
+    # datepicker setup
+    $('.graph-controls-startDate').pickadate(
+      onClose: -> @$holder.blur()
+    )
+    $('.graph-controls-endDate').pickadate(
+      max: @get("controller.viewportEnd").local().toDate()
+      onClose: -> @$holder.blur()
+    )
 
     # Enable keyboard to manipulate graph, needing focus is bad though
     #   @$().attr({ tabindex: 1 })
