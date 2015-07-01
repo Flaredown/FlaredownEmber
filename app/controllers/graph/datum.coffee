@@ -24,6 +24,8 @@ object = Ember.ObjectProxy.extend colorableMixin,
 
     if not @get("missing") and not @get("processing")
       names.pushObject @colorClasses(@get("uniqName")).fill
+      if @get("sourceType") is "treatment"
+        names.pushObject @colorClasses(@get("uniqName")).stroke
 
     if @get("processing")
       names.pushObject "processing"

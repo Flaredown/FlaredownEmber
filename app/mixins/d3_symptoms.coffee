@@ -44,7 +44,7 @@ mixin = Ember.Mixin.create
 
   pipSelection: (datums) ->
     datums ?= @get("symptomDatums")
-    @get("svg").selectAll("rect.symptom").data(datums, (d) -> d.get("id"))
+    @get("mainCanvas").selectAll("rect.symptom").data(datums, (d) -> d.get("id"))
 
   highestOrderPipByDayAndName: (selected_datum) ->
     datums = @get("datums")

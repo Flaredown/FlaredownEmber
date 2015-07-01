@@ -3,7 +3,6 @@
 mixin = Ember.Mixin.create
 
   ### CONTROL FUNCTIONALITY ###
-  # TODO fix bug that allows dragging from foreground
   draggable: 'true'
   attributeBindings: 'draggable'
   graphShifted: false
@@ -46,11 +45,11 @@ mixin = Ember.Mixin.create
     @set "graphShifted", true
 
   shift: Ember.observer ->
-    @get("svg").attr("transform", "translate(" + @get("shiftGraphPx") + "," + @get("margin").top + ")")
+    @get("allCanvases").attr("transform", "translate(" + @get("shiftGraphPx") + "," + @get("margin").top + ")")
   .observes("shiftGraphPx")
 
   resetGraphShift: ->
     @set "graphShifted", false
-    @get("svg").attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")")
+    @get("allCanvases").attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")")
 
 `export default mixin`

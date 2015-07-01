@@ -1,23 +1,50 @@
 `import Ember from 'ember'`
+computed = Ember.computed
 
 mixin = Ember.Mixin.create
 
   treatmentRadius: 7
   treatmentPadding: 30
 
-  treatmentsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.filterBy("type", "treatment").length) ).property("datumsByDayInViewport")
+  treatmentLineHeight: 2
 
-  treatments_y: Ember.computed(->
+  treatmentLineWidth: Ember.computed("pipDimensions", ->
+    Ember.assert("need pipDimensions", Ember.isPresent(@get("pipDimensions")))
+    @get("pipDimensions").total_width
+  )
+
+  treatmentsMax: computed("datumsByDayInViewport", ->
+    d3.max(@get("datumsByDayInViewport"), (dayDatums) ->
+      dayDatums.filterBy("type", "treatment").length
+    )
+  )
+
+  treatments_y: computed("treatmentsHeight", "treatmentsMax", ->
     d3.scale.linear()
       .domain([0, @get("treatmentsMax")])
-      .range [@get("height")-@get("treatmentsHeight")+@treatmentPadding,@get("height")].reverse()
-  ).property("height", "treatmentsMax")
+      .range [@get("treatmentsHeight") + @get("treatmentPadding"), @get("treatmentPadding")]
+  )
 
-  treatmentSelection: ->
-    @get("svg").selectAll("circle.treatment").data(@get("treatmentDatums"), (d) -> d.get("id"))
+  treatmentCircleSelection: ->
+    @get("treatmentCanvas").selectAll("circle.treatment")
+      .data(@get("treatmentDatums"), (d) -> d.get("id") if d.get("taken"))
+
+  treatmentLineSelection: ->
+    @get("treatmentCanvas").selectAll("line.treatment")
+      .data(@get("treatmentDatums"), (d) -> d.get("id"))
 
   treatmentEnter: ->
-    @treatmentSelection()
+    @treatmentLineSelection()
+      .enter()
+        .append("line")
+          .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
+          .on("mouseover", (d,i) => @jBoxFor(d) if d.get("status") is "actual" )
+          .on("mouseout", (d,i) => @jBoxFor(d, true) )
+          .attr(
+            class: (d) -> d.get("classes")
+          )
+
+    @treatmentCircleSelection()
       .enter()
         .append("circle")
           .datum( (d) =>
@@ -41,12 +68,26 @@ mixin = Ember.Mixin.create
 
   updateTreatments: ->
     @treatmentEnter()
-    @treatmentSelection()
+    @treatmentCircleSelection()
       .attr
         cy: (d) -> d.get("end_y")
         cx: (d) -> d.get("end_x")
 
-    @treatmentSelection()
+    @treatmentCircleSelection()
+      .exit()
+      .remove()
+
+    @treatmentLineSelection()
+      .attr
+        "stroke-dasharray": "2, 2"
+        "stroke-linecap": "butt"        
+        "stroke-width": @get("treatmentLineHeight")
+        x1: (d) => d.get("end_x") - @get("treatmentLineWidth") / 2 if d.get("end_x")
+        x2: (d) => d.get("end_x") + @get("treatmentLineWidth") / 2 if d.get("end_x")
+        y1: (d) => d.get("end_y")
+        y2: (d) => d.get("end_y")
+
+    @treatmentLineSelection()
       .exit()
       .remove()
 

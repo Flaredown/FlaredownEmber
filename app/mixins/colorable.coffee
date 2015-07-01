@@ -13,6 +13,7 @@ mixin = Ember.Mixin.create
       fill:   "colorable-fill-#{id}"
       color:  "colorable-clr-#{id}"
       border: "colorable-border-#{id}"
+      stroke: "colorable-stroke-#{id}"
     }
 
 `export default mixin`
