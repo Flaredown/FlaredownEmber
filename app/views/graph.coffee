@@ -92,10 +92,10 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     if @get("isSetup")
       @updatePips()
       @updateTreatments()
+      @updateDatestamps()      
       @resetGraphShift()
     else
       @setup()
-      @updateDatestamps()
 
   ### D3 STUFF ###
   x: Ember.computed ->
