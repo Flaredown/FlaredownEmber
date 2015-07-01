@@ -8,10 +8,10 @@ mixin = Ember.Mixin.create
     @get("days").map( (day) => allSymptomDatums.filterBy("day", day)).forEach (dayDatums) ->
       firstDatumsByDays.pushObject dayDatums.sortBy("order").get("firstObject")
 
-    @get("dateG").selectAll("text.datestamp").data(firstDatumsByDays, (d) -> d.get("id"))
+    @get("dateCanvas").selectAll("text.datestamp").data(firstDatumsByDays, (d) -> d.get("id"))
 
     # firstDatumsOfTheDay = @get("datumsByDay").map( (dayDatums) -> dayDatums.filterBy("type", "symptom").get("firstObject") ).compact()
-    # @get("mainG").selectAll("text.datestamp").data(firstDatumsOfTheDay, (d) -> d.get("id"))
+    # @get("dateCanvas").selectAll("text.datestamp").data(firstDatumsOfTheDay, (d) -> d.get("id"))
 
   datestampEnter: ->
     @datestampSelection()

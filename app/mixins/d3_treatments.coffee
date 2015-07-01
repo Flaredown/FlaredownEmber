@@ -19,7 +19,7 @@ mixin = Ember.Mixin.create
   )
 
   treatmentSelection: ->
-    @get("treatmentG").selectAll("circle.treatment").data(@get("treatmentDatums"), (d) -> d.get("id"))
+    @get("treatmentCanvas").selectAll("circle.treatment").data(@get("treatmentDatums"), (d) -> d.get("id"))
 
   treatmentEnter: ->
     @treatmentSelection()

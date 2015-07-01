@@ -110,21 +110,21 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
     )
 
-    @set("allG", @get("svg").append("g")
+    @set("allCanvases", @get("svg").append("g")
       .attr("class", "all-canvases")
     )
 
-    @set("mainG", @get("allG").append("g")
+    @set("mainCanvas", @get("allCanvases").append("g")
       .attr("class", "main-canvas")
       .attr("transform", "translate(" + @get("margin").left + ", " + @get("margin").top + ")")
     )
 
-    @set("dateG", @get("allG").append("g")
+    @set("dateCanvas", @get("allCanvases").append("g")
       .attr("class", "date-canvas")
       .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
     )
 
-    @set("treatmentG", @get("allG").append("g")
+    @set("treatmentCanvas", @get("allCanvases").append("g")
       .attr("class", "treatment-canvas")
       .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
     )
@@ -140,11 +140,11 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
       .attr("height", @get("height"))
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
 
-    # in case we want to adjust size of mainG or dateG later
-    @get("dateG")
+    # in case we want to adjust size of mainCanvas or dateCanvas later
+    @get("dateCanvas")
       .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
 
-    @get("treatmentG")
+    @get("treatmentCanvas")
       .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
 
 
