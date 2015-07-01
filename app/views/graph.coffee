@@ -42,8 +42,14 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   # Graph section heights, (note: depends on css settings)
   symptomsHeight:   400
   datesHeight:      25
-  treatmentsHeight: 100
-  height: Ember.computed(-> @symptomsHeight + @datesHeight + @treatmentsHeight)
+  treatmentsHeight: Ember.computed("treatmentsMax", -> 
+    Ember.assert("must have treatmentsMax", Ember.isPresent(@get("treatmentsMax")))
+    Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))    
+    @get("treatmentPadding") * @get("treatmentsMax") + 40)
+  #treatmentsHeight: 100
+  height: Ember.computed("symptomsHeight", "datesHeight", "treatmentsHeight", ->
+    @get("symptomsHeight") + @get("datesHeight") + @get("treatmentsHeight")
+  )
 
   jBoxFor: (datum, close) ->
     @set "tooltip", new jBox("Mouse", {id: "jbox-tooltip", x: "right", y: "center"}) unless @get("tooltip")
@@ -75,6 +81,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
       @updatePips()
       @updateTreatments()
       @resetGraphShift()
+      @updateChartSize()
     else
       @setup()
       @updateDatestamps()
@@ -86,7 +93,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
     d3.scale.linear()
       .domain([@get("viewportDays.firstObject"), last_day])
-      .range [@get("pipDimensions.right_margin")*2, @get("width")]
+      .range [@get("pipDimensions.right_margin") * 2, @get("width")]
   .property("width", "viewportDays.@each")
 
   setup: ->
@@ -99,16 +106,46 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     @set("svg", d3.select(".graph-container").append("svg")
       .attr("id", "graph")
       .attr("width", "100%")
-      .attr("height", "100%")
+      .attr("height", @get("height"))
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
-      .append("g")
-        .attr("transform", "translate(" + @get("margin").left + "," + @get("margin").top + ")"))
+    )
+
+    @set("allCanvases", @get("svg").append("g")
+      .attr("class", "all-canvases")
+    )
+
+    @set("mainCanvas", @get("allCanvases").append("g")
+      .attr("class", "main-canvas")
+      .attr("transform", "translate(" + @get("margin").left + ", " + @get("margin").top + ")")
+    )
+
+    @set("dateCanvas", @get("allCanvases").append("g")
+      .attr("class", "date-canvas")
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
+    )
+
+    @set("treatmentCanvas", @get("allCanvases").append("g")
+      .attr("class", "treatment-canvas")
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
+    )
 
     @set("isSetup", true)
-
 
     @pipEnter()
     @treatmentEnter()
     @datestampEnter()
+
+  updateChartSize: ->
+    @get("svg")
+      .attr("height", @get("height"))
+      .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
+
+    # in case we want to adjust size of mainCanvas or dateCanvas later
+    @get("dateCanvas")
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
+
+    @get("treatmentCanvas")
+      .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
+
 
 `export default view`

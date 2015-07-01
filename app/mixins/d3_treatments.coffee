@@ -1,20 +1,25 @@
 `import Ember from 'ember'`
+computed = Ember.computed
 
 mixin = Ember.Mixin.create
 
   treatmentRadius: 7
   treatmentPadding: 30
 
-  treatmentsMax: Ember.computed(-> d3.max(@get("datumsByDayInViewport") , (dayDatums) -> dayDatums.filterBy("type", "treatment").length) ).property("datumsByDayInViewport")
+  treatmentsMax: computed("datumsByDayInViewport", ->
+    d3.max(@get("datumsByDayInViewport"), (dayDatums) ->
+      dayDatums.filterBy("type", "treatment").length
+    )
+  )
 
-  treatments_y: Ember.computed(->
+  treatments_y: computed("treatmentsHeight", "treatmentsMax", ->
     d3.scale.linear()
       .domain([0, @get("treatmentsMax")])
-      .range [@get("height")-@get("treatmentsHeight")+@treatmentPadding,@get("height")].reverse()
-  ).property("height", "treatmentsMax")
+      .range [@get("treatmentsHeight") + @get("treatmentPadding"), @get("treatmentPadding")]
+  )
 
   treatmentSelection: ->
-    @get("svg").selectAll("circle.treatment").data(@get("treatmentDatums"), (d) -> d.get("id"))
+    @get("treatmentCanvas").selectAll("circle.treatment").data(@get("treatmentDatums"), (d) -> d.get("id"))
 
   treatmentEnter: ->
     @treatmentSelection()

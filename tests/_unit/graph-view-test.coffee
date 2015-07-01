@@ -78,3 +78,9 @@ test "#setupEndPositions determines y positioning based on unfilteredDatums and 
   expect 1
 
   ok 1000 - parseInt(view.get("datums.firstObject.end_y")) is 48, "first y pos is around 48"
+
+test "calculates treatment display area according to number of treatments", ->
+  expect 2
+
+  equal view.get("treatmentsHeight"), 130
+  equal view.get("height"), 130 + view.get("datesHeight") + view.get("symptomsHeight")
