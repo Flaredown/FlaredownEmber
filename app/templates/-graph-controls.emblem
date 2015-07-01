@@ -1,5 +1,5 @@
 .graph-controls
-  .graph-controls-header {{ t "showing_symptoms_and_treatments_over_days" noOfDays=viewportSize }}
+  .graph-controls-header {{ t "showing_symptoms_and_treatments_over_days" numTreatments=numFilteredTreatments numSymptoms=numFilteredSymptoms numConditions=numFilteredConditions numDays=viewportSize }}
   .graph-controls-body
     hr
     ul.graph-controls-time

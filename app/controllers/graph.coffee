@@ -2,13 +2,14 @@
 `import datum from './graph/datum'`
 `import viewportMixin from '../mixins/viewport_manager'`
 `import colorableMixin from '../mixins/colorable'`
+`import graphControls from '../mixins/graph_controls'`
 `import config from '../config/environment'`
 `import GroovyResponseHandlerMixin from '../mixins/groovy_response_handler'`
 `import ajax from 'ic-ajax'`
 
 computed = Ember.computed
 
-controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyResponseHandlerMixin,
+controller = Ember.Controller.extend viewportMixin, colorableMixin, graphControls, GroovyResponseHandlerMixin,
   ### The route sets up a few attributes ###
   # rawData -- condensed data by "type" (source)
   # firstEntryDate
@@ -16,8 +17,6 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyRespon
   # catalog -- current selected catalog
   # loadedStartDate
   # loadedEndDate
-
-  filtered: [] # default to no filtering
 
   # Some timeline preference helpers
   isTwoWeeks:   computed.equal("viewportDays.length", 14)
@@ -169,37 +168,6 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyRespon
         {name: catalog, active: @get("catalog") is catalog} # is it the currently selected catalog?
   )
 
-  filterableNames: computed("rawData", ->
-    _names = []
-    @get("sources").forEach (source) =>
-      @get("rawData.#{source}").mapBy("name").uniq().forEach (name) -> _names.pushObject([source,name])
-    _names
-  )
-
-  # Filterables, or trackables, are things that can be filtered off/on the graph
-  # e.g. treatments, symptoms, catalog responses
-  filterables: computed("filterableNames", "filtered.@each", ->
-    filtered = @get("filtered")
-    @get("filterableNames").map (name_array) =>
-      [source,name] = name_array
-      psuedoCatalog = ["treatments", "symptoms", "conditions"].contains(source)
-      id            = "#{source}_#{name}"
-      type          = if source is "treatments" then "treatment" else "symptom"
-      name          = if psuedoCatalog then name else Em.I18n.t("catalogs.#{source}.#{name}")
-
-      id:       id
-      name:     name
-      source:   source
-      color:    @colorClasses(id).bg
-      filtered: filtered.contains(id)
-  )
-
-  ### Filter helpers ###
-  activeFilterables:    computed.filterBy("filterables", "filtered", true)
-  inactiveFilterables:  computed.filterBy("filterables", "filtered", false)
-  catalogFilterables:   computed("filterables", "catalog", -> @get("filterables").filterBy("source", @get("catalog")) )
-  treatmentFilterables: computed.filterBy("filterables", "source", "treatments")
-
   ### Datum Sorting/Filtering ###
   viewportDatums:   computed("datums.@each", "viewportDays", -> @get("datums").filter((datum) => @get("viewportDays").contains(datum.get("day"))) )
   treatmentDatums:  computed.filterBy("unfilteredDatums", "type", "treatment")
@@ -255,16 +223,5 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyRespon
         @get("serverProcessingDays").removeObject(day)
 
       Em.run.next => @loadMore(date, date)
-
-    changeCatalog: (catalog) -> @set("catalog", catalog)
-
-    filter: (filterable_id) ->
-      filtered = @get("filtered")
-      if filtered.contains filterable_id
-        filtered.removeObject filterable_id
-      else
-        filtered.pushObject filterable_id
-
-      @propertyDidChange("filtered")
 
 `export default controller`
