@@ -101,7 +101,7 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, GroovyRespon
 
             datapointsForDayBySource.forEach (datapoint,i) =>
               if source is "treatments"
-                @get("_processedDatums").pushObject datum.create content: {day: day, order: i, name: datapoint.name, type: "treatment", controller: @}
+                @get("_processedDatums").pushObject datum.create content: {day: day, order: i, name: datapoint.name, taken: datapoint.points, type: "treatment", controller: @}
 
               else # it must be a regular pip
                 if datapoint.points isnt 0

@@ -27,7 +27,7 @@ mixin = Ember.Mixin.create
 
   treatmentCircleSelection: ->
     @get("treatmentCanvas").selectAll("circle.treatment")
-      .data(@get("treatmentDatums"), (d) -> d.get("id"))
+      .data(@get("treatmentDatums"), (d) -> d.get("id") if d.get("taken"))
 
   treatmentLineSelection: ->
     @get("treatmentCanvas").selectAll("line.treatment")
@@ -41,12 +41,7 @@ mixin = Ember.Mixin.create
           .on("mouseover", (d,i) => @jBoxFor(d) if d.get("status") is "actual" )
           .on("mouseout", (d,i) => @jBoxFor(d, true) )
           .attr(
-            # transform: "translate(" + parseInt(-@get("treatmentLineWidth") / 2) + ", " + parseInt(-@get("treatmentLineHeight") / 2) + ")"
             class: (d) -> d.get("classes")
-            # x1: (d) -> d.get("end_x") - @get("treatmentLineWidth") / 2
-            # x2: (d) -> d.get("end_x") + @get("treatmentLineWidth") / 2
-            # y1: (d) -> d.get("end_y")
-            # y2: (d) -> d.get("end_y")
           )
 
     @treatmentCircleSelection()
@@ -87,8 +82,8 @@ mixin = Ember.Mixin.create
         "stroke-dasharray": "2, 2"
         "stroke-linecap": "butt"        
         "stroke-width": @get("treatmentLineHeight")
-        x1: (d) => d.get("end_x") - @get("treatmentLineWidth") / 2
-        x2: (d) => d.get("end_x") + @get("treatmentLineWidth") / 2
+        x1: (d) => d.get("end_x") - @get("treatmentLineWidth") / 2 if d.get("end_x")
+        x2: (d) => d.get("end_x") + @get("treatmentLineWidth") / 2 if d.get("end_x")
         y1: (d) => d.get("end_y")
         y2: (d) => d.get("end_y")
 
