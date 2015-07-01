@@ -3,6 +3,7 @@
 `import DS from 'ember-data'`
 `import { test, moduleFor } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
+`import localeFixture from "../fixtures/locale-fixture"`
 `import userFixture from "../fixtures/user-fixture"`
 
 `import bigGraphFixture from "../fixtures/big-graph-fixture"`
@@ -20,6 +21,7 @@ moduleFor("controller:graph", "Graph Controller (big)",
     needs: ["controller:graph/datum"]
     setup: ->
       Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
+      Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
 
       App         = startApp()
       store       = App.__container__.lookup("store:main")
