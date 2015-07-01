@@ -1,0 +1,27 @@
+.graph-controls
+  .graph-controls-header {{ t "showing_symptoms_and_treatments_over_days" numTreatments=numFilteredTreatments numSymptoms=numFilteredSymptoms numConditions=numFilteredConditions numDays=viewportSize }}
+  .graph-controls-body
+    hr
+    ul.graph-controls-time
+      p = t "graph_date_range_label"
+      = input class="graph-controls-startDate" valueBinding="pickerStartDate"
+      = input class="graph-controls-endDate" valueBinding="pickerEndDate"
+
+    ul.graph-controls-trackables
+      each catalog in catalogs
+        li{action 'changeCatalog' catalog.name}{bind-attr class=":available-catalog catalog.active:active-catalog:inactive-catalog"}
+
+          .catalog-name = catalog.name
+
+          if catalog.active
+            ul: each filterable in catalogFilterables
+              li{action 'filter' filterable.id}{bind-attr class="filterable.filtered:filtered-symptom:filterable-symptom"}
+                div class={:graph-controls-trackable-block filterable.color}
+                = filterable.name
+
+    ul.graph-controls-treatments
+      p.catalog-name = t "treatments"
+      each filterable in treatmentFilterables
+        li{action 'filter' filterable.id}{bind-attr class="filterable.filtered:filtered-treatment:filterable-treatment"}
+          div class={:graph-controls-treatment-dot filterable.color}
+          = filterable.name

@@ -7,8 +7,18 @@
 view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, DraggableGraphMixin,
 
   didInsertElement: ->
-    $('.graph-controls-startDate').pickadate()
-    $('.graph-controls-endDate').pickadate(max: @get("controller.viewportEnd").local().toDate())
+    @renderGraph()
+    window.onresize = this.resizeGraph.bind(@);
+
+    # datepicker setup
+    $('.graph-controls-startDate').pickadate(
+      onClose: -> @$holder.blur()
+    )
+    $('.graph-controls-endDate').pickadate(
+      max: @get("controller.viewportEnd").local().toDate()
+      onClose: -> @$holder.blur()
+    )
+
     # Enable keyboard to manipulate graph, needing focus is bad though
     #   @$().attr({ tabindex: 1 })
     #   @$().focus()
@@ -18,6 +28,9 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     #   switch e.keyCode
     #     when 37 then @controller.send("shiftViewport", amount, "past")    # keyboard: left arrow
     #     when 39 then @controller.send("shiftViewport", amount, "future")  # keyboard: right arrow
+
+  willDestroy: ->
+    window.onresize = null
 
   ### CONFIG ###
   daysBinding:                    "controller.days"
@@ -46,14 +59,13 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     Ember.assert("must have treatmentsMax", Ember.isPresent(@get("treatmentsMax")))
     Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))    
     @get("treatmentPadding") * @get("treatmentsMax") + 40)
-  #treatmentsHeight: 100
   height: Ember.computed("symptomsHeight", "datesHeight", "treatmentsHeight", ->
     @get("symptomsHeight") + @get("datesHeight") + @get("treatmentsHeight")
   )
 
   jBoxFor: (datum, close) ->
     @set "tooltip", new jBox("Mouse", {id: "jbox-tooltip", x: "right", y: "center"}) unless @get("tooltip")
-    if close then @get("tooltip").close() else @get("tooltip").setContent(datum.get("name")).open()
+    if close then @get("tooltip").close() else @get("tooltip").setContent(datum.get("formattedName")).open()
 
   setupEndPositions: Ember.observer ->
     Ember.run.once =>
@@ -97,10 +109,8 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   .property("width", "viewportDays.@each")
 
   setup: ->
-    # @set "margin", {top: 50, right: 50, bottom: 50, left: 50}
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
     @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
-    # @set "height", $(".graph-container").height() - @get("margin").top - @get("margin").bottom
     @setupEndPositions()
 
     @set("svg", d3.select(".graph-container").append("svg")
@@ -135,7 +145,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     @treatmentEnter()
     @datestampEnter()
 
-  updateChartSize: ->
+updateChartSize: ->
     @get("svg")
       .attr("height", @get("height"))
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
@@ -147,5 +157,16 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     @get("treatmentCanvas")
       .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
 
+  resizeGraph: ->
+    @_resizeContainer()
+    @_resizeViewbox()
+    Em.run.next => @renderGraph()
+
+  _resizeContainer: ->
+    @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
+
+  _resizeViewbox: ->
+    @get("svg")
+      .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
 
 `export default view`

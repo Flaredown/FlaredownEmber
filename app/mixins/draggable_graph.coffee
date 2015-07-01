@@ -39,7 +39,7 @@ mixin = Ember.Mixin.create
         else if moment(@get("viewportDays.lastObject")*1000).utc().startOf("day").add(days, "days") > moment.utc().startOf("day")
           days-- until moment(@get("viewportDays.lastObject")*1000).utc().startOf("day").add(days, "days").unix() is moment.utc().startOf("day").unix()
 
-      @controller.send("shiftViewport", days, direction)
+      @get("controller").send("shiftViewport", days, direction)
 
     @set "dragStartX", false
     @set "graphShifted", true

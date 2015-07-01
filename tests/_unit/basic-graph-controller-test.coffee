@@ -5,6 +5,7 @@
 `import startApp from "../helpers/start-app"`
 
 `import graphFixture from "../fixtures/graph-fixture"`
+`import localeFixture from "../fixtures/locale-fixture"`
 `import userFixture from "../fixtures/user-fixture"`
 
 App         = null
@@ -15,7 +16,9 @@ moduleFor("controller:graph", "Graph Controller (basic)",
   {
     needs: ["controller:graph/datum", "controller:current-user", "model:user"]
     setup: ->
+
       Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
+      Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
 
       App         = startApp()
       store       = App.__container__.lookup("store:main")
@@ -67,11 +70,11 @@ test "#filterables contains filterable objects and their status", ->
   ok controller.get("filterables").length is 11,                "is the expected length based on fixtures"
 
   first = controller.get("filterables.firstObject")
-  ok Ember.typeOf(first) is "object",                            "made up of objects"
-  ok first.id is "hbi_general_wellbeing",                        "has a uniq name for an ID"
-  ok first.name is "general_wellbeing",                          "has a sensible name"
-  ok first.source is "hbi",                                      "comes from a source"
-  ok first.filtered is false,                                    "initially unfiltered"
+  equal Ember.typeOf(first), "object",                            "made up of objects"
+  equal first.id, "hbi_general_wellbeing",                        "has a uniq name for an ID"
+  equal first.name, "General well-being",                         "has a sensible name"
+  equal first.source, "hbi",                                      "comes from a source"
+  equal first.filtered, false,                                    "initially unfiltered"
 
   controller.get("filtered").pushObject "hbi_general_wellbeing"
   ok controller.get("filterables.firstObject.filtered") is true, "now filtered"
@@ -79,7 +82,7 @@ test "#filterables contains filterable objects and their status", ->
 test "#catalogFilterables gets filterables for current catalog", ->
   expect 2
 
-  ok controller.get("catalogFilterables.firstObject.name") is "general_wellbeing"
+  ok controller.get("catalogFilterables.firstObject.name") is "General well-being"
 
   controller.set "catalog", "symptoms"
   ok controller.get("catalogFilterables.firstObject.name") is "fat toes"

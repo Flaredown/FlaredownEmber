@@ -18,6 +18,9 @@ object = Ember.ObjectProxy.extend colorableMixin,
   # Initial attributes should be: day, catalog, order, name, type, missing
   id: Ember.computed(-> "#{@get("sourceType")}_#{@get("day")}_#{@get("order")}_#{@get("status")}" ).property("sourceType", "day", "order", "status")
   uniqName: Ember.computed(-> "#{@get("source")}_#{@get("name")}").property("name", "source")
+  formattedName: Ember.computed "name", "source", ->
+    psuedoCatalog = ["treatments", "symptoms", "conditions"].contains(@get("source"))
+    if psuedoCatalog then @get("name") else Em.I18n.t("catalogs.#{@get("source")}.#{@get("name")}")
 
   classes: Ember.computed(->
     names = [@get("type")]
