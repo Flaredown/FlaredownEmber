@@ -80,6 +80,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
       @updatePips()
       @updateTreatments()
       @resetGraphShift()
+      @updateChartSize()
     else
       @setup()
       @updateDatestamps()
@@ -101,14 +102,16 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     # @set "height", $(".graph-container").height() - @get("margin").top - @get("margin").bottom
     @setupEndPositions()
 
-    @set("mainG", d3.select(".graph-container").append("svg")
+    @set("svg", d3.select(".graph-container").append("svg")
       .attr("id", "graph")
       .attr("width", "100%")
-      .attr("height", "100%")
+      .attr("height", @get("height"))
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
-      .append("g")
-        .attr("class", "main-canvas")
-        .attr("transform", "translate(" + @get("margin").left + ", " + @get("margin").top + ")")
+    )
+
+    @set("mainG", @get("svg").append("g")
+      .attr("class", "main-canvas")
+      .attr("transform", "translate(" + @get("margin").left + ", " + @get("margin").top + ")")
     )
 
     @set("dateG", d3.select(".graph-container svg")
@@ -125,9 +128,20 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
     @set("isSetup", true)
 
-
     @pipEnter()
     @treatmentEnter()
     @datestampEnter()
+
+  updateChartSize: ->
+    @get("svg")
+      .attr("height", @get("height"))
+      .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
+
+    # @get("dateG")
+    #   .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight")) + ")")          
+
+    # @get("treatmentG")
+    #   .attr("transform", "translate(" + @get("margin").left + ", " + parseInt(@get("margin").top + @get("symptomsHeight") + @get("datesHeight")) + ")")
+
 
 `export default view`
