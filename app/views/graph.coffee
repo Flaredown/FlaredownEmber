@@ -7,6 +7,7 @@
 view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, DraggableGraphMixin,
 
   didInsertElement: ->
+    @renderGraph()
     $('.graph-controls-startDate').pickadate()
     $('.graph-controls-endDate').pickadate(max: @get("controller.viewportEnd").local().toDate())
     window.onresize = this.resizeGraph.bind(@);
