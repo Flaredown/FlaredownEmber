@@ -3,29 +3,31 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
-
 `import graphFixture from "../fixtures/graph-fixture"`
 `import singleGraphDayFixture from "../fixtures/single-graph-day-fixture"`
 `import entryFixture from "../fixtures/entry-fixture"`
-`import localeFixture from "../fixtures/locale-fixture"`
-`import userFixture from "../fixtures/user-fixture"`
 
 App   = null
 today = moment().utc().startOf("day").format("MMM-DD-YYYY")
+controller = null
 
 module('Graph Integration', {
   needs: ["controller:graph"]
 
   setup: ->
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", type: 'GET', responseText: userFixture()
-    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
+
     Ember.$.mockjax url: "#{config.apiNamespace}/entries/*", type: 'PUT', responseText: {}
 
     Ember.$.mockjax url: "#{config.apiNamespace}/graph", type: 'GET', responseText: graphFixture(moment().utc().startOf("day").subtract(5,"days"))
     Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', responseText: entryFixture(today)
 
     App = startApp()
+
+    controller = App.__container__.lookup("controller:graph")
+    Ember.run -> controller.set("serverProcessingDays", []) # HACK! Reset from other tests affecting it
+
     null
+
   teardown: ->
     Ember.run(App, App.destroy);
     $.mockjax.clear();
@@ -90,24 +92,21 @@ test "Filtering removes matching datums", ->
       triggerEvent ".filtered-symptom:eq(0)", "click"
 
       andThen ->
-        ok find("rect.symptom.present").length is 39, "Back to 39"
+        equal find("rect.symptom.present").length, 39, "Back to 39"
   )
 
 test "Updating entry goes to loading state and updates entry on graph", ->
   expect 2
 
-  controller = App.__container__.lookup("controller:graph")
-
-
   visit('/').then ->
 
-    controller.send("dayProcessing", moment().utc().format("MMM-DD-YYYY")) # simulate update/closing modal
+    controller.send("dayProcessing", today) # simulate update/closing modal
 
     stop()
     Ember.run.later(
       ->
         start()
-        ok find("rect.processing").length is 3, "Has loading datums"
+        equal find("rect.processing").length, 3, "Has loading datums"
 
         andThen ->
           $.mockjax.clear();

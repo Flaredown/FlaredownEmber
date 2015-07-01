@@ -5,8 +5,6 @@
 
 `import entryFixture from "../fixtures/entry-fixture"`
 `import graphFixture from "../fixtures/graph-fixture"`
-`import localeFixture from "../fixtures/locale-fixture"`
-`import userFixture from "../fixtures/user-fixture"`
 `import symptomSearchFixture from "../fixtures/symptom-search-fixture"`
 
 App = null
@@ -14,13 +12,17 @@ yesterdayFormatted = moment().subtract(1, "days").format("MMM-DD-YYYY")
 
 module('Colors Integration', {
   setup: ->
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: userFixture()
-    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
+
     Ember.$.mockjax url: "#{config.apiNamespace}/graph", responseText: graphFixture()
     Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', responseText: entryFixture(yesterdayFormatted)
     Ember.$.mockjax url: "#{config.apiNamespace}/entries/*", type: 'PUT', responseText: {}
 
     App = startApp()
+
+    # don't render graph for better test performance
+    App.__container__.lookupFactory("view:graph").reopen
+      renderGraph: ->
+
     null
 
   teardown: ->

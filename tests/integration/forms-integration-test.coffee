@@ -3,7 +3,6 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
-`import localeFixture from "../fixtures/locale-fixture"`
 `import userFixture from "../fixtures/user-fixture"`
 
 App = null
@@ -12,10 +11,15 @@ module('Forms Integration Tests', {
   setup: ->
     user = userFixture()
     user.current_user.settings.onboarded = "false"
+    $.mockjax.clear()
     Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
-    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
 
     App = startApp()
+
+    # don't render graph for better test performance
+    App.__container__.lookupFactory("view:graph").reopen
+      renderGraph: ->
+
     null
   teardown: ->
     Ember.run(App, App.destroy);

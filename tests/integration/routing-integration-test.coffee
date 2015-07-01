@@ -22,7 +22,13 @@ module('Base Routing Integration', {
     today = moment().utc().format("MMM-DD-YYYY")
     Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', data: {date: today}, responseText: entryFixture(today)
 
-    App = startApp(); null
+    App = startApp()
+
+    # don't render graph for better test performance
+    App.__container__.lookupFactory("view:graph").reopen
+      renderGraph: ->
+
+    null
 
   teardown: -> Ember.run(App, App.destroy); $.mockjax.clear()
 
