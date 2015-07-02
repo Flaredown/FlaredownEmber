@@ -14,6 +14,7 @@ model = DS.Model.extend
   email:                DS.attr "string"
   authentication_token: DS.attr "string"
   created_at:           DS.attr "date"
+  momentCreatedAt:      Em.computed("created_at", -> moment(this.get("created_at")) )
 
   currentLocation:      null
 
