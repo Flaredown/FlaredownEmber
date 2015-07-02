@@ -12,9 +12,12 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
     # datepicker setup
     $('.graph-controls-startDate').pickadate(
+      min: @get("currentUser.momentCreatedAt").local().toDate()
+      max: @get("controller.viewportEnd").local().toDate()
       onClose: -> @$holder.blur()
     )
     $('.graph-controls-endDate').pickadate(
+      min: @get("currentUser.momentCreatedAt").local().toDate()
       max: @get("controller.viewportEnd").local().toDate()
       onClose: -> @$holder.blur()
     )
@@ -92,7 +95,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     if @get("isSetup")
       @updatePips()
       @updateTreatments()
-      @updateDatestamps()      
+      @updateDatestamps()
       @resetGraphShift()
     else
       @setup()
