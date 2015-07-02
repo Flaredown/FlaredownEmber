@@ -35,12 +35,16 @@ general_error_response = {
   }
 }
 
-
 App = null
 
 module('Login Integration', {
   setup: ->
     App = startApp()
+
+    # stub out logged in status
+    App.__container__.lookup("controller:currentUser").reopen
+      loggedIn: false
+
     null
   teardown: ->
     Ember.run(App, App.destroy);
@@ -54,7 +58,6 @@ successfulLogin = ->
 
 test "Inline errors are shown on inline error response", ->
   expect 2
-
   Ember.$.mockjax url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 500, responseText: inline_response
 
   visit('/login').then(
@@ -64,16 +67,6 @@ test "Inline errors are shown on inline error response", ->
         ok $(".form-email").hasClass('errors'), 'Email has error class'
         ok $(".form-password").hasClass('errors'), 'Password has error class'
   )
-
-# test "alert is shown on growl error response", ->
-#   Ember.$.mockjax
-#     url: "#{config.apiNamespace}/users/sign_in.json", type: 'POST', status: 500, responseText: general_error_response
-#
-#   visit('/login').then(
-#     ->
-#       triggerEvent(".login-button", "click")
-#       andThen -> assertAlertPresent()
-#   )
 
 test "sets up colors on login", ->
   expect 1
@@ -91,4 +84,4 @@ test "sets up colors when already logged in", ->
 
   successfulLogin()
   visit('/').then ->
-    ok Em.isPresent(window.colors), "has some treatmentColors"
+    ok Em.isPresent(window.colors), "has some colors"

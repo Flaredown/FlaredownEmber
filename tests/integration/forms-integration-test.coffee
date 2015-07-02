@@ -3,7 +3,6 @@
 `import { test } from "ember-qunit"`
 `import startApp from "../helpers/start-app"`
 
-`import localeFixture from "../fixtures/locale-fixture"`
 `import userFixture from "../fixtures/user-fixture"`
 
 App = null
@@ -12,10 +11,15 @@ module('Forms Integration Tests', {
   setup: ->
     user = userFixture()
     user.current_user.settings.onboarded = "false"
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
-    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
+    $.mockjax.clear()
+    $.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
 
     App = startApp()
+
+    # don't render graph for better test performance
+    App.__container__.lookupFactory("view:graph").reopen
+      renderGraph: ->
+
     null
   teardown: ->
     Ember.run(App, App.destroy);
@@ -52,15 +56,13 @@ test "Text field invalid", ->
   )
 
 test "Radio input required", ->
-  expect 3
+  expect 2
 
   visit('/onboarding/account').then(
     ->
       triggerEvent(".continue-button", "click")
-      ok $(".form-sex .errors .error-message").length is 1
-      ok $(".form-sex .errors .error-message").text().match(/required/i)
-
-      triggerEvent(".form-sex-option-male", "click")
       andThen ->
-        ok $(".form-sex .errors .error-message").length is 0
+        equal $(".form-sex .errors .error-message").length, 1
+        ok $(".form-sex .errors .error-message").text().match(/required/i)
+
   )

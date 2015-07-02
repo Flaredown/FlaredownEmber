@@ -5,18 +5,13 @@
 
 `import entryFixture from "../fixtures/entry-fixture"`
 `import graphFixture from "../fixtures/graph-fixture"`
-`import localeFixture from "../fixtures/locale-fixture"`
-`import userFixture from "../fixtures/user-fixture"`
 `import symptomSearchFixture from "../fixtures/symptom-search-fixture"`
 
 App = null
 yesterdayFormatted = moment().subtract(1, "days").format("MMM-DD-YYYY")
-user = userFixture()
 
 module('Check-In Integration', {
   setup: ->
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
-    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
     Ember.$.mockjax url: "#{config.apiNamespace}/graph", responseText: graphFixture()
 
     # For "today" tests
@@ -38,6 +33,11 @@ module('Check-In Integration', {
     Ember.$.mockjax url: "#{config.apiNamespace}/symptoms/search/*", responseText: symptomSearchFixture
 
     App = startApp()
+
+    # don't render graph for better test performance
+    App.__container__.lookupFactory("view:graph").reopen
+      renderGraph: ->
+
     null
 
   teardown: ->
@@ -67,16 +67,12 @@ test "Can navigate through the sections (today)", ->
   expect 2
 
   visit('/checkin/today/1').then( =>
-    # triggerEvent(".pagination-dots ul li:eq(1)", "click")
-    # stop()
-    # ok currentURL() == "/checkin/today/2", "Clicking a number goes to that section"
-
     triggerEvent(".checkin-next", "click")
     andThen ->
-      ok currentURL() == "/checkin/today/3", "Clicking a next goes forward"
+      equal currentURL(), "/checkin/today/2", "Clicking a next goes forward"
       triggerEvent(".checkin-back", "click")
       andThen ->
-        ok currentURL() == "/checkin/today/2", "Clicking a prev goes back"
+        equal currentURL(), "/checkin/today/1", "Clicking a prev goes back"
   )
 
 test "Disable on prev/next on first/last", ->

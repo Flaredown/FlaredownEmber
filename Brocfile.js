@@ -14,6 +14,9 @@ var app = new EmberApp({
   },
   minifyJS: {
     enabled: (ENV != "development")
+  },
+  sourcemaps: {
+    enabled: (ENV === "development")
   }
 });
 
