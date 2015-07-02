@@ -5,22 +5,17 @@
 
 `import entryFixture from "../fixtures/entry-fixture"`
 `import graphFixture from "../fixtures/graph-fixture"`
-`import localeFixture from "../fixtures/locale-fixture"`
-`import userFixture from "../fixtures/user-fixture"`
 
 App   = null
-user  = userFixture()
 getCurrentUser = -> App.__container__.lookup("controller:currentUser")
 
 module('Base Routing Integration', {
-  needs: ["controller:current-user", "model:user"]
+  needs: ["controller:current-user", "model:user", "controller:graph/checkin"]
   setup: ->
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
-    Ember.$.mockjax url: "#{config.apiNamespace}/locales/en", responseText: localeFixture()
     Ember.$.mockjax url: "#{config.apiNamespace}/graph", type: 'GET', responseText: graphFixture(moment().utc().startOf("day").subtract(5,"days"))
 
-    today = moment().utc().format("MMM-DD-YYYY")
-    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', data: {date: today}, responseText: entryFixture(today)
+    today = moment().format("MMM-DD-YYYY")
+    Ember.$.mockjax url: "#{config.apiNamespace}/entries", type: 'POST', responseText: entryFixture(today)
 
     App = startApp()
 
@@ -49,7 +44,7 @@ test "Not checked in today goes to today checkin", ->
   Ember.run.later ->
     start()
     getCurrentUser().set("checked_in_today", false)
-    visit('/').then( -> ok currentURL() == "/checkin/today/1" )
+    visit('/').then( -> equal currentURL(), "/checkin/today/1" )
   , 100
 
 test "Non-onboarded user gets redirected to onboarding", ->
@@ -65,7 +60,7 @@ test "Non-onboarded user gets redirected to onboarding", ->
       visit('/onboarding/symptoms').then( -> ok currentURL() == "/onboarding/symptoms" )
     )
 
-  , 100
+  , 300
 
 # test "Unauthed pages while logged in gets 404", ->
 #   expect 1
@@ -80,7 +75,7 @@ test "Not logged in on authedOnly goes to login page", ->
     getCurrentUser().set("model.id", null) # not logged in
 
     visit('/checkin/Aug-13-2014/1').then( -> ok currentURL() == "/login")
-  , 100
+  , 300
 
 test "Funky URL produces 404", ->
   expect 1

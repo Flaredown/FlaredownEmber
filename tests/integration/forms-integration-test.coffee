@@ -12,7 +12,7 @@ module('Forms Integration Tests', {
     user = userFixture()
     user.current_user.settings.onboarded = "false"
     $.mockjax.clear()
-    Ember.$.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
+    $.mockjax url: "#{config.apiNamespace}/current_user", responseText: user
 
     App = startApp()
 
@@ -56,15 +56,13 @@ test "Text field invalid", ->
   )
 
 test "Radio input required", ->
-  expect 3
+  expect 2
 
   visit('/onboarding/account').then(
     ->
       triggerEvent(".continue-button", "click")
-      ok $(".form-sex .errors .error-message").length is 1
-      ok $(".form-sex .errors .error-message").text().match(/required/i)
-
-      triggerEvent(".form-sex-option-male", "click")
       andThen ->
-        ok $(".form-sex .errors .error-message").length is 0
+        equal $(".form-sex .errors .error-message").length, 1
+        ok $(".form-sex .errors .error-message").text().match(/required/i)
+
   )
