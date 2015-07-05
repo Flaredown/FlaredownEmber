@@ -2,8 +2,6 @@
 
 view = Ember.View.extend
   templateName: "account-menu"
-  tagName: "li"
-  classNames: ["dropdown"]
   userWatcher: Em.observer(-> @setupMenu() ).observes("currentUser.loggedIn", "currentUser.onboarded")
   didInsertElement: -> @setupMenu()
 
