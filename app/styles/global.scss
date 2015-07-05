@@ -105,12 +105,8 @@ body > .loading-spinner {
   }
   .navbar-sections {
     display: none;
-    a {
-      color: black;
-      &:hover {
-        color: lighten(black, 20%);
-      }
-    }
+    color: $primary;
+    text-transform: capitalize;;
     li {
       margin-left: 10px;
     }

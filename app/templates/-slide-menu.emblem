@@ -3,10 +3,14 @@ if currentUser.loggedIn
     ul
       li: link-to "graph"
         = t "menu_item_graph"
-      li: link-to "insights"
-        = t "menu_item_stats"
-      li: link-to "reports"
-        = t "menu_item_investigations"
+      li: link-to "upcoming"
+        = t "menu_item_upcoming"
+      li: a href="http://talk.flaredown.com" target="_blank"
+        = t "menu_item_talk"
+      / li: link-to "insights"
+      /   = t "menu_item_stats"
+      / li: link-to "reports"
+      /   = t "menu_item_investigations"
       li.navbar-slide-account #{currentUser.email}
       li.account-option: link-to "graph.account"
         = t "menu_item_account"
