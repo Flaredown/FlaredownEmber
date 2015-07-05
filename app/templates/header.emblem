@@ -15,20 +15,16 @@ if currentUser.loggedIn
         ul.navbar-sections
           li: link-to "graph" | {{ t "menu_item_graph" }}
           li &#47;
-          li: link-to "insights" | {{ t "menu_item_stats" }}
+          li: link-to "upcoming" | {{ t "menu_item_upcoming" }}
           li &#47;
-          li: link-to "reports" | {{ t "menu_item_investigations" }}
+          li: a href="http://talk.flaredown.com" target="_blank" {{ t "menu_item_talk" }}
+          / li: link-to "insights" | {{ t "menu_item_stats" }}
+          / li &#47;
+          / li: link-to "reports" | {{ t "menu_item_investigations" }}
 
       //Account
       .navbar-right
-        .dropdown
-          .dropdown-container
-            / p.dropdown-description account
-            p.dropdown-button #{currentUser.email} &#9662;
-            ul.dropdown-menu.dropdown-select
-              li: link-to "graph.account"
-                = t "menu_item_account"
-              li{action "logout"} = t "menu_item_logout"
+        view "account-menu"
 
 else
   nav.navbar-centered
