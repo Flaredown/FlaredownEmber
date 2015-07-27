@@ -48,6 +48,8 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   treatmentDatumsBinding:         "controller.treatmentDatums"
   symptomDatumsBinding:           "controller.symptomDatums"
 
+  treatmentViewportDatumNamesBinding: "controller.treatmentViewportDatumNames"
+  
   streamGraphStyle: false
   dragAmplifier: 1.2 # amplify drag a bit
 
@@ -58,11 +60,14 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   # Graph section heights, (note: depends on css settings)
   symptomsHeight:   400
   datesHeight:      25
-  treatmentsHeight: Ember.computed("treatmentsMax", ->
-    Ember.assert("must have treatmentsMax", Ember.isPresent(@get("treatmentsMax")))
+
+  treatmentsHeight: Ember.computed("treatmentViewportDatumNames.@each", ->
+    Ember.assert("must have treatmentViewportDatumNames", !Ember.isNone(@get("treatmentViewportDatumNames")))
     Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))
-    @get("treatmentPadding") * @get("treatmentsMax") + 40)
+    @get("treatmentPadding") * @get("treatmentViewportDatumNames").uniq().length + 40)
+
   height: Ember.computed("symptomsHeight", "datesHeight", "treatmentsHeight", ->
+    console.log("Hooah!")
     @get("symptomsHeight") + @get("datesHeight") + @get("treatmentsHeight")
   )
 
@@ -79,9 +84,9 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
             datum.set "end_y", @get("symptoms_y")(i+1)
 
         datums.filterBy("type", "treatment").sortBy("order").forEach (datum,i) =>
-          if @get("x")(1) and @get("treatments_y")(1)
-            datum.set "end_x", @get("x")(datum.get("day")) + (@get("pipDimensions.width")  / 2)
-            datum.set "end_y", @get("treatments_y")(i+1)
+          # if @get("x")(1) and @get("treatments_y")(1)
+          datum.set "end_x", @get("x")(datum.get("day")) + (@get("pipDimensions.width") / 2)
+          datum.set "end_y", @get("treatments_y")(datum.get("name"))
 
     Ember.run.next => @renderGraph()
 

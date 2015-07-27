@@ -173,6 +173,9 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, graphControl
   treatmentDatums:  computed.filterBy("unfilteredDatums", "type", "treatment")
   symptomDatums:    computed.filterBy("unfilteredDatums", "type", "symptom")
 
+  treatmentViewportDatums: computed.filterBy("viewportDatums", "type", "treatment")
+  treatmentViewportDatumNames: computed.mapBy("treatmentViewportDatums", "name")
+
   # Some internal helpers
   clearDatumsForDays: (days) ->
     @get("_processedDatumDays").removeObjects( days )

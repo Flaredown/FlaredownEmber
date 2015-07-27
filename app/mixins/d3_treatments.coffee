@@ -25,10 +25,10 @@ mixin = Ember.Mixin.create
     )
   )
 
-  treatments_y: computed("treatmentsHeight", "treatmentsMax", ->
-    d3.scale.linear()
-      .domain([0, @get("treatmentsMax")])
-      .range [@get("treatmentsHeight") + @get("treatmentPadding"), @get("treatmentPadding")]
+  treatments_y: computed("treatmentsHeight", "treatmentViewportDatumNames.@each", ->
+    d3.scale.ordinal()
+      .domain(@get("treatmentViewportDatumNames").uniq())
+      .rangeBands [@get("treatmentsHeight") + @get("treatmentPadding"), @get("treatmentPadding")]
   )
 
   treatmentCircleSelection: ->
