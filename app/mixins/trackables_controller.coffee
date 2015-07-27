@@ -55,8 +55,6 @@ mixin = Ember.Mixin.create FormHandlerMixin,
     existings = @get("model.treatments").filterBy("name",treatment.name)
     repetition = if existings then existings.length+1 else 1
 
-    console.log treatment
-    console.log "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}"
     newTreatment = @store.createRecord "treatment", Ember.merge(treatment,{id: "#{treatment.name}_#{treatment.quantity}_#{treatment.unit}_#{repetition}_#{@get("id")}", active: true, editing: editing})
     @get("model.treatments").addObject newTreatment
 
@@ -79,7 +77,6 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       treatments.forEach (treatment) -> treatment.set("editing", false)
       first = treatments.get("firstObject")
 
-      console.log first.get("quantity"), first.get("takenWithoutDose")
       if first.get("quantity") isnt null and not first.get("takenWithoutDose") # add a dose (e.g. treatment repetition)
         @addEntryTreatment(treatments.get("firstObject"), true)
       else  # go straight to edit
