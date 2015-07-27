@@ -77,8 +77,8 @@ mixin = Ember.Mixin.create
           .on("mouseout", (d,i) => @jBoxFor(d, true) )
           .attr
             class: (d) -> d.get("classes")
-            x: (d) -> d.get("end_x") - @get("treatmentLineWidth") / 2 if d.get("end_x")
-            y: (d) -> d.get("end_y") - @get("treatmentHitboxHeight") / 2 if d.get("end_y")
+            x: (d) => d.get("end_x") - @get("treatmentLineWidth") / 2 if d.get("end_x")
+            y: (d) => d.get("end_y") - @get("treatmentHitboxHeight") / 2 if d.get("end_y")
             width: @get("treatmentHitboxWidth")
             height: @get("treatmentHitboxHeight")
           .style
