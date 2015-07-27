@@ -7,10 +7,16 @@ mixin = Ember.Mixin.create
   treatmentPadding: 30
 
   treatmentLineHeight: 2
-
   treatmentLineWidth: Ember.computed("pipDimensions", ->
     Ember.assert("need pipDimensions", Ember.isPresent(@get("pipDimensions")))
     @get("pipDimensions").total_width
+  )
+
+  treatmentHitboxHeight: Ember.computed("treatmentPadding", ->
+    @get("treatmentPadding")
+  )
+  treatmentHitboxWidth: Ember.computed("treatmentLineWidth", ->
+    @get("treatmentLineWidth")
   )
 
   treatmentsMax: computed("datumsByDayInViewport", ->
@@ -31,6 +37,10 @@ mixin = Ember.Mixin.create
 
   treatmentLineSelection: ->
     @get("treatmentCanvas").selectAll("line.treatment")
+      .data(@get("treatmentDatums"), (d) -> d.get("id"))
+
+  treatmentHitboxSelection: ->
+    @get("treatmentCanvas").selectAll("rect.treatment")
       .data(@get("treatmentDatums"), (d) -> d.get("id"))
 
   treatmentEnter: ->
@@ -59,6 +69,21 @@ mixin = Ember.Mixin.create
             cy: (d) -> d.get("end_y")
             cx: (d) -> d.get("end_x")
 
+    @treatmentHitboxSelection()
+      .enter()
+        .append("rect")
+          .on("click", (d,i) => @get("controller").transitionToRoute("graph.checkin", d.get("entryDate"), 1) )
+          .on("mouseover", (d,i) => @jBoxFor(d) if d.get("status") is "actual" )
+          .on("mouseout", (d,i) => @jBoxFor(d, true) )
+          .attr
+            class: (d) -> d.get("classes")
+            x: (d) -> d.get("end_x") - @get("treatmentLineWidth") / 2 if d.get("end_x")
+            y: (d) -> d.get("end_y") - @get("treatmentHitboxHeight") / 2 if d.get("end_y")
+            width: @get("treatmentHitboxWidth")
+            height: @get("treatmentHitboxHeight")
+          .style
+            opacity: 0
+
   # treatmentLines: Ember.computed ->
   #   treatmentNames = @get("treatmentDatums").mapBy("name")
   #   treatmentNames.forEach (name) ->
@@ -70,6 +95,7 @@ mixin = Ember.Mixin.create
     @treatmentEnter()
     @treatmentCircleSelection()
       .attr
+        class: (d) -> d.get("classes")      
         cy: (d) -> d.get("end_y")
         cx: (d) -> d.get("end_x")
 
@@ -79,6 +105,7 @@ mixin = Ember.Mixin.create
 
     @treatmentLineSelection()
       .attr
+        class: (d) -> d.get("classes")
         "stroke-dasharray": "2, 2"
         "stroke-linecap": "butt"
         "stroke-width": @get("treatmentLineHeight")
@@ -88,6 +115,20 @@ mixin = Ember.Mixin.create
         y2: (d) => d.get("end_y")
 
     @treatmentLineSelection()
+      .exit()
+      .remove()
+
+    @treatmentHitboxSelection()
+      .attr
+        class: (d) -> d.get("classes")
+        x: (d) => d.get("end_x") - @get("treatmentLineWidth") / 2 if d.get("end_x")
+        y: (d) => d.get("end_y") - @get("treatmentHitboxHeight") / 2 if d.get("end_y")
+        width: @get("treatmentHitboxWidth")
+        height: @get("treatmentHitboxHeight")
+      .style
+        opacity: 0
+
+    @treatmentHitboxSelection()
       .exit()
       .remove()
 
