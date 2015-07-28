@@ -42,7 +42,6 @@ mixin = Ember.Mixin.create
   valueObserver: Ember.observer(-> @set("controller.#{@get("name")}", @get("value")) ).observes("value")
 
   present: Ember.computed(->
-
     if @get("kind") is "number" # special validity for number input types (they don't return a value when inputting word characters)
       el = $("##{@get("elementId")} input")[0]
       return true if el and el.validity and el.validity.badInput
