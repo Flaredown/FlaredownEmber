@@ -2,7 +2,8 @@
   ul: each input in question.inputs
     li
       form submit="'sendResponse' value"
-        = input class="response-input form-control input-lg" type="number" valueBinding="value"
+        view "forms/numberInput" name="value" parentForm=parent valueBinding="value" step=question.step min=question.min max=question.max noLabelText=true
+        // = input class="response-input form-control input-lg" type="number" valueBinding="value"
 
         // HACK!! TODO: replace this form stuff with something better, data-based idea for components
-        .errors: small.error-message = controller.errors.fields.value.firstObject.message
+        / .errors: small.error-message = controller.errors.fields.value.firstObject.message

@@ -2,5 +2,5 @@ label
 unless view.noLabelText
   = view.label
 
-= input type="number" value=view.value class=view.inputClass placeholder=view.placeholderText step=view.step min=view.min disabledBinding="view.disabled"
+= input type="number" value=view.value class=view.inputClass placeholder=view.placeholderText step=view.step min=view.min max=view.max disabledBinding="view.disabled"
 view "forms/errors"

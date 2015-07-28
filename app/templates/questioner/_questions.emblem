@@ -3,4 +3,4 @@
   h3 = currentSectionPrompt
 
   each question in sectionQuestions
-    = questioner-input type="catalog" question=question section=currentSection responses=responsesData action="setResponse"
+    = questioner-input type="catalog" question=question parent=controller section=currentSection responses=responsesData action="setResponse"

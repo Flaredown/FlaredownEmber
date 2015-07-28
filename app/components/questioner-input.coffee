@@ -20,9 +20,6 @@ component = Ember.Component.extend colorableMixin, formHandlerMixin,
   requirements: []
   validations: []
 
-  # For "number" type
-  valueValid: (-> /^([0-9]*[1-9][0-9]*(\.[0-9]+)?|[0]*\.[0-9]*[1-9][0-9]*)$/.test(@get("value")) ).property("value")
-
   inputs: Ember.computed(->
     uniq_name = "#{@get("section.category")}_#{@get("question.name")}"
 
@@ -56,7 +53,18 @@ component = Ember.Component.extend colorableMixin, formHandlerMixin,
     if question then question.get("value") else null
   ).property("question", "section.category", "responses.@each")
 
+  # for number input
+  valueValid: (->
+    return true unless @get("question.kind") is "number"
+
+    # TODO DRY up, duplicated in form-input mixin
+    el = $("##{@get("elementId")} input")[0]
+    return false if el and el.validity and not el.validity.valid
+    true
+  ).property("value")
+
   checked: Ember.computed( -> @get("value") > 0.0 ).property("value")
+
 
   didInsertElement: ->
     @set "jBox", new jBox("Tooltip", {id: "jbox-tooltip", offset: {x:0, y:-20} , addClass: "trackable-input-tooltip", x: "center", y: "center", ignoreDelay: true, fade: false})
@@ -65,7 +73,7 @@ component = Ember.Component.extend colorableMixin, formHandlerMixin,
       @set("validations",  "value".w())
       # HACK! TODO refactor
       # @set("parentView.controller.subForms", []) # clobber all other previous forms
-      @get("parentView.controller.subForms").addObject(@)
+      # @get("parentView.controller.subForms").addObject(@)
 
   willDestroyElement: ->
     @send("sendResponse", @get("value")) if @get("value")
