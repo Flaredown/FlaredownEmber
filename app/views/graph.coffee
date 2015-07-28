@@ -67,7 +67,6 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     @get("treatmentPadding") * @get("treatmentViewportDatumNames").uniq().length + 40)
 
   height: Ember.computed("symptomsHeight", "datesHeight", "treatmentsHeight", ->
-    console.log("Hooah!")
     @get("symptomsHeight") + @get("datesHeight") + @get("treatmentsHeight")
   )
 
