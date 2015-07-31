@@ -152,6 +152,7 @@
     margin-bottom: 1em;
   }
 
+// TODO refactor this fucking SASS
   .switch {
     @include span-columns(10);
     display: flex;
@@ -160,7 +161,6 @@
       display: inline-block;
     }
     .checkin-treatment-name {
-      margin-left: 15px;
       text-overflow: ellipsis;
       max-width: 75%;
       overflow: hidden;
