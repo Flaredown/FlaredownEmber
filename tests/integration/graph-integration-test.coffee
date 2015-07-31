@@ -96,7 +96,7 @@ test "Filtering removes matching datums", ->
   )
 
 test "Updating entry goes to loading state and updates entry on graph", ->
-  expect 2
+  expect 3
 
   visit('/').then ->
 
@@ -106,7 +106,9 @@ test "Updating entry goes to loading state and updates entry on graph", ->
     Ember.run.later(
       ->
         start()
-        equal find("rect.processing").length, 3, "Has loading datums"
+
+        equal find("rect.symptom.processing").length, 3, "Has symptom loading datums"
+        equal find("rect.treatment.processing").length, 1, "Has treatment loading datum"
 
         andThen ->
           $.mockjax.clear();
