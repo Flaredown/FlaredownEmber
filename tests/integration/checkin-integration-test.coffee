@@ -9,19 +9,28 @@
 
 App = null
 yesterdayFormatted = moment().subtract(1, "days").format("MMM-DD-YYYY")
+today = moment().format("MMM-DD-YYYY")
+tomorrow = moment().add(1, "day").format("MMM-DD-YYYY")
 
 module('Check-In Integration', {
   setup: ->
     Ember.$.mockjax url: "#{config.apiNamespace}/graph", responseText: graphFixture()
 
     # For "today" tests
-    today = moment().format("MMM-DD-YYYY")
     Ember.$.mockjax
       url: "#{config.apiNamespace}/entries",
       type: 'POST'
       data:
         date: today
       responseText: entryFixture(today)
+
+    # for tomorrow (time mock)
+    Ember.$.mockjax
+      url: "#{config.apiNamespace}/entries",
+      type: 'POST'
+      data:
+        date: tomorrow
+      responseText: entryFixture(tomorrow)
 
     # For other dates
     entry = entryFixture(yesterdayFormatted)
@@ -33,6 +42,10 @@ module('Check-In Integration', {
     Ember.$.mockjax url: "#{config.apiNamespace}/symptoms/search/*", responseText: symptomSearchFixture
 
     App = startApp()
+
+    # 60 second refresh is a bit much for testing purposes
+    App.__container__.lookup("route:graph.checkin").reopen
+      checkTimeFrequency: 100
 
     # don't render graph for better test performance
     App.__container__.lookupFactory("view:graph").reopen
@@ -61,6 +74,28 @@ test "Can see the checkin for 'today' ", ->
   visit('/checkin/today/1').then( ->
     assertModalPresent()
     ok currentURL() == "/checkin/today/1"
+  )
+
+test "Goes to today properly after time passes", ->
+  expect 3
+
+  visit("/checkin/today/2").then( ->
+    tomorrow = parseInt(moment().add(1, "day").format("x"))
+    timekeeper.travel(tomorrow)
+    yesterdayDate = today
+
+    stop()
+    Ember.run.later ->
+      start()
+      equal $(".checkin-date").text(), "Yesterday", "checkin date changes"
+      equal currentURL(), "/checkin/#{yesterdayDate}/2", "URL changes correctly on passing through to next day"
+
+      triggerEvent(".checkin-date-container .tomorrow a", "click")
+      andThen ->
+        equal currentURL(), "/checkin/today/1", "Clicking next goes to the new 'today'"
+        timekeeper.reset()
+    , 200
+
   )
 
 test "Can navigate through the sections (today)", ->

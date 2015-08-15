@@ -3,6 +3,7 @@
 `import GroovyResponseHandlerMixin from '../../mixins/groovy_response_handler'`
 
 route = Ember.Route.extend GroovyResponseHandlerMixin,
+  checkTimeFrequency: 60000,
   model: (params, transition, queryParams) ->
     date = params.date
     today = moment().format("MMM-DD-YYYY")
@@ -26,30 +27,50 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
         @errorCallback.bind(@)
       )
 
-  afterModel: (model, transition, params) ->
+  afterModel: (entry, transition, params) ->
     @_super()
     controller = @controllerFor("graph.checkin")
-    model.set("section", @get("section"))
+
+    # Start refreshing the entry
+    @set("checkTheTime", true)
+    @_checkTheTime(entry)
+
+    entry.set("section", @get("section"))
 
     # TODO reimplement, perhaps in router
     # fromDate = transition.router.state.params["graph.checkin"].date if transition.router.state.params["graph.checkin"]
-    # betweenDays = fromDate and (fromDate isnt model.get("dateAsParam"))
+    # betweenDays = fromDate and (fromDate isnt entry.get("dateAsParam"))
     #
-    # if not model.get("just_created") and (not fromDate or betweenDays)
-    #    # and (fromDate isnt model.get("dateAsParam"))
+    # if not entry.get("just_created") and (not fromDate or betweenDays)
+    #    # and (fromDate isnt entry.get("dateAsParam"))
     #   Ember.run.next =>
     #     summarySection = controller.get("sections.lastObject").number
-    #     model.set("section", summarySection)
+    #     entry.set("section", summarySection)
 
-    has_notes = Em.isPresent(model.get("notes"))
+    has_notes = Em.isPresent(entry.get("notes"))
     if has_notes
       Ember.run.next =>
         controller.set("show_notes", has_notes)
         controller.set("notesSaved", has_notes)
 
+  exit: ->
+    @set("checkTheTime", false)
 
   actions:
     close: -> @transitionTo "graph"
+
+  _checkTheTime: (entry) -> # periodically check the time to see if we're still on the right day
+    if entry.get("moment")
+      checkingTime = setTimeout((=> @_checkTheTime(entry)), @get("checkTimeFrequency")) if @get("checkTheTime")
+
+      if moment().format("MMM-DD-YYYY") isnt entry.get("niceDate")
+        clearTimeout(checkingTime)
+
+        Ember.run.next =>
+          controller = @controllerFor("graph.checkin")
+          @controllerFor("graph.checkin").get("model").propertyDidChange("moment") if controller.get("model")
+
+          @transitionTo("graph.checkin", entry.get("niceDate"), @get("section"))
 
 `export default route`
 
