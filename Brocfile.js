@@ -29,6 +29,7 @@ app.import('bower_components/jquery-cookie/jquery.cookie.js');
 app.import('bower_components/fastclick/lib/fastclick.js');
 
 app.import('bower_components/moment/moment.js');
+app.import('bower_components/timekeeper/lib/timekeeper.js'); // time mocking
 
 app.import('bower_components/pusher/dist/pusher.js');
 

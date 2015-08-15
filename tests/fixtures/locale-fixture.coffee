@@ -2,7 +2,8 @@
 
 fixture = -> Ember.Object.create({
   "en":{
-    "hello":"Hello world",
+    "today": "Today"
+    "yesterday": "Yesterday"
     "catalogs":{
       "hbi":{
         "section_1_prompt":"How would you rate your general well-being?",
