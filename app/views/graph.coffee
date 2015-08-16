@@ -63,7 +63,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   datesHeight:      25
 
   treatmentsHeight: Ember.computed("visibleTreatmentViewportDatumNames.@each", ->
-    Ember.assert("must have treatmentViewportDatumNames", !Ember.isNone(@get("visibleTreatmentViewportDatumNames")))
+    Ember.assert("must have visibleTreatmentViewportDatumNames", !Ember.isNone(@get("visibleTreatmentViewportDatumNames")))
     Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))
     Em.run.later => @updateChartSize()
     @get("treatmentPadding") * @get("visibleTreatmentViewportDatumNames").length + 40
