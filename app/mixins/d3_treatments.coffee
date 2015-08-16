@@ -3,13 +3,13 @@ computed = Ember.computed
 
 mixin = Ember.Mixin.create
 
-  treatmentRadius: 7
+  treatmentRadius: 10
   treatmentPadding: 30
 
   treatmentLineHeight: 2
   treatmentLineWidth: Ember.computed("pipDimensions", ->
     Ember.assert("need pipDimensions", Ember.isPresent(@get("pipDimensions")))
-    @get("pipDimensions").total_width
+    @get("pipDimensions").total_width - 4
   )
 
   treatmentHitboxHeight: Ember.computed("treatmentPadding", ->
@@ -51,7 +51,7 @@ mixin = Ember.Mixin.create
           .on("mouseover", (d,i) => @jBoxFor(d) if d.get("status") is "actual" )
           .on("mouseout", (d,i) => @jBoxFor(d, true) )
           .attr(
-            class: (d) -> d.get("classes")
+            class: (d) -> d.get("classes") + " treatment-line"
           )
 
     @treatmentCircleSelection()
@@ -64,7 +64,7 @@ mixin = Ember.Mixin.create
           .on("mouseover", (d,i) => @jBoxFor(d) if d.get("status") is "actual" )
           .on("mouseout", (d,i) => @jBoxFor(d, true) )
           .attr
-            class: (d) -> d.get("classes")
+            class: (d) -> d.get("classes") + " treatment-circle"
             r: @get("treatmentRadius")
             cy: (d) -> d.get("end_y")
             cx: (d) -> d.get("end_x")
@@ -95,7 +95,7 @@ mixin = Ember.Mixin.create
     @treatmentEnter()
     @treatmentCircleSelection()
       .attr
-        class: (d) -> d.get("classes")
+        class: (d) -> d.get("classes")  + " treatment-circle"
         cy: (d) -> d.get("end_y")
         cx: (d) -> d.get("end_x")
 
@@ -105,9 +105,9 @@ mixin = Ember.Mixin.create
 
     @treatmentLineSelection()
       .attr
-        class: (d) -> d.get("classes")
-        "stroke-dasharray": "2, 2"
-        "stroke-linecap": "butt"
+        class: (d) -> d.get("classes") + " treatment-line"
+        "stroke-dasharray": "1, 6"
+        "stroke-linecap": "round"
         "stroke-width": @get("treatmentLineHeight")
         x1: (d) => d.get("end_x") - @get("treatmentLineWidth") / 2 if d.get("end_x")
         x2: (d) => d.get("end_x") + @get("treatmentLineWidth") / 2 if d.get("end_x")

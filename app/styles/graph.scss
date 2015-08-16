@@ -68,7 +68,11 @@
       -o-animation-delay: 0.2s;
       animation-delay: 0.2s;
     }
-
+  }
+  .treatment-circle {
+    stroke-width: 6px;
+    stroke-location: outside;
+    stroke: $background;
   }
 
   .datestamp {
