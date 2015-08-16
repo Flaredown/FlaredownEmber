@@ -117,7 +117,7 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, graphControl
             type    = if source is "treatments" then "treatment" else "symptom"
 
             if @get("serverProcessingDays").contains(day)
-
+              return if type is "treatment" # TODO no loading treatment stuff for now
               loading_pips = if type is "treatment" then 1 else 3 # loading "animation" for treatments only has 1 pip, others have 3 "loading" pips
               [1..loading_pips].forEach (i) =>
                 @get("_processedDatums").pushObject datum.create content: {day: day, catalog: catalog, order: i, type: type, processing: true, controller: @}
