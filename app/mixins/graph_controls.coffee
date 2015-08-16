@@ -39,7 +39,9 @@ mixin = Ember.Mixin.create
   treatmentFilterables: computed.filterBy("filterables", "source", "treatments")
   visibleTreatmentFilterables: computed("treatmentFilterables", "treatmentViewportDatumNames", ->
     uniqVisibles = @get("treatmentViewportDatumNames").uniq()
-    @get("treatmentFilterables").filter( (filterable) => uniqVisibles.contains(filterable.name) )
+    @get("treatmentFilterables")
+      .filter( (filterable) => uniqVisibles.contains(filterable.name) )
+      .sortBy("name")
   )
 
   ### Controls text helpers ###
