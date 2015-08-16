@@ -25,9 +25,9 @@ mixin = Ember.Mixin.create
     )
   )
 
-  treatments_y: computed("treatmentsHeight", "treatmentViewportDatumNames.@each", ->
+  treatments_y: computed("treatmentsHeight", "visibleTreatmentViewportDatumNames.@each", ->
     d3.scale.ordinal()
-      .domain(@get("treatmentViewportDatumNames").uniq())
+      .domain(@get("visibleTreatmentViewportDatumNames"))
       .rangeBands [@get("treatmentsHeight") + @get("treatmentPadding"), @get("treatmentPadding")]
   )
 
@@ -95,7 +95,7 @@ mixin = Ember.Mixin.create
     @treatmentEnter()
     @treatmentCircleSelection()
       .attr
-        class: (d) -> d.get("classes")      
+        class: (d) -> d.get("classes")
         cy: (d) -> d.get("end_y")
         cx: (d) -> d.get("end_x")
 

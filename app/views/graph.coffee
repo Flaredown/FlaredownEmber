@@ -8,7 +8,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
   didInsertElement: ->
     @renderGraph()
-    window.onresize = this.updateChartSize.bind(@);
+    window.onresize = @updateChartSize.bind(@);
 
     # datepicker setup
     $('.graph-controls-startDate').pickadate(
@@ -49,7 +49,8 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   symptomDatumsBinding:           "controller.symptomDatums"
 
   treatmentViewportDatumNamesBinding: "controller.treatmentViewportDatumNames"
-  
+  visibleTreatmentViewportDatumNamesBinding: "controller.visibleTreatmentViewportDatumNames"
+
   streamGraphStyle: false
   dragAmplifier: 1.2 # amplify drag a bit
 
@@ -61,10 +62,12 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   symptomsHeight:   400
   datesHeight:      25
 
-  treatmentsHeight: Ember.computed("treatmentViewportDatumNames.@each", ->
-    Ember.assert("must have treatmentViewportDatumNames", !Ember.isNone(@get("treatmentViewportDatumNames")))
+  treatmentsHeight: Ember.computed("visibleTreatmentViewportDatumNames.@each", ->
+    Ember.assert("must have treatmentViewportDatumNames", !Ember.isNone(@get("visibleTreatmentViewportDatumNames")))
     Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))
-    @get("treatmentPadding") * @get("treatmentViewportDatumNames").uniq().length + 40)
+    Em.run.later => @updateChartSize()
+    @get("treatmentPadding") * @get("visibleTreatmentViewportDatumNames").length + 40
+  )
 
   height: Ember.computed("symptomsHeight", "datesHeight", "treatmentsHeight", ->
     @get("symptomsHeight") + @get("datesHeight") + @get("treatmentsHeight")
@@ -153,6 +156,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
     @datestampEnter()
 
   updateChartSize: ->
+    return unless @get("svg")
     @get("svg")
       .attr("viewBox","0 0 #{@get("width") + @get("margin").left + @get("margin").right} #{@get("height") + @get("margin").top + @get("margin").bottom}" )
 
