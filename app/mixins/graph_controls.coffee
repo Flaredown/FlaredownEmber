@@ -37,7 +37,7 @@ mixin = Ember.Mixin.create
   conditionFilterables: computed.filterBy("filterables", "source", "conditions")
   symptomFilterables: computed.filterBy("filterables", "source", "symptoms")
   treatmentFilterables: computed.filterBy("filterables", "source", "treatments")
-  visibleTreatmentFilterables: computed("treatmentFilterables", "treatmentViewportDatumNames", ->
+  visibleTreatmentFilterables: computed("treatmentFilterables.@each", "treatmentViewportDatumNames", ->
     uniqVisibles = @get("treatmentViewportDatumNames").uniq()
     @get("treatmentFilterables")
       .filter( (filterable) => uniqVisibles.contains(filterable.name) )
