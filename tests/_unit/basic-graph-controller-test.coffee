@@ -120,5 +120,6 @@ test "#dayProcessing replaces datums for a day with processing representation", 
   expect 2
 
   controller.get("serverProcessingDays").addObject(controller.get("days.lastObject"))
-  ok controller.get("unfilteredDatumsByDay.lastObject.length") is 4,                         "3 symptoms + 1 treatment processing dots in the processing representation"
+  # ok controller.get("unfilteredDatumsByDay.lastObject.length") is 4,                         "3 symptoms + 1 treatment processing dots in the processing representation"
+  ok controller.get("unfilteredDatumsByDay.lastObject.length") is 3,                         "3 symptom processing dots in the processing representation"
   ok controller.get("unfilteredDatumsByDay.lastObject.firstObject.processing") is true,      "is processing type"
