@@ -95,6 +95,9 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, graphControl
         @get("sources").forEach (source) =>
           datapointsForDayBySource = datapointsForDay.filterBy("source", source)
 
+          if source is "treatments" # treatments don't have an order attribute, do a..z sorting by name
+            datapointsForDayBySource = datapointsForDayBySource.sortBy("name").reverse()
+
           # if there is data for that day and source then put it in
           if datapointsForDayBySource.length and not @get("serverProcessingDays").contains(day)
 
