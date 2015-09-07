@@ -14,8 +14,9 @@ view = Ember.View.extend colorableMixin, formHandlerMixin,
         unless @get("isDestroyed") or @get("isDestroying")
           # prevent errors on form by prefilling
           unless @get("hasDose")
-            @set "quantity", @get("currentUser.settings.treatment_#{@get("name")}_quantity")
-            @set "unit", @get("currentUser.settings.treatment_#{@get("name")}_unit")
+            debugger
+            @set "quantity", @get("currentUser.settings.treatment_#{@get("name")}_1_quantity")
+            @set "unit", @get("currentUser.settings.treatment_#{@get("name")}_1_unit")
 
           @set("editing", not @saveForm())
           @endSave()
