@@ -122,6 +122,11 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
     return true unless @get("just_created") is true
     @get("sectionsSeen").contains(section)
 
+  hasEntryChanged: (entry) -> 
+    lastSave = @get("lastSave.entry")
+    initialEntry = @get("model.initialEntry")
+    return initialEntry is not entry or entry is lastSave
+    
   hasCompleteResponse: (catalog,section_index) ->
       questions = []
       if @get("userQuestionSections").contains(catalog)
@@ -256,7 +261,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         entry:
           JSON.stringify(checkin_data)
 
-      unless @get("lastSave.entry") is data.entry # don't bother saving unless there are changes
+      unless not @hasEntryChanged(data.entry) # don't bother saving unless there are changes
 
         ajax(
           url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
