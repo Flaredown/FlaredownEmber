@@ -37,6 +37,11 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
 
     entry.set("section", @get("section"))
 
+    entry.set("initialEntry", JSON.stringify({ 
+        tags: @get("tags"), 
+        notes: @get("notes"), 
+        treatments: @get("treatments")}))
+
     # TODO reimplement, perhaps in router
     # fromDate = transition.router.state.params["graph.checkin"].date if transition.router.state.params["graph.checkin"]
     # betweenDays = fromDate and (fromDate isnt entry.get("dateAsParam"))
