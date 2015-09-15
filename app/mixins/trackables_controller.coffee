@@ -80,8 +80,8 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       if first.get("quantity") isnt null and not first.get("takenWithoutDose") # add a dose (e.g. treatment repetition)
         @addEntryTreatment(treatments.get("firstObject"), true)
       else  # go straight to edit
-        quantity_setting = @get("currentUser.settings.treatment_#{first.get("name")}_quantity") || ""
-        unit_setting = @get("currentUser.settings.treatment_#{first.get("name")}_unit") || ""
+        quantity_setting = @get("currentUser.settings.treatment_#{first.get("name")}_1_quantity") || ""
+        unit_setting = @get("currentUser.settings.treatment_#{first.get("name")}_1_unit") || ""
         first.setProperties(quantity: quantity_setting, unit: unit_setting, editing: true, active: true)
         @propertyDidChange("treatments")
 
