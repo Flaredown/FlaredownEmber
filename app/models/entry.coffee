@@ -47,16 +47,13 @@ model = DS.Model.extend
     @set("tags",[]) unless @get("tags")
 
   checkinData: Ember.computed(->
-    Ember.Logger.debug("getting checkinData")
     checkin_data =
         responses: @get("responseData")
         notes: @get("notes")
         tags: @get("tags")
         treatments: @get("treatmentData")
 
-    checkin_data = JSON.stringify(checkin_data)
-    Ember.Logger.debug("checkinData: " + checkin_data)
-    checkin_data
+    JSON.stringify(checkin_data)
   ).property("treatmentData", "responseData", "notes", "tags")
 
   responseData: Ember.computed(->
