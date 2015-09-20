@@ -2,6 +2,11 @@
 `import DS from 'ember-data'`
 
 model = DS.Model.extend
+  defaultResponseValues:
+      checkbox: 0
+      select: null
+      number: null
+
   user:                 DS.belongsTo("user")
 
   date:                 DS.attr("string")
@@ -41,5 +46,57 @@ model = DS.Model.extend
   didLoad: ->
     @set("tags",[]) unless @get("tags")
 
+  checkinData: Ember.computed(->
+    Ember.Logger.debug("getting checkinData")
+    checkin_data =
+        responses: @get("responseData")
+        notes: @get("notes")
+        tags: @get("tags")
+        treatments: @get("treatmentData")
 
+    checkin_data = JSON.stringify(checkin_data)
+    Ember.Logger.debug("checkinData: " + checkin_data)
+    checkin_data
+  ).property("treatmentData", "responseData", "notes", "tags")
+
+  responseData: Ember.computed(->
+    that            = @
+    responses       = []
+
+    entryResponses = @get("responses")
+    catalogs = @get("catalogs")
+
+    if catalogs and entryResponses
+      catalogs.removeObjects(["symptoms", "conditions"])
+      catalogs.sort()
+      catalogs.addObjects(["symptoms", "conditions"])
+
+      catalogs.forEach (catalog) =>
+        that.get("catalog_definitions.#{catalog}").forEach (section) =>
+          section.forEach (question) ->
+            # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
+            response  = entryResponses.findBy("id", "#{catalog}_#{question.name}_#{that.get("id")}")
+            value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
+
+            responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
+
+    responses
+  ).property("catalog_definitions", "responses.@each")
+
+  treatmentData: Ember.computed(->
+    treatments = @get("treatments")
+    if treatments
+        treatment_data = treatments.map((treatment) ->
+          if treatment.get("active")
+            if treatment.get("hasDose") # Taken w/ doses
+              treatment.getProperties("name", "quantity", "unit")
+            else # Taken no doses
+              Ember.merge treatment.getProperties("name"), {quantity: -1, unit: null}
+          else # Not taken
+            treatment.getProperties("name", "quantity", "unit")
+        ).compact()
+
+    treatment_data
+  ).property("treatments.@each")
+  
 `export default model`
