@@ -139,6 +139,34 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         response.get("value") isnt null
       ).contains(false)
 
+  _getCheckinData: ->
+    checkin_data =
+        responses: @get("responsesData")
+        notes: @get("notes")
+        tags: @get("tags")
+
+      if @get("treatments")
+        treatment_data = @get("treatments").map((treatment) ->
+          if treatment.get("active")
+            if treatment.get("hasDose") # Taken w/ doses
+              treatment.getProperties("name", "quantity", "unit")
+            else # Taken no doses
+              Ember.merge treatment.getProperties("name"), {quantity: -1, unit: null}
+          else # Not taken
+            treatment.getProperties("name", "quantity", "unit")
+        ).compact()
+      checkin_data["treatments"] = treatment_data if Em.isPresent(treatment_data)
+
+    checkin_data
+  _hasModelChanged: (entry) ->
+    lastSave = @get("lastSave.entry")
+    initialEntry = @get("model.initialEntry")
+
+    return false if lastSave is entry
+    return false if entry is initialEntry
+
+    return true
+
   currentSection:             Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each", "sectionsDefinition.@each")
   isFirstSection:             Ember.computed( -> @get("sections.firstObject.number") is @get("section") ).property("section", "sections.@each")
   isLastSection:              Ember.computed( -> @get("sections.lastObject.number") is @get("section") ).property("section", "sections.@each")
@@ -235,29 +263,14 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
     save: (close) ->
 
-      checkin_data =
-        responses: @get("responsesData")
-        notes: @get("notes")
-        tags: @get("tags")
-
-      if @get("treatments")
-        treatment_data = @get("treatments").map((treatment) ->
-          if treatment.get("active")
-            if treatment.get("hasDose") # Taken w/ doses
-              treatment.getProperties("name", "quantity", "unit")
-            else # Taken no doses
-              Ember.merge treatment.getProperties("name"), {quantity: -1, unit: null}
-          else # Not taken
-            treatment.getProperties("name", "quantity", "unit")
-        ).compact()
-      checkin_data["treatments"] = treatment_data if Em.isPresent(treatment_data)
+      checkin_data = @_getCheckinData()
 
       data =
         entry:
           JSON.stringify(checkin_data)
 
-      unless @get("lastSave.entry") is data.entry # don't bother saving unless there are changes
-
+      if @_hasModelChanged(data.entry)# don't bother saving unless there are changes
+        Ember.Logger.debug("model has changed... saving")
         ajax(
           url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
           type: "PUT"
@@ -274,5 +287,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
             # @get("controllers.graph").send("dayProcessing", @get("date"))
           (response) => @errorCallback(response)
         )
+      else
+        Ember.Logger.debug("model has not changed... not saving")
 
 `export default controller`
