@@ -20,11 +20,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "tags", "summary"]
   userQuestionSections: ["conditions","symptoms"]
   trackableSections: ["treatments", "conditions", "symptoms"]
-  isTrackableSection: Em.computed( -> @get("trackableSections").contains(@get("currentSection").category) ).property("currentSection")
-  defaultResponseValues:
-    checkbox: 0
-    select: null
-    number: null
+  isTrackableSection: Em.computed( -> @get("trackableSections").contains(@get("currentSection").category) ).property("currentSection") 
 
   needs: ["graph"]
 
@@ -59,19 +55,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   ).property("catalogs")
 
   responsesData: Ember.computed ->
-    that            = @
-    responses       = []
-
-    @get("catalogsSorted").forEach (catalog) =>
-      @get("catalog_definitions.#{catalog}").forEach (section) =>
-        section.forEach (question) ->
-          # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
-          response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
-          value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
-
-          responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
-
-    responses
+    @get("model.responseData")
   .property("catalog_definitions", "responses.@each")
 
   ### Sections: All the pages in the checkin form ###
