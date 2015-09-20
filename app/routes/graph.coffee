@@ -22,7 +22,7 @@ route = Ember.Route.extend GroovyResponseHandlerMixin,
     controller.set "loadedEndDate",   @get("currentUser").get("defaultEndDate")#moment().utc().startOf("day")
     controller.set "rawData",         model
     controller.set "firstEntryDate",  moment().utc().startOf("day").subtract(365,"days") # TODO unhaxorize this
-    controller.set "catalog",         Object.keys(model).sort()[0]
+    controller.set "catalog",         "symptoms"
     controller.set "viewportStart",   moment().utc().startOf("day").subtract(14,"days")
 
     # TODO these are antiquated -> /dev/null

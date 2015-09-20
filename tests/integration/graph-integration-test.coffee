@@ -86,6 +86,7 @@ test "Filtering removes matching datums", ->
   expect 2
 
   visit('/').then( ->
+    triggerEvent ".available-catalog.hbi", "click"
     triggerEvent ".filterable-symptom:eq(0)", "click"
     andThen ->
       ok find("rect.symptom.present").length < 39, "Has less than 39 datums for HBI fixture"
@@ -99,7 +100,7 @@ test "Updating entry goes to loading state and updates entry on graph", ->
   expect 3
 
   visit('/').then ->
-
+    triggerEvent ".available-catalog.hbi", "click"
     controller.send("dayProcessing", today) # simulate update/closing modal
 
     stop()
