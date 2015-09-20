@@ -9,7 +9,7 @@
 
     ul.graph-controls-trackables
       each catalog in catalogs
-        li{action 'changeCatalog' catalog.name}{bind-attr class=":available-catalog catalog.active:active-catalog:inactive-catalog"}
+        li{action 'changeCatalog' catalog.name}{bind-attr class=":available-catalog catalog.active:active-catalog:inactive-catalog catalog.name"}
 
           .catalog-name = catalog.name
 
