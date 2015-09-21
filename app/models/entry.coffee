@@ -78,7 +78,7 @@ model = DS.Model.extend
             responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
 
     responses
-  ).property("catalog_definitions", "responses.@each")
+  ).property("catalog_definitions", "responses.[]", "responses.@each.value" )
 
   treatmentData: Ember.computed(->
     treatments = @get("treatments")
