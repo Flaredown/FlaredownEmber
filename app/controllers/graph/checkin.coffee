@@ -20,7 +20,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   nonResearchSections: ["start", "conditions", "treatments", "symptoms", "treatments-empty", "conditions-empty", "tags", "summary"]
   userQuestionSections: ["conditions","symptoms"]
   trackableSections: ["treatments", "conditions", "symptoms"]
-  isTrackableSection: Em.computed( -> @get("trackableSections").contains(@get("currentSection").category) ).property("currentSection") 
+  isTrackableSection: Em.computed( -> @get("trackableSections").contains(@get("currentSection").category) ).property("currentSection")
 
   needs: ["graph"]
 
@@ -53,10 +53,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
     catalogs.sort()
     catalogs.addObjects(["symptoms", "conditions"])
   ).property("catalogs")
-
-  responsesData: Ember.computed ->
-    @get("model.responseData")
-  .property("catalog_definitions", "responses.@each")
 
   ### Sections: All the pages in the checkin form ###
   sectionsDefinition: Ember.computed ->

@@ -48,15 +48,15 @@ model = DS.Model.extend
 
   checkinData: Ember.computed(->
     checkin_data =
-      responses: @get("responseData")
+      responses: @get("responsesData")
       notes: @get("notes")
       tags: @get("tags")
       treatments: @get("treatmentData")
 
     JSON.stringify(checkin_data)
-  ).property("treatmentData", "responseData", "notes", "tags")
+  ).property("treatmentData", "responsesData", "notes", "tags")
 
-  responseData: Ember.computed(->
+  responsesData: Ember.computed(->
     that            = @
     responses       = []
 
