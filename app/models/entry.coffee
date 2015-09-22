@@ -3,9 +3,9 @@
 
 model = DS.Model.extend
   defaultResponseValues:
-      checkbox: 0
-      select: null
-      number: null
+    checkbox: 0
+    select: null
+    number: null
 
   user:                 DS.belongsTo("user")
 
@@ -48,15 +48,15 @@ model = DS.Model.extend
 
   checkinData: Ember.computed(->
     checkin_data =
-        responses: @get("responseData")
-        notes: @get("notes")
-        tags: @get("tags")
-        treatments: @get("treatmentData")
+      responses: @get("responsesData")
+      notes: @get("notes")
+      tags: @get("tags")
+      treatments: @get("treatmentData")
 
     JSON.stringify(checkin_data)
-  ).property("treatmentData", "responseData", "notes", "tags")
+  ).property("treatmentData", "responsesData", "notes", "tags")
 
-  responseData: Ember.computed(->
+  responsesData: Ember.computed(->
     that            = @
     responses       = []
 
@@ -78,7 +78,7 @@ model = DS.Model.extend
             responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
 
     responses
-  ).property("catalog_definitions", "responses.@each")
+  ).property("catalog_definitions", "responses.[]", "responses.@each.value" )
 
   treatmentData: Ember.computed(->
     treatments = @get("treatments")
@@ -95,5 +95,5 @@ model = DS.Model.extend
 
     treatment_data
   ).property("treatments.@each")
-  
+
 `export default model`
