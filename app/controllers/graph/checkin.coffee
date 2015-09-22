@@ -21,10 +21,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
   userQuestionSections: ["conditions","symptoms"]
   trackableSections: ["treatments", "conditions", "symptoms"]
   isTrackableSection: Em.computed( -> @get("trackableSections").contains(@get("currentSection").category) ).property("currentSection")
-  defaultResponseValues:
-    checkbox: 0
-    select: null
-    number: null
 
   needs: ["graph"]
 
@@ -57,22 +53,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
     catalogs.sort()
     catalogs.addObjects(["symptoms", "conditions"])
   ).property("catalogs")
-
-  responsesData: Ember.computed ->
-    that            = @
-    responses       = []
-
-    @get("catalogsSorted").forEach (catalog) =>
-      @get("catalog_definitions.#{catalog}").forEach (section) =>
-        section.forEach (question) ->
-          # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
-          response  = that.get("responses").findBy("id", "#{catalog}_#{question.name}_#{that.get("model.id")}")
-          value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
-
-          responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
-
-    responses
-  .property("catalog_definitions", "responses.@each")
 
   ### Sections: All the pages in the checkin form ###
   sectionsDefinition: Ember.computed ->
@@ -138,6 +118,15 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         return false unless response
         response.get("value") isnt null
       ).contains(false)
+
+  _hasModelChanged: (entry) ->
+    lastSave = @get("lastSave.entry")
+    initialEntry = @get("model.initialEntry")
+
+    return false if lastSave is entry
+    return false if entry is initialEntry
+
+    return true
 
   currentSection:             Ember.computed( -> @get("sections").objectAt(@get("section")-1) ).property("section", "sections.@each", "sectionsDefinition.@each")
   isFirstSection:             Ember.computed( -> @get("sections.firstObject.number") is @get("section") ).property("section", "sections.@each")
@@ -213,8 +202,6 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
         newResponse = @store.createRecord "response", {id: id, value: value, name: question_name, catalog: @get("currentCategory")}
         @get("responses").addObject newResponse
 
-      @propertyDidChange("responsesData")
-
       # Transition to next section automatially if it wasn't previously completed
       if @hasCompleteResponse(@get("currentSection.category"), @get("currentSection.category_number")-1) and not previouslyCompleted
         Ember.run.later((=> @send("nextSection")), 150)
@@ -235,29 +222,13 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
     save: (close) ->
 
-      checkin_data =
-        responses: @get("responsesData")
-        notes: @get("notes")
-        tags: @get("tags")
-
-      if @get("treatments")
-        treatment_data = @get("treatments").map((treatment) ->
-          if treatment.get("active")
-            if treatment.get("hasDose") # Taken w/ doses
-              treatment.getProperties("name", "quantity", "unit")
-            else # Taken no doses
-              Ember.merge treatment.getProperties("name"), {quantity: -1, unit: null}
-          else # Not taken
-            treatment.getProperties("name", "quantity", "unit")
-        ).compact()
-      checkin_data["treatments"] = treatment_data if Em.isPresent(treatment_data)
+      checkin_data = @get("model.checkinData")
 
       data =
-        entry:
-          JSON.stringify(checkin_data)
+        entry: checkin_data
 
-      unless @get("lastSave.entry") is data.entry # don't bother saving unless there are changes
-
+      if @_hasModelChanged(data.entry)# don't bother saving unless there are changes
+        Ember.Logger.debug("model has changed... saving")
         ajax(
           url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
           type: "PUT"
@@ -274,5 +245,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
             # @get("controllers.graph").send("dayProcessing", @get("date"))
           (response) => @errorCallback(response)
         )
+      else
+        Ember.Logger.debug("model has not changed... not saving")
 
 `export default controller`
