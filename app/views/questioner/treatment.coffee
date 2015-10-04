@@ -8,6 +8,19 @@ view = Ember.View.extend colorableMixin,
 
   active: Em.computed( -> @get("controller.treatments").filterBy("name", @get("name")).get("firstObject.active") ).property("controller.treatments.@each.active")
   doses: Em.computed(-> @get("controller.treatments").filterBy("name", @get("name")).filterBy("taken",true) ).property("controller.treatments.@each", "name")
+
+  hasPriorSettings: Em.computed(-> @get("currentUser.settings.treatment_#{@get("name")}_1_quantity") ).property("name")
+  priorSettingsLabel: Em.computed(->
+    repetition = 1
+    dosages = []
+    until @get("currentUser.settings.treatment_#{@get("name")}_#{repetition}_quantity") is undefined
+      dosages.push "#{@get("currentUser.settings.treatment_#{@get("name")}_#{repetition}_quantity")}#{@get("currentUser.settings.treatment_#{@get("name")}_#{repetition}_unit")}"
+      repetition = repetition+1
+
+    dosagesString = dosages.join(" + ")
+    Ember.I18n.t("use_prior_settings_label", dosages: dosagesString)
+  ).property("name")
+
   colors: Ember.computed(->  @colorClasses("treatments_#{@get("name")}") ).property("name")
 
   actions:
