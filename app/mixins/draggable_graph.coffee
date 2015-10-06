@@ -7,15 +7,30 @@ mixin = Ember.Mixin.create
   attributeBindings: 'draggable'
   graphShifted: false
 
-  touchStart: (event) -> @dehighlightPips(); @set "dragStartX", event.originalEvent.touches[0].pageX
-  touchMove:  (event) -> @dragGraph event.originalEvent.touches[0].pageX
-  touchEnd:   (event) -> @changeViewport()
+  _notUnderTarget: (event) ->
+    drag_container = @get("dragContainer")
+    return false unless drag_container
+    return true if $(event.target, drag_container).length is 0
+    return false
+  touchStart: (event) ->
+    unless @_notUnderTarget(event)
+      @dehighlightPips()
+      @set "dragStartX", event.originalEvent.touches[0].pageX
+  touchMove:  (event) ->
+    unless @_notUnderTarget(event)
+      @dragGraph event.originalEvent.touches[0].pageX
+  touchEnd: (event) ->
+    unless @_notUnderTarget(event)
+      @changeViewport()
 
   dragStart:  (event) ->
-    @dehighlightPips()
-    event.dataTransfer.setDragImage(window.dragImg, 0, 0)
-    event.dataTransfer.setData("text/plain", "")
-    @set "dragStartX", event.originalEvent.pageX
+    if @_notUnderTarget(event)
+      event.stopPropagation()
+    else
+      @dehighlightPips()
+      event.dataTransfer.setDragImage(window.dragImg, 0, 0)
+      event.dataTransfer.setData("text/plain", "")
+      @set "dragStartX", event.originalEvent.pageX
 
   dragOver: (event) -> @dragGraph event.originalEvent.pageX
   dragEnd:    (event) -> @changeViewport()

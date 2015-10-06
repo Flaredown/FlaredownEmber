@@ -118,8 +118,10 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   .property("width", "viewportDays.@each")
 
   setup: ->
+    graph_container = $(".graph-container")
+    @set "dragContainer", graph_container
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
-    @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
+    @set "width", graph_container.width() - @get("margin").left - @get("margin").right
     @setupEndPositions()
 
     @set("svg", d3.select(".graph-container").append("svg")
