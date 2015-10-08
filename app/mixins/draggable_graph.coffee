@@ -7,37 +7,39 @@ mixin = Ember.Mixin.create
   attributeBindings: 'draggable'
   graphShifted: false
 
-  _notUnderTarget: (event) ->
-    drag_container = @get("dragContainer")
-    return false unless drag_container
-    return true if $(event.target, drag_container).length is 0
-    return false
   touchStart: (event) ->
-    unless @_notUnderTarget(event)
-      @dehighlightPips()
-      @set "dragStartX", event.originalEvent.touches[0].pageX
+    @dehighlightPips()
+    @set "dragStartX", event.originalEvent.touches[0].pageX
+    @set "dragStartY", event.originalEvent.touches[0].pageY
   touchMove:  (event) ->
-    unless @_notUnderTarget(event)
-      @dragGraph event.originalEvent.touches[0].pageX
+    @dragGraph event.originalEvent.touches[0].pageX
   touchEnd: (event) ->
-    unless @_notUnderTarget(event)
-      @changeViewport()
-
+    @changeViewport()
   dragStart:  (event) ->
-    if @_notUnderTarget(event)
-      event.stopPropagation()
-    else
-      @dehighlightPips()
-      event.dataTransfer.setDragImage(window.dragImg, 0, 0)
-      event.dataTransfer.setData("text/plain", "")
-      @set "dragStartX", event.originalEvent.pageX
-
+    @dehighlightPips()
+    event.dataTransfer.setDragImage(window.dragImg, 0, 0)
+    event.dataTransfer.setData("text/plain", "")
+    @set "dragStartX", event.originalEvent.pageX
+    @set "dragStartY", event.originalEvent.pageY
   dragOver: (event) -> @dragGraph event.originalEvent.pageX
   dragEnd:    (event) -> @changeViewport()
 
+  _insideDragContainer: (x, y) ->
+    dragContainer = @get("dragContainer")
+    return false if x < 0
+    return false if y < 0
+    width  = dragContainer.width()
+    height = dragContainer.height()
+    offset = dragContainer.offset()
+
+    return x >= offset.left and x <= offset.left + width and y >= offset.top and y <= offset.top + height
+
   dragGraph: (pixels) ->
-    if @get("viewportDays.length") and @get("dragStartX") and pixels > 0
-      difference          = pixels - @get("dragStartX")
+    startX = @get("dragStartX")
+    startY = @get("dragStartY")
+
+    if @get("viewportDays.length") and @_insideDragContainer(startX, startY) and pixels > 0
+      difference          = pixels - startX
       @set "shiftGraphPx", difference * @get("dragAmplifier")
 
   changeViewport: ->
