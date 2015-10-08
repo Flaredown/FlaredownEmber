@@ -62,6 +62,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
   symptomsHeight:   400
   datesHeight:      25
 
+  dragContainer: Ember.computed(-> $('#graph'))
   treatmentsHeight: Ember.computed("visibleTreatmentViewportDatumNames.@each", ->
     Ember.assert("must have visibleTreatmentViewportDatumNames", !Ember.isNone(@get("visibleTreatmentViewportDatumNames")))
     Ember.assert("must have treatmentPadding", Ember.isPresent(@get("treatmentPadding")))
@@ -119,7 +120,7 @@ view = Ember.View.extend D3SymptomsMixin, D3DatestampsMixin, D3TreatmentsMixin, 
 
   setup: ->
     @set "margin", {top: 0, right: 0, bottom: 0, left: 0}
-    @set "width", $(".graph-container").width() - @get("margin").left - @get("margin").right
+    @set "width", $('.graph-container').width() - @get("margin").left - @get("margin").right
     @setupEndPositions()
 
     @set("svg", d3.select(".graph-container").append("svg")
