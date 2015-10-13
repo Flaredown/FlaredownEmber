@@ -72,6 +72,25 @@ mixin = Ember.Mixin.create FormHandlerMixin,
   actions:
 
     ### TREATMENTS ###
+    usePreviousDosageSettings: (name) ->
+      first = @treatmentsByName(name).get("firstObject")
+      repetition = 1
+      treatments = []
+      until @get("currentUser.settings.treatment_#{name}_#{repetition}_quantity") is undefined
+        quantity_setting = @get("currentUser.settings.treatment_#{name}_#{repetition}_quantity")
+        unit_setting = @get("currentUser.settings.treatment_#{name}_#{repetition}_unit")
+        treatments.push {
+          id: "#{name}_#{quantity_setting}_#{unit_setting}_#{repetition}_#{first.get("id")}",
+          name: name, quantity: quantity_setting, unit: unit_setting,
+          active: true, editing: false
+        }
+        repetition = repetition+1
+
+      treatments.forEach (treatment) =>
+        @get("model.treatments").addObject @store.createRecord("treatment", treatment)
+
+       @propertyDidChange("treatments")
+
     addTreatmentDose: (name) ->
       treatments = @treatmentsByName(name)
       treatments.forEach (treatment) -> treatment.set("editing", false)
@@ -80,9 +99,7 @@ mixin = Ember.Mixin.create FormHandlerMixin,
       if first.get("quantity") isnt null and not first.get("takenWithoutDose") # add a dose (e.g. treatment repetition)
         @addEntryTreatment(treatments.get("firstObject"), true)
       else  # go straight to edit
-        quantity_setting = @get("currentUser.settings.treatment_#{first.get("name")}_1_quantity") || ""
-        unit_setting = @get("currentUser.settings.treatment_#{first.get("name")}_1_unit") || ""
-        first.setProperties(quantity: quantity_setting, unit: unit_setting, editing: true, active: true)
+        first.setProperties(quantity: "", unit: "", editing: true, active: true)
         @propertyDidChange("treatments")
 
       # else # not yet activated, activate and but don't edit
