@@ -33,7 +33,7 @@
     stroke: #cccccc;
     stroke-dasharray: 1, 3;
   }
-  rect.symptom, circle.treatment {
+  rect.symptom, circle.treatment, line.treatment {
     &.missing {
       stroke-width: 2px;
       stroke: $shadow;
