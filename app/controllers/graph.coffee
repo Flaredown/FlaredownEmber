@@ -98,6 +98,10 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, graphControl
           if source is "treatments" # treatments don't have an order attribute, do a..z sorting by name
             datapointsForDayBySource = datapointsForDayBySource.sortBy("name").reverse()
 
+            # for faded dotted lines for unlogged treatments
+            if Em.isEmpty(datapointsForDayBySource)
+              @get("_processedDatums").pushObject datum.create content: {day: day, catalog: undefined, order: -1, type: "treatment", processing: false, missing: true, controller: @}
+
           # if there is data for that day and source then put it in
           if datapointsForDayBySource.length and not @get("serverProcessingDays").contains(day)
 
