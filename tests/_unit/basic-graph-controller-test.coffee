@@ -102,11 +102,12 @@ test "#datums is an array of SymptomDatums generated from rawData", ->
 
 test "#viewportDatums: all datums that fit in the viewport", ->
   expect 1
-  ok controller.get("viewportDatums.length") is 57+4+14,                              "has expected length from fixtures (all datums, all catalogs) + treatments + 4 total missing days"
+
+  equal controller.get("viewportDatums.length"), 57+8+14,                          "has expected length from fixtures (all datums, all catalogs) + treatments + 4 total missing days"
 
 test "#catalogDatums: all datums that fit in the viewport and catalog and treatments", ->
   expect 1
-  ok controller.get("catalogDatums.length") is 39+1+14,                               "has expected length from fixtures (all datums in current catalog) + treatments + 1 missing day"
+  equal controller.get("catalogDatums.length"), 39+5+14,                           "has expected length from fixtures (all datums in current catalog) + treatments + 1 missing day"
 
 test "#unfilteredDatumsByDay is an array of arrays containing datums for each day in #days", ->
   expect 3
@@ -120,6 +121,5 @@ test "#dayProcessing replaces datums for a day with processing representation", 
   expect 2
 
   controller.get("serverProcessingDays").addObject(controller.get("days.lastObject"))
-  # ok controller.get("unfilteredDatumsByDay.lastObject.length") is 4,                         "3 symptoms + 1 treatment processing dots in the processing representation"
-  ok controller.get("unfilteredDatumsByDay.lastObject.length") is 3,                         "3 symptom processing dots in the processing representation"
+  equal controller.get("unfilteredDatumsByDay.lastObject.length"), 4,                         "3 symptoms dots in the processing representation + 1 treatment missing"
   ok controller.get("unfilteredDatumsByDay.lastObject.firstObject.processing") is true,      "is processing type"
