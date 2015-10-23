@@ -54,6 +54,9 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, graphControl
 
     _data.sortBy("x")
   )
+  uniqTreatmentNames: computed("rawData", ->
+    @get("rawDatapoints").filterBy("source", "treatments").mapBy("name").uniq().sort().reverse()
+  )
 
   ### All the days possible within the raw responses ###
   days: computed("loadedStartDate", "loadedEndDate", ->
@@ -79,7 +82,6 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, graphControl
     if @get("rawDatapoints") and @get("days")
 
       # Remove any server processing days from the already processed days so they are reprocessed below
-
       if @get("serverProcessingDays.length")
         @clearDatumsForDays(@get("serverProcessingDays"))
 
@@ -99,8 +101,10 @@ controller = Ember.Controller.extend viewportMixin, colorableMixin, graphControl
             datapointsForDayBySource = datapointsForDayBySource.sortBy("name").reverse()
 
             # for faded dotted lines for unlogged treatments
-            if Em.isEmpty(datapointsForDayBySource)
-              @get("_processedDatums").pushObject datum.create content: {day: day, catalog: undefined, order: -1, type: "treatment", processing: false, missing: true, controller: @}
+            if datapointsForDayBySource.length < @get("uniqTreatmentNames").length
+              existingNames = datapointsForDayBySource.mapBy("name")
+              @get("uniqTreatmentNames").reject((name) -> existingNames.contains(name)).forEach (name, index) =>
+                @get("_processedDatums").pushObject datum.create content: {day: day, catalog: undefined, name: name, order: index+1, type: "treatment", processing: false, missing: true, controller: @}
 
           # if there is data for that day and source then put it in
           if datapointsForDayBySource.length and not @get("serverProcessingDays").contains(day)
