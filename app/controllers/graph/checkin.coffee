@@ -227,7 +227,7 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
       data =
         entry: checkin_data
 
-      if @_hasModelChanged(data.entry)# don't bother saving unless there are changes
+      if true #@_hasModelChanged(data.entry)# don't bother saving unless there are changes
         Ember.Logger.debug("model has changed... saving")
         ajax(
           url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
