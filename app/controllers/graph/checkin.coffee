@@ -6,7 +6,11 @@
 `import SummaryMixin from '../../mixins/checkin_summary'`
 `import ajax from 'ic-ajax'`
 
-controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResponseHandlerMixin, FormHandlerMixin, Em.I18n.TranslateableProperties, SummaryMixin,
+controller = Ember.ObjectController.extend TrackablesControllerMixin,
+  GroovyResponseHandlerMixin,
+  FormHandlerMixin,
+  Em.I18n.TranslateableProperties,
+  SummaryMixin,
 
   saveOnSectionChange: true
   modalOpen: true
@@ -180,6 +184,57 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
 
   sectionResponses: Ember.computed( -> @get("responsesData").filterBy("catalog", @get("currentCategory")) ).property("currentCategory", "responsesData.@each")
 
+  checkinData: Ember.computed(->
+    checkin_data =
+      responses: @get("responsesData")
+      notes: @get("notes")
+      tags: @get("tags")
+      treatments: @get("treatmentData")
+
+    JSON.stringify(checkin_data)
+  ).property("treatmentData.@each", "responsesData", "notes", "tags.[]")
+
+  responsesData: Ember.computed(->
+    that            = @
+    responses       = []
+
+    entryResponses = @get("responses")
+    catalogs = @get("catalogs")
+
+    if catalogs and entryResponses
+      catalogs.removeObjects(["symptoms", "conditions"])
+      catalogs.sort()
+      catalogs.addObjects(["symptoms", "conditions"])
+
+      catalogs.forEach (catalog) =>
+        that.get("catalog_definitions.#{catalog}").forEach (section) =>
+          section.forEach (question) ->
+            # Lookup an existing response loaded on the Entry, use it's value to setup responsesData, otherwise null
+            response  = entryResponses.findBy("id", "#{catalog}_#{question.name}_#{that.get("id")}")
+            value     = if response then response.get("value") else that.defaultResponseValues[question.kind]
+
+            responses.pushObject Ember.Object.create({name: question.name, value: value, catalog: catalog})
+
+    responses
+  ).property("catalog_definitions", "responses.[]", "responses.@each.value" )
+
+  treatmentData: Ember.computed(->
+
+    treatments = @get("treatments")
+    if treatments
+        treatment_data = treatments.map((treatment) ->
+          if treatment.get("active")
+            if treatment.get("hasDose") # Taken w/ doses
+              treatment.getProperties("name", "quantity", "unit")
+            else # Taken no doses
+              Ember.merge treatment.getProperties("name"), {quantity: -1, unit: null}
+          else # Not taken
+            treatment.getProperties("name", "quantity", "unit")
+        ).compact()
+
+    treatment_data
+  ).property("treatments", "treatments.@each")
+
   actions:
     closeCheckin: -> @set("modalOpen", false)
 
@@ -221,14 +276,10 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
     removeTag: (tag) -> @get("tags").removeObject(tag)
 
     save: (close) ->
-
-      checkin_data = @get("model.checkinData")
-
       data =
-        entry: checkin_data
+        entry: @get("checkinData")
 
-      if true #@_hasModelChanged(data.entry)# don't bother saving unless there are changes
-        Ember.Logger.debug("model has changed... saving")
+      if @_hasModelChanged(data.entry)# don't bother saving unless there are changes
         ajax(
           url: "#{config.apiNamespace}/entries/#{@get('date')}.json"
           type: "PUT"
@@ -245,7 +296,5 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin, GroovyResp
             # @get("controllers.graph").send("dayProcessing", @get("date"))
           (response) => @errorCallback(response)
         )
-      else
-        Ember.Logger.debug("model has not changed... not saving")
 
 `export default controller`
