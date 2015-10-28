@@ -12,6 +12,11 @@ controller = Ember.ObjectController.extend TrackablesControllerMixin,
   Em.I18n.TranslateableProperties,
   SummaryMixin,
 
+  defaultResponseValues:
+    checkbox: 0
+    select: null
+    number: null
+
   saveOnSectionChange: true
   modalOpen: true
   sectionsSeen: []

@@ -2,10 +2,6 @@
 `import DS from 'ember-data'`
 
 model = DS.Model.extend
-  defaultResponseValues:
-    checkbox: 0
-    select: null
-    number: null
 
   user:                 DS.belongsTo("user")
 
