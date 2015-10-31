@@ -1,6 +1,6 @@
 if view.mobileChecker.isMobile
   .container style="text-align:center;"
-    h3 Please forgive the mess!
+    h3 Please forgive the lack of Graph!
     h5 We're working on graph performance for mobile devices
 
     br
