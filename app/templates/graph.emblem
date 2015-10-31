@@ -1,9 +1,20 @@
-if viewportDays.length
-  .graph-container
+if view.mobileChecker.isMobile
+  .container style="text-align:center;"
+    h3 Please forgive the mess!
+    h5 We're working on graph performance for mobile devices
+
+    br
+    br
+
+    link-to "graph.checkin" "today" "1"
+      a.btn.btn-primary = t "onboarding.checkin"
 else
-  .container: h1.text-center = t "no_scores_in_date_range"
+  if viewportDays.length
+    .graph-container
+  else
+    .container: h1.text-center = t "no_scores_in_date_range"
 
-.container
- partial "graph-controls"
+  .container
+   partial "graph-controls"
 
-outlet
+  outlet
