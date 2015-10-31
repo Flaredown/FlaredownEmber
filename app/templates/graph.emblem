@@ -8,6 +8,8 @@ if view.mobileChecker.isMobile
 
     link-to "graph.checkin" "today" "1"
       a.btn.btn-primary = t "onboarding.checkin"
+
+    outlet
 else
   if viewportDays.length
     .graph-container
