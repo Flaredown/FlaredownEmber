@@ -141,9 +141,8 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    // TODO changeme
-    ENV.pusher.key = '40edeaadb34fd870d29e';
-    ENV.pusher.app_id = '102551';
+    ENV.pusher.key = '66a262146703acf904a1';
+    ENV.pusher.app_id = '150830';
 
     ENV.keen.project_id = '55328229672e6c290c2be9cd';
     ENV.keen.write_key = '2cebdf5d1c5aa2d18fd11763ca8639ee0e158d28b5644ec75a91e414a740b668d314f6ea163940c3631c4900ee3a759608cfaeeda9c7f3bb14cb2d58c3950bb60ff54473443d16488b3436b7b1dc5e5d39a712e1a8c9fbbdbf7c119eea79df16aebbd5e76a4c63348f56c7eac064b5aa';
