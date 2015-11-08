@@ -14,7 +14,7 @@ view = Ember.View.extend colorableMixin,
     repetition = 1
     dosages = []
     until @get("currentUser.settings.treatment_#{@get("name")}_#{repetition}_quantity") is undefined
-      dosages.push "#{@get("currentUser.settings.treatment_#{@get("name")}_#{repetition}_quantity")}#{@get("currentUser.settings.treatment_#{@get("name")}_#{repetition}_unit")}"
+      dosages.push "#{@get("currentUser.settings.treatment_#{@get("name")}_#{repetition}_quantity")} #{@get("currentUser.settings.treatment_#{@get("name")}_#{repetition}_unit")}"
       repetition = repetition+1
 
     dosagesString = dosages.join(" + ")
