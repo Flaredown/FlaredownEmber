@@ -6,14 +6,16 @@
 mixin = Ember.Mixin.create FormHandlerMixin,
   isEntry: Ember.computed(-> @get("model.constructor.typeKey") is "entry").property("model")
   isPastEntry: Ember.computed.and("isEntry", "model.isPast")
-
   anyTreatments: Em.computed.or("model.treatments", "currentUser.treatments")
   treatments: Ember.computed ->
     if @get("isEntry") then @get("model.treatments") else @get("currentUser.treatments")
   .property("currentUser.treatments.@each", "model.treatments.@each")
 
-  treatmentNames: Em.computed(-> @get("treatments").mapBy("name").uniq() ).property("treatments.@each")
-  treatmentsByName: (name) -> @get("treatments").filterBy("name",name)
+  treatmentSortProperties: ["name"]
+  treatmentsSorted: Ember.computed.sort("treatments", "treatmentSortProperties")
+
+  treatmentNames: Em.computed(-> @get("treatmentsSorted").mapBy("name").uniq() ).property("treatments.@each")
+  treatmentsByName: (name) -> @get("treatmentsSorted").filterBy("name",name)
 
   inactiveTreatments: Ember.computed(->
     actives = @get("treatments").mapBy("name")
