@@ -3,7 +3,7 @@
 
 view = Ember.View.extend # TaggableNotesMixin,
 
-  tagName: "div"
+  tagName: "textarea"
   templateName: "questioner/note-textarea"
   classNames: ["checkin-note-textarea", "summary-note"]
 
@@ -22,9 +22,13 @@ view = Ember.View.extend # TaggableNotesMixin,
   attributeBindings: ["contenteditable", "spellcheck", "role", "aria-multiline"]
 
   # Placeholder
-  placeholder: "<span class='placeholder'>Leave a note about your day</span>"
-  isPlaceheld: Ember.computed(-> @$().text() is "Leave a note about your day").property().volatile()
-  setPlaceholder: -> @$().html(@placeholder) if Ember.isEmpty(@$().text())
+  placeholder: "Leave a note about your day"
+  isPlaceheld: Ember.computed(->
+    return false if (@$().val() || '').length > 0
+    return true
+  ).property()
+  .volatile()
+  setPlaceholder: -> @$().attr("placeholder", @placeholder) if Ember.isEmpty(@$().text())
 
   didInsertElement: ->
     @set "value", @get("controller.notes")
