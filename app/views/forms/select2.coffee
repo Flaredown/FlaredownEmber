@@ -33,16 +33,21 @@ view = Ember.View.extend
         callback(initialValue) if initialValue
       ).bind(@)
     }
-    _config.createSearchChoice = ((term) -> {id: 0, text: term} unless @get("content").mapBy("text").contains(term) ).bind(@) if @get("allowCustom")
+    _config.createSearchChoice = ((term) -> {id: 0, text: term, custom: @get("allowCustom")} unless @get("content").mapBy("text").contains(term) ).bind(@) if @get("allowCustom")
     _config
 
   ).property("content")
 
   formatted: (option) ->
-    if @get("descriptions")
-      "<span class='name'>#{option.text}</span><div class='description'>#{option.description}</div>"
+    if option.custom
+      option_text = '"' + option.text + '"'
     else
-      "<span class='name'>#{option.text}</span>"
+      option_text = option.text
+   
+    if @get("descriptions")
+      "<span class='name'>#{option_text}</span><div class='description'>#{option.description}</div>"
+    else
+      "<span class='name'>#{option_text}</span>"
 
   focused: (event) ->
     select2 = @$().data("select2")
