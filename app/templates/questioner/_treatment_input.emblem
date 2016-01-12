@@ -2,7 +2,7 @@ div
   .switch{action 'toggleTreatment' view.name}
     input class={view.active:checked:unchecked view.colors.color :cmn-toggle :cmn-toggle-round} type="checkbox"
     label
-    &nbsp;
+    |&nbsp;
     label.checkin-treatment-name class={view.active:taken:untaken}
       = view.name
   .remove-trackable.checkin-treatment-remove{action 'destroy' view.name target=view} &times;
